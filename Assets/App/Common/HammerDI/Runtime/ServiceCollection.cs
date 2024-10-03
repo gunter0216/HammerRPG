@@ -6,6 +6,7 @@ using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Interfaces;
 using App.Common.Logger.Runtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
 
 namespace App.Common.HammerDI.Runtime
@@ -19,7 +20,7 @@ namespace App.Common.HammerDI.Runtime
         private readonly InterfacesExtractor m_InterfacesExtractor = new();
         private readonly DependenciesInjector m_DependenciesInjector = new();
         
-        public IServiceProvider BuildServiceProvider(object context)
+        public IServiceProvider BuildServiceProvider(object context, List<Type> sceneScopeds)
         {
             if (!m_Contexts.TryGetValue(context, out var scopeds))
             {
@@ -36,6 +37,12 @@ namespace App.Common.HammerDI.Runtime
             foreach (var singleton in m_Singletons)
             {
                 services.Add(singleton.Key, singleton.Value);
+            }
+            
+            foreach (var scoped in sceneScopeds)
+            {
+                var instance = Activator.CreateInstance(scoped);
+                services.Add(scoped, instance);
             }
 
             var interfaces = m_InterfacesExtractor.ExtractInterfaces(services);

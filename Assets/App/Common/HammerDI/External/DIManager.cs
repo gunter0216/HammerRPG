@@ -1,7 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using App.Common.HammerDI.Runtime;
 using App.Common.HammerDI.Runtime.Attributes;
-using App.Common.HammerDI.Runtime.Interfaces;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
 
 namespace App.Common.HammerDI.External
 {
@@ -43,10 +47,42 @@ namespace App.Common.HammerDI.External
                 }
             }
         }
-        
+
         public IServiceProvider BuildServiceProvider(object context)
         {
-            return m_ServiceCollection.BuildServiceProvider(context);
+            var sceneScopeds = GetScopedFromCurrentScene();
+            return m_ServiceCollection.BuildServiceProvider(context, sceneScopeds);
+        }
+
+        private List<Type> GetScopedFromCurrentScene()
+        {
+            var allSceneObjects = new List<MonoBehaviour>();
+            var rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+            foreach (var rootGameObject in rootGameObjects)
+            {
+                var monoBehaviours = rootGameObject.GetComponentsInChildren<MonoBehaviour>(includeInactive: true);
+                allSceneObjects.AddRange(monoBehaviours);
+            }
+
+            var monoScopeds = new List<Type>();
+            foreach (var sceneObject in allSceneObjects)
+            {
+                var monoType = sceneObject.GetType();
+                var monoScoped = monoType.GetCustomAttribute<MonoScopedAttribute>();
+                if (monoScoped != null)
+                {
+                    if (monoType.FullName != null)
+                    {
+                        var type = Type.GetType(monoType.FullName);
+                        if (type != null)
+                        {
+                            monoScopeds.Add(type);
+                        }
+                    }
+                }
+            }
+
+            return monoScopeds;
         }
     }
 }

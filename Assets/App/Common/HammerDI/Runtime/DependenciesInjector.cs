@@ -34,7 +34,7 @@ namespace App.Common.HammerDI.Runtime
 
                         instance = instanceList.First();
                     }
-                    else if (fieldType.GetGenericTypeDefinition() == typeof(List<>))
+                    else if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
                     {
                         if (!interfaces.TryGetValue(fieldType, out var instanceList))
                         {
