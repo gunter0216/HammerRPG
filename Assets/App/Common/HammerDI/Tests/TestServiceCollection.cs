@@ -5,6 +5,7 @@ using App.Common.HammerDI.Runtime.Interfaces;
 using App.Common.HammerDI.Tests.TestClasses;
 using NUnit.Framework;
 using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
+using TestContext = App.Common.HammerDI.Tests.TestClasses.TestContext;
 
 namespace App.Common.HammerDI.Tests
 {
@@ -30,12 +31,10 @@ namespace App.Common.HammerDI.Tests
             {
                 typeof(Singleton1),
             };
-
-            var context = "context1";
             
             foreach (var type in scoped)
             {
-                m_ServiceCollection.AddScoped(type, context);
+                m_ServiceCollection.AddScoped(type, typeof(TestContext));
             }
             
             foreach (var singleton in singletons)
@@ -43,7 +42,7 @@ namespace App.Common.HammerDI.Tests
                 m_ServiceCollection.AddSingleton(singleton);
             }
 
-            m_ServiceProvider = m_ServiceCollection.BuildServiceProvider(context, new List<Type>());
+            m_ServiceProvider = m_ServiceCollection.BuildServiceProvider(typeof(TestContext), new List<Type>());
         }
 
         [Test]

@@ -36,12 +36,14 @@ namespace App.Common.HammerDI.Runtime
                     }
                     else if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
                     {
-                        if (!interfaces.TryGetValue(fieldType, out var instanceList))
+                        var genericType = fieldType.GenericTypeArguments[0];
+                        if (!interfaces.TryGetValue(genericType, out var instanceList))
                         {
-                            throw new ArgumentException($"Cant inject {fieldType} in {serviceType.Name}");
+                            throw new ArgumentException($"Cant inject {genericType} in {serviceType.Name} instanceList not found.");
                         }
-
-                        instance = instanceList;
+                        
+                        var arguments = field.FieldType.GetGenericArguments();
+                        instance = Activator.CreateInstance(genericType, instanceList);
                     }
                     else
                     {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace App.Start
 {
-    [Scoped(Context = typeof(StartSceneContext))]
+    [Scoped(typeof(StartSceneContext))]
     public class Start1 : IInitSystem
     {
         [Inject] private MonoScoped1 m_MonoScoped1;

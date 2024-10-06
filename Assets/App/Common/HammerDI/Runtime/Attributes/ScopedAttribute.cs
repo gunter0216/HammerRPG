@@ -6,5 +6,10 @@ namespace App.Common.HammerDI.Runtime.Attributes
     public class ScopedAttribute : Attribute
     {
         public object Context { get; set; }
+
+        public ScopedAttribute(object context)
+        {
+            Context = context;
+        }
     }
 }

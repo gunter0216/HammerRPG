@@ -1,28 +1,29 @@
-﻿using UnityEditor;
+﻿using App.Common.SceneControllers.Runtime;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace App.Common.Scenes.Editor
+namespace App.Common.SceneControllers.Editor
 {
     public class SceneEditor : MonoBehaviour
     {
 #if UNITY_EDITOR
-        [MenuItem("Helper/Scenes/StartScene")]
+        [MenuItem("Helper/Scenes/StartScene", false, 1)]
         public static void GoToStartScene()
         {
-            OpenScene("Assets/Scenes/StartScene.unity");
+            OpenScene($"Assets/Scenes/{SceneConstants.StartScene}.unity");
         }
         
-        [MenuItem("Helper/Scenes/MenuScene")]
+        [MenuItem("Helper/Scenes/MenuScene", false, 2)]
         public static void GoToMetaScene()
         {
-            OpenScene("Assets/Scenes/MenuScene.unity");
+            OpenScene($"Assets/Scenes/{SceneConstants.MenuScene}.unity");
         }
         
-        [MenuItem("Helper/Scenes/GameScene")]
+        [MenuItem("Helper/Scenes/GameScene", false, 3)]
         public static void GoToCoreScene()
         {
-            OpenScene("Assets/Scenes/GameScene.unity");
+            OpenScene($"Assets/Scenes/{SceneConstants.GameScene}.unity");
         }
 
         private static void OpenScene(string name)

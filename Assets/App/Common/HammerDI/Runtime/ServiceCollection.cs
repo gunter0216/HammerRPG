@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Interfaces;
-using App.Common.Logger.Runtime;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
 
 namespace App.Common.HammerDI.Runtime
@@ -64,7 +59,6 @@ namespace App.Common.HammerDI.Runtime
                 m_Contexts.Add(context, scopeds);
             }
             
-            // var instance = Activator.CreateInstance(type);
             scopeds.Add(type, type);
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace App.Common.HammerDI.Tests.TestClasses
 {
-    [Scoped]
+    [Scoped(typeof(TestContext))]
     public class InjectedClass : IInjectedClass
     {
         private int _value;

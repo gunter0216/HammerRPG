@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace App.Game
 {
-    [Scoped(Context = typeof(GameSceneContext))]
+    [Scoped(typeof(GameSceneContext))]
     public class Game1 : IInitSystem
     {
         public void Init()

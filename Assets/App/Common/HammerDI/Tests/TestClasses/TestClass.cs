@@ -3,7 +3,7 @@ using App.Common.HammerDI.Runtime.Attributes;
 
 namespace App.Common.HammerDI.Tests.TestClasses
 {
-    [Scoped]
+    [Scoped(typeof(TestContext))]
     public class TestClass
     {
         [Inject] private Class1Interface1 m_Class1Interface1;

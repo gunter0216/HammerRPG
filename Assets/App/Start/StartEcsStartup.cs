@@ -1,4 +1,6 @@
 ﻿using App.Common.HammerDI.External;
+using App.Common.SceneControllers.External;
+using App.Common.SceneControllers.Runtime;
 using App.Game;
 using App.Game.Contexts;
 using App.Game.Player.Systems;
@@ -25,10 +27,9 @@ namespace App.Start
             {
                 initSystem.Init();
             }
-            
-            Debug.LogError("-----");
 
-            SceneManager.LoadScene("GameScene");
+            var sceneController = serviceProvider.GetService<SceneController>();
+            sceneController.LoadScene(SceneConstants.MenuScene);
 
 //             m_World = new EcsWorld();
 //             m_UpdateSystems = new EcsSystems(m_World, "MainSystem");

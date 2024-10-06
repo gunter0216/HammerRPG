@@ -2,7 +2,7 @@
 
 namespace App.Common.HammerDI.Tests.TestClasses
 {
-    [Scoped]
+    [Scoped(typeof(TestContext))]
     public class Class1Interface2 : IInterface2
     {
         
