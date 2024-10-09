@@ -42,7 +42,7 @@ namespace App.Common.HammerDI.Tests
                 m_ServiceCollection.AddSingleton(singleton);
             }
 
-            m_ServiceProvider = m_ServiceCollection.BuildServiceProvider(typeof(TestContext), new List<Type>());
+            m_ServiceProvider = m_ServiceCollection.BuildServiceProvider(typeof(TestContext), new List<object>());
         }
 
         [Test]

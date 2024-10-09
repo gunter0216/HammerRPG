@@ -9,6 +9,7 @@ using App.Game.Contexts;
 using App.Menu.UI.External.FSM;
 using App.Menu.UI.External.FSM.States;
 using App.Menu.UI.External.View;
+using UnityEngine;
 
 namespace App.Menu.UI.External
 {
@@ -25,7 +26,7 @@ namespace App.Menu.UI.External
         private MultiplayerMenuState m_MultiplayerMenuState;
         private SettingsMenuState m_SettingsMenuState;
         private SingleplayerMenuState m_SingleplayerMenuState;
-        private MenuFSM m_MenuFsm;
+        private MenuMachine m_MenuMachine;
         
         private MenuSceneMenuView m_View;
 
@@ -42,19 +43,19 @@ namespace App.Menu.UI.External
 
             m_View = view.Value;
 
-            m_MenuFsm = new MenuFSM();
+            m_MenuMachine = new MenuMachine();
 
-            m_SingleplayerMenuState = new SingleplayerMenuState(m_MenuFsm, m_View.SingleplayerPanel);
-            m_MultiplayerMenuState = new MultiplayerMenuState(m_MenuFsm, m_View.MultiplayerPanel);
-            m_SettingsMenuState = new SettingsMenuState(m_MenuFsm, m_View.SettingsPanel);
+            m_SingleplayerMenuState = new SingleplayerMenuState(m_MenuMachine, m_View.SingleplayerPanel);
+            m_MultiplayerMenuState = new MultiplayerMenuState(m_MenuMachine, m_View.MultiplayerPanel);
+            m_SettingsMenuState = new SettingsMenuState(m_MenuMachine, m_View.SettingsPanel);
             m_MainMenuState = new MainMenuState(
-                m_MenuFsm, 
+                m_MenuMachine, 
                 m_View.MainMenuPanel, 
                 m_SingleplayerMenuState, 
                 m_MultiplayerMenuState, 
                 m_SettingsMenuState);
             
-            m_MenuFsm.PushState(m_MainMenuState);
+            m_MenuMachine.PushState(m_MainMenuState);
         }
 
         public void Dispose()

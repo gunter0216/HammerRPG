@@ -25,7 +25,7 @@ namespace App.Common.AssetSystem.Runtime
         
         public Optional<T> InstantiateSync<T>(IKeyEvaluator key, Transform parent = null) where T : Object
         {
-            var asset = LoadSync<T>(key);
+            var asset = LoadSync<GameObject>(key);
             if (!asset.HasValue)
             {
                 HLogger.LogError($"Cant load asset = {key}.");
@@ -41,7 +41,7 @@ namespace App.Common.AssetSystem.Runtime
 
             _instantiatedItems[key].Add(item);
             
-            return new Optional<T>(item);
+            return new Optional<T>(item.GetComponent<T>());
         }
 
         public void UnloadInstance(IKeyEvaluator key, Object item)

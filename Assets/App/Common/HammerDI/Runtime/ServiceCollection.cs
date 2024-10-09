@@ -15,7 +15,7 @@ namespace App.Common.HammerDI.Runtime
         private readonly InterfacesExtractor m_InterfacesExtractor = new();
         private readonly DependenciesInjector m_DependenciesInjector = new();
         
-        public IServiceProvider BuildServiceProvider(object context, List<Type> sceneScopeds)
+        public IServiceProvider BuildServiceProvider(object context, List<object> sceneScopeds)
         {
             if (!m_Contexts.TryGetValue(context, out var scopeds))
             {
@@ -36,8 +36,7 @@ namespace App.Common.HammerDI.Runtime
             
             foreach (var scoped in sceneScopeds)
             {
-                var instance = Activator.CreateInstance(scoped);
-                services.Add(scoped, instance);
+                services.Add(scoped.GetType(), scoped);
             }
 
             var interfaces = m_InterfacesExtractor.ExtractInterfaces(services);

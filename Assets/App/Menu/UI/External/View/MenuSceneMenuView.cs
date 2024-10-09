@@ -1,4 +1,5 @@
 ﻿using App.Menu.UI.External.View.Panels;
+using App.Menu.UI.External.View.Panels.Singleplayer;
 using UnityEngine;
 
 namespace App.Menu.UI.External.View

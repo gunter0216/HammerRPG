@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime.UnloadStrategy;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Object = UnityEngine.Object;
 
 namespace App.Common.AssetSystem.Runtime
 {
@@ -29,8 +31,17 @@ namespace App.Common.AssetSystem.Runtime
             {
                 return new Optional<T>(asset);
             }
-            
-            asset = Addressables.LoadAssetAsync<T>(key).WaitForCompletion();
+
+            try
+            {
+                asset = Addressables.LoadAssetAsync<T>(key).WaitForCompletion();
+            }
+            catch (Exception e)
+            {
+                HLogger.LogError($"Cant load asset {key}");
+                // ignored
+            }
+
             if (asset == default)
             {
                 return Optional<T>.Empty;

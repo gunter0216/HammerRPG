@@ -9,6 +9,6 @@ namespace App.Common.HammerDI.Runtime.Interfaces
         void AddScoped(Type type, object context);
         void AddSingleton(Type type);
         void UnloadContext(object context);
-        IServiceProvider BuildServiceProvider(object context, List<Type> sceneScopeds);
+        IServiceProvider BuildServiceProvider(object context, List<object> sceneScopeds);
     }
 }

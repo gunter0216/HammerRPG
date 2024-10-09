@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace App.Menu.UI.External.View.Panels
+namespace App.Menu.UI.External.View.Panels.Singleplayer
 {
     public class SingleplayerPanel : MonoBehaviour
     {

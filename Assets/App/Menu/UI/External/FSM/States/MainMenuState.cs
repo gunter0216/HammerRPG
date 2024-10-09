@@ -10,15 +10,15 @@ namespace App.Menu.UI.External.FSM.States
         private readonly MultiplayerMenuState m_MultiplayerMenuState;
         private readonly SettingsMenuState m_SettingsMenuState;
         private readonly MainMenuPanel m_MainMenuPanel;
-        private readonly MenuFSM m_MenuFsm;
+        private readonly MenuMachine m_MenuMachine;
 
-        public MainMenuState(MenuFSM menuFsm, MainMenuPanel mainMenuPanel, SingleplayerMenuState singleplayerMenuState, MultiplayerMenuState multiplayerMenuState, SettingsMenuState settingsMenuState)
+        public MainMenuState(MenuMachine menuMachine, MainMenuPanel mainMenuPanel, SingleplayerMenuState singleplayerMenuState, MultiplayerMenuState multiplayerMenuState, SettingsMenuState settingsMenuState)
         {
             m_MainMenuPanel = mainMenuPanel;
             m_SingleplayerMenuState = singleplayerMenuState;
             m_MultiplayerMenuState = multiplayerMenuState;
             m_SettingsMenuState = settingsMenuState;
-            m_MenuFsm = menuFsm;
+            m_MenuMachine = menuMachine;
             
             m_MainMenuPanel.SetActive(false);
             
@@ -40,22 +40,22 @@ namespace App.Menu.UI.External.FSM.States
         
         private void OnExitButtonClick()
         {
-            // todo
+            Application.Quit();
         }
 
         private void OnSettingsButtonClick()
         {
-            m_MenuFsm.PushState(m_SettingsMenuState);
+            m_MenuMachine.PushState(m_SettingsMenuState);
         }
 
         private void OnMultiplayerButtonClick()
         {
-            m_MenuFsm.PushState(m_MultiplayerMenuState);
+            m_MenuMachine.PushState(m_MultiplayerMenuState);
         }
 
         private void OnSingleplayerButtonClick()
         {
-            m_MenuFsm.PushState(m_SingleplayerMenuState);
+            m_MenuMachine.PushState(m_SingleplayerMenuState);
         }
 
         public void Dispose()

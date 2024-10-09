@@ -4,6 +4,7 @@ using App.Game;
 using App.Game.Contexts;
 using Leopotam.EcsLite;
 using UnityEngine;
+using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
 
 namespace App.Menu
 {
@@ -11,18 +12,22 @@ namespace App.Menu
     {
         private EcsWorld m_World;
         private EcsSystems m_UpdateSystems;
+        private IServiceProvider m_ServiceProvider;
 
-        void Start()
+        private void Start()
         {
             var diManager = DiManager.Instance;
-            var serviceProvider = diManager.BuildServiceProvider(typeof(MenuSceneContext));
+            m_ServiceProvider = diManager.BuildServiceProvider(typeof(MenuSceneContext));
 
-            foreach (IInitSystem initSystem in serviceProvider.GetInterfaces<IInitSystem>())
+            foreach (IInitSystem initSystem in m_ServiceProvider.GetInterfaces<IInitSystem>())
             {
                 initSystem.Init();
             }
-            
-            foreach (IDisposable disposable in serviceProvider.GetInterfaces<IDisposable>())
+        }
+
+        private void OnDestroy()
+        {
+            foreach (IDisposable disposable in m_ServiceProvider.GetInterfaces<IDisposable>())
             {
                 disposable.Dispose();
             }

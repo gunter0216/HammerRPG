@@ -54,7 +54,7 @@ namespace App.Common.HammerDI.External
             return m_ServiceCollection.BuildServiceProvider(context, sceneScopeds);
         }
 
-        private List<Type> GetScopedFromCurrentScene()
+        private List<object> GetScopedFromCurrentScene()
         {
             var allSceneObjects = new List<MonoBehaviour>();
             var rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
@@ -64,21 +64,14 @@ namespace App.Common.HammerDI.External
                 allSceneObjects.AddRange(monoBehaviours);
             }
 
-            var monoScopeds = new List<Type>();
+            var monoScopeds = new List<object>();
             foreach (var sceneObject in allSceneObjects)
             {
                 var monoType = sceneObject.GetType();
                 var monoScoped = monoType.GetCustomAttribute<MonoScopedAttribute>();
                 if (monoScoped != null)
                 {
-                    if (monoType.FullName != null)
-                    {
-                        var type = Type.GetType(monoType.FullName);
-                        if (type != null)
-                        {
-                            monoScopeds.Add(type);
-                        }
-                    }
+                    monoScopeds.Add(sceneObject);
                 }
             }
 

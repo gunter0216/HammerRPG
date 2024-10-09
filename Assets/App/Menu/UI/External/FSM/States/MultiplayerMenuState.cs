@@ -6,12 +6,12 @@ namespace App.Menu.UI.External.FSM.States
     public class MultiplayerMenuState : IMenuState, IDisposable
     {
         private readonly MultiplayerPanel m_MultiplayerPanel;
-        private readonly MenuFSM m_MenuFsm;
+        private readonly MenuMachine m_MenuMachine;
 
-        public MultiplayerMenuState(MenuFSM menuFsm, MultiplayerPanel multiplayerPanel)
+        public MultiplayerMenuState(MenuMachine menuMachine, MultiplayerPanel multiplayerPanel)
         {
             m_MultiplayerPanel = multiplayerPanel;
-            m_MenuFsm = menuFsm;
+            m_MenuMachine = menuMachine;
             
             m_MultiplayerPanel.SetActive(false);
             
@@ -30,7 +30,7 @@ namespace App.Menu.UI.External.FSM.States
 
         private void OnBackButtonClick()
         {
-            m_MenuFsm.PopState();
+            m_MenuMachine.PopState();
         }
 
         public void Dispose()

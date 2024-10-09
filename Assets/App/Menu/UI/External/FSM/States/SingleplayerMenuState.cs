@@ -1,17 +1,18 @@
 ﻿using System;
 using App.Menu.UI.External.View.Panels;
+using App.Menu.UI.External.View.Panels.Singleplayer;
 
 namespace App.Menu.UI.External.FSM.States
 {
     public class SingleplayerMenuState : IMenuState, IDisposable
     {
-        private readonly MenuFSM m_MenuFsm;
+        private readonly MenuMachine m_MenuMachine;
         private readonly SingleplayerPanel m_SingleplayerPanel;
 
-        public SingleplayerMenuState(MenuFSM menuFsm, SingleplayerPanel singleplayerPanel)
+        public SingleplayerMenuState(MenuMachine menuMachine, SingleplayerPanel singleplayerPanel)
         {
             m_SingleplayerPanel = singleplayerPanel;
-            m_MenuFsm = menuFsm;
+            m_MenuMachine = menuMachine;
             
             m_SingleplayerPanel.SetActive(false);
             
@@ -30,7 +31,7 @@ namespace App.Menu.UI.External.FSM.States
         
         private void OnBackButtonClick()
         {
-            m_MenuFsm.PopState();
+            m_MenuMachine.PopState();
         }
 
         public void Dispose()

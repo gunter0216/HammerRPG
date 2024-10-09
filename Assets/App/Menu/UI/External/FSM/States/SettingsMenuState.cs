@@ -1,17 +1,18 @@
 ﻿using System;
 using App.Menu.UI.External.View.Panels;
+using UnityEngine;
 
 namespace App.Menu.UI.External.FSM.States
 {
     public class SettingsMenuState : IMenuState, IDisposable
     {
         private readonly SettingsPanel m_SettingsPanel;
-        private readonly MenuFSM m_MenuFsm;
+        private readonly MenuMachine m_MenuMachine;
 
-        public SettingsMenuState(MenuFSM menuFsm, SettingsPanel settingsPanel)
+        public SettingsMenuState(MenuMachine menuMachine, SettingsPanel settingsPanel)
         {
             m_SettingsPanel = settingsPanel;
-            m_MenuFsm = menuFsm;
+            m_MenuMachine = menuMachine;
             
             m_SettingsPanel.SetActive(false);
             
@@ -30,7 +31,7 @@ namespace App.Menu.UI.External.FSM.States
         
         private void OnBackButtonClick()
         {
-            m_MenuFsm.PopState();
+            m_MenuMachine.PopState();
         }
 
         public void Dispose()
