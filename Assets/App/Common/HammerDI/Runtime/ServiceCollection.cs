@@ -15,6 +15,7 @@ namespace App.Common.HammerDI.Runtime
         private readonly InterfacesExtractor m_InterfacesExtractor = new();
         private readonly DependenciesInjector m_DependenciesInjector = new();
         
+        // todo каждый раз инжектятся зависимости в синглтоны. Баг или фича?
         public IServiceProvider BuildServiceProvider(object context, List<object> sceneScopeds)
         {
             if (!m_Contexts.TryGetValue(context, out var scopeds))
