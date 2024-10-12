@@ -2,10 +2,11 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace App.Common.SceneControllers.Editor
 {
-    public class SceneEditor : MonoBehaviour
+    public class SceneEditor
     {
 #if UNITY_EDITOR
         [MenuItem("Helper/Scenes/StartScene", false, 1)]
@@ -34,7 +35,7 @@ namespace App.Common.SceneControllers.Editor
                 return;
             }
             
-            bool isSaved = EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene(), EditorSceneManager.GetActiveScene().path);
+            bool isSaved = EditorSceneManager.SaveScene(SceneManager.GetActiveScene(), SceneManager.GetActiveScene().path);
             Debug.Log("Saved Scene " + (isSaved ? "OK" : "Error!"));
             EditorSceneManager.OpenScene(name);
         }
