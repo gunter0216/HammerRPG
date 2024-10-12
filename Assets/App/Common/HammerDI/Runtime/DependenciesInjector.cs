@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using App.Common.HammerDI.Runtime.Attributes;
+using UnityEngine;
 
 namespace App.Common.HammerDI.Runtime
 {
@@ -42,8 +44,14 @@ namespace App.Common.HammerDI.Runtime
                             throw new ArgumentException($"Cant inject {genericType} in {serviceType.Name} instanceList not found.");
                         }
                         
-                        var arguments = field.FieldType.GetGenericArguments();
-                        instance = Activator.CreateInstance(genericType, instanceList);
+                        var listType = typeof(List<>).MakeGenericType(genericType);
+                        var list = (IList)Activator.CreateInstance(listType);
+                        foreach (var value in instanceList)
+                        {
+                            list.Add(value);
+                        }
+
+                        instance = list;
                     }
                     else
                     {

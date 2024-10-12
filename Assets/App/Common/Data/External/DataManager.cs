@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using App.Common.Data.Runtime;
 using App.Common.Data.Runtime.Deserializer;
@@ -8,33 +9,45 @@ using App.Common.Data.Runtime.Serializer;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
+using App.Game;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace App.Common.Data.External
 {
     [Singleton]
-    public class DataManager : IDataManager
+    public class DataManager : IDataManager, IInitSystem
     {
-        private const string m_FileName = "Save";
+        private const string m_FileName = "Save.json";
         
-        private readonly string m_SaveDirectory;
-        private readonly string m_FilePath;
+        private string m_SaveDirectory;
+        private string m_FilePath;
         
         [Inject] private List<IData> m_Datas;
         
-        private readonly IJsonLoader m_Loader;
-        private readonly IJsonSaver m_Saver;
+        private IJsonLoader m_Loader;
+        private IJsonSaver m_Saver;
 
         private Dictionary<string, IData> m_NameToData;
+        private Dictionary<string, Type> m_DataToType;
+
+        private bool m_IsInitialized = false;
         
         // todo добавить в конфигурато saver and loader
-        public DataManager()
+        public void Init()
         {
+            if (m_IsInitialized)
+            {
+                return;
+            }
+
+            m_IsInitialized = true;
+            
             m_SaveDirectory = Path.Combine(Application.persistentDataPath, "Data");
             m_FilePath = Path.Combine(m_SaveDirectory, m_FileName);
             
             m_NameToData = new Dictionary<string, IData>(m_Datas.Count);
+            m_DataToType = new Dictionary<string, Type>(m_Datas.Count);
             
             var jsonSettings = new JsonSerializerSettings()
             {
@@ -54,13 +67,30 @@ namespace App.Common.Data.External
                 Directory.CreateDirectory(m_SaveDirectory);
             }
 
+            foreach (var data in m_Datas)
+            {
+                m_DataToType.Add(data.Name(), data.GetType());
+            }
+            
             Load(m_FilePath);
             CreateNewDatas();
         }
 
         public void SaveByExit()
         {
+            HLogger.Log("SaveByExit");
             Save(m_FilePath);
+        }
+
+        public Optional<IData> GetData(string name)
+        {
+            if (m_NameToData.TryGetValue(name, out var data))
+            {
+                return new Optional<IData>(data);
+            }
+            
+            HLogger.LogError($"Data not found {name}");
+            return Optional<IData>.Empty;
         }
 
         private void CreateNewDatas()
@@ -79,7 +109,6 @@ namespace App.Common.Data.External
         {
             if (!File.Exists(path))
             {
-                HLogger.LogError($"Not found file {path}");
                 return;
             }
             
@@ -93,10 +122,16 @@ namespace App.Common.Data.External
             m_NameToData.Clear();
             foreach (var dataWrapper in fullData.Value.Datas)
             {
-                var data = m_Loader.Deserialize<IData>(dataWrapper.Object);
+                if (!m_DataToType.TryGetValue(dataWrapper.Type, out var dataType))
+                {
+                    HLogger.LogError($"Not found type");
+                    continue;
+                }
+                
+                var data = m_Loader.Deserialize<IData>(dataWrapper.Object, dataType);
                 if (!data.HasValue)
                 {
-                    HLogger.LogError($"Cat deserialize {dataWrapper.Object}");
+                    HLogger.LogError($"Cant deserialize {dataWrapper.Object}");
                     return;
                 }
                 
@@ -107,7 +142,7 @@ namespace App.Common.Data.External
         private void Save(string path)
         {
             var dataWrappers = new List<DataWrapper>();
-            foreach (var data in m_Datas)
+            foreach (var data in m_NameToData.Values)
             {
                 data.BeforeSerialize();
                 var obj = m_Saver.Serialize(data);
@@ -117,17 +152,6 @@ namespace App.Common.Data.External
             
             var fullData = new FullDataContainer(dataWrappers);
             m_Saver.Save(fullData, path);
-        }
-
-        private Optional<IData> GetData(string name)
-        {
-            if (m_NameToData.TryGetValue(name, out var data))
-            {
-                return new Optional<IData>(data);
-            }
-            
-            HLogger.LogError($"Data not found {name}");
-            return Optional<IData>.Empty;
         }
     }
 }

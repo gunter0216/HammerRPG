@@ -30,7 +30,7 @@ namespace App.Common.Data.Runtime.JsonLoader
                 var data = Deserialize<T>(json);
                 if (!data.HasValue)
                 {
-                    HLogger.LogError($"Cat deserialize {json}");
+                    HLogger.LogError($"Cant deserialize {json}");
                     return Optional<T>.Empty;
                 }
                 
@@ -42,6 +42,11 @@ namespace App.Common.Data.Runtime.JsonLoader
             }
             
             return Optional<T>.Empty;
+        }
+
+        public Optional<T> Deserialize<T>(string json, Type type)
+        {
+            return m_Deserializer.Deserialize<T>(json, type);
         }
 
         public Optional<T> Deserialize<T>(string json)

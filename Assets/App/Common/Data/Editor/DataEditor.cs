@@ -13,7 +13,7 @@ namespace App.Common.Data.Editor
             EditorUtility.RevealInFinder(Application.persistentDataPath);
         }
 
-        [MenuItem("Helper/ClearData")]
+        [MenuItem("Helper/Data/ClearData", false, 2)]
         public static void ClearData()
         {
             if (Directory.Exists(Application.persistentDataPath))
