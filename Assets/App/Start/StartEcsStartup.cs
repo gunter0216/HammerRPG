@@ -1,13 +1,19 @@
-﻿using App.Common.HammerDI.External;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using App.Common.FSM.Runtime;
+using App.Common.HammerDI.External;
 using App.Common.SceneControllers.External;
 using App.Common.SceneControllers.Runtime;
 using App.Game;
 using App.Game.Contexts;
 using App.Game.Player.Systems;
+using App.Game.States.Start;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
 
 namespace App.Start
 {
@@ -18,17 +24,18 @@ namespace App.Start
     
         private EcsWorld m_World;
         private EcsSystems m_UpdateSystems;
+        private IServiceProvider m_ServiceProvider;
 
         void Start()
         {
             var diManager = DiManager.Instance;
-            var serviceProvider = diManager.BuildServiceProvider(typeof(StartSceneContext));
-            foreach (IInitSystem initSystem in serviceProvider.GetInterfaces<IInitSystem>())
-            {
-                initSystem.Init();
-            }
+            m_ServiceProvider = diManager.BuildServiceProvider(typeof(StartSceneContext));
 
-            var sceneController = serviceProvider.GetService<SceneController>();
+            var stateMachine = new StateMachine(m_ServiceProvider.GetInterfaces<IInitSystem>().Cast<IInitSystem>().ToList());
+            stateMachine.AddState(new DefaultStage(typeof(StartInitPhase)));
+            stateMachine.SyncRun();
+            
+            var sceneController = m_ServiceProvider.GetService<SceneController>();
             sceneController.LoadScene(SceneConstants.MenuScene);
 
 //             m_World = new EcsWorld();
@@ -64,5 +71,13 @@ namespace App.Start
         //     m_World?.Destroy();
         //     m_World = null;
         // }
+        
+        private void OnDestroy()
+        {
+            foreach (IDisposable disposable in m_ServiceProvider.GetInterfaces<IDisposable>())
+            {
+                disposable.Dispose();
+            }
+        }
     }
 }

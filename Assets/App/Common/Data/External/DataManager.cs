@@ -6,16 +6,19 @@ using App.Common.Data.Runtime.Deserializer;
 using App.Common.Data.Runtime.JsonLoader;
 using App.Common.Data.Runtime.JsonSaver;
 using App.Common.Data.Runtime.Serializer;
+using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using App.Game;
+using App.Game.States.Start;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace App.Common.Data.External
 {
     [Singleton]
+    [Stage(typeof(StartInitPhase), -100_000)]
     public class DataManager : IDataManager, IInitSystem
     {
         private const string m_FileName = "Save.json";

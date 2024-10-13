@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
+using App.Common.FSM.Runtime;
 using App.Common.HammerDI.External;
 using App.Game;
 using App.Game.Contexts;
+using App.Game.States.Menu;
 using Leopotam.EcsLite;
 using UnityEngine;
 using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
@@ -19,10 +22,9 @@ namespace App.Menu
             var diManager = DiManager.Instance;
             m_ServiceProvider = diManager.BuildServiceProvider(typeof(MenuSceneContext));
 
-            foreach (IInitSystem initSystem in m_ServiceProvider.GetInterfaces<IInitSystem>())
-            {
-                initSystem.Init();
-            }
+            var stateMachine = new StateMachine(m_ServiceProvider.GetInterfaces<IInitSystem>().Cast<IInitSystem>().ToList());
+            stateMachine.AddState(new DefaultStage(typeof(MenuInitPhase)));
+            stateMachine.SyncRun();
         }
 
         private void OnDestroy()
