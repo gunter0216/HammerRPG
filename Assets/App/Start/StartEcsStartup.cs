@@ -5,6 +5,7 @@ using App.Common.FSM.Runtime;
 using App.Common.HammerDI.External;
 using App.Common.SceneControllers.External;
 using App.Common.SceneControllers.Runtime;
+using App.Common.Utility.Runtime.Extensions;
 using App.Game;
 using App.Game.Contexts;
 using App.Game.Player.Systems;
@@ -74,7 +75,13 @@ namespace App.Start
         
         private void OnDestroy()
         {
-            foreach (IDisposable disposable in m_ServiceProvider.GetInterfaces<IDisposable>())
+            var dInterfaces = m_ServiceProvider.GetInterfaces<IDisposable>();
+            if (dInterfaces.IsNullOrEmpty())
+            {
+                return;
+            }
+            
+            foreach (IDisposable disposable in dInterfaces)
             {
                 disposable.Dispose();
             }

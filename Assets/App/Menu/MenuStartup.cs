@@ -2,6 +2,7 @@
 using System.Linq;
 using App.Common.FSM.Runtime;
 using App.Common.HammerDI.External;
+using App.Common.Utility.Runtime.Extensions;
 using App.Game;
 using App.Game.Contexts;
 using App.Game.States.Menu;
@@ -29,7 +30,13 @@ namespace App.Menu
 
         private void OnDestroy()
         {
-            foreach (IDisposable disposable in m_ServiceProvider.GetInterfaces<IDisposable>())
+            var dInterfaces = m_ServiceProvider.GetInterfaces<IDisposable>();
+            if (dInterfaces.IsNullOrEmpty())
+            {
+                return;
+            }
+            
+            foreach (IDisposable disposable in dInterfaces)
             {
                 disposable.Dispose();
             }

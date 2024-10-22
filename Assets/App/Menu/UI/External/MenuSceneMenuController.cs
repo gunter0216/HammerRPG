@@ -1,19 +1,23 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
+using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using App.Game;
 using App.Game.Canvases;
 using App.Game.Contexts;
+using App.Game.States.Menu;
 using App.Menu.UI.External.FSM;
 using App.Menu.UI.External.FSM.States;
 using App.Menu.UI.External.View;
+using UnityEditor.Search;
 using UnityEngine;
 
 namespace App.Menu.UI.External
 {
     [Scoped(typeof(MenuSceneContext))]
+    [Stage(typeof(MenuInitPhase), 0)]
     public class MenuSceneMenuController : IInitSystem, IDisposable
     {
         private const string m_MenuSceneMenuAssetKey = "MenuSceneMenuView";
@@ -27,13 +31,13 @@ namespace App.Menu.UI.External
         private SettingsMenuState m_SettingsMenuState;
         private SingleplayerMenuState m_SingleplayerMenuState;
         private MenuMachine m_MenuMachine;
-        
+
         private MenuSceneMenuView m_View;
 
         public void Init()
         {
             var view = m_AssetManager.InstantiateSync<MenuSceneMenuView>(
-                m_MenuSceneMenuAssetKeyEvaluator, 
+                m_MenuSceneMenuAssetKeyEvaluator,
                 m_MainCanvas.GetContent());
             if (!view.HasValue)
             {

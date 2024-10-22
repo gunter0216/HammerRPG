@@ -1,13 +1,17 @@
-﻿using App.Common.Data.Runtime;
+﻿using a;
+using App.Common.Data.Runtime;
+using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Game;
 using App.Game.Contexts;
+using App.Game.States.Menu;
 using App.Menu.Inventory.Runtime.Data;
 
 namespace App.Menu.Inventory.External
 {
     [Scoped(typeof(MenuSceneContext))]
+    [Stage(typeof(MenuInitPhase), 0)]
     public class InventoryController : IInitSystem
     {
         [Inject] private IDataManager m_DataManager;
@@ -21,8 +25,8 @@ namespace App.Menu.Inventory.External
                  return;
              }
              
-             HLogger.LogError($"{data.CountSlots}");
-             data.CountSlots = 99;
+             // HLogger.LogError($"{data.CountSlots}");
+             // data.CountSlots = 99;
         }
     }
 }

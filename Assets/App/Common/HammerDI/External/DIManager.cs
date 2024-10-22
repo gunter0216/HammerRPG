@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using App.Common.AssemblyManager.Runtime;
 using App.Common.HammerDI.Runtime;
 using App.Common.HammerDI.Runtime.Attributes;
 using UnityEngine;
@@ -29,22 +31,22 @@ namespace App.Common.HammerDI.External
 
         public DiManager()
         {
-            var assembly = Assembly.GetCallingAssembly();
-            var allTypes = assembly.GetTypes();
-            for (int i = 0; i < allTypes.Length; ++i)
+            var assemblyProvider = new AssemblyProviderBuilder()
+                .AddAttribute<SingletonAttribute>()
+                .AddAttribute<ScopedAttribute>()
+                .Build();
+            var singletons = assemblyProvider.GetTypes<SingletonAttribute>();
+            var scopeds = assemblyProvider.GetTypes<ScopedAttribute>();
+
+            for (int i = 0; i < singletons.Count; ++i)
             {
-                var type = allTypes[i];
-                var singleton = type.GetCustomAttribute<SingletonAttribute>(false);
-                if (singleton != null)
-                {
-                    m_ServiceCollection.AddSingleton(type);
-                }
-                
-                var scoped = type.GetCustomAttribute<ScopedAttribute>(false);
-                if (scoped != null)
-                {
-                    m_ServiceCollection.AddScoped(type, scoped.Context);
-                }
+                m_ServiceCollection.AddSingleton(singletons[i].Holder);
+            }
+            
+            for (int i = 0; i < scopeds.Count; ++i)
+            {
+                var scoped = scopeds[i].Attribute as ScopedAttribute;
+                m_ServiceCollection.AddScoped(scopeds[i].Holder, scoped.Context);
             }
         }
 
