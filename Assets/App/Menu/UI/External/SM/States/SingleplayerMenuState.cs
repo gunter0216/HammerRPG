@@ -8,17 +8,27 @@ namespace App.Menu.UI.External.FSM.States
     {
         private readonly MenuMachine m_MenuMachine;
         private readonly SingleplayerPanel m_SingleplayerPanel;
+        private readonly CreateGameMenuState m_CreateGameMenuState;
 
-        public SingleplayerMenuState(MenuMachine menuMachine, SingleplayerPanel singleplayerPanel)
+        public SingleplayerMenuState(MenuMachine menuMachine, 
+            SingleplayerPanel singleplayerPanel, 
+            CreateGameMenuState createGameMenuState)
         {
             m_SingleplayerPanel = singleplayerPanel;
+            m_CreateGameMenuState = createGameMenuState;
             m_MenuMachine = menuMachine;
             
             m_SingleplayerPanel.SetActive(false);
             
             m_SingleplayerPanel.SubscribeToBackButtonClick(OnBackButtonClick);
+            m_SingleplayerPanel.SetCreateNewGameButtonAction(OnCreateNewGameButtonClick);
         }
-        
+
+        private void OnCreateNewGameButtonClick()
+        {
+            m_MenuMachine.PushState(m_CreateGameMenuState);
+        }
+
         public void Enter()
         {
             m_SingleplayerPanel.SetActive(true);

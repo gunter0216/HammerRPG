@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using App.Common.AssemblyManager.Runtime;
 using App.Common.Data.Runtime;
 using App.Common.Data.Runtime.Deserializer;
 using App.Common.Data.Runtime.JsonLoader;
@@ -25,12 +26,11 @@ namespace App.Common.Data.External
         
         private string m_SaveDirectory;
         private string m_FilePath;
-        
-        [Inject] private List<IData> m_Datas;
-        
+
         private IJsonLoader m_Loader;
         private IJsonSaver m_Saver;
 
+        private List<IData> m_Datas;
         private Dictionary<string, IData> m_NameToData;
         private Dictionary<string, Type> m_DataToType;
 
@@ -77,6 +77,23 @@ namespace App.Common.Data.External
             
             Load(m_FilePath);
             CreateNewDatas();
+        }
+
+        public void SetDatas(List<AttributeNode> datas)
+        {
+            m_Datas = new List<IData>(datas.Count);
+            for (int i = 0; i < datas.Count; ++i)
+            {
+                var holder = datas[i].Holder;
+                var instance = Activator.CreateInstance(holder) as IData;
+                if (instance == null)
+                {
+                    HLogger.LogError($"data {datas[i].Holder.Name} contains attribute but no interface");
+                    continue;
+                }
+                
+                m_Datas.Add(instance);
+            }
         }
 
         public void SaveByExit()

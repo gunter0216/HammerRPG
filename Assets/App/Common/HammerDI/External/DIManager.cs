@@ -31,13 +31,11 @@ namespace App.Common.HammerDI.External
 
         public DiManager()
         {
-            var assemblyProvider = new AssemblyProviderBuilder()
-                .AddAttribute<SingletonAttribute>()
-                .AddAttribute<ScopedAttribute>()
-                .Build();
-            var singletons = assemblyProvider.GetTypes<SingletonAttribute>();
-            var scopeds = assemblyProvider.GetTypes<ScopedAttribute>();
+            
+        }
 
+        public void Init(List<AttributeNode> singletons, List<AttributeNode> scopeds)
+        {
             for (int i = 0; i < singletons.Count; ++i)
             {
                 m_ServiceCollection.AddSingleton(singletons[i].Holder);
@@ -56,6 +54,7 @@ namespace App.Common.HammerDI.External
             return m_ServiceCollection.BuildServiceProvider(context, sceneScopeds);
         }
 
+        // todo вытащить отсюда
         private List<object> GetScopedFromCurrentScene()
         {
             var allSceneObjects = new List<MonoBehaviour>();

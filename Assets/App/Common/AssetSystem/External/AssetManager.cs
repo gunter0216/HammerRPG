@@ -38,6 +38,16 @@ namespace App.Common.AssetSystem.External
             return _contextInstanceAssetLoader.InstantiateSync<T>(key, parent, context);
         }
 
+        public Optional<T> LoadSync<T>(IKeyEvaluator key) where T : Object
+        {
+            return _contextInstanceAssetLoader.LoadSync<T>(key);
+        }
+
+        public void UnloadAsset(IKeyEvaluator key)
+        {
+            _contextInstanceAssetLoader.UnloadAsset(key);
+        }
+
         public void UnloadContext(Type context)
         {
             _contextInstanceAssetLoader.UnloadContext(context);

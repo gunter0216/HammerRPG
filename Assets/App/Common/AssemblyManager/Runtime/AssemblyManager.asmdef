@@ -1,3 +1,4 @@
 ﻿{
-  "name": "AssemblyManager"
+  "name": "AssemblyManager",
+  "references":[ "GUID:c48ceabe3d824b629f2bda7260f9a285" ]
 }

@@ -1,0 +1,4 @@
+﻿{
+  "name": "MainMenu",
+  "references":[ "GUID:c48ceabe3d824b629f2bda7260f9a285", "GUID:cb7a0762fc784c5ca6c851f0ec798816", "GUID:fa2a01c7fdf944848eb240f27e5bcaa8" ]
+}

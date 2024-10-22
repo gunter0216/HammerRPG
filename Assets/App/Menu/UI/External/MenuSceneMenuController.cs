@@ -1,16 +1,20 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using App.Game;
 using App.Game.Canvases;
+using App.Game.Canvases.External;
 using App.Game.Contexts;
 using App.Game.States.Menu;
+using App.Menu.UI.External.Data;
 using App.Menu.UI.External.FSM;
 using App.Menu.UI.External.FSM.States;
 using App.Menu.UI.External.View;
+using App.Menu.UI.Runtime.Data;
 using UnityEditor.Search;
 using UnityEngine;
 
@@ -25,14 +29,19 @@ namespace App.Menu.UI.External
         
         [Inject] private MainCanvas m_MainCanvas;
         [Inject] private IAssetManager m_AssetManager;
+        [Inject] private IDataManager m_DataManager;
 
+        private CreateGameMenuState m_CreateGameMenuState;
         private MainMenuState m_MainMenuState;
         private MultiplayerMenuState m_MultiplayerMenuState;
         private SettingsMenuState m_SettingsMenuState;
         private SingleplayerMenuState m_SingleplayerMenuState;
+        
         private MenuMachine m_MenuMachine;
 
+        private GameRecordsDataController m_DataController;
         private MenuSceneMenuView m_View;
+        private GameRecordsData m_Data;
 
         public void Init()
         {
@@ -45,11 +54,16 @@ namespace App.Menu.UI.External
                 return;
             }
 
+            var dataLoader = new GameRecordsDataLoader(m_DataManager);
+            m_DataController = new GameRecordsDataController(dataLoader);
+
             m_View = view.Value;
 
             m_MenuMachine = new MenuMachine();
+            var gameRecordCreateStrategy = new GameRecordCreateStrategy(m_DataController);
 
-            m_SingleplayerMenuState = new SingleplayerMenuState(m_MenuMachine, m_View.SingleplayerPanel);
+            m_CreateGameMenuState = new CreateGameMenuState(m_MenuMachine, m_View.CreateGamePanel, gameRecordCreateStrategy);
+            m_SingleplayerMenuState = new SingleplayerMenuState(m_MenuMachine, m_View.SingleplayerPanel, m_CreateGameMenuState);
             m_MultiplayerMenuState = new MultiplayerMenuState(m_MenuMachine, m_View.MultiplayerPanel);
             m_SettingsMenuState = new SettingsMenuState(m_MenuMachine, m_View.SettingsPanel);
             m_MainMenuState = new MainMenuState(

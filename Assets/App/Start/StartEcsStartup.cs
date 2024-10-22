@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using App.Common.AssemblyManager.External;
+using App.Common.AssemblyManager.Runtime;
+using App.Common.Data.External;
+using App.Common.Data.Runtime.Attributes;
 using App.Common.FSM.Runtime;
 using App.Common.HammerDI.External;
+using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.SceneControllers.External;
 using App.Common.SceneControllers.Runtime;
 using App.Common.Utility.Runtime.Extensions;
@@ -29,8 +34,22 @@ namespace App.Start
 
         void Start()
         {
+            var assemblyProvider = new AssemblyManager()
+                .CreateAssemblyProviderBuilder()
+                .AddAttribute<SingletonAttribute>()
+                .AddAttribute<ScopedAttribute>()
+                .AddAttribute<DataAttribute>()
+                .Build();
+            
+            var singletons = assemblyProvider.GetTypes<SingletonAttribute>();
+            var scopeds = assemblyProvider.GetTypes<ScopedAttribute>();
+            var datas = assemblyProvider.GetTypes<DataAttribute>();
+            
             var diManager = DiManager.Instance;
+            diManager.Init(singletons, scopeds);
             m_ServiceProvider = diManager.BuildServiceProvider(typeof(StartSceneContext));
+            
+            m_ServiceProvider.GetService<DataManager>().SetDatas(datas);
 
             var stateMachine = new StateMachine(m_ServiceProvider.GetInterfaces<IInitSystem>().Cast<IInitSystem>().ToList());
             stateMachine.AddState(new DefaultStage(typeof(StartInitPhase)));
