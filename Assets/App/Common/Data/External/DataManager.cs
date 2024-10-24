@@ -96,7 +96,7 @@ namespace App.Common.Data.External
             }
         }
 
-        public void SaveByExit()
+        public void SaveProgress()
         {
             HLogger.Log("SaveByExit");
             Save(m_FilePath);
@@ -111,6 +111,18 @@ namespace App.Common.Data.External
             
             HLogger.LogError($"Data not found {name}");
             return Optional<IData>.Empty;
+        }
+        
+        public Optional<T> GetData<T>(string name) where T : IData
+        {
+            // TODO
+            // if (m_NameToData.TryGetValue(name, out var data))
+            // {
+            //     return new Optional<T>(data);
+            // }
+            //
+            // HLogger.LogError($"Data not found {name}");
+            return Optional<T>.Empty;
         }
 
         private void CreateNewDatas()

@@ -13,7 +13,7 @@ namespace App.Start
     {
         public void Init()
         {
-            Debug.LogError("Start2");
+            // Debug.LogError("Start2");
         }
     }
 }

@@ -20,6 +20,7 @@ using Leopotam.EcsLite.Di;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
+using SceneManager = App.Common.SceneControllers.External.SceneManager;
 
 namespace App.Start
 {
@@ -55,7 +56,7 @@ namespace App.Start
             stateMachine.AddState(new DefaultStage(typeof(StartInitPhase)));
             stateMachine.SyncRun();
             
-            var sceneController = m_ServiceProvider.GetService<SceneController>();
+            var sceneController = m_ServiceProvider.GetService<SceneManager>();
             sceneController.LoadScene(SceneConstants.MenuScene);
 
 //             m_World = new EcsWorld();

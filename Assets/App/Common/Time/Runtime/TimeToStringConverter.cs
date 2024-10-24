@@ -1,24 +1,45 @@
-﻿namespace App.Common.Utility.Runtime.Time
+﻿using System;
+
+namespace App.Common.Utility.Runtime.Time
 {
     public class TimeToStringConverter : ITimeToStringConverter
     {
-        public string ReturnFullTimeToShow(float timeLeft)
+        private readonly string m_Days;
+        private readonly string m_Hours;
+        private readonly string m_Minutes;
+        private readonly string m_Seconds;
+
+        public TimeToStringConverter()
         {
-            // int hour = (int)(timeLeft / Seconds.Hour);
-            // int minute = (int)(timeLeft / Seconds.Minute % Seconds.Minute);
-            // int seconds = (int)(timeLeft - (Seconds.Hour * hour) - (Seconds.Minute * minute));
-            // string timeToShow =  hour +
-            //                      "hours".Localize() +
-            //                      " " +
-            //                      minute +
-            //                      "minutes".Localize() +
-            //                      " " +
-            //                      seconds +
-            //                      "seconds".Localize();
-            //
-            // return timeToShow;
-            return "";
+            // todo localize
+            m_Days = "d";
+            m_Hours = "h";
+            m_Minutes = "m";
+            m_Seconds = "s";
         }
+        
+        public string ReturnTimeToShow(long time)
+        {
+            var date = new DateTime(time);
+            return date.ToString();
+        }
+        
+        // public string ReturnTimeToShow(long time)
+        // {
+        //     var date = new DateTime(time).Subtract(DateTime.MinValue);
+        //     
+        //     if (date.Days > 0)
+        //     {
+        //         return $"{date.Days}{m_Days} {date.Hours}{m_Hours}";
+        //     } 
+        //     
+        //     if (date.Hours > 0)
+        //     {
+        //         return $"{date.Hours}{m_Hours} {date.Minutes}{m_Minutes}";
+        //     }
+        //     
+        //     return $"{date.Minutes}{m_Minutes} {date.Seconds}{m_Seconds}";
+        // }
 
         public string ReturnTimeToShow(float timeLeft)
         {
@@ -50,6 +71,24 @@
             // }
             
 
+            return "";
+        }
+
+        public string ReturnFullTimeToShow(float timeLeft)
+        {
+            // int hour = (int)(timeLeft / Seconds.Hour);
+            // int minute = (int)(timeLeft / Seconds.Minute % Seconds.Minute);
+            // int seconds = (int)(timeLeft - (Seconds.Hour * hour) - (Seconds.Minute * minute));
+            // string timeToShow =  hour +
+            //                      "hours".Localize() +
+            //                      " " +
+            //                      minute +
+            //                      "minutes".Localize() +
+            //                      " " +
+            //                      seconds +
+            //                      "seconds".Localize();
+            //
+            // return timeToShow;
             return "";
         }
     }

@@ -1,4 +1,5 @@
-﻿using App.Common.Data.Runtime;
+﻿using System;
+using App.Common.Data.Runtime;
 using App.Common.HammerDI.Runtime.Attributes;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace App.Common.ApplicationQuit.External
         {
             if (m_DataManager != null)
             {
-                m_DataManager.SaveByExit();
+                m_DataManager.SaveProgress();
             }
         }
 
@@ -28,8 +29,9 @@ namespace App.Common.ApplicationQuit.External
 #if UNITY_EDITOR
         private void OnApplicationQuit()
         {
+            Debug.LogError("qqwqeqweqweqweqwe");
             SaveProgress();
         }
-#endif 
+#endif
     }
 }

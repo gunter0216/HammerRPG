@@ -8,7 +8,7 @@ namespace App.Game
     {
         public void GetValue()
         {
-            Debug.LogError("AAA");
+            // Debug.LogError("AAA");
             return;
         }
     }

@@ -1,9 +1,11 @@
-﻿using App.Common.Logger.Runtime;
+﻿using System;
+using App.Common.Logger.Runtime;
 using App.Menu.UI.External.View.Panels.Singleplayer;
+using UnityEngine;
 
 namespace App.Menu.UI.External.FSM.States
 {
-    public class CreateGameMenuState : IMenuState
+    public class CreateGameMenuState : IMenuState, IDisposable
     {
         private readonly GameRecordCreateStrategy m_RecordCreateStrategy;
         private readonly CreateGamePanel m_Panel;
@@ -49,6 +51,11 @@ namespace App.Menu.UI.External.FSM.States
                 // todo
                 HLogger.LogError("name is exists");
             }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

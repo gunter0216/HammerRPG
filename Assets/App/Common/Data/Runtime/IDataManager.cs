@@ -4,7 +4,7 @@ namespace App.Common.Data.Runtime
 {
     public interface IDataManager
     {
-        void SaveByExit();
+        void SaveProgress();
         Optional<IData> GetData(string name);
     }
 }

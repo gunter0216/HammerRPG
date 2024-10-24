@@ -15,7 +15,7 @@ namespace App.Start
         
         public void Init()
         {
-            Debug.LogError("Start1");
+            // Debug.LogError("Start1");
             m_MonoScoped1.GetValue();
         }
     }

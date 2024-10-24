@@ -4,6 +4,7 @@ using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
+using App.Common.SceneControllers.Runtime;
 using App.Common.Utility.Runtime;
 using App.Game;
 using App.Game.Canvases;
@@ -30,6 +31,7 @@ namespace App.Menu.UI.External
         [Inject] private MainCanvas m_MainCanvas;
         [Inject] private IAssetManager m_AssetManager;
         [Inject] private IDataManager m_DataManager;
+        [Inject] private ISceneManager m_SceneManager;
 
         private CreateGameMenuState m_CreateGameMenuState;
         private MainMenuState m_MainMenuState;
@@ -41,7 +43,6 @@ namespace App.Menu.UI.External
 
         private GameRecordsDataController m_DataController;
         private MenuSceneMenuView m_View;
-        private GameRecordsData m_Data;
 
         public void Init()
         {
@@ -61,9 +62,15 @@ namespace App.Menu.UI.External
 
             m_MenuMachine = new MenuMachine();
             var gameRecordCreateStrategy = new GameRecordCreateStrategy(m_DataController);
-
+            var startGameStrategy = new StartGameStrategy(m_SceneManager, m_DataController);
+            
             m_CreateGameMenuState = new CreateGameMenuState(m_MenuMachine, m_View.CreateGamePanel, gameRecordCreateStrategy);
-            m_SingleplayerMenuState = new SingleplayerMenuState(m_MenuMachine, m_View.SingleplayerPanel, m_CreateGameMenuState);
+            m_SingleplayerMenuState = new SingleplayerMenuState(
+                m_MenuMachine, 
+                m_View.SingleplayerPanel,
+                m_CreateGameMenuState,
+                m_DataController,
+                startGameStrategy);
             m_MultiplayerMenuState = new MultiplayerMenuState(m_MenuMachine, m_View.MultiplayerPanel);
             m_SettingsMenuState = new SettingsMenuState(m_MenuMachine, m_View.SettingsPanel);
             m_MainMenuState = new MainMenuState(
@@ -78,6 +85,7 @@ namespace App.Menu.UI.External
 
         public void Dispose()
         {
+            m_CreateGameMenuState?.Dispose();
             m_MultiplayerMenuState?.Dispose();
             m_SettingsMenuState?.Dispose();
             m_SingleplayerMenuState?.Dispose();

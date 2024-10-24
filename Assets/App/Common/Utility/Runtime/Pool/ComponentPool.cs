@@ -15,11 +15,11 @@ namespace App.Common.Utility.Runtime.Pool
         public ComponentPool(
             T prefab,
             Transform parent = null,
+            int capacity = 0,
             Action<T> onCreate = null,
             Action<T> onGet = null,
             Action<T> onRelease = null,
-            Action<T> onDestroy = null,
-            int capacity = 0)
+            Action<T> onDestroy = null)
         {
             m_Pool = new ListPool<T>(
                 createFunc: () =>

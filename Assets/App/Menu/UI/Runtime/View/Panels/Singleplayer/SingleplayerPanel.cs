@@ -9,6 +9,11 @@ namespace App.Menu.UI.External.View.Panels.Singleplayer
         [SerializeField] private Button m_BackButton;
         [SerializeField] private Button m_RemoveButton;
         [SerializeField] private Button m_CreateNewGameButton;
+        [SerializeField] private Transform m_SaveRowsContent;
+        [SerializeField] private SingleplayerSaveRow m_SaveRowPrefab;
+
+        public SingleplayerSaveRow SaveRowPrefab => m_SaveRowPrefab;
+        public Transform SaveRowsContent => m_SaveRowsContent;
         
         public void SetActive(bool state)
         {

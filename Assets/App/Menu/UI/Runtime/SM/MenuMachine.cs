@@ -19,7 +19,7 @@ namespace App.Menu.UI.External.FSM
         {
             if (m_MenuStates.Count > 0)
             {
-                m_MenuStates.Last().Exit();
+                m_MenuStates.Peek().Exit();
             }
             
             m_MenuStates.Push(menuState);
@@ -33,13 +33,14 @@ namespace App.Menu.UI.External.FSM
                 HLogger.LogError("stack is empty");
                 return;
             }
-
+            
+            
             var state = m_MenuStates.Pop();
             state.Exit();
             
             if (m_MenuStates.Count > 0)
             {
-                m_MenuStates.Last().Enter();
+                m_MenuStates.Peek().Enter();
             }
         }
 

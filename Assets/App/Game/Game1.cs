@@ -9,7 +9,7 @@ namespace App.Game
     {
         public void Init()
         {
-            Debug.LogError("Game1");
+            // Debug.LogError("Game1");
         }
     }
 }
