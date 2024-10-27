@@ -14,8 +14,6 @@ namespace App.Menu
 {
     public class MenuStartup : MonoBehaviour
     {
-        private EcsWorld m_World;
-        private EcsSystems m_UpdateSystems;
         private IServiceProvider m_ServiceProvider;
 
         private void Start()
@@ -23,7 +21,9 @@ namespace App.Menu
             var diManager = DiManager.Instance;
             m_ServiceProvider = diManager.BuildServiceProvider(typeof(MenuSceneContext));
 
-            var stateMachine = new StateMachine(m_ServiceProvider.GetInterfaces<IInitSystem>().Cast<IInitSystem>().ToList());
+            var stateMachine = new StateMachine(
+                m_ServiceProvider.GetInterfaces<IInitSystem>().Cast<IInitSystem>().ToList(),
+                m_ServiceProvider.GetInterfaces<IPostInitSystem>().Cast<IPostInitSystem>().ToList());
             stateMachine.AddState(new DefaultStage(typeof(MenuInitPhase)));
             stateMachine.SyncRun();
         }

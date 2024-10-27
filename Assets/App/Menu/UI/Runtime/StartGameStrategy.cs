@@ -18,7 +18,6 @@ namespace App.Menu.UI.External
 
         public void StartGame(string name)
         {
-            Debug.LogError($"{name}");
             m_DataController.SetLastLogin(name, TimeHelper.Now.Ticks);
             m_SceneManager.LoadScene(SceneConstants.GameScene);
         }

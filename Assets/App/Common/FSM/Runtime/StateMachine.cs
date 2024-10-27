@@ -3,20 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
+using App.Common.Utility.Runtime;
+using App.Common.Utility.Runtime.Extensions;
 using App.Game;
 using Unity.VisualScripting;
 
 namespace App.Common.FSM.Runtime
 {
+    // todo несколько фаз нужно перенести в build логику или в синк ран, хз, сортировку по стадиям
     public class StateMachine : IStateMachine
     {
         private readonly List<IStage> m_States;
-        private readonly Dictionary<string, List<Tuple<int, IInitSystem>>> m_NameToSystems;
+        private readonly Dictionary<string, List<OrderedItem<IInitSystem>>> m_NameToSystems;
+        private readonly Dictionary<string, List<OrderedItem<IPostInitSystem>>> m_NameToPostSystems;
 
-        public StateMachine(List<IInitSystem> systems)
+        public StateMachine(List<IInitSystem> systems, List<IPostInitSystem> postSystems)
         {
             m_States = new List<IStage>();
-            m_NameToSystems = new Dictionary<string, List<Tuple<int, IInitSystem>>>(systems.Count);
+            m_NameToSystems = new Dictionary<string, List<OrderedItem<IInitSystem>>>(systems.Count);
+            m_NameToPostSystems = new Dictionary<string, List<OrderedItem<IPostInitSystem>>>(postSystems.Count);
+
+            ParseSystems(m_NameToSystems, systems);
+            ParseSystems(m_NameToPostSystems, postSystems);
+        }
+
+        private void ParseSystems<T>(Dictionary<string, List<OrderedItem<T>>> dictionary, List<T> systems)
+        {
+            if (systems.IsNullOrEmpty())
+            {
+                return;
+            }
             
             foreach (var system in systems)
             {
@@ -29,23 +45,23 @@ namespace App.Common.FSM.Runtime
                 }
 
                 var name = stage.GetName();
-                if (!m_NameToSystems.TryGetValue(name, out var initSystems))
+                if (!dictionary.TryGetValue(name, out var initSystems))
                 {
-                    initSystems = new List<Tuple<int, IInitSystem>>(1);
-                    m_NameToSystems.Add(name, initSystems);
+                    initSystems = new List<OrderedItem<T>>(1);
+                    dictionary.Add(name, initSystems);
                 }
                 
-                initSystems.Add(new Tuple<int, IInitSystem>(stage.GetOrder(), system));
+                initSystems.Add(new OrderedItem<T>(system, stage.GetOrder()));
             }
 
-            SortSystems();
+            SortSystems(dictionary);
         }
 
-        private void SortSystems()
+        private void SortSystems<T>(Dictionary<string, List<OrderedItem<T>>> dictionary)
         {
-            foreach (var systems in m_NameToSystems.Values)
+            foreach (var systems in dictionary.Values)
             {
-                systems.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+                systems.Sort((x, y) => x.Order.CompareTo(y.Order));
             }
         }
 
@@ -57,8 +73,15 @@ namespace App.Common.FSM.Runtime
                 HLogger.LogError($"Systems not found {name}");
                 return;
             }
+            
+            if (!m_NameToPostSystems.TryGetValue(name, out var postSystems))
+            {
+                postSystems = new List<OrderedItem<IPostInitSystem>>();
+            }
 
-            stage.SetSystems(systems.Select(x => x.Item2).ToList());
+            stage.SetSystems(
+                systems.Select(x => x.Item).ToList(),
+                postSystems.Select(x => x.Item).ToList());
             m_States.Add(stage);
         }
 

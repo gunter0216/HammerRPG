@@ -33,7 +33,7 @@ namespace App.Common.HammerDI.Runtime
                 return objects;
             }
 
-            return null;
+            return new List<object>();
         }
     }
 }

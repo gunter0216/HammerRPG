@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using App.Game;
+using App.Game.States.Game;
+using UnityEngine;
 
 namespace App.Common.FSM.Runtime
 {
@@ -10,6 +12,7 @@ namespace App.Common.FSM.Runtime
         private readonly string m_Name;
         private readonly List<Func<bool>> m_Predicates;
         private List<IInitSystem> m_Systems;
+        private List<IPostInitSystem> m_PostInitSystems;
 
         public DefaultStage(Type type, List<Func<bool>> predicates = null)
         {
@@ -17,9 +20,10 @@ namespace App.Common.FSM.Runtime
             m_Name = type.Name;
         }
 
-        public void SetSystems(List<IInitSystem> systems)
+        public void SetSystems(List<IInitSystem> systems, List<IPostInitSystem> postInitSystems)
         {
             m_Systems = systems;
+            m_PostInitSystems = postInitSystems;
         }
 
         public string GetName()
@@ -32,6 +36,11 @@ namespace App.Common.FSM.Runtime
             for (int i = 0; i < m_Systems.Count; ++i)
             {
                 m_Systems[i].Init();
+            }
+            
+            for (int i = 0; i < m_PostInitSystems.Count; ++i)
+            {
+                m_PostInitSystems[i].PostInit();
             }
         }
         

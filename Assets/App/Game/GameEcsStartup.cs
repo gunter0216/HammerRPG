@@ -1,61 +1,52 @@
+using System;
+using System.Linq;
+using App.Common.FSM.Runtime;
 using App.Common.HammerDI.External;
+using App.Common.Utility.Runtime.Extensions;
 using App.Game.Contexts;
-using App.Game.Player.Systems;
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
+using App.Game.States.Game;
+using App.Game.Update.External;
 using UnityEngine;
+using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
 
 namespace App.Game
 {
     sealed class GameEcsStartup : MonoBehaviour
     {
-        [SerializeField] public StaticData StaticData;
-        [SerializeField] public SceneData SceneData;
-    
-        private EcsWorld m_World;
-        private EcsSystems m_UpdateSystems;
+        private IServiceProvider m_ServiceProvider;
+        private UpdateManager m_UpdateManager;
 
         void Start()
         {
             var diManager = DiManager.Instance;
-            var serviceProvider = diManager.BuildServiceProvider(typeof(GameSceneContext));
-            foreach (IInitSystem initSystem in serviceProvider.GetInterfaces<IInitSystem>())
-            {
-                initSystem.Init();
-            }
+            m_ServiceProvider = diManager.BuildServiceProvider(typeof(GameSceneContext));
             
-            m_World = new EcsWorld();
-            m_UpdateSystems = new EcsSystems(m_World, "MainSystem");
-            var runtimeData = new RuntimeData();
-            
-            m_UpdateSystems
-                .Add(new PlayerInitSystem())
-                .Add(new PlayerInputSystem())
-                .Add(new PlayerMoveSystem())
-#if UNITY_EDITOR
-                // Регистрируем отладочные системы по контролю за состоянием каждого отдельного мира:
-                // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
-                .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ())
-                // Регистрируем отладочные системы по контролю за текущей группой систем. 
-                .Add (new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem ())
-#endif
-                .Inject(StaticData)
-                .Inject(SceneData)
-                .Inject(runtimeData)
-                .Init();
+            var stateMachine = new StateMachine(
+                m_ServiceProvider.GetInterfaces<IInitSystem>().Cast<IInitSystem>().ToList(),
+                m_ServiceProvider.GetInterfaces<IPostInitSystem>().Cast<IPostInitSystem>().ToList());
+            stateMachine.AddState(new DefaultStage(typeof(GameInitPhase)));
+            stateMachine.SyncRun();
+
+            m_UpdateManager = m_ServiceProvider.GetService<UpdateManager>();
         }
 
         void Update()
         {
-            m_UpdateSystems?.Run();
+            m_UpdateManager?.Run();
         }
 
         void OnDestroy()
         {
-            m_UpdateSystems?.Destroy();
-            m_UpdateSystems = null;
-            m_World?.Destroy();
-            m_World = null;
+            var dInterfaces = m_ServiceProvider.GetInterfaces<IDisposable>();
+            if (dInterfaces.IsNullOrEmpty())
+            {
+                return;
+            }
+            
+            foreach (IDisposable disposable in dInterfaces)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }

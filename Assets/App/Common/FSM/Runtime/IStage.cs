@@ -8,6 +8,6 @@ namespace App.Common.FSM.Runtime
         string GetName();
         void SyncRun();
         bool IsPredicatesCompleted();
-        void SetSystems(List<IInitSystem> systems);
+        void SetSystems(List<IInitSystem> systems, List<IPostInitSystem> postInitSystems);
     }
 }
