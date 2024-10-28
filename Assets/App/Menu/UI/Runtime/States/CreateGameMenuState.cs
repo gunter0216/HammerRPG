@@ -1,9 +1,9 @@
 ﻿using System;
 using App.Common.Logger.Runtime;
-using App.Menu.UI.External.View.Panels.Singleplayer;
-using UnityEngine;
+using App.Game.Utility.Runtime.MenuSM;
+using App.Menu.UI.Runtime.View.Panels;
 
-namespace App.Menu.UI.External.FSM.States
+namespace App.Menu.UI.Runtime.States
 {
     public class CreateGameMenuState : IMenuState, IDisposable
     {

@@ -1,8 +1,7 @@
 ﻿using System;
-using App.Menu.UI.External.View.Panels;
-using UnityEngine;
+using App.Game.Utility.Runtime.MenuSM;
 
-namespace App.Menu.UI.External.FSM.States
+namespace App.Game.Settings.Runtime
 {
     public class SettingsMenuState : IMenuState, IDisposable
     {

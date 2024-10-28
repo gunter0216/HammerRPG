@@ -1,4 +1,4 @@
 ﻿{
   "name": "MainMenu",
-  "references":[ "Unity.TextMeshPro", "GUID:c48ceabe3d824b629f2bda7260f9a285", "GUID:cb7a0762fc784c5ca6c851f0ec798816", "GUID:fa2a01c7fdf944848eb240f27e5bcaa8", "GUID:b1ca0d9bc5aa49689e2134e17155f9d6" ]
+  "references":[ "Unity.TextMeshPro", "GUID:c48ceabe3d824b629f2bda7260f9a285", "GUID:cb7a0762fc784c5ca6c851f0ec798816", "GUID:fa2a01c7fdf944848eb240f27e5bcaa8", "GUID:b1ca0d9bc5aa49689e2134e17155f9d6", "GUID:71d4b410868b4ae8b6dc2d9a9faad1b2", "GUID:dcd6048a3b7640e9820eb982d48244fa" ]
 }

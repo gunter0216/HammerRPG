@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace App.Menu.UI.External.View.Panels.Singleplayer
+namespace App.Menu.UI.Runtime.View.Panels.Singleplayer
 {
     public class SingleplayerSaveRow : MonoBehaviour
     {

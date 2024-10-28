@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace App.Menu.UI.External.View.Panels
+namespace App.Game.Settings.Runtime
 {
     public class SettingsPanel : MonoBehaviour
     {

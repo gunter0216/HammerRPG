@@ -1,4 +1,4 @@
-﻿namespace App.Menu.UI.External.FSM.States
+﻿namespace App.Game.Utility.Runtime.MenuSM
 {
     public interface IMenuState
     {

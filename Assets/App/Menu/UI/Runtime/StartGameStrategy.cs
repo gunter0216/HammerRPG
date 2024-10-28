@@ -1,9 +1,8 @@
 ﻿using App.Common.SceneControllers.Runtime;
 using App.Common.Utility.Runtime.Time;
 using App.Menu.UI.Runtime.Data;
-using UnityEngine;
 
-namespace App.Menu.UI.External
+namespace App.Menu.UI.Runtime
 {
     public class StartGameStrategy : IStartGameStrategy
     {

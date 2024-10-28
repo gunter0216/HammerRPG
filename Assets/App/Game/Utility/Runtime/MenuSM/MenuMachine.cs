@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using App.Common.Logger.Runtime;
-using App.Menu.UI.External.FSM.States;
-using UnityEngine;
 
-namespace App.Menu.UI.External.FSM
+namespace App.Game.Utility.Runtime.MenuSM
 {
     public class MenuMachine
     {
         private readonly Stack<IMenuState> m_MenuStates;
 
-        public MenuMachine()
+        private Action<IMenuState> m_PushAction;
+        private Action<IMenuState> m_PopAction;
+
+        public MenuMachine(
+            Action<IMenuState> pushAction = null, 
+            Action<IMenuState> popAction = null)
         {
+            m_PushAction = pushAction;
+            m_PopAction = popAction;
             m_MenuStates = new Stack<IMenuState>();
         }
 
@@ -24,6 +30,7 @@ namespace App.Menu.UI.External.FSM
             
             m_MenuStates.Push(menuState);
             menuState.Enter();
+            m_PushAction?.Invoke(menuState);
         }
         
         public void PopState()
@@ -42,6 +49,13 @@ namespace App.Menu.UI.External.FSM
             {
                 m_MenuStates.Peek().Enter();
             }
+            
+            m_PopAction?.Invoke(state);
+        }
+
+        public int GetCountInStack()
+        {
+            return m_MenuStates.Count;
         }
 
         public IMenuState GetCurrentState()

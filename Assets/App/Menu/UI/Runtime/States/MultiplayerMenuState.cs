@@ -1,7 +1,8 @@
 ﻿using System;
-using App.Menu.UI.External.View.Panels;
+using App.Game.Utility.Runtime.MenuSM;
+using App.Menu.UI.Runtime.View.Panels;
 
-namespace App.Menu.UI.External.FSM.States
+namespace App.Menu.UI.Runtime.States
 {
     public class MultiplayerMenuState : IMenuState, IDisposable
     {
