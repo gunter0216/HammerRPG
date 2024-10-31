@@ -46,6 +46,11 @@ namespace App.Game.EcsEvent.External
             AddDelSystem<T>();
             return eventPool;
         }
+        
+        public EcsFilter GetFilter<T>() where T : struct
+        {
+            return m_World.Filter<T>().End();
+        }
 
         public void Run()
         {

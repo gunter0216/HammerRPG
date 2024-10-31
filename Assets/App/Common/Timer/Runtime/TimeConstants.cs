@@ -1,4 +1,4 @@
-﻿namespace App.Common.Utility.Runtime.Time
+﻿namespace App.Common.Time.Runtime
 {
     public static class TimeConstants
     {

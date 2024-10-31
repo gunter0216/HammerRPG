@@ -1,4 +1,4 @@
-﻿namespace App.Game.Player
+﻿namespace App.Game.Player.Runtime
 {
     public struct DamageEvent
     {

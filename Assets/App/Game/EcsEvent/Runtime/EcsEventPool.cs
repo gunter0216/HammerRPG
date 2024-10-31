@@ -1,4 +1,5 @@
-﻿using Leopotam.EcsLite;
+﻿using System.Runtime.CompilerServices;
+using Leopotam.EcsLite;
 
 namespace App.Game.EcsEvent.Runtime
 {
@@ -18,6 +19,12 @@ namespace App.Game.EcsEvent.Runtime
             var entity = m_World.NewEntity();
             ref T data = ref m_Pool.Add(entity);
             data = eventData;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref T Get(int entity)
+        {
+            return ref m_Pool.Get(entity);
         }
     }
 }

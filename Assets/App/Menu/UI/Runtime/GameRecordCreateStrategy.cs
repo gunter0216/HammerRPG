@@ -1,4 +1,4 @@
-﻿using App.Common.Utility.Runtime.Time;
+﻿using App.Common.Time.Runtime;
 using App.Menu.UI.Runtime.Data;
 
 namespace App.Menu.UI.Runtime

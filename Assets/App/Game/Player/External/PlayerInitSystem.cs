@@ -4,6 +4,7 @@ using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Game.Contexts;
+using App.Game.Player.Runtime;
 using App.Game.States.Game;
 using App.Game.Worlds.Runtime;
 using UnityEngine;
@@ -33,10 +34,12 @@ namespace App.Game.Player.External
             var playerEntity = world.NewEntity();
 
             var entities = world.GetPool<Entity>();
-            ref var player = ref entities.Add(playerEntity);
+            var playerPool = world.GetPool<PlayerComponent>();
+            ref var entity = ref entities.Add(playerEntity);
+            ref var playerComponent = ref playerPool.Add(playerEntity);
             
-            player.PlayerRigidbody = playerObject.Value.gameObject.GetComponent<Rigidbody2D>();
-            player.MoveSpeed = m_DefaultMoveSpeed;
+            entity.PlayerRigidbody = playerObject.Value.gameObject.GetComponent<Rigidbody2D>();
+            entity.MoveSpeed = m_DefaultMoveSpeed;
         }
     }
 }

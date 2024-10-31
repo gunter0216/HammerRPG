@@ -3,6 +3,7 @@ using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
 using App.Game.Contexts;
+using App.Game.EcsEvent.Runtime;
 using App.Game.EcsWorlds.Runtime;
 using App.Game.States.Game;
 using App.Game.Update.Runtime;
@@ -55,6 +56,16 @@ namespace App.Game.Worlds.External
         public EcsWorld GetWorld(string name = null)
         {
             return m_Systems.GetWorld(name);
+        }
+        
+        public EcsPool<T> GetPool<T>(string worldName = null) where T : struct
+        {
+            return m_Systems.GetWorld(worldName).GetPool<T>();
+        }
+        
+        public EcsFilter GetFilter<T>(string worldName = null) where T : struct
+        {
+            return m_Systems.GetWorld(worldName).Filter<T>().End();
         }
 
         public void Dispose()
