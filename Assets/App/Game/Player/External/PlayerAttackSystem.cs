@@ -26,24 +26,26 @@ namespace App.Game.Player.External
         
         private EcsEventPool<AttackEvent> m_AttackEventPool;
         private EcsFilter m_PlayerFilter;
+        private Camera m_Camera;
 
         public void Init()
         {
             m_AttackEventPool = m_EcsEventManager.GetPool<AttackEvent>();
             m_PlayerFilter = m_WorldManager.GetFilter<Inc<Entity, PlayerComponent>>();
+            m_Camera = Camera.main;
         }
 
         public void Run()
         {
             if (Input.GetMouseButtonDown(0))
             {
+                var mousePosition = m_Camera.ScreenToWorldPoint(Input.mousePosition); 
                 var entities = m_PlayerFilter.GetRawEntities();
                 if (entities.Length > 0)
                 {
-                    m_AttackEventPool.Trigger(new AttackEvent()
-                    {
-                        EntityId = entities[0]
-                    });
+                    m_AttackEventPool.Trigger(new AttackEvent(
+                        entityId: entities[0],
+                        position: mousePosition));
                 }
             }
         }

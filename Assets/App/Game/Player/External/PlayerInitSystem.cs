@@ -23,8 +23,8 @@ namespace App.Game.Player.External
 
         public void Init()
         {
-            var playerObject = m_AssetManager.InstantiateSync<Rigidbody2D>(new StringKeyEvaluator(m_PlayerAssetKey));
-            if (!playerObject.HasValue)
+            var entityView = m_AssetManager.InstantiateSync<EntityView>(new StringKeyEvaluator(m_PlayerAssetKey));
+            if (!entityView.HasValue)
             {
                 HLogger.LogError("cant create player");
                 return;
@@ -38,7 +38,8 @@ namespace App.Game.Player.External
             ref var entity = ref entities.Add(playerEntity);
             ref var playerComponent = ref playerPool.Add(playerEntity);
             
-            entity.PlayerRigidbody = playerObject.Value.gameObject.GetComponent<Rigidbody2D>();
+            entity.View = entityView.Value;
+            entity.View.Weapon.gameObject.SetActive(false);
             entity.MoveSpeed = m_DefaultMoveSpeed;
         }
     }

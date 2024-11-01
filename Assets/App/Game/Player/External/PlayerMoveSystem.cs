@@ -49,7 +49,7 @@ namespace App.Game.Player.External
 
                 var direction = new Vector2(axis.Horizontal, axis.Vertical).normalized;
                 var velocity = direction * player.MoveSpeed;
-                player.PlayerRigidbody.velocity = velocity;
+                player.View.PlayerRigidbody.velocity = velocity;
             }
         }
     }
