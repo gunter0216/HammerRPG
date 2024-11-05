@@ -5,6 +5,8 @@ using App.Game.Contexts;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Inputs.Runtime.Events;
 using App.Game.Player.Runtime;
+using App.Game.Player.Runtime.Components;
+using App.Game.Player.Runtime.Events;
 using App.Game.States.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
@@ -24,13 +26,13 @@ namespace App.Game.Player.External
         
         private EcsEventPool<AttackEvent> m_AttackEventPool;
         private EcsFilter m_AttackEventFilter;
-        private EcsPool<Entity> m_EntitiesPool;
+        private EcsPool<EntityComponent> m_EntitiesPool;
         private EcsEventPool<PlayAttackAnimationEvent> m_PlayAttackAnimationPool;
 
         public void Init()
         {
             m_PlayAttackAnimationPool = m_EcsEventManager.GetPool<PlayAttackAnimationEvent>();
-            m_EntitiesPool = m_WorldManager.GetPool<Entity>();
+            m_EntitiesPool = m_WorldManager.GetPool<EntityComponent>();
             
             m_AttackEventPool = m_EcsEventManager.GetPool<AttackEvent>();
             m_AttackEventFilter = m_EcsEventManager.GetFilter<AttackEvent>();

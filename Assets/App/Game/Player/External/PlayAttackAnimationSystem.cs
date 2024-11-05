@@ -5,6 +5,8 @@ using App.Game.Contexts;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Player.External.Animations;
 using App.Game.Player.Runtime;
+using App.Game.Player.Runtime.Components;
+using App.Game.Player.Runtime.Events;
 using App.Game.States.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
@@ -23,13 +25,13 @@ namespace App.Game.Player.External
 
         private EcsFilter m_PlayAttackAnimationEventFilter;
         private EcsEventPool<PlayAttackAnimationEvent> m_PlayAttackAnimationPool;
-        private EcsPool<Entity> m_EntitiesPool;
+        private EcsPool<EntityComponent> m_EntitiesPool;
 
         private EntityMeleeWeaponAnimation m_EntityMeleeWeaponAnimation;
 
         public void Init()
         {
-            m_EntitiesPool = m_WorldManager.GetPool<Entity>();
+            m_EntitiesPool = m_WorldManager.GetPool<EntityComponent>();
             
             m_PlayAttackAnimationPool = m_EcsEventManager.GetPool<PlayAttackAnimationEvent>();
             m_PlayAttackAnimationEventFilter = m_EcsEventManager.GetFilter<PlayAttackAnimationEvent>();

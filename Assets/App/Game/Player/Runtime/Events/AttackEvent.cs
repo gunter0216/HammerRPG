@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace App.Game.Player.Runtime
+namespace App.Game.Player.Runtime.Events
 {
     public struct AttackEvent
     {

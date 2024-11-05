@@ -4,6 +4,7 @@ namespace App.Common.Utility.Runtime.Extensions
 {
     public static class TransformExtensions
     {
+        // position
         public static void SetPositionX(this Transform transform, float value)
         {
             var position = transform.position;
@@ -24,6 +25,8 @@ namespace App.Common.Utility.Runtime.Extensions
             position.z = value;
             transform.position = position;
         }
+        
+        // local position
         
         public static void SetLocalPositionX(this Transform transform, float value)
         {
@@ -46,6 +49,8 @@ namespace App.Common.Utility.Runtime.Extensions
             transform.localPosition = position;
         }
         
+        // rotate
+        
         public static void SetEulerRotateX(this Transform transform, float value)
         {
             var angles = transform.eulerAngles;
@@ -65,6 +70,24 @@ namespace App.Common.Utility.Runtime.Extensions
             var angles = transform.eulerAngles;
             angles.z = value;
             transform.eulerAngles = angles;
+        }
+        
+        // local rotate
+        
+        public static void SetLocalEulerRotateZ(this Transform transform, float value)
+        {
+            var angles = transform.localEulerAngles;
+            angles.z = value;
+            transform.localEulerAngles = angles;
+        }
+        
+        // local scale
+        
+        public static void SetLocalScaleX(this Transform transform, float value)
+        {
+            var angles = transform.localScale;
+            angles.x = value;
+            transform.localScale = angles;
         }
     }
 }

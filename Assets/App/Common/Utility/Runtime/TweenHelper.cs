@@ -183,6 +183,35 @@ namespace App.Common.Utility.Runtime
             tween.SetTarget(target);
             return tween;
         }
+        
+        public static Tweener TweenDOLocalRotateZ(Transform target, float endValue, float duration)
+        {        
+            TweenerCore<float,float,FloatOptions> tween = DOTween.To(
+                () =>
+                {
+                    if (target != null)
+                    {
+                        return target.localRotation.z;
+                    }
+                    Debug.LogError("опять трансформ кто-то убил, а твину нет");
+                    return endValue;
+                },
+                x =>
+                {
+                    if (target != null)
+                    {
+                        target.SetLocalEulerRotateZ(x);
+                    }
+                    else
+                    {
+                        Debug.LogError("опять трансформ кто-то убил, а твину нет");
+                    }
+                },
+                endValue,
+                duration);
+            tween.SetTarget(target);
+            return tween;
+        }
 
         public static Tweener TweenDORotate(Transform target, Vector3 startValue, Vector3 rotateValue, float duration, RotateMode mode = RotateMode.Fast)
         {

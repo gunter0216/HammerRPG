@@ -6,6 +6,8 @@ using App.Game.EcsEvent.Runtime;
 using App.Game.Inputs.Runtime;
 using App.Game.Inputs.Runtime.Events;
 using App.Game.Player.Runtime;
+using App.Game.Player.Runtime.Components;
+using App.Game.Player.Runtime.Events;
 using App.Game.States.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
@@ -31,7 +33,7 @@ namespace App.Game.Player.External
         public void Init()
         {
             m_AttackEventPool = m_EcsEventManager.GetPool<AttackEvent>();
-            m_PlayerFilter = m_WorldManager.GetFilter<Inc<Entity, PlayerComponent>>();
+            m_PlayerFilter = m_WorldManager.GetFilter<Inc<EntityComponent, PlayerComponent>>();
             m_Camera = Camera.main;
         }
 

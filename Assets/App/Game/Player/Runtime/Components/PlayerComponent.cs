@@ -1,4 +1,4 @@
-﻿namespace App.Game.Player.Runtime
+﻿namespace App.Game.Player.Runtime.Components
 {
     public struct PlayerComponent
     {

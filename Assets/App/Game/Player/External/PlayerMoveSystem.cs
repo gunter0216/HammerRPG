@@ -5,6 +5,7 @@ using App.Game.Contexts;
 using App.Game.EcsWorlds.Runtime;
 using App.Game.Inputs.Runtime.Events;
 using App.Game.Player.Runtime;
+using App.Game.Player.Runtime.Components;
 using App.Game.States.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
@@ -23,7 +24,7 @@ namespace App.Game.Player.External
         [Inject] private IWorldManager m_WorldManager;
         
         private EcsFilter m_EntitiesFilter;
-        private EcsPool<Entity> m_EntitiesPool;
+        private EcsPool<EntityComponent> m_EntitiesPool;
         
         private EcsFilter m_AxisFilter;
         private EcsPool<AxisRawEvent> m_AxisPool;
@@ -35,8 +36,8 @@ namespace App.Game.Player.External
             m_AxisPool = eventWorld.GetPool<AxisRawEvent>();
             
             var world = m_WorldManager.GetWorld();
-            m_EntitiesFilter = world.Filter<Entity>().End();
-            m_EntitiesPool = world.GetPool<Entity>();
+            m_EntitiesFilter = world.Filter<EntityComponent>().End();
+            m_EntitiesPool = world.GetPool<EntityComponent>();
         }
 
         public void Run()
