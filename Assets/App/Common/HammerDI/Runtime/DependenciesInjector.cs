@@ -10,7 +10,10 @@ namespace App.Common.HammerDI.Runtime
 {
     public class DependenciesInjector
     {
-        public void InjectDependencies(Dictionary<Type, object> services, Dictionary<Type, List<object>> interfaces)
+        public void InjectDependencies(
+            Dictionary<Type, object> services,
+            Dictionary<Type, List<object>> interfaces,
+            Dictionary<Type, Func<Type>> transients)
         {
             foreach (var service in services)
             {
@@ -36,7 +39,7 @@ namespace App.Common.HammerDI.Runtime
 
                         instance = instanceList.First();
                     }
-                    else if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
+                    else if (FieldIsListInterfaces(fieldType))
                     {
                         var genericType = fieldType.GenericTypeArguments[0];
                         if (!interfaces.TryGetValue(genericType, out var instanceList))
@@ -64,6 +67,11 @@ namespace App.Common.HammerDI.Runtime
                     field.SetValue(service.Value, instance);
                 }
             }
+        }
+
+        private bool FieldIsListInterfaces(Type fieldType)
+        {
+            return fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>);
         }
     }
 }

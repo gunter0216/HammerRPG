@@ -31,14 +31,16 @@ namespace App.Start
                 .AddAttribute<SingletonAttribute>()
                 .AddAttribute<ScopedAttribute>()
                 .AddAttribute<DataAttribute>()
+                .AddAttribute<ConfiguratorAttribute>()
                 .Build();
 
             var singletons = assemblyProvider.GetTypes<SingletonAttribute>();
             var scopeds = assemblyProvider.GetTypes<ScopedAttribute>();
             var datas = assemblyProvider.GetTypes<DataAttribute>();
+            var configurators = assemblyProvider.GetTypes<ConfiguratorAttribute>();
 
             var diManager = DiManager.Instance;
-            diManager.Init(singletons, scopeds);
+            diManager.Init(singletons, scopeds, configurators);
             m_ServiceProvider = diManager.BuildServiceProvider(typeof(StartSceneContext));
 
             m_ServiceProvider.GetService<DataManager>().SetDatas(datas);

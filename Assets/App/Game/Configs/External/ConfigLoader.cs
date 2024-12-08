@@ -13,26 +13,12 @@ namespace App.Game.Configs.External
     {
         public const string PlayerPrefsUseLocalConfigsKey = "TestingPanel_UseLocalConfigs";
 
-        [Inject] private IAssetManager m_AssetManager;
-        
+        [Inject] private readonly IAssetManager m_AssetManager;
+        [Inject] private readonly IJsonDeserializer m_JsonDeserializer;
+
         private bool UseLocalConfigs => PlayerPrefs.GetInt(PlayerPrefsUseLocalConfigsKey, 0) == 1;
 
-        // todo когда сделаю в di конфигуратор, перенести это туда
-        private IJsonDeserializer m_JsonDeserializer;
-        
-        public ConfigLoader()
-        {
-            var jsonSettings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                NullValueHandling = NullValueHandling.Ignore,
-                DateFormatString = "d.M.yyyy HH:mm:ss",
-                Formatting = Formatting.Indented
-            };
-            
-            m_JsonDeserializer = new NewtonsoftJsonDeserializer(jsonSettings);
-        }
-        
+
         public Optional<T> LoadLocalConfig<T>(string localKey) where T : class
         {
             var configKeyEvaluator = new StringKeyEvaluator(localKey);

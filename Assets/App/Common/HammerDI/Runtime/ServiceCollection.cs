@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Interfaces;
 using UnityEngine;
 using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
@@ -8,42 +11,75 @@ namespace App.Common.HammerDI.Runtime
 {
     public class ServiceCollection : IServiceCollection
     {
-        private readonly Dictionary<Type, object> m_Transients = new();
+        private readonly Dictionary<Type, Func<Type>> m_Transients = new();
         private readonly Dictionary<object, Dictionary<Type, Type>> m_Contexts = new();
         private readonly Dictionary<Type, object> m_Singletons = new();
 
         private readonly InterfacesExtractor m_InterfacesExtractor = new();
         private readonly DependenciesInjector m_DependenciesInjector = new();
+
+        public void PreBuild()
+        {
+            InjectDependenciesIntoSingletons();
+        }
+
+        private void InjectDependenciesIntoSingletons()
+        {
+            var interfaces = m_InterfacesExtractor.ExtractInterfaces(m_Singletons);
+            m_DependenciesInjector.InjectDependencies(m_Singletons, interfaces, m_Transients);
+        }
         
-        // todo каждый раз инжектятся зависимости в синглтоны. Баг или фича?
+        public void AddConfigurator(Type configurator)
+        {
+            var configuratorInstance = Activator.CreateInstance(configurator);
+            foreach (var method in configurator.GetMethods())
+            {
+                var singleton = method.GetCustomAttribute<SingletonAttribute>();
+                if (singleton != null)
+                {
+                    if (method.ReturnType != typeof(void))
+                    {
+                        AddSingleton(method.ReturnType, method.Invoke(configuratorInstance, parameters: null));
+                    }
+                }
+            }
+        }
+        
         public IServiceProvider BuildServiceProvider(object context, List<object> sceneScopeds)
         {
-            if (!m_Contexts.TryGetValue(context, out var scopeds))
+            if (!m_Contexts.TryGetValue(context, out var scopedsFromContext))
             {
                 throw new ArgumentException($"Cant get context {context}");
             }
-            
-            var services = new Dictionary<Type, object>(scopeds.Count + m_Singletons.Count);
-            foreach (var scoped in scopeds)
+
+            int scopedsAmount = scopedsFromContext.Count + sceneScopeds.Count;
+            int servicesAmount = scopedsAmount + m_Singletons.Count;
+
+            var allServices = new Dictionary<Type, object>(servicesAmount);
+            var allScopeds = new Dictionary<Type, object>(scopedsAmount);
+            foreach (var scoped in scopedsFromContext)
             {
                 var instance = Activator.CreateInstance(scoped.Key);
-                services.Add(scoped.Key, instance);
-            }
-            
-            foreach (var singleton in m_Singletons)
-            {
-                services.Add(singleton.Key, singleton.Value);
-            }
-            
-            foreach (var scoped in sceneScopeds)
-            {
-                services.Add(scoped.GetType(), scoped);
+                allServices.Add(scoped.Key, instance);
+                allScopeds.Add(scoped.Key, instance);
             }
 
-            var interfaces = m_InterfacesExtractor.ExtractInterfaces(services);
-            m_DependenciesInjector.InjectDependencies(services, interfaces);
+            foreach (var scoped in sceneScopeds)
+            {
+                var type = scoped.GetType();
+                allServices.Add(type, scoped);
+                allScopeds.Add(type, scoped);
+            }
+
+            foreach (var singleton in m_Singletons)
+            {
+                allServices.Add(singleton.Key, singleton.Value);
+            }
+
+            var interfaces = m_InterfacesExtractor.ExtractInterfaces(allServices);
+            m_DependenciesInjector.InjectDependencies(allScopeds, interfaces, m_Transients);
             
-            return new ServiceProvider(services, interfaces);
+            return new ServiceProvider(allServices, interfaces);
         }
 
         public void AddTransient(Type type)
@@ -70,6 +106,16 @@ namespace App.Common.HammerDI.Runtime
             }
             
             var instance = Activator.CreateInstance(type);
+            m_Singletons.Add(type, instance);
+        }
+        
+        public void AddSingleton(Type type, object instance)
+        {
+            if (m_Singletons.ContainsKey(type))
+            {
+                throw new ArgumentException($"Cant add singleton, key is already exists {type.Name}");
+            }
+            
             m_Singletons.Add(type, instance);
         }
 

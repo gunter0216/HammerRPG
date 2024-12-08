@@ -28,8 +28,8 @@ namespace App.Common.Data.External
         private string m_SaveDirectory;
         private string m_FilePath;
 
-        private IJsonLoader m_Loader;
-        private IJsonSaver m_Saver;
+        [Inject] private readonly IJsonLoader m_Loader;
+        [Inject] private readonly IJsonSaver m_Saver;
 
         private List<IData> m_Datas;
         private Dictionary<string, IData> m_NameToData;
@@ -37,7 +37,6 @@ namespace App.Common.Data.External
 
         private bool m_IsInitialized = false;
         
-        // todo добавить в конфигурато saver and loader
         public void Init()
         {
             if (m_IsInitialized)
@@ -52,19 +51,6 @@ namespace App.Common.Data.External
             
             m_NameToData = new Dictionary<string, IData>(m_Datas.Count);
             m_DataToType = new Dictionary<string, Type>(m_Datas.Count);
-            
-            var jsonSettings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                NullValueHandling = NullValueHandling.Ignore,
-                DateFormatString = "d.M.yyyy HH:mm:ss",
-                Formatting = Formatting.Indented
-            };
-            
-            IJsonDeserializer deserializer = new NewtonsoftJsonDeserializer(jsonSettings);
-            IJsonSerializer serializer = new NewtonsoftJsonSerializer(jsonSettings);
-            m_Loader = new DefaultJsonLoader(deserializer);
-            m_Saver = new DefaultJsonSaver(serializer);
             
             if (!Directory.Exists(m_SaveDirectory))
             {
