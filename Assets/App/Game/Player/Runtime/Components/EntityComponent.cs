@@ -1,4 +1,4 @@
-﻿using App.Common.Time.Runtime;
+﻿using App.Common.Timer.Runtime;
 using App.Game.Player.External.View;
 
 namespace App.Game.Player.Runtime.Components

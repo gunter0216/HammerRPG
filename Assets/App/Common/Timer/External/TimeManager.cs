@@ -1,46 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
-using App.Common.Time.Runtime;
+using App.Common.Timer.Runtime;
 using App.Game.Contexts;
 using App.Game.States.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
 
-namespace App.Common.Time.External
+namespace App.Common.Timer.External
 {
     [Scoped(typeof(GameSceneContext))]
     [Stage(typeof(GameInitPhase), -500)]
     [RunSystem(1_000)]
     public class TimeManager : IRunSystem, IInitSystem, ITimeManager
     {
-        private List<RealtimeTimer> m_RealtimeTimers;
+        private InternalTimeManager m_InternalTimeManager;
         
         public void Init()
         {
-            m_RealtimeTimers = new();
+            m_InternalTimeManager.Init();
         }
 
         public void Run()
         {
-            var deltaTime = UnityEngine.Time.deltaTime;
-            for (int i = 0; i < m_RealtimeTimers.Count; ++i)
-            {
-                m_RealtimeTimers[i].Decrease(deltaTime);
-            }
+            m_InternalTimeManager.Run(UnityEngine.Time.deltaTime);
         }
 
-        public RealtimeTimer CreateRealtimeTimer(float startTime)
+        public RealtimeTimer CreateRealtimeTimer(float startTime, Action onCompleteAction = null, Action onTickAction = null)
         {
-            var timer = new RealtimeTimer(startTime);
-            m_RealtimeTimers.Add(timer);
-            return timer;
+            return m_InternalTimeManager.CreateRealtimeTimer(startTime, onCompleteAction, onTickAction);
         }
-        
-        public void AddRealtimeTimer(RealtimeTimer timer)
+
+        public RealtimeTimer CreateRealtimeTimer(RealtimeTimer other, Action onCompleteAction = null, Action onTickAction = null)
         {
-            m_RealtimeTimers.Add(timer);
+            return m_InternalTimeManager.CreateRealtimeTimer(other, onCompleteAction, onTickAction);
         }
     }
 }

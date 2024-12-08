@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace App.Common.Time.Runtime
+namespace App.Common.Timer.Runtime
 {
     // todo сделать перемотку времени
     public static class TimeHelper

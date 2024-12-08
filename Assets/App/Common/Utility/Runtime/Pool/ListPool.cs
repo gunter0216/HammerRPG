@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace App.Common.Utility.Runtime.Pool
 {
-    public class ListPool<T> : IPool<T>, IDisposable
+    public class ListPool<T> : IListPool<T>, IDisposable
     {
         private readonly Func<T> m_CreateFunc;
         private readonly Action<T> m_ActionOnGet;
@@ -14,7 +14,10 @@ namespace App.Common.Utility.Runtime.Pool
         private readonly List<T> m_ActiveItems;
 
         public int Capacity => m_Items.Count + m_ActiveItems.Count;
-        public IReadOnlyCollection<T> ActiveItems => m_ActiveItems;
+
+        public IReadOnlyList<T> ActiveItems => m_ActiveItems;
+
+        IReadOnlyCollection<T> IPool<T>.ActiveItems => m_ActiveItems;
 
         public ListPool(
             Func<T> createFunc, 
