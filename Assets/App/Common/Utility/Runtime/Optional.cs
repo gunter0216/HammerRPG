@@ -18,5 +18,15 @@
             Value = value;
             HasValue = hasValue;
         }
+        
+        public static Optional<T> Success(T result)
+        {
+            return new Optional<T>(result, true);
+        }
+
+        public static Optional<T> Fail()
+        {
+            return new Optional<T>(default, false);
+        }
     }
 }
