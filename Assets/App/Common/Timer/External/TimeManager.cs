@@ -27,9 +27,9 @@ namespace App.Common.Timer.External
             m_InternalTimeManager.Run(UnityEngine.Time.deltaTime);
         }
 
-        public RealtimeTimer CreateRealtimeTimer(float startTime, Action onCompleteAction = null, Action onTickAction = null)
+        public RealtimeTimer CreateRealtimeTimer(float duration, Action onCompleteAction = null, Action onTickAction = null)
         {
-            return m_InternalTimeManager.CreateRealtimeTimer(startTime, onCompleteAction, onTickAction);
+            return m_InternalTimeManager.CreateRealtimeTimer(duration, onCompleteAction, onTickAction);
         }
 
         public RealtimeTimer CreateRealtimeTimer(RealtimeTimer other, Action onCompleteAction = null, Action onTickAction = null)

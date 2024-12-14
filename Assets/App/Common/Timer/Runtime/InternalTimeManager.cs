@@ -53,10 +53,10 @@ namespace App.Common.Timer.Runtime
             m_CompletedTimers.Clear();
         }
 
-        public RealtimeTimer CreateRealtimeTimer(float startTime, Action onCompleteAction = null, Action onTickAction = null)
+        public RealtimeTimer CreateRealtimeTimer(float duration, Action onCompleteAction = null, Action onTickAction = null)
         {
             var timer = m_RealtimeTimers.Get();
-            timer.Init(startTime);
+            timer.Init(duration);
             timer.SetSignals(onCompleteAction, onTickAction);
             return timer;
         }

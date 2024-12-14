@@ -10,13 +10,13 @@ namespace App.Common.Timer.Runtime
     public class RealtimeTimer : IDisposable
     {
         [SerializeField, JsonProperty("left_time")] private float m_LeftTime;
-        [SerializeField, JsonProperty("start_time")] private float m_StartTime;
+        [SerializeField, JsonProperty("duration")] private float m_Duration;
 
         private event Action m_OnCompleteAction; 
         private event Action m_OnTickAction; 
         
         public float LeftTime => m_LeftTime;
-        public float StartTime => m_StartTime;
+        public float Duration => m_Duration;
 
         public RealtimeTimer()
         {
@@ -24,16 +24,16 @@ namespace App.Common.Timer.Runtime
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void Init(float startTime)
+        internal void Init(float duration)
         {
-            m_StartTime = startTime;
-            m_LeftTime = startTime;
+            m_Duration = duration;
+            m_LeftTime = duration;
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void Init(RealtimeTimer other)
         {
-            Init(other.StartTime);
+            Init(other.Duration);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

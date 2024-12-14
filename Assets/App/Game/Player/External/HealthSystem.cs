@@ -39,8 +39,8 @@ namespace App.Game.Player.External
             {
                 ref var health = ref m_HealthPool.Get(i);
                 ref var entity = ref m_EntityPool.Get(i);
-                
-                Debug.LogError($"entity {i} health {health.Current}");
+                //
+                // Debug.LogError($"entity {i} health {health.Current}");
             }
         }
     }

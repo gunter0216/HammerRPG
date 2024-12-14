@@ -1,10 +1,9 @@
 ﻿using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.HammerDI.Runtime.Attributes;
+using App.Common.Timer.Runtime;
 using App.Game.Contexts;
 using App.Game.EcsEvent.Runtime;
-using App.Game.Inputs.Runtime.Events;
-using App.Game.Player.Runtime;
 using App.Game.Player.Runtime.Components;
 using App.Game.Player.Runtime.Events;
 using App.Game.States.Game;
@@ -12,7 +11,6 @@ using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
 
 namespace App.Game.Player.External
 {
@@ -23,6 +21,7 @@ namespace App.Game.Player.External
     {
         [Inject] private IEcsEventManager m_EcsEventManager;
         [Inject] private IWorldManager m_WorldManager;
+        [Inject] private ITimeManager m_TimeManager;
         
         private EcsEventPool<AttackEvent> m_AttackEventPool;
         private EcsFilter m_AttackEventFilter;
@@ -44,11 +43,17 @@ namespace App.Game.Player.External
             {
                 ref var attackEvent = ref m_AttackEventPool.Get(i);
                 ref var entity = ref m_EntitiesPool.Get(attackEvent.EntityId);
+
+                if (entity.AttackTimer != null && !entity.AttackTimer.IsCompleted())
+                {
+                    continue;
+                }
                 
                 m_PlayAttackAnimationPool.Trigger(new PlayAttackAnimationEvent(
                     entityId: attackEvent.EntityId,
                     position: attackEvent.Position));
-                // todo здесь проверка на возможность атаковать
+
+                entity.AttackTimer = m_TimeManager.CreateRealtimeTimer(1);
             }
         }
     }
