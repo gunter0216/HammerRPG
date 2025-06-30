@@ -1,4 +1,4 @@
-﻿using App.Common.HammerDI.Runtime.Attributes;
+﻿using App.Common.Autumn.Runtime.Attributes;
 
 namespace App.Game.Items.External
 {

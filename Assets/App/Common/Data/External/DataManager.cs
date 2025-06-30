@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using App.Common.AssemblyManager.Runtime;
+using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
 using App.Common.Data.Runtime.Deserializer;
 using App.Common.Data.Runtime.JsonLoader;
@@ -9,7 +10,6 @@ using App.Common.Data.Runtime.JsonSaver;
 using App.Common.Data.Runtime.Serializer;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
-using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using App.Game;
@@ -19,7 +19,6 @@ using UnityEngine;
 
 namespace App.Common.Data.External
 {
-    [Singleton]
     [Stage(typeof(StartInitPhase), -100_000)]
     public class DataManager : IDataManager, IInitSystem
     {
@@ -66,7 +65,7 @@ namespace App.Common.Data.External
             CreateNewDatas();
         }
 
-        public void SetDatas(List<AttributeNode> datas)
+        public void SetDatas(IReadOnlyList<AttributeNode> datas)
         {
             m_Datas = new List<IData>(datas.Count);
             for (int i = 0; i < datas.Count; ++i)

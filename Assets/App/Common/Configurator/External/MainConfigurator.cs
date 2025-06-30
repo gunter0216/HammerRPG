@@ -1,15 +1,22 @@
-﻿using App.Common.Data.Runtime.Deserializer;
+﻿using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Autumn.Runtime.Collection;
+using App.Common.Data.External;
+using App.Common.Data.Runtime.Deserializer;
 using App.Common.Data.Runtime.JsonLoader;
 using App.Common.Data.Runtime.JsonSaver;
 using App.Common.Data.Runtime.Serializer;
-using App.Common.HammerDI.Runtime.Attributes;
 using Newtonsoft.Json;
 
 namespace App.Common.Configurator.External
 {
     [Configurator]
-    public class MainConfigurator
+    public class MainConfigurator : IConfigurator
     {
+        public void Configuration(IConfigurationCollection collection)
+        {
+            collection.AddSingleton(typeof(DataManager));
+        }
+
         [Singleton]
         public JsonSerializerSettings BeanJsonSerializerSettings()
         {
@@ -27,19 +34,19 @@ namespace App.Common.Configurator.External
         {
             return new NewtonsoftJsonDeserializer(BeanJsonSerializerSettings());
         }
-        
+
         [Singleton]
         public IJsonSerializer BeanJsonSerializer()
         {
             return new NewtonsoftJsonSerializer(BeanJsonSerializerSettings());
         }
-        
+
         [Singleton]
         public IJsonLoader BeanJsonLoader()
         {
             return new DefaultJsonLoader(BeanJsonDeserializer());
         }
-        
+
         [Singleton]
         public IJsonSaver BeanJsonSaver()
         {

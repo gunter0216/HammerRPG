@@ -1,8 +1,8 @@
 ﻿using App.Common.AssetSystem.External;
 using App.Common.AssetSystem.Runtime;
 using App.Common.AssetSystem.Runtime.Context;
+using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
-using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.SceneControllers.Runtime;
 using App.Game.IconLoaders.External;
 using UnityEngine.SceneManagement;

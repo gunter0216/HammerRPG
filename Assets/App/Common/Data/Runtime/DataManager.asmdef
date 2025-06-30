@@ -1,4 +1,4 @@
 ﻿{
   "name": "DataManager",
-  "references":[ "GUID:fa2a01c7fdf944848eb240f27e5bcaa8", "GUID:c48ceabe3d824b629f2bda7260f9a285" ]
+  "references":[ "HLogger", "CommonUtility" ]
 }

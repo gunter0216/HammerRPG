@@ -2,7 +2,7 @@
 
 namespace App.Common.AssemblyManager.Runtime
 {
-    public class AttributeNode
+    public struct AttributeNode
     {
         public Attribute Attribute { get; }
         public Type Holder { get; }

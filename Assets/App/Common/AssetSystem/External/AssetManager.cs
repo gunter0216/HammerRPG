@@ -2,7 +2,7 @@
 using App.Common.AssetSystem.Runtime;
 using App.Common.AssetSystem.Runtime.DestroyStrategy;
 using App.Common.AssetSystem.Runtime.UnloadStrategy;
-using App.Common.HammerDI.Runtime.Attributes;
+using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Utility;
 using App.Common.Utility.Runtime;
 using UnityEngine;

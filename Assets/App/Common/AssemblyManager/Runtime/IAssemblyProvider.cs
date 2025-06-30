@@ -5,6 +5,6 @@ namespace App.Common.AssemblyManager.Runtime
 {
     public interface IAssemblyProvider
     {
-        List<AttributeNode> GetTypes<T>() where T : Attribute;
+        IReadOnlyList<AttributeNode> GetTypes<T>() where T : Attribute;
     }
 }

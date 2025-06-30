@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
+using App.Common.Autumn.External;
 using App.Common.FSM.Runtime;
-using App.Common.HammerDI.External;
 using App.Common.Utility.Runtime.Extensions;
 using App.Game.Contexts;
 using App.Game.States.Game;
 using App.Game.Update.External;
 using UnityEngine;
-using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
+using IServiceProvider = App.Common.Autumn.Runtime.Provider.IServiceProvider;
 
 namespace App.Game
 {

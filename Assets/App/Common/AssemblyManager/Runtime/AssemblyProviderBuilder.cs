@@ -34,9 +34,9 @@ namespace App.Common.AssemblyManager.Runtime
                 for (int j = 0; j < m_Attributes.Count; ++j)
                 {
                     var attributeType = m_Attributes[j];
-                    var attribute = type.GetCustomAttribute(attributeType, m_Inherit);
-                    if (attribute != null)
+                    if (HasAttribute(type, attributeType))
                     {
+                        var attribute = type.GetCustomAttribute(attributeType, m_Inherit);
                         m_AttributeToTypes[attributeType].Add(new AttributeNode(type, attribute));
                     }
                 }
@@ -47,7 +47,7 @@ namespace App.Common.AssemblyManager.Runtime
 
         private bool HasAttribute(Type type, Type attribute)
         {
-            return type.GetCustomAttribute(attribute, m_Inherit) != null;
+            return type.IsDefined(attribute, m_Inherit);
         }
     }
 }

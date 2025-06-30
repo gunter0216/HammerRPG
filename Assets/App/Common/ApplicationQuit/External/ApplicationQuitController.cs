@@ -1,6 +1,6 @@
 ﻿using System;
+using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
-using App.Common.HammerDI.Runtime.Attributes;
 using UnityEngine;
 
 namespace App.Common.ApplicationQuit.External

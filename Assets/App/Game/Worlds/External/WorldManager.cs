@@ -1,7 +1,7 @@
 ﻿using System;
+using App.Common.Autumn.Runtime.Attributes;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
-using App.Common.HammerDI.Runtime.Attributes;
 using App.Game.Contexts;
 using App.Game.EcsEvent.Runtime;
 using App.Game.EcsWorlds.Runtime;

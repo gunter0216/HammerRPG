@@ -1,7 +1,7 @@
-﻿using App.Common.Data.Runtime;
+﻿using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
-using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Game;
 using App.Game.Contexts;

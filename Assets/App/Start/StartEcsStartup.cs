@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using App.Common.AssemblyManager.External;
 using App.Common.AssemblyManager.Runtime;
+using App.Common.Autumn.External;
+using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.External;
 using App.Common.Data.Runtime.Attributes;
 using App.Common.FSM.Runtime;
-using App.Common.HammerDI.External;
-using App.Common.HammerDI.Runtime.Attributes;
 using App.Common.SceneControllers.External;
 using App.Common.SceneControllers.Runtime;
 using App.Common.Utility.Runtime.Extensions;
@@ -15,7 +15,7 @@ using App.Game;
 using App.Game.Contexts;
 using App.Game.States.Start;
 using UnityEngine;
-using IServiceProvider = App.Common.HammerDI.Runtime.Interfaces.IServiceProvider;
+using IServiceProvider = App.Common.Autumn.Runtime.Provider.IServiceProvider;
 using SceneManager = App.Common.SceneControllers.External.SceneManager;
 
 namespace App.Start
@@ -28,6 +28,7 @@ namespace App.Start
         {
             var assemblyProvider = new AssemblyManager()
                 .CreateAssemblyProviderBuilder()
+                .AddAttribute<TransientAttribute>()
                 .AddAttribute<SingletonAttribute>()
                 .AddAttribute<ScopedAttribute>()
                 .AddAttribute<DataAttribute>()
@@ -38,9 +39,10 @@ namespace App.Start
             var scopeds = assemblyProvider.GetTypes<ScopedAttribute>();
             var datas = assemblyProvider.GetTypes<DataAttribute>();
             var configurators = assemblyProvider.GetTypes<ConfiguratorAttribute>();
+            var transients = assemblyProvider.GetTypes<TransientAttribute>();
 
             var diManager = DiManager.Instance;
-            diManager.Init(singletons, scopeds, configurators);
+            diManager.Init(singletons, scopeds, transients, configurators);
             m_ServiceProvider = diManager.BuildServiceProvider(typeof(StartSceneContext));
 
             m_ServiceProvider.GetService<DataManager>().SetDatas(datas);

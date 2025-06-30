@@ -14,7 +14,7 @@ namespace App.Common.AssemblyManager.Runtime
             m_AttributeToTypes = attributeToTypes;
         }
 
-        public List<AttributeNode> GetTypes<T>() where T : Attribute
+        public IReadOnlyList<AttributeNode> GetTypes<T>() where T : Attribute
         {
             if (m_AttributeToTypes.TryGetValue(typeof(T), out var nodes))
             {
