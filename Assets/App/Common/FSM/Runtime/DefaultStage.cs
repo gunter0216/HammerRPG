@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using App.Game;
-using App.Game.States.Game;
-using UnityEngine;
 
 namespace App.Common.FSM.Runtime
 {

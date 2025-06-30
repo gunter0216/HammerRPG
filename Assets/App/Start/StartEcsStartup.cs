@@ -45,7 +45,7 @@ namespace App.Start
             diManager.Init(singletons, scopeds, transients, configurators);
             m_ServiceProvider = diManager.BuildServiceProvider(typeof(StartSceneContext));
 
-            m_ServiceProvider.GetService<DataManager>().SetDatas(datas);
+            m_ServiceProvider.GetService<DataManagerProxy>().SetDatas(datas);
 
             var stateMachine = new StateMachine(
                 m_ServiceProvider.GetInterfaces<IInitSystem>().Cast<IInitSystem>().ToList(),

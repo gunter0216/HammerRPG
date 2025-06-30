@@ -1,41 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using App.Common.AssemblyManager.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.Data.Runtime;
-using App.Common.Data.Runtime.Deserializer;
 using App.Common.Data.Runtime.JsonLoader;
 using App.Common.Data.Runtime.JsonSaver;
-using App.Common.Data.Runtime.Serializer;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
-using App.Game;
-using App.Game.States.Start;
-using Newtonsoft.Json;
 using UnityEngine;
 
-namespace App.Common.Data.External
+namespace App.Common.Data.Runtime
 {
-    [Stage(typeof(StartInitPhase), -100_000)]
-    public class DataManager : IDataManager, IInitSystem
+    public class DataManager : IDataManager
     {
         private const string m_FileName = "Save.json";
         
         private string m_SaveDirectory;
         private string m_FilePath;
 
-        [Inject] private readonly IJsonLoader m_Loader;
-        [Inject] private readonly IJsonSaver m_Saver;
+        private readonly IJsonLoader m_Loader;
+        private readonly IJsonSaver m_Saver;
 
         private List<IData> m_Datas;
         private Dictionary<string, IData> m_NameToData;
         private Dictionary<string, Type> m_DataToType;
 
         private bool m_IsInitialized = false;
-        
+
+        public DataManager(IJsonLoader loader, IJsonSaver saver)
+        {
+            m_Loader = loader;
+            m_Saver = saver;
+        }
+
         public void Init()
         {
             if (m_IsInitialized)
@@ -65,21 +60,9 @@ namespace App.Common.Data.External
             CreateNewDatas();
         }
 
-        public void SetDatas(IReadOnlyList<AttributeNode> datas)
+        public void SetDatas(List<IData> datas)
         {
-            m_Datas = new List<IData>(datas.Count);
-            for (int i = 0; i < datas.Count; ++i)
-            {
-                var holder = datas[i].Holder;
-                var instance = Activator.CreateInstance(holder) as IData;
-                if (instance == null)
-                {
-                    HLogger.LogError($"data {datas[i].Holder.Name} contains attribute but no interface");
-                    continue;
-                }
-                
-                m_Datas.Add(instance);
-            }
+            m_Datas = datas;
         }
 
         public void SaveProgress()

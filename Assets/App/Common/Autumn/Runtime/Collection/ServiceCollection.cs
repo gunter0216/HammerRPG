@@ -39,6 +39,14 @@ namespace App.Common.Autumn.Runtime.Collection
             var values = m_Singletons.Values.ToArray();
             var interfaces = m_InterfacesExtractor.CreateInterfaceToInstances(values);
             m_DependenciesInjector.InjectDependencies(m_Singletons, interfaces, m_TransientsFabrics);
+
+            foreach (var singletonObj in m_Singletons.Values)
+            {
+                if (singletonObj is ISingleton singleton)
+                {
+                    singleton.OnInjectEnd();
+                }
+            }
         }
 
         public IServiceProvider BuildServiceProvider(object context, List<object> additional)

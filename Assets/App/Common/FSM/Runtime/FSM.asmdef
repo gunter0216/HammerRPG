@@ -1,0 +1,4 @@
+﻿{
+  "name": "FSM",
+  "references":[ "HLogger", "CommonUtility" ]
+}

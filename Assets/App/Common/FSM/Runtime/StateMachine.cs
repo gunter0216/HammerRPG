@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using App.Common.Utility.Runtime.Extensions;
-using App.Game;
-using Unity.VisualScripting;
 
 namespace App.Common.FSM.Runtime
 {
@@ -37,7 +35,7 @@ namespace App.Common.FSM.Runtime
             foreach (var system in systems)
             {
                 var type = system.GetType();
-                var stage = type.GetAttribute<Stage>(false);
+                var stage = type.GetCustomAttribute<Stage>(false);
                 if (stage == null)
                 {
                     HLogger.LogError($"Not found attribute {type.Name}");

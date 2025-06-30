@@ -14,7 +14,6 @@ namespace App.Common.Configurator.External
     {
         public void Configuration(IConfigurationCollection collection)
         {
-            collection.AddSingleton(typeof(DataManager));
         }
 
         [Singleton]
