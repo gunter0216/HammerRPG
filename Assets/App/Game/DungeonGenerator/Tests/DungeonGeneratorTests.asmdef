@@ -1,9 +1,13 @@
 {
-    "name": "DungeonGenerator",
+    "name": "DungeonGeneratorTests",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "DungeonGenerator"
+    ],
     "includePlatforms": [],
-    "excludePlatforms": [],
+    "excludePlatforms": [
+        "Editor"
+    ],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],

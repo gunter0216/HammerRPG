@@ -56,10 +56,10 @@ namespace App.Game.DungeonGenerator.Editor
             m_Dungeon = m_DungeonGenerator.Generate(mono.Config);
             m_DungeonGenerator.GenerateRooms(m_Dungeon);
 
-            foreach (var roomData in m_Dungeon.Data.RoomsData.Rooms)
-            {
-                Debug.LogError($"{roomData}");
-            }
+            // foreach (var roomData in m_Dungeon.Data.RoomsData.Rooms)
+            // {
+            //     Debug.LogError($"{roomData}");
+            // }
         }
 
         void WhenUpdate(SceneView sceneView)
@@ -77,11 +77,6 @@ namespace App.Game.DungeonGenerator.Editor
                 {
                     Debug.LogError("End separated");
                     m_Stage = DungeonGenerateStage.None;
-                    
-                    foreach (var roomData in m_Dungeon.Data.RoomsData.Rooms)
-                    {
-                        Debug.LogError($"{roomData}");
-                    }
                 }
             }
         }

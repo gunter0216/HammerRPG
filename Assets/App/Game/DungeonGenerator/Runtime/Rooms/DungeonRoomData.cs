@@ -40,7 +40,7 @@ namespace App.Game.DungeonGenerator.Runtime.Rooms
         
         public Vector2 GetCenter()
         {
-            return new Vector2(Row + Height * 0.5f, Col + Width * 0.5f);
+            return new Vector2(m_Position.x + Width * 0.5f, m_Position.y + Height * 0.5f);
         }
         
         public void SetCenter(Vector2 center)
@@ -80,7 +80,7 @@ namespace App.Game.DungeonGenerator.Runtime.Rooms
 
         public override string ToString()
         {
-            return $"Room [ Position: {GetCenter()}, Size: {m_Size} ]";
+            return $"Room [ Position: {GetCenter()}, Size: {m_Size}, Left {m_Position}]";
         }
     }
 }
