@@ -1,0 +1,17 @@
+﻿{
+    "name": "room1",
+    "look-at": "right",
+    "horizontal-rotate": true,
+    "vertical-rotate": true,
+    "matrix": [
+        "RoomWall   RoomWall    RoomWall    RoomWall    RoomWall    RoomWall    RoomWall    RoomWall    RoomWall",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomWall",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomWall",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomWall",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomDoor",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomWall",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomWall",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomWall",
+        "RoomWall   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomFloor   RoomWall"
+    ]
+}
