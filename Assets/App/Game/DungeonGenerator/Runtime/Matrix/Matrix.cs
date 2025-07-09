@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using App.Game.DungeonGenerator.Runtime.Extensions;
-using App.Game.DungeonGenerator.Runtime.Utility;
 
-namespace DungeonGenerator.Matrices
+namespace App.Game.DungeonGenerator.Runtime.Matrix
 {
     public class Matrix : Matrix<int>
     {

@@ -1,23 +1,19 @@
 ﻿using System;
 using UnityEngine;
 
-namespace App.Game.DungeonGenerator.Runtime.Rooms
+namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel
 {
     [Serializable]
-    public class DungeonRoomsConfig
+    public class DungeonRoomsCreateConfig
     {
         [SerializeField] private int m_CountRooms = 20;
-        
+        [Header("MinRoom")]
         [SerializeField] private int m_MinWidthRoom = 7;
-        [SerializeField] private int m_MaxWidthRoom = 12;
         [SerializeField] private int m_MinHeightRoom = 7;
+        [Header("MaxRoom")]
+        [SerializeField] private int m_MaxWidthRoom = 12;
         [SerializeField] private int m_MaxHeightRoom = 12;
-        
-        [SerializeField] private int m_HeightRoomThreshold = 9;
-        [SerializeField] private int m_WidthRoomThreshold = 9;        
-        
-        [SerializeField] private int m_MinCorridorSize = 10;
-        
+        [Header("Shape")]
         [SerializeField] private int m_Radius = 1;
         
         public int CountRooms
@@ -54,24 +50,6 @@ namespace App.Game.DungeonGenerator.Runtime.Rooms
         {
             get => m_Radius;
             set => m_Radius = value;
-        }
-        
-        public int HeightRoomThreshold
-        {
-            get => m_HeightRoomThreshold;
-            set => m_HeightRoomThreshold = value;
-        }
-        
-        public int WidthRoomThreshold
-        {
-            get => m_WidthRoomThreshold;
-            set => m_WidthRoomThreshold = value;
-        }
-        
-        public int MinCorridorSize
-        {
-            get => m_MinCorridorSize;
-            set => m_MinCorridorSize = value;
         }
     }
 }

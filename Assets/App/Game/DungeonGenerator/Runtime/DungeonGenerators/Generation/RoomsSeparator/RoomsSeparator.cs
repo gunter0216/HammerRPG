@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using App.Game.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Game.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
 using Random = System.Random;
 
-namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators
+namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator
 {
-    public class RoomSeparationStrategy
+    public class RoomsSeparator
     {
         public bool Separate(Dungeon dungeon)
         {
-            int maxSpeed = 1;
+            int maxSpeed = dungeon.Config.SeparationConfig.Speed;
 
             // Wether all rooms are not overlapping anymore
             bool isEveryRoomSeperated = true;

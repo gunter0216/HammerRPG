@@ -1,6 +1,6 @@
 ﻿using System;
 using App.Game.DungeonGenerator.Runtime.DungeonGenerators;
-using DungeonGenerator.Matrices;
+using App.Game.DungeonGenerator.Runtime.Matrix;
 
 namespace App.Game.DungeonGenerator.Runtime.Extensions
 {

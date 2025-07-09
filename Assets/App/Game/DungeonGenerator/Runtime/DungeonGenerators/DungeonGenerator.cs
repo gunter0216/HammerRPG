@@ -1,7 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using App.Game.DelaunayTriangulation.Runtime;
+using App.Game.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
+using App.Game.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding;
+using App.Game.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator;
+using App.Game.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsDiscarding;
+using App.Game.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator;
 using App.Game.DungeonGenerator.Runtime.Rooms;
-using DungeonGenerator.Matrices;
+using App.Game.KruskalAlgorithm.Runtime;
+using UnityEngine;
+using Edge = App.Game.DelaunayTriangulation.Runtime.Edge;
 
 namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators
 {
@@ -17,11 +26,22 @@ namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators
         //
         // private List<Room> m_Rooms;
 
-        private RoomSeparationStrategy m_SeparationStrategy = new RoomSeparationStrategy();
-        private RoomCreateStrategy m_RoomCreateStrategy = new RoomCreateStrategy();
+        private RoomsSeparator m_SeparationStrategy;
+        private RoomsCreator m_RoomsCreator;
+        private SmallRoomsDiscarder m_SmallRoomsDiscarder;
+        private BorderingRoomsDiscarder m_BorderingRoomsDiscarder;
+        private ITriangulation m_Triangulation;
+        private KruskalAlgorithm.Runtime.KruskalAlgorithm m_KruskalAlgorithm;
 
         public DungeonGenerator()
         {
+            var roomCreator = new RoomCreator();
+            m_SeparationStrategy = new RoomsSeparator();
+            m_RoomsCreator = new RoomsCreator(roomCreator);
+            m_SmallRoomsDiscarder = new SmallRoomsDiscarder();
+            m_BorderingRoomsDiscarder = new BorderingRoomsDiscarder();
+            m_Triangulation = new DelaunayTriangulation.Runtime.DelaunayTriangulation();
+            m_KruskalAlgorithm = new KruskalAlgorithm.Runtime.KruskalAlgorithm();
             // m_Rooms = new List<Room>(DungeonConstants.CountRooms);
             // m_PathFinder = new PathFinder(
             //     Tile.Wall, 
@@ -38,7 +58,7 @@ namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators
 
         public Dungeon Generate(DungeonConfig dungeonConfig)
         {
-            var matrix = new Matrix(dungeonConfig.Width, dungeonConfig.Height);
+            var matrix = new Matrix.Matrix(dungeonConfig.Width, dungeonConfig.Height);
             var dungeonData = new DungeonData();
             dungeonData.RoomsData = new DungeonRoomsData();
             dungeonData.Matrix = matrix;
@@ -56,7 +76,7 @@ namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators
 
         public void GenerateRooms(Dungeon dungeon)
         {
-            var rooms = m_RoomCreateStrategy.CreateRooms(dungeon.Config);
+            var rooms = m_RoomsCreator.CreateRooms(dungeon.Config);
             dungeon.Data.RoomsData.Rooms = rooms;
         }
 
@@ -70,145 +90,51 @@ namespace App.Game.DungeonGenerator.Runtime.DungeonGenerators
 
         public HashSet<int> GetSmallRooms(Dungeon dungeon)
         {
-	        var smallRooms = new HashSet<int>(dungeon.Data.RoomsData.Rooms.Count);
-	        for(int i = 0; i < dungeon.Data.RoomsData.Rooms.Count; ++i)
-	        {
-		        var room = dungeon.Data.RoomsData.Rooms[i];
-		        
-		        if (room.Width < dungeon.Config.Rooms.WidthRoomThreshold || room.Height < dungeon.Config.Rooms.HeightRoomThreshold)
-		        {
-			        smallRooms.Add(i);
-		        }
-	        }
-
-	        return smallRooms;
+	        return m_SmallRoomsDiscarder.GetSmallRooms(dungeon);
         }
 
         public void DiscardRooms(Dungeon dungeon, HashSet<int> discardRooms)
         {
-	        var dungeonRooms = dungeon.Data.RoomsData.Rooms;
-	        var newRooms = new List<DungeonRoomData>(dungeonRooms.Count);
-	        for (int i = 0; i < dungeonRooms.Count; ++i)
-	        {
-		        if (!discardRooms.Contains(i))
-		        {
-			        newRooms.Add(dungeonRooms[i]);
-		        }
-	        }
-
-	        dungeon.Data.RoomsData.Rooms = newRooms;
+	        m_SmallRoomsDiscarder.DiscardRooms(dungeon, discardRooms);
         }
 
-        public HashSet<int> DiscardBorderingRooms(Dungeon dungeon)
+        public HashSet<int> GetBorderingRooms(Dungeon dungeon)
         {
-	        var minCorridorSize = dungeon.Config.Rooms.MinCorridorSize;
-	        var roomsCount = dungeon.Data.RoomsData.Rooms.Count;
-
-	        var borderingRooms = new HashSet<int>(dungeon.Data.RoomsData.Rooms.Count);
-	        
-	        for (int i = 0; i < roomsCount; ++i)
-	        {
-		        var room = dungeon.Data.RoomsData.Rooms[i];
-		        
-		        for (int j = i + 1; j < roomsCount; ++j)
-		        {
-			        var other = dungeon.Data.RoomsData.Rooms[j];
-			        
-			        var distance = room.GetCenter() - other.GetCenter();
-			        var roomDistX = Math.Abs(distance.x);
-			        var roomDistY = Math.Abs(distance.y);
-			        
-			        var minCorridorSizeSpaceX = room.Width / 2 + other.Width / 2 + minCorridorSize;
-			        var minCorridorSizeSpaceY = room.Height / 2 + other.Height / 2 + minCorridorSize;
-			        
-			        var isCorridorFlat = roomDistX > roomDistY;
-			        
-			        if (isCorridorFlat && roomDistX < minCorridorSizeSpaceX ||
-			            !isCorridorFlat && roomDistY < minCorridorSizeSpaceY)
-			        {
-				        borderingRooms.Add(i);
-				        break;
-			        }
-		        }
-	        }
-
-	        return borderingRooms;
+            return m_BorderingRoomsDiscarder.GetBorderingRooms(dungeon);
         }
-    
-        // private void PlaceRooms()
-        // {
-        //     while (m_PlacedRooms > 0)
-        //     {
-        //         var roomPos = GetRandomPos();
-        //         var roomSize = GetRandomRoomSize();
-        //         if (CanPlaceRoom(roomPos, roomSize))
-        //         {
-        //             // Logger.Log($"{roomPos} {roomSize}");
-        //             PlaceRoom(roomPos, roomSize);
-        //             m_PlacedRooms -= 1;
-        //             m_Rooms.Add(new Room(roomPos, roomSize));
-        //         }
-        //     }
-        // }
-        //
-        // private bool CanPlaceRoom(Position pos, Size size)
-        // {
-        //     for (int i = 0; i < size.Height; ++i)
-        //     {
-        //         for (int j = 0; j < size.Width; ++j)
-        //         {
-        //             if (!m_Matrix.IsCorrectPos(pos.Row + i, pos.Col + j))
-        //             {
-        //                 Logger.Log("Incorrect pos");
-        //                 return false;
-        //             }
-        //
-        //             if (m_Matrix.GetCell(pos.Row + i, pos.Col + j) != Tile.Wall)
-        //             {
-        //                 return false;
-        //             }
-        //         }
-        //     }
-        //
-        //     return true;
-        // }
-        //
-        // private void PlaceRoom(Position pos, Size size)
-        // {
-        //     for (int i = 0; i < size.Height; ++i)
-        //     {
-        //         for (int j = 0; j < size.Width; ++j)
-        //         {
-        //             if (i == 0 || i == size.Height - 1 ||
-        //                 j == 0 || j == size.Width - 1)
-        //             {
-        //                 m_Matrix.SetCell(pos.Row + i, pos.Col + j, Tile.RoomWall);
-        //             }
-        //             else
-        //             {
-        //                 m_Matrix.SetCell(pos.Row + i, pos.Col + j, Tile.Empty);
-        //             }
-        //         }
-        //     }
-        // }
-        //
-        // private Position GetRandomPos()
-        // {
-        //     var col = m_Random.Next(0, DungeonConstants.Width + 1);
-        //     var row = m_Random.Next(0, DungeonConstants.Height + 1);
-        //     return new Position(row, col);
-        // }
-        //
-        // private Size GetRandomRoomSize()
-        // {
-        //     var width = m_Random.Next(DungeonConstants.MinWidthRoom, DungeonConstants.MaxWidthRoom + 1);
-        //     var height = m_Random.Next(DungeonConstants.MinHeightRoom, DungeonConstants.MaxHeightRoom + 1);
-        //     return new Size(width, height);
-        // }
-        //
-        // private void FillWalls()
-        // {
-        //     m_Matrix.Fill(Tile.Wall);
-        // }
+
+        public List<Triangle> Triangulate(Dungeon dungeon)
+        {
+            var points = new List<Point>();
+            foreach (var roomData in dungeon.Data.RoomsData.Rooms)
+            {
+                var center = roomData.GetCenter();
+                var point = new Point(center.x, center.y);
+                points.Add(point);
+            }
+
+            foreach (var point in points)
+            {
+                Debug.LogError($"{point}");
+            }
+
+            var triangles = m_Triangulation.Triangulate(points);
+            foreach (var triangle in triangles)
+            {
+                Debug.LogError($"{triangle}");
+            }
+            
+            return triangles;
+        }
+
+        public List<Edge> GetEdges()
+        {
+            return m_Triangulation.GetEdges();
+        }
+
+        public (KruskalResult result, Dictionary<int, Point> indexToPoint) FindMinimumSpanningTree(List<Triangle> triangles)
+        {
+            return m_KruskalAlgorithm.FindMinimumSpanningTree(triangles);
+        }
     }
 }

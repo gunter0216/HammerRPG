@@ -1,13 +1,12 @@
 ﻿using App.Game.DungeonGenerator.Runtime.DungeonGenerators;
-using DungeonGenerator.Matrices;
 
 namespace App.Game.DungeonGenerator.Runtime.RoadCreators.CreatorCollidingMatrix
 {
     public class CreatorCollidingMatrix1 : ICreatorCollidingMatrix
     {
-        public Matrix CreateCollidingMatrix(Matrix inputMatrix, int thickness)
+        public Matrix.Matrix CreateCollidingMatrix(Matrix.Matrix inputMatrix, int thickness)
         {
-            Matrix matrix = new Matrix(inputMatrix.Width, inputMatrix.Height);
+            Matrix.Matrix matrix = new Matrix.Matrix(inputMatrix.Width, inputMatrix.Height);
             matrix.Fill(Tile.Empty);
             for (int i = 0; i < inputMatrix.Height; ++i)
             {

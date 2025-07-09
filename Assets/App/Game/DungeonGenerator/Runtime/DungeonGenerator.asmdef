@@ -1,7 +1,7 @@
 {
     "name": "DungeonGenerator",
     "rootNamespace": "",
-    "references": [],
+    "references": [ "DelaunayTriangulation", "KruskalAlgorithm" ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

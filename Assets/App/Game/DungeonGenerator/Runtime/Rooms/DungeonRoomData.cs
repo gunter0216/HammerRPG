@@ -1,11 +1,11 @@
 ﻿using System;
-using App.Game.DungeonGenerator.Runtime.Utility;
 using UnityEngine;
 
 namespace App.Game.DungeonGenerator.Runtime.Rooms
 {
     public class DungeonRoomData
     {
+        private readonly int m_UID;
         private Vector2Int m_Position;
         private Vector2Int m_Size;
         
@@ -19,22 +19,25 @@ namespace App.Game.DungeonGenerator.Runtime.Rooms
         public int Left => m_Position.x;
         public int Top => m_Position.y + m_Size.y;
         public int Bottom => m_Position.y;
-        
+
+        public int UID => m_UID;
+
         public Vector2Int Position
         {
             get => m_Position;
             set => m_Position = value;
         }
-        
+
         public Vector2Int Size
         {
             get => m_Size;
             set => m_Size = value;
         }
-    
-        public DungeonRoomData(Vector2Int position, Vector2Int size)
+
+        public DungeonRoomData(int uid, Vector2Int position, Vector2Int size)
         {
             this.m_Size = size;
+            m_UID = uid;
             this.m_Position = position;
         }
         
