@@ -2,6 +2,8 @@
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding.Cash;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation.Cash;
 using UnityEditor;
 using UnityEngine;
 using Logger = App.Common.Logger.Runtime.Logger;
@@ -35,6 +37,7 @@ namespace App.Generation.DungeonGenerator.Editor
             if (GUILayout.Button("Next Iteration"))
             {
                 m_Generator.NextIteration();
+                SceneView.RepaintAll();
             }
         }
 
@@ -53,71 +56,44 @@ namespace App.Generation.DungeonGenerator.Editor
         private void Draw()
         {
             DrawRooms();
-            DrawTriangulation();
-            // Handles.color = Color.magenta;
-            // Handles.DrawWireCube(Vector2.zero, Vector3.one);
-            //
-            // Handles.color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-            // for (int x = -10; x < 10; ++x)
-            // {
-            //     for (int y = -10; y < 10; ++y)
-            //     {
-            //         var position = new Vector3(x + 0.5f, y + 0.5f);
-            //         var size = new Vector3(1, 1, 0.1f);
-            //         Handles.DrawWireCube(position, size);
-            //     }
-            // }
-            //
-            // if (m_ShowTriangulation)
-            // {
-            //     Handles.color = Color.blue;
-            //     foreach (var triangle in m_Triangulation)
-            //     {
-            //         var points = new Vector3[3];
-            //         points[0] = new Vector3(triangle.A.X, triangle.A.Y, 0);
-            //         points[1] = new Vector3(triangle.B.X, triangle.B.Y, 0);
-            //         points[2] = new Vector3(triangle.C.X, triangle.C.Y, 0);
-            //         Handles.DrawPolyLine(points);
-            //     }
-            // }
-            //
-            // if (m_ShowTree)
-            // {
-            //     Handles.color = Color.yellow;
-            //     foreach (var edge in m_Tree.MinimumSpanningTree)
-            //     {
-            //         var point1 = m_IndexToPoint[edge.Source];
-            //         var point2 = m_IndexToPoint[edge.Destination];
-            //         var points = new Vector3[2];
-            //         points[0] = new Vector3(point1.X, point1.Y, 0);
-            //         points[1] = new Vector3(point2.X, point2.Y, 0);
-            //         Handles.DrawPolyLine(points);
-            //     }
-            // }
-
-            // Handles.color = Color.red;
-            // foreach (var room in m_Dungeon.Data.RoomsData.Rooms)
-            // {
-            //     var roomPosition = room.GetCenter();
-            //     Handles.DrawWireCube(roomPosition, Vector3.one);
-            //     Handles.Label(roomPosition, room.ToString());
-            // }
+            if (m_Generation.TryGetCash<SpanningTreeGenerationCash>(out var spanningTree))
+            {
+                DrawTree(spanningTree);
+            }
+            else if (m_Generation.TryGetCash<TriangulationGenerationCash>(out var triangulation))
+            {
+                DrawTriangulation(triangulation);
+            }
         }
 
-        private void DrawTriangulation()
+        private void DrawTree(SpanningTreeGenerationCash spanningTree)
         {
-            // if (m_ShowTriangulation)
-            // {
-            //     Handles.color = Color.blue;
-            //     foreach (var triangle in m_Triangulation)
-            //     {
-            //         var points = new Vector3[3];
-            //         points[0] = new Vector3(triangle.A.X, triangle.A.Y, 0);
-            //         points[1] = new Vector3(triangle.B.X, triangle.B.Y, 0);
-            //         points[2] = new Vector3(triangle.C.X, triangle.C.Y, 0);
-            //         Handles.DrawPolyLine(points);
-            //     }
-            // }
+            var indexToPoint = spanningTree.Result.IndexToPoint;
+            var tree = spanningTree.Result.MinimumSpanningTree;
+            
+            Handles.color = Color.yellow;
+            foreach (var edge in tree)
+            {
+                var point1 = indexToPoint[edge.Source];
+                var point2 = indexToPoint[edge.Destination];
+                var points = new Vector3[2];
+                points[0] = new Vector3(point1.X, point1.Y, 0);
+                points[1] = new Vector3(point2.X, point2.Y, 0);
+                Handles.DrawPolyLine(points);
+            }
+        }
+
+        private void DrawTriangulation(TriangulationGenerationCash triangulation)
+        {
+            Handles.color = Color.blue;
+            foreach (var triangle in triangulation.Triangles)
+            {
+                var points = new Vector3[3];
+                points[0] = new Vector3(triangle.A.X, triangle.A.Y, 0);
+                points[1] = new Vector3(triangle.B.X, triangle.B.Y, 0);
+                points[2] = new Vector3(triangle.C.X, triangle.C.Y, 0);
+                Handles.DrawPolyLine(points);
+            }
         }
 
         private void DrawRooms()

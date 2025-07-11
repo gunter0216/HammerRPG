@@ -19,14 +19,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
     public class DungeonGenerator
     {
         private readonly ILogger m_Logger;
-        
-        private SeparateRoomsDungeonGenerator m_SeparationStrategy;
-        private CreateRoomsDungeonGenerator m_CreateRoomsDungeonGenerator;
-        private DiscardSmallRoomsDungeonGenerator m_DiscardSmallRoomsDungeonGenerator;
-        private DiscardBorderingRoomsDungeonGenerator m_DiscardBorderingRoomsDungeonGenerator;
-        private ITriangulation m_Triangulation;
-        private KruskalAlgorithm.Runtime.KruskalAlgorithm m_KruskalAlgorithm;
-
         private readonly List<IDungeonGenerator> m_Generators;
         
         private int m_CurrentGeneratorIndex;
@@ -110,68 +102,5 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             
             return Optional<DungeonGeneration>.Success(m_Generation);
         }
-
-        // public void GenerateRooms(Dungeon dungeon)
-        // {
-        //     // var rooms = m_CreateRoomsDungeonGenerator.CreateRooms(dungeon.Config);
-        //     // dungeon.Data.RoomsData.Rooms = rooms;
-        // }
-        //
-        // public bool SeparateRooms(Dungeon dungeon)
-        // {
-        //     return m_SeparationStrategy.Separate(dungeon);
-        //     // m_SeparationStrategy.SeparateRectangles(dungeon);
-        //     // m_SeparationStrategy.SeparateRectanglesWithGrid(dungeon);
-        //     return true;
-        // }
-        //
-        // public HashSet<int> GetSmallRooms(Dungeon dungeon)
-        // {
-	       //  return m_SmallRoomsDiscarder.GetSmallRooms(dungeon);
-        // }
-        //
-        // public void DiscardRooms(Dungeon dungeon, HashSet<int> discardRooms)
-        // {
-	       //  m_SmallRoomsDiscarder.DiscardRooms(dungeon, discardRooms);
-        // }
-        //
-        // public HashSet<int> GetBorderingRooms(Dungeon dungeon)
-        // {
-        //     return m_BorderingRoomsDiscarder.GetBorderingRooms(dungeon);
-        // }
-        //
-        // public List<Triangle> Triangulate(Dungeon dungeon)
-        // {
-        //     var points = new List<Point>();
-        //     foreach (var roomData in dungeon.Data.RoomsData.Rooms)
-        //     {
-        //         var center = roomData.GetCenter();
-        //         var point = new Point(center.x, center.y);
-        //         points.Add(point);
-        //     }
-        //
-        //     foreach (var point in points)
-        //     {
-        //         Debug.LogError($"{point}");
-        //     }
-        //
-        //     var triangles = m_Triangulation.Triangulate(points);
-        //     foreach (var triangle in triangles)
-        //     {
-        //         Debug.LogError($"{triangle}");
-        //     }
-        //     
-        //     return triangles;
-        // }
-        //
-        // public List<Edge> GetEdges()
-        // {
-        //     return m_Triangulation.GetEdges();
-        // }
-        //
-        // public (KruskalResult result, Dictionary<int, Point> indexToPoint) FindMinimumSpanningTree(List<Triangle> triangles)
-        // {
-        //     return m_KruskalAlgorithm.FindMinimumSpanningTree(triangles);
-        // }
     }
 }

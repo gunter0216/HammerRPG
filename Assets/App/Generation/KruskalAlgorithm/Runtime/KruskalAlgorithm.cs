@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using App.Common.Algorithms.Runtime;
+using App.Common.Utility.Runtime;
 
 // Основной класс для алгоритма Краскала
 namespace App.Generation.KruskalAlgorithm.Runtime
 {
     public class KruskalAlgorithm
     {
-        public (KruskalResult result, Dictionary<int, Vector2> indexToPoint) FindMinimumSpanningTree(List<Triangle> triangles)
+        public KruskalResult FindMinimumSpanningTree(List<Triangle> triangles)
         {
             if (triangles == null || triangles.Count == 0)
                 return default;
@@ -69,12 +70,13 @@ namespace App.Generation.KruskalAlgorithm.Runtime
 
             // Выполняем алгоритм Краскала
             var result = FindMinimumSpanningTree(graph);
+            result.Value.IndexToPoint = indexToPoint;
 
             // Если нужно, выводим результат с координатами точек
-            if (result.IsConnected)
+            if (result.Value.IsConnected)
             {
                 Console.WriteLine("\nРёбра MST с координатами:");
-                foreach (var edge in result.MinimumSpanningTree)
+                foreach (var edge in result.Value.MinimumSpanningTree)
                 {
                     var pointA = pointList[edge.Source];
                     var pointB = pointList[edge.Destination];
@@ -82,7 +84,7 @@ namespace App.Generation.KruskalAlgorithm.Runtime
                 }
             }
 
-            return (result, indexToPoint);
+            return result.Value;
         }
         
         private double CalculateDistance(Vector2 p1, Vector2 p2)
@@ -91,16 +93,16 @@ namespace App.Generation.KruskalAlgorithm.Runtime
         }
 
         // Главный метод - нахождение минимального остовного дерева
-        public KruskalResult FindMinimumSpanningTree(WeightedGraph graph)
+        public Optional<KruskalResult> FindMinimumSpanningTree(WeightedGraph graph)
         {
             if (graph.VertexCount == 0)
-                return new KruskalResult(new List<Edge>(), 0, true);
+                return Optional<KruskalResult>.Fail();
 
             // Проверяем связность графа
             if (!graph.IsConnected())
             {
                 Console.WriteLine("Граф не связен - невозможно построить остовное дерево");
-                return new KruskalResult(new List<Edge>(), 0, false);
+                return Optional<KruskalResult>.Fail();
             }
 
             var mst = new List<Edge>();
@@ -134,7 +136,7 @@ namespace App.Generation.KruskalAlgorithm.Runtime
                 }
             }
 
-            return new KruskalResult(mst, totalWeight, true);
+            return Optional<KruskalResult>.Success(new KruskalResult(mst, totalWeight, true));
         }
 
         // Проверка корректности остовного дерева

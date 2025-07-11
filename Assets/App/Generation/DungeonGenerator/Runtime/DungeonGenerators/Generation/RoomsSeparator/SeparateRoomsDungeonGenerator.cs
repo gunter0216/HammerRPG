@@ -22,9 +22,12 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.R
             const int stupidCount = 10000;
             for (int i = 0; i < stupidCount; ++i)
             {
+                // SeparateRectanglesWithGrid(dungeon);
+                // break;
+
                 if (Separate(dungeon, config))
                 {
-                    break;
+                   break;
                 }
             }
 
