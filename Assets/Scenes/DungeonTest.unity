@@ -148,7 +148,7 @@ Transform:
   m_GameObject: {fileID: 143936026}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3548.5327, y: 0.23889925, z: -660.33606}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -167,18 +167,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Config:
-    m_Width: 128
-    m_Height: 96
-    m_Rooms:
-      m_CountRooms: 3
-      m_MinWidthRoom: 7
-      m_MaxWidthRoom: 12
-      m_MinHeightRoom: 7
-      m_MaxHeightRoom: 12
-      m_HeightRoomThreshold: 9
-      m_WidthRoomThreshold: 9
-      m_MinCorridorSize: 10
+    m_RoomsGeneration:
+      m_CountRooms: 20
+      m_MinRoomSize:
+        m_Width: 4
+        m_Height: 4
+      m_MaxRoomSize:
+        m_Width: 16
+        m_Height: 16
       m_Radius: 1
+    m_SeparationConfig:
+      m_Speed: 2
+    m_SmallRooms:
+      m_RoomThreshold:
+        m_Width: 5
+        m_Height: 5
+    m_BorderingRooms:
+      m_MinCorridorSize: 3
 --- !u!1 &887375796
 GameObject:
   m_ObjectHideFlags: 0

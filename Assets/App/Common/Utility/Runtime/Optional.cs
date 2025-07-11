@@ -1,22 +1,25 @@
 ﻿namespace App.Common.Utility.Runtime
 {
-    public struct Optional<T>
+    public readonly struct Optional<T>
     {
-        public readonly T Value { get; }
-        public readonly bool HasValue { get; }
+        private readonly T m_Value;
+        private readonly bool m_HasValue;
+
+        public T Value => m_Value;
+        public bool HasValue => m_HasValue;
 
         public static Optional<T> Empty => new Optional<T>(default, false);
         
         public Optional(T value)
         {
-            Value = value;
-            HasValue = true;
+            m_Value = value;
+            m_HasValue = true;
         }
         
         public Optional(T value, bool hasValue)
         {
-            Value = value;
-            HasValue = hasValue;
+            m_Value = value;
+            m_HasValue = hasValue;
         }
         
         public static Optional<T> Success(T result)
@@ -27,6 +30,41 @@
         public static Optional<T> Fail()
         {
             return new Optional<T>(default, false);
+        }
+        
+        public override string ToString()
+        {
+            return HasValue ? $"Optional[{m_Value}]" : "Optional.Empty";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not Optional<T>)
+            {
+                return false;
+            }
+            
+            return Equals((Optional<T>)obj);
+        }
+
+        public bool Equals(Optional<T> other)
+        {
+            if (!m_HasValue && !other.m_HasValue)
+            {
+                return true;
+            }
+
+            if (m_HasValue && other.m_HasValue)
+            {
+                return m_Value.Equals(other.m_Value);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return m_HasValue ? m_Value?.GetHashCode() ?? 0 : 0;
         }
     }
 }

@@ -1,4 +1,4 @@
 ﻿{
   "name": "DataManager",
-  "references":[ "HLogger", "CommonUtility" ]
+  "references":[ "Logger", "CommonUtility" ]
 }

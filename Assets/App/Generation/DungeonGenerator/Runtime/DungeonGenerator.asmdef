@@ -1,8 +1,12 @@
 {
-    "name": "CommonUtility",
+    "name": "DungeonGenerator",
     "rootNamespace": "",
     "references": [
-        "Unity.TextMeshPro"
+        "DelaunayTriangulation",
+        "KruskalAlgorithm",
+        "CommonUtility",
+        "Logger",
+        "Algorithms"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,5 +16,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": false
+    "noEngineReferences": true
 }
