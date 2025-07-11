@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using App.Common.Algorithms.Runtime;
 using App.Common.Utility.Runtime;
 using App.Generation.DelaunayTriangulation.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
@@ -19,18 +20,18 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         {
             var dungeon = generation.Dungeon;
             var triangles = Triangulate(dungeon);
-            generation.AddCash(new TriangulationGenerationCash());
+            generation.AddCash(new TriangulationGenerationCash(triangles));
             
             return Optional<DungeonGeneration>.Success(generation);
         }
 
         private List<Triangle> Triangulate(Dungeon dungeon)
         {
-            var points = new List<Point>();
+            var points = new List<Vector2>();
             foreach (var roomData in dungeon.Data.RoomsData.Rooms)
             {
                 var center = roomData.GetCenter();
-                var point = new Point(center.x, center.y);
+                var point = new Vector2(center.X, center.Y);
                 points.Add(point);
             }
         

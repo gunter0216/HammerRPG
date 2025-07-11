@@ -135,8 +135,8 @@ namespace App.Generation.DungeonGenerator.Editor
                 Handles.color = Color.white;
                 var room = rooms[i];
                 var roomPosition = room.GetCenter();
-                var position = new Vector3(roomPosition.x, roomPosition.y);
-                var size = new Vector3(room.Size.x, room.Size.y, 0.1f);
+                var position = new Vector3(roomPosition.X, roomPosition.Y);
+                var size = new Vector3(room.Size.X, room.Size.Y, 0.1f);
                 if (smallRooms.HasValue)
                 {
                     if (smallRooms.Value.SmallRooms.Contains(room.UID))

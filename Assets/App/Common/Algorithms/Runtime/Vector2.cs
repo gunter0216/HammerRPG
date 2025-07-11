@@ -7,13 +7,13 @@ namespace App.Common.Algorithms.Runtime
         private float m_X;
         private float m_Y;
 
-        public float x
+        public float X
         {
             get => m_X;
             set => m_X = value;
         }
 
-        public float y
+        public float Y
         {
             get => m_Y;
             set => m_Y = value;
@@ -26,28 +26,28 @@ namespace App.Common.Algorithms.Runtime
         }
 
         public static Vector2 operator +(Vector2 a, Vector2 b)
-            => new Vector2(a.x + b.x, a.y + b.y);
+            => new Vector2(a.X + b.X, a.Y + b.Y);
         
         public static Vector2 operator +(Vector2 a, Vector2Int b)
-            => new Vector2(a.x + b.x, a.y + b.y);
+            => new Vector2(a.X + b.X, a.Y + b.Y);
 
         public static Vector2 operator -(Vector2 a, Vector2 b)
-            => new Vector2(a.x - b.x, a.y - b.y);
+            => new Vector2(a.X - b.X, a.Y - b.Y);
 
         public static Vector2 operator -(Vector2 a)
-            => new Vector2(-a.x, -a.y);
+            => new Vector2(-a.X, -a.Y);
 
         public static Vector2 operator *(Vector2 a, float d)
-            => new Vector2(a.x * d, a.y * d);
+            => new Vector2(a.X * d, a.Y * d);
 
         public static Vector2 operator *(float d, Vector2 a)
             => a * d;
 
         public static Vector2 operator /(Vector2 a, float d)
-            => new Vector2(a.x / d, a.y / d);
+            => new Vector2(a.X / d, a.Y / d);
 
         public static bool operator ==(Vector2 a, Vector2 b)
-            => Math.Abs(a.x - b.x) < 1e-6f && Math.Abs(a.y - b.y) < 1e-6f;
+            => Math.Abs(a.X - b.X) < 1e-6f && Math.Abs(a.Y - b.Y) < 1e-6f;
 
         public static bool operator !=(Vector2 a, Vector2 b)
             => !(a == b);
@@ -59,14 +59,14 @@ namespace App.Common.Algorithms.Runtime
             => obj is Vector2 other && Equals(other);
 
         public override int GetHashCode()
-            => HashCode.Combine(x, y);
+            => HashCode.Combine(X, Y);
 
         public override string ToString()
-            => $"({x:F3}, {y:F3})";
+            => $"({X:F3}, {Y:F3})";
 
-        public float Magnitude => MathF.Sqrt(x * x + y * y);
+        public float Magnitude => MathF.Sqrt(X * X + Y * Y);
 
-        public float SqrMagnitude => x * x + y * y;
+        public float SqrMagnitude => X * X + Y * Y;
 
         public Vector2 Normalized
         {
@@ -83,7 +83,7 @@ namespace App.Common.Algorithms.Runtime
             => (a - b).Magnitude;
 
         public static float Dot(Vector2 a, Vector2 b)
-            => a.x * b.x + a.y * b.y;
+            => a.X * b.X + a.Y * b.Y;
 
         public static float Angle(Vector2 from, Vector2 to)
         {

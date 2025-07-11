@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace App.Generation.DelaunayTriangulation.Runtime
+namespace App.Common.Algorithms.Runtime
 {
     public struct Triangle
     {
-        public Point A { get; }
-            public Point B { get; }
-            public Point C { get; }
+        public Vector2 A { get; }
+            public Vector2 B { get; }
+            public Vector2 C { get; }
         
-            public Triangle(Point a, Point b, Point c)
+            public Triangle(Vector2 a, Vector2 b, Vector2 c)
             {
                 A = a;
                 B = b;
@@ -16,7 +16,7 @@ namespace App.Generation.DelaunayTriangulation.Runtime
             }
         
             // Проверка, содержит ли описанная окружность треугольника данную точку
-            public bool CircumcircleContains(Point point)
+            public bool CircumcircleContains(Vector2 point)
             {
                 var center = GetCircumcenter();
                 var radius = GetCircumradius();
@@ -25,7 +25,7 @@ namespace App.Generation.DelaunayTriangulation.Runtime
             }
         
             // Вычисление центра описанной окружности
-            public Point GetCircumcenter()
+            public Vector2 GetCircumcenter()
             {
                 float ax = A.X, ay = A.Y;
                 float bx = B.X, by = B.Y;
@@ -39,7 +39,7 @@ namespace App.Generation.DelaunayTriangulation.Runtime
                 float ux = ((ax * ax + ay * ay) * (by - cy) + (bx * bx + by * by) * (cy - ay) + (cx * cx + cy * cy) * (ay - by)) / d;
                 float uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d;
         
-                return new Point(ux, uy);
+                return new Vector2(ux, uy);
             }
         
             // Вычисление радиуса описанной окружности
@@ -50,7 +50,7 @@ namespace App.Generation.DelaunayTriangulation.Runtime
             }
         
             // Проверка, содержит ли треугольник данную вершину
-            public bool ContainsVertex(Point vertex)
+            public bool ContainsVertex(Vector2 vertex)
             {
                 return (A.X == vertex.X && A.Y == vertex.Y) ||
                        (B.X == vertex.X && B.Y == vertex.Y) ||

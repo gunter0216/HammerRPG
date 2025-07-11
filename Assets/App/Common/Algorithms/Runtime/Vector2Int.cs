@@ -7,13 +7,13 @@ namespace App.Common.Algorithms.Runtime
         private int m_X;
         private int m_Y;
 
-        public int x
+        public int X
         {
             get => m_X;
             set => m_X = value;
         }
 
-        public int y
+        public int Y
         {
             get => m_Y;
             set => m_Y = value;
@@ -26,25 +26,25 @@ namespace App.Common.Algorithms.Runtime
         }
 
         public static Vector2Int operator +(Vector2Int a, Vector2Int b)
-            => new Vector2Int(a.x + b.x, a.y + b.y);
+            => new Vector2Int(a.X + b.X, a.Y + b.Y);
 
         public static Vector2Int operator -(Vector2Int a, Vector2Int b)
-            => new Vector2Int(a.x - b.x, a.y - b.y);
+            => new Vector2Int(a.X - b.X, a.Y - b.Y);
 
         public static Vector2Int operator -(Vector2Int a)
-            => new Vector2Int(-a.x, -a.y);
+            => new Vector2Int(-a.X, -a.Y);
 
         public static Vector2Int operator *(Vector2Int a, int d)
-            => new Vector2Int(a.x * d, a.y * d);
+            => new Vector2Int(a.X * d, a.Y * d);
 
         public static Vector2Int operator *(int d, Vector2Int a)
             => a * d;
 
         public static Vector2Int operator /(Vector2Int a, int d)
-            => new Vector2Int(a.x / d, a.y / d);
+            => new Vector2Int(a.X / d, a.Y / d);
 
         public static bool operator ==(Vector2Int a, Vector2Int b)
-            => a.x == b.x && a.y == b.y;
+            => a.X == b.X && a.Y == b.Y;
 
         public static bool operator !=(Vector2Int a, Vector2Int b)
             => !(a == b);
@@ -56,15 +56,15 @@ namespace App.Common.Algorithms.Runtime
             => obj is Vector2Int other && Equals(other);
 
         public override int GetHashCode()
-            => HashCode.Combine(x, y);
+            => HashCode.Combine(X, Y);
 
         public override string ToString()
-            => $"({x}, {y})";
+            => $"({X}, {Y})";
 
-        public int SqrMagnitude => x * x + y * y;
+        public int SqrMagnitude => X * X + Y * Y;
 
         public static int Distance(Vector2Int a, Vector2Int b)
-            => (int)Math.Sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+            => (int)Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
 
         public static Vector2Int Zero => new Vector2Int(0, 0);
     }

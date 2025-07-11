@@ -53,7 +53,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.R
         private Vector2Int GetRandomRoomPosition(float radius = 1)
         {
             var randomPointInCircle = GetRandomPointInCircle(radius);
-            return new Vector2Int((int)randomPointInCircle.x, (int)randomPointInCircle.y);
+            return new Vector2Int((int)randomPointInCircle.X, (int)randomPointInCircle.Y);
         }
 
         private Vector2 GetRandomPointInCircle(float radius)

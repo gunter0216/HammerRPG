@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using App.Generation.DelaunayTriangulation.Runtime;
+using App.Common.Algorithms.Runtime;
 
 // Основной класс для алгоритма Краскала
 namespace App.Generation.KruskalAlgorithm.Runtime
 {
     public class KruskalAlgorithm
     {
-        public (KruskalResult result, Dictionary<int, Point> indexToPoint) FindMinimumSpanningTree(List<Triangle> triangles)
+        public (KruskalResult result, Dictionary<int, Vector2> indexToPoint) FindMinimumSpanningTree(List<Triangle> triangles)
         {
             if (triangles == null || triangles.Count == 0)
                 return default;
@@ -16,7 +16,7 @@ namespace App.Generation.KruskalAlgorithm.Runtime
             Console.WriteLine("=== Построение графа из треугольников ===");
 
             // Собираем все уникальные точки
-            var uniquePoints = new HashSet<Point>();
+            var uniquePoints = new HashSet<Vector2>();
             foreach (var triangle in triangles)
             {
                 uniquePoints.Add(triangle.A);
@@ -25,8 +25,8 @@ namespace App.Generation.KruskalAlgorithm.Runtime
             }
 
             var pointList = uniquePoints.ToList();
-            var pointToIndex = new Dictionary<Point, int>();
-            var indexToPoint = new Dictionary<int, Point>();
+            var pointToIndex = new Dictionary<Vector2, int>();
+            var indexToPoint = new Dictionary<int, Vector2>();
 
             for (int i = 0; i < pointList.Count; i++)
             {
@@ -85,7 +85,7 @@ namespace App.Generation.KruskalAlgorithm.Runtime
             return (result, indexToPoint);
         }
         
-        private double CalculateDistance(Point p1, Point p2)
+        private double CalculateDistance(Vector2 p1, Vector2 p2)
         {
             return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
         }

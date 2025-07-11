@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using App.Common.Algorithms.Runtime;
 
 // Основной класс для триангуляции Делоне
 namespace App.Generation.DelaunayTriangulation.Runtime
@@ -15,7 +16,7 @@ namespace App.Generation.DelaunayTriangulation.Runtime
         }
 
         // Главный метод - выполнение триангуляции Делоне алгоритмом Бойера-Ватсона
-        public List<Triangle> Triangulate(IEnumerable<Point> points)
+        public List<Triangle> Triangulate(IEnumerable<Vector2> points)
         {
             var pointList = points.ToList();
             if (pointList.Count < 3)
@@ -42,7 +43,7 @@ namespace App.Generation.DelaunayTriangulation.Runtime
         }
 
         // Создание супертреугольника, содержащего все точки
-        private Triangle CreateSuperTriangle(List<Point> points)
+        private Triangle CreateSuperTriangle(List<Vector2> points)
         {
             float minX = points.Min(p => p.X);
             float minY = points.Min(p => p.Y);
@@ -56,15 +57,15 @@ namespace App.Generation.DelaunayTriangulation.Runtime
             float midY = (minY + maxY) / 2;
 
             // Создаём большой треугольник
-            var p1 = new Point(midX - 20 * deltaMax, midY - deltaMax);
-            var p2 = new Point(midX, midY + 20 * deltaMax);
-            var p3 = new Point(midX + 20 * deltaMax, midY - deltaMax);
+            var p1 = new Vector2(midX - 20 * deltaMax, midY - deltaMax);
+            var p2 = new Vector2(midX, midY + 20 * deltaMax);
+            var p3 = new Vector2(midX + 20 * deltaMax, midY - deltaMax);
 
             return new Triangle(p1, p2, p3);
         }
 
         // Добавление точки в триангуляцию (основной шаг алгоритма Бойера-Ватсона)
-        private void AddPoint(Point point)
+        private void AddPoint(Vector2 point)
         {
             var badTriangles = new List<Triangle>();
             var polygon = new List<Edge>();
@@ -150,17 +151,17 @@ namespace App.Generation.DelaunayTriangulation.Runtime
 //     public static void Main()
 //     {
 //         // Создаём набор тестовых точек
-//         var points = new List<Point>
+//         var points = new List<Vector2>
 //         {
-//             new Point(0, 0),
-//             new Point(1, 0),
-//             new Point(0, 1),
-//             new Point(1, 1),
-//             new Point(0.5, 0.5),
-//             new Point(2, 0),
-//             new Point(2, 1),
-//             new Point(-1, 0),
-//             new Point(-1, 1)
+//             new Vector2(0, 0),
+//             new Vector2(1, 0),
+//             new Vector2(0, 1),
+//             new Vector2(1, 1),
+//             new Vector2(0.5, 0.5),
+//             new Vector2(2, 0),
+//             new Vector2(2, 1),
+//             new Vector2(-1, 0),
+//             new Vector2(-1, 1)
 //         };
 //
 //         Console.WriteLine("Исходные точки:");
@@ -191,7 +192,7 @@ namespace App.Generation.DelaunayTriangulation.Runtime
 //     }
 //
 //     // Проверка свойства Делоне
-//     private static bool ValidateDelaunayProperty(List<Triangle> triangles, List<Point> allPoints)
+//     private static bool ValidateDelaunayProperty(List<Triangle> triangles, List<Vector2> allPoints)
 //     {
 //         foreach (var triangle in triangles)
 //         {

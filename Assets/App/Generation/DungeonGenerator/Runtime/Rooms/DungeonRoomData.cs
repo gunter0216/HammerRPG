@@ -9,16 +9,16 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private Vector2Int m_Position;
         private Vector2Int m_Size;
         
-        public int Col => m_Position.x;
-        public int Row => m_Position.y;
+        public int Col => m_Position.X;
+        public int Row => m_Position.Y;
         
-        public int Width => m_Size.x;
-        public int Height => m_Size.y;
+        public int Width => m_Size.X;
+        public int Height => m_Size.Y;
 
-        public int Right => m_Position.x + m_Size.x;
-        public int Left => m_Position.x;
-        public int Top => m_Position.y + m_Size.y;
-        public int Bottom => m_Position.y;
+        public int Right => m_Position.X + m_Size.X;
+        public int Left => m_Position.X;
+        public int Top => m_Position.Y + m_Size.Y;
+        public int Bottom => m_Position.Y;
 
         public int UID => m_UID;
 
@@ -43,14 +43,14 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         
         public Vector2 GetCenter()
         {
-            return new Vector2(m_Position.x + Width * 0.5f, m_Position.y + Height * 0.5f);
+            return new Vector2(m_Position.X + Width * 0.5f, m_Position.Y + Height * 0.5f);
         }
         
         public void SetCenter(Vector2 center)
         {
             Position = new Vector2Int(
-                (int)Math.Round(center.x - Width * 0.5f), 
-                (int)Math.Round(center.y - Height * 0.5f)
+                (int)Math.Round(center.X - Width * 0.5f), 
+                (int)Math.Round(center.Y - Height * 0.5f)
             );
         }
         

@@ -40,8 +40,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.B
                     var other = rooms[j];
 			        
                     var distance = room.GetCenter() - other.GetCenter();
-                    var roomDistX = Math.Abs(distance.x);
-                    var roomDistY = Math.Abs(distance.y);
+                    var roomDistX = Math.Abs(distance.X);
+                    var roomDistY = Math.Abs(distance.Y);
 			        
                     var minCorridorSizeSpaceX = room.Width / 2 + other.Width / 2 + minCorridorSize;
                     var minCorridorSizeSpaceY = room.Height / 2 + other.Height / 2 + minCorridorSize;

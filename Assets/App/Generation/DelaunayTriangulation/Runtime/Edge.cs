@@ -1,11 +1,13 @@
-﻿namespace App.Generation.DelaunayTriangulation.Runtime
+﻿using App.Common.Algorithms.Runtime;
+
+namespace App.Generation.DelaunayTriangulation.Runtime
 {
     public struct Edge
     {
-        public Point Start { get; }
-        public Point End { get; }
+        public Vector2 Start { get; }
+        public Vector2 End { get; }
 
-        public Edge(Point start, Point end)
+        public Edge(Vector2 start, Vector2 end)
         {
             Start = start;
             End = end;
