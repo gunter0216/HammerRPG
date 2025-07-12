@@ -42,6 +42,9 @@ namespace App.Common.Algorithms.Runtime
 
         public static Vector2Int operator /(Vector2Int a, int d)
             => new Vector2Int(a.X / d, a.Y / d);
+        
+        public static Vector2Int operator /(Vector2Int a, float d)
+            => new Vector2Int((int)(a.X / d), (int)(a.Y / d));
 
         public static bool operator ==(Vector2Int a, Vector2Int b)
             => a.X == b.X && a.Y == b.Y;
@@ -67,5 +70,10 @@ namespace App.Common.Algorithms.Runtime
             => (int)Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
 
         public static Vector2Int Zero => new Vector2Int(0, 0);
+        
+        public Vector2 ToVector()
+        {
+            return new Vector2(m_X, m_Y);
+        }
     }
 }

@@ -68,14 +68,13 @@ namespace App.Generation.DungeonGenerator.Editor
 
         private void DrawTree(SpanningTreeGenerationCash spanningTree)
         {
-            var indexToPoint = spanningTree.Result.IndexToPoint;
-            var tree = spanningTree.Result.MinimumSpanningTree;
+            var tree = spanningTree.Tree;
             
             Handles.color = Color.yellow;
             foreach (var edge in tree)
             {
-                var point1 = indexToPoint[edge.Source];
-                var point2 = indexToPoint[edge.Destination];
+                var point1 = edge.Room1.GetCenter();
+                var point2 = edge.Room2.GetCenter();
                 var points = new Vector3[2];
                 points[0] = new Vector3(point1.X, point1.Y, 0);
                 points[1] = new Vector3(point2.X, point2.Y, 0);
@@ -130,6 +129,7 @@ namespace App.Generation.DungeonGenerator.Editor
                 }
                 
                 Handles.DrawWireCube(position, size);
+                Handles.Label(position, $"uid: {room.UID}");
             }
         }
     }

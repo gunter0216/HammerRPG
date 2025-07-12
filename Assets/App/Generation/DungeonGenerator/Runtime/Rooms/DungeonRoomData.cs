@@ -22,6 +22,8 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
 
         public int UID => m_UID;
 
+        public Vector2 Center => GetCenter();
+
         public Vector2Int Position
         {
             get => m_Position;

@@ -6,6 +6,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Gen
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding;
@@ -37,7 +38,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             generators.Add(new SelectBorderingRoomsDungeonGenerator());
             generators.Add(new DiscardBorderingRoomsDungeonGenerator());
             generators.Add(new TriangulationDungeonGenerator());
-            generators.Add(new SpanningTreeDungeonGenerator());
+            generators.Add(new SpanningTreeDungeonGenerator(m_Logger));
+            generators.Add(new CreateCorridorsDungeonGenerator(roomCreator));
             
             m_Generators = generators;
         }
@@ -67,7 +69,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
 
             var generator = m_Generators[m_CurrentGeneratorIndex];
             
-            m_Logger.LogError($"Next iteration generation: {generator.GetName()}");
+            m_Logger.LogError($"Next iteration generation: {generator.GetName()}"); 
             
             var generation = generator.Process(m_Generation);
             if (!generation.HasValue)

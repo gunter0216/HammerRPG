@@ -4,6 +4,7 @@ using App.Common.Utility.Runtime;
 using App.Generation.DelaunayTriangulation.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation.Cash;
+using App.Generation.DungeonGenerator.Runtime.Rooms;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation
 {
@@ -19,25 +20,27 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         public Optional<DungeonGeneration> Process(DungeonGeneration generation)
         {
             var dungeon = generation.Dungeon;
-            var triangles = Triangulate(dungeon);
-            generation.AddCash(new TriangulationGenerationCash(triangles));
+            var cash = Triangulate(dungeon);
+            generation.AddCash(cash);
             
             return Optional<DungeonGeneration>.Success(generation);
         }
 
-        private List<Triangle> Triangulate(Dungeon dungeon)
+        private TriangulationGenerationCash Triangulate(Dungeon dungeon)
         {
             var points = new List<Vector2>();
+            var pointToIndex = new Dictionary<Vector2, DungeonRoomData>();
             foreach (var roomData in dungeon.Data.RoomsData.Rooms)
             {
                 var center = roomData.GetCenter();
                 var point = new Vector2(center.X, center.Y);
                 points.Add(point);
+                pointToIndex.Add(center, roomData);
             }
         
             var triangles = m_Triangulation.Triangulate(points);
             
-            return triangles;
+            return new TriangulationGenerationCash(triangles, pointToIndex);
         }
 
         public string GetName()
