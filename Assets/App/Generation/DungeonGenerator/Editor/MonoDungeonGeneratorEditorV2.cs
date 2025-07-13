@@ -97,7 +97,8 @@ namespace App.Generation.DungeonGenerator.Editor
 
         private void DrawRooms()
         {
-            var rooms = m_Generation.Dungeon.Data.RoomsData.Rooms;
+            var roomsData = m_Generation.Dungeon.Data.RoomsData;
+            var rooms = roomsData.Rooms;
             if (rooms == null)
             {
                 return;
@@ -126,6 +127,16 @@ namespace App.Generation.DungeonGenerator.Editor
                     {
                         Handles.color = Color.red;
                     }
+                }
+
+                if (roomsData.StartRoom != null && roomsData.StartRoom == room)
+                {
+                    Handles.color = Color.cyan;
+                }
+                
+                if (roomsData.EndRoom != null && roomsData.EndRoom == room)
+                {
+                    Handles.color = Color.blue;
                 }
                 
                 Handles.DrawWireCube(position, size);

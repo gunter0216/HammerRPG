@@ -35,9 +35,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
                 edges.Add(new WeightRoomPair(source, destination, edge.Weight));
             }
 
-            generation.AddCash(new SpanningTreeGenerationCash(
-                indexToPoint: result.IndexToPoint,
-                tree: edges));
+            generation.AddCash(new SpanningTreeGenerationCash(tree: edges));
             
             return Optional<DungeonGeneration>.Success(generation);
         }

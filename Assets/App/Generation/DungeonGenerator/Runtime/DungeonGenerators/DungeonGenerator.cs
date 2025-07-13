@@ -11,6 +11,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Rooms
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndRooms;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 
@@ -40,6 +41,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             generators.Add(new TriangulationDungeonGenerator());
             generators.Add(new SpanningTreeDungeonGenerator(m_Logger));
             generators.Add(new CreateCorridorsDungeonGenerator(roomCreator));
+            generators.Add(new StartEndRoomsDungeonGenerator());
             
             m_Generators = generators;
         }

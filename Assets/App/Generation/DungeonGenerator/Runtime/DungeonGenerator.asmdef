@@ -6,7 +6,8 @@
         "KruskalAlgorithm",
         "CommonUtility",
         "Logger",
-        "Algorithms"
+        "Algorithms",
+        "BFS"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
