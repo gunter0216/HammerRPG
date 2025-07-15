@@ -1,9 +1,14 @@
-﻿using App.Generation.DungeonGenerator.External;
+﻿using System.Collections.Generic;
+using System.Text;
+using App.Generation.DungeonGenerator.External;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndPath.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation.Cash;
+using App.Generation.DungeonGenerator.Runtime.Rooms;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using Logger = App.Common.Logger.Runtime.Logger;
@@ -17,6 +22,7 @@ namespace App.Generation.DungeonGenerator.Editor
         private readonly DungeonGenerationDtoToConfigConverter m_DungeonGenerationDtoToConfigConverter = new();
         
         private DungeonGeneration m_Generation;
+        private bool m_ShowLabel;
 
         void OnEnable()
         {
@@ -28,6 +34,7 @@ namespace App.Generation.DungeonGenerator.Editor
             DrawDefaultInspector();
             
             var myScript = (MonoDungeonGenerator)target;
+            m_ShowLabel = myScript.ShowLabel;
             if (GUILayout.Button("Start Generate"))
             {
                 var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
@@ -56,7 +63,11 @@ namespace App.Generation.DungeonGenerator.Editor
         private void Draw()
         {
             DrawRooms();
-            if (m_Generation.TryGetCash<SpanningTreeGenerationCash>(out var spanningTree))
+            if (m_Generation.TryGetCash<StartEndPathGenerationCash>(out var startEndPath))
+            {
+                DrawStartEndPath(startEndPath);
+            }
+            else if (m_Generation.TryGetCash<SpanningTreeGenerationCash>(out var spanningTree))
             {
                 DrawTree(spanningTree);
             }
@@ -64,6 +75,21 @@ namespace App.Generation.DungeonGenerator.Editor
             {
                 DrawTriangulation(triangulation);
             }
+        }
+
+        private void DrawStartEndPath(StartEndPathGenerationCash startEndPath)
+        {
+            Handles.color = Color.cyan;
+            var points = new Vector3[startEndPath.Path.Count];
+            int i = 0;
+            foreach (var room in startEndPath.Path)
+            {
+                var center = room.GetCenter();
+                var point = new Vector3(center.X, center.Y);
+                points[i++] = point;
+            }
+            
+            Handles.DrawPolyLine(points);
         }
 
         private void DrawTree(SpanningTreeGenerationCash spanningTree)
@@ -131,7 +157,7 @@ namespace App.Generation.DungeonGenerator.Editor
 
                 if (roomsData.StartRoom != null && roomsData.StartRoom == room)
                 {
-                    Handles.color = Color.cyan;
+                    Handles.color = Color.blue;
                 }
                 
                 if (roomsData.EndRoom != null && roomsData.EndRoom == room)
@@ -140,8 +166,54 @@ namespace App.Generation.DungeonGenerator.Editor
                 }
                 
                 Handles.DrawWireCube(position, size);
-                Handles.Label(position, $"uid: {room.UID}");
+                if (m_ShowLabel)
+                {
+                    Handles.Label(position, RoomToString(room));
+                }
             }
+        }
+
+        private string RoomToString(DungeonRoomData room)
+        {
+            var roomsData = m_Generation.Dungeon.Data.RoomsData;
+            var start = roomsData.StartRoom;
+            var end = roomsData.EndRoom;
+            
+            var str = new StringBuilder();
+            str.Append("[ ");
+            if (room == start)
+            {
+                str.Append($"START\n");   
+            } 
+            else if (room == end)
+            {
+                str.Append($"END\n");   
+            }
+            
+            str.Append($"UID: {room.UID}");
+            str.Append($"\nIsMain: {room.IsMainPath}");
+            if (room.RequiredKey != null)
+            {
+                str.Append($"\nRequiredKey: {room.RequiredKey.UID}");
+            }
+            
+            if (room.ContainsDoorKeys.Count > 0)
+            {
+                str.Append($"\nContainsKey: {room.ContainsDoorKeys[0].UID}");
+            }
+            
+            // if (room.Connections.Count > 0)
+            // {
+            //     str.Append("\n Connections: ");
+            //     foreach (var connection in room.Connections)
+            //     {
+            //         str.Append($"{connection.UID} ");
+            //     }
+            // }
+            
+            str.Append(" ]");
+
+            return str.ToString();
         }
     }
 }

@@ -7,7 +7,8 @@
         "CommonUtility",
         "Logger",
         "Algorithms",
-        "BFS"
+        "BFS",
+        "DFS"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

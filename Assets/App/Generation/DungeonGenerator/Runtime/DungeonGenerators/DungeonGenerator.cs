@@ -7,10 +7,12 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.KeysDistributor;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndPath;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndRooms;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
@@ -42,6 +44,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             generators.Add(new SpanningTreeDungeonGenerator(m_Logger));
             generators.Add(new CreateCorridorsDungeonGenerator(roomCreator));
             generators.Add(new StartEndRoomsDungeonGenerator());
+            generators.Add(new StartEndPathDungeonGenerator());
+            generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
             
             m_Generators = generators;
         }

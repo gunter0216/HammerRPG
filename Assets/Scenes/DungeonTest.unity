@@ -184,6 +184,7 @@ MonoBehaviour:
         m_Height: 15
     m_BorderingRooms:
       m_MinCorridorSize: 15
+  ShowLabel: 1
 --- !u!1 &887375796
 GameObject:
   m_ObjectHideFlags: 0

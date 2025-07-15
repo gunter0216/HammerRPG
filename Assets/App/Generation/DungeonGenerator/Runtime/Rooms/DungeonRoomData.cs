@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using App.Common.Algorithms.Runtime;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 
 namespace App.Generation.DungeonGenerator.Runtime.Rooms
 {
@@ -8,6 +10,10 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private readonly int m_UID;
         private Vector2Int m_Position;
         private Vector2Int m_Size;
+        private readonly List<DungeonKeyData> m_ContainsDoorKeys;
+        private readonly List<DungeonRoomData> m_Connections;
+        private DungeonKeyData m_RequiredKey;
+        private bool m_IsMainPath;
         
         public int Col => m_Position.X;
         public int Row => m_Position.Y;
@@ -36,11 +42,50 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             set => m_Size = value;
         }
 
+        public IReadOnlyList<DungeonKeyData> ContainsDoorKeys => m_ContainsDoorKeys;
+        public IReadOnlyList<DungeonRoomData> Connections => m_Connections;
+
+        public DungeonKeyData RequiredKey
+        {
+            get => m_RequiredKey;
+            set => m_RequiredKey = value;
+        }
+
+        public bool IsMainPath
+        {
+            get => m_IsMainPath;
+            set => m_IsMainPath = value;
+        }
+
         public DungeonRoomData(int uid, Vector2Int position, Vector2Int size)
         {
-            this.m_Size = size;
+            m_Size = size;
             m_UID = uid;
-            this.m_Position = position;
+            m_Position = position;
+            m_ContainsDoorKeys = new List<DungeonKeyData>();
+            m_Connections = new List<DungeonRoomData>();
+        }
+
+        public bool AddDoorKey(DungeonKeyData dungeonKeyData)
+        {
+            if (!m_ContainsDoorKeys.Contains(dungeonKeyData))
+            {
+                m_ContainsDoorKeys.Add(dungeonKeyData);
+                return true;
+            }
+
+            return false;
+        }
+        
+        public bool AddConnection(DungeonRoomData room)
+        {
+            if (!m_Connections.Contains(room))
+            {
+                m_Connections.Add(room);
+                return true;
+            }
+
+            return false;
         }
         
         public Vector2 GetCenter()
@@ -82,6 +127,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         //     return Left <= second.Right && Right >= second.Left &&
         //            Top >= second.Bottom && Bottom <= second.Top;
         // }
+
+        public override int GetHashCode()
+        {
+            return m_UID;
+        }
 
         public override string ToString()
         {

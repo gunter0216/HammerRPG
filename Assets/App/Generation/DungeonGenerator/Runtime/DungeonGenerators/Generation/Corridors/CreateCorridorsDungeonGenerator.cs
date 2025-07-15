@@ -40,6 +40,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
                 var room = CreateCorridor(edge.Room1, edge.Room2);
                 
                 dungeon.Data.RoomsData.Rooms.Add(room);
+                
+                edge.Room1.AddConnection(room);
+                edge.Room2.AddConnection(room);
+                room.AddConnection(edge.Room1);
+                room.AddConnection(edge.Room2);
             }
         }
 
