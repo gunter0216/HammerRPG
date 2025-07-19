@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using App.Generation.DungeonGenerator.External;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding.Cash;
@@ -23,6 +24,7 @@ namespace App.Generation.DungeonGenerator.Editor
         
         private DungeonGeneration m_Generation;
         private bool m_ShowLabel;
+        private bool m_ShowRoomBorders;
 
         void OnEnable()
         {
@@ -35,6 +37,7 @@ namespace App.Generation.DungeonGenerator.Editor
             
             var myScript = (MonoDungeonGenerator)target;
             m_ShowLabel = myScript.ShowLabel;
+            m_ShowRoomBorders = myScript.ShowRoomBorders;
             if (GUILayout.Button("Start Generate"))
             {
                 var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
@@ -67,8 +70,17 @@ namespace App.Generation.DungeonGenerator.Editor
             {
                 DrawTiles();
             }
-            
-            DrawRooms();
+
+            if (m_ShowRoomBorders)
+            {
+                DrawRooms();
+            }
+
+            if (m_ShowLabel)
+            {
+                DrawRoomLabels();
+            }
+
             if (m_Generation.TryGetCash<StartEndPathGenerationCash>(out var startEndPath))
             {
                 DrawStartEndPath(startEndPath);
@@ -96,12 +108,8 @@ namespace App.Generation.DungeonGenerator.Editor
                     rect.xMax = tilePosition.X + 1;
                     rect.yMin = tilePosition.Y;
                     rect.yMax = tilePosition.Y + 1;
-                    // var rect = new Rect(
-                    //     tilePosition.X,
-                    //     tilePosition.Y,
-                    //     1,
-                    //     1);
-                    Handles.DrawSolidRectangleWithOutline(rect, Color.black, Color.black);
+                    var color = tile.Id == TileConstants.Wall ? Color.black : Color.red;
+                    Handles.DrawSolidRectangleWithOutline(rect, color, color);
                 }
             }
         }
@@ -195,6 +203,27 @@ namespace App.Generation.DungeonGenerator.Editor
                 }
                 
                 Handles.DrawWireCube(position, size);
+                if (m_ShowLabel)
+                {
+                    Handles.Label(position, RoomToString(room));
+                }
+            }
+        }
+        
+        private void DrawRoomLabels()
+        {
+            var roomsData = m_Generation.Dungeon.Data.RoomsData;
+            var rooms = roomsData.Rooms;
+            if (rooms == null)
+            {
+                return;
+            }
+            
+            for (int i = 0; i < rooms.Count; ++i)
+            {
+                var room = rooms[i];
+                var roomPosition = room.GetCenter();
+                var position = new Vector3(roomPosition.X, roomPosition.Y);
                 if (m_ShowLabel)
                 {
                     Handles.Label(position, RoomToString(room));

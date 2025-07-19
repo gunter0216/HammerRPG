@@ -4,10 +4,14 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel
 {
     public class TileData
     {
-        private readonly string m_Id;
+        private string m_Id; // todo make readonly
         private Vector2Int m_Position;
 
-        public string Id => m_Id;
+        public string Id
+        {
+            get => m_Id;
+            set { m_Id = value; }
+        }
 
         public Vector2Int Position
         {
@@ -17,7 +21,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel
 
         public TileData(string id)
         {
-            m_Id = id;
+            Id = id;
         }
     }
 }

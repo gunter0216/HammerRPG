@@ -18,7 +18,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             var roomsData = generation.Dungeon.Data.RoomsData;
             var startRoom = roomsData.StartRoom;
             var rooms = roomsData.Rooms;
-            ExpandRooms(null, startRoom.Connections[0].Room, 0);
+            ExpandRooms(null, startRoom, 0);
 
             CreateWalls(rooms);
             

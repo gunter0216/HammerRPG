@@ -3,5 +3,6 @@
     public static class TileConstants
     {
         public const string Wall = "Wall";
+        public const string Door = "Door";
     }
 }
