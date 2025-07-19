@@ -62,6 +62,12 @@ namespace App.Generation.DungeonGenerator.Editor
         
         private void Draw()
         {
+            var tiles = m_Generation.Dungeon.Data.RoomsData.Rooms[0].Tiles;
+            if (tiles != null && tiles.Count > 0)
+            {
+                DrawTiles();
+            }
+            
             DrawRooms();
             if (m_Generation.TryGetCash<StartEndPathGenerationCash>(out var startEndPath))
             {
@@ -74,6 +80,29 @@ namespace App.Generation.DungeonGenerator.Editor
             else if (m_Generation.TryGetCash<TriangulationGenerationCash>(out var triangulation))
             {
                 DrawTriangulation(triangulation);
+            }
+        }
+
+        private void DrawTiles()
+        {
+            var rooms = m_Generation.Dungeon.Data.RoomsData.Rooms;
+            foreach (var room in rooms)
+            {
+                foreach (var tile in room.Tiles)
+                {
+                    var tilePosition = tile.Position;
+                    var rect = new Rect();
+                    rect.xMin = tilePosition.X;
+                    rect.xMax = tilePosition.X + 1;
+                    rect.yMin = tilePosition.Y;
+                    rect.yMax = tilePosition.Y + 1;
+                    // var rect = new Rect(
+                    //     tilePosition.X,
+                    //     tilePosition.Y,
+                    //     1,
+                    //     1);
+                    Handles.DrawSolidRectangleWithOutline(rect, Color.black, Color.black);
+                }
             }
         }
 

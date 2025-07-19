@@ -7,6 +7,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateWalls;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.KeysDistributor;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator;
@@ -46,6 +47,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             generators.Add(new StartEndRoomsDungeonGenerator());
             generators.Add(new StartEndPathDungeonGenerator());
             generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
+            generators.Add(new CreateWallsDungeonGenerator());
             
             m_Generators = generators;
         }

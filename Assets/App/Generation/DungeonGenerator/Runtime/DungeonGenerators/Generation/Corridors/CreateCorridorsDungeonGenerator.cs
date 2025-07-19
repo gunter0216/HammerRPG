@@ -67,7 +67,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             {
                 newRoom = CreateVertical(room1, room2);
             }
-
+            
             return newRoom;
             //
             // const int minSize = 20;
@@ -218,8 +218,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             var bottomRoom = room1.Center.Y < room2.Center.Y ? room1 : room2;
             var topRoom = room1.Center.Y < room2.Center.Y ? room2 : room1;
             
-            var top = bottomRoom.Top;
-            var bottom = topRoom.Bottom;
+            var bottom = bottomRoom.Top;
+            var top = topRoom.Bottom;
             var left = room1.Left > room2.Left ? room1.Left : room2.Left;
             var right = room1.Right < room2.Right ? room1.Right : room2.Right;
 

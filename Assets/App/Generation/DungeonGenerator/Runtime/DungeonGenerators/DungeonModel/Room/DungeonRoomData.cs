@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using App.Common.Algorithms.Runtime;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 
 namespace App.Generation.DungeonGenerator.Runtime.Rooms
@@ -12,9 +13,10 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private Vector2Int m_Size;
         private readonly List<DungeonKeyData> m_ContainsDoorKeys;
         private readonly List<DungeonRoomData> m_Connections;
+        private List<TileData> m_Tiles;
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
-        
+
         public int Col => m_Position.X;
         public int Row => m_Position.Y;
         
@@ -57,6 +59,12 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             set => m_IsMainPath = value;
         }
 
+        public List<TileData> Tiles
+        {
+            get => m_Tiles;
+            set => m_Tiles = value;
+        }
+
         public DungeonRoomData(int uid, Vector2Int position, Vector2Int size)
         {
             m_Size = size;
@@ -64,6 +72,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             m_Position = position;
             m_ContainsDoorKeys = new List<DungeonKeyData>();
             m_Connections = new List<DungeonRoomData>();
+            Tiles = new List<TileData>();
         }
 
         public bool AddDoorKey(DungeonKeyData dungeonKeyData)
@@ -121,12 +130,6 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         {
             return Width * Height;
         }
-        
-        // public bool IsOverlapping(DungeonRoomData second)
-        // {
-        //     return Left <= second.Right && Right >= second.Left &&
-        //            Top >= second.Bottom && Bottom <= second.Top;
-        // }
 
         public override int GetHashCode()
         {
@@ -135,7 +138,32 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
 
         public override string ToString()
         {
-            return $"Room [ Position: {GetCenter()}, Size: {m_Size}, Left {m_Position}]";
+            return $"Room [ UID: {m_UID}, Center: {GetCenter()}, Size: {m_Size}, Position {m_Position}]";
+        }
+
+        public void Move(Vector2Int value)
+        {
+            m_Position += value;
+        }
+        
+        public void DecreaseHeight(int value)
+        {
+            m_Size.Y -= value;
+        }
+        
+        public void DecreaseWidth(int value)
+        {
+            m_Size.X -= value;
+        }
+
+        public void IncreaseHeight(int value)
+        {
+            m_Size.Y += value;
+        }
+        
+        public void IncreaseWidth(int value)
+        {
+            m_Size.X += value;
         }
     }
 }
