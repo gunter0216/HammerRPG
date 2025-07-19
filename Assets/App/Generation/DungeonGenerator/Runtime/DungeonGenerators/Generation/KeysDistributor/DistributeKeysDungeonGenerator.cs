@@ -39,7 +39,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
                     continue;
                 }
 
-                if (room.Connections.Count(x => roomsInPath.Contains(x)) >= 2)
+                if (room.Connections
+                        .Select(x => x.Room)
+                        .Count(x => roomsInPath.Contains(x)) >= 2)
                 {
                     roomsInPath.Add(room);
                 }
@@ -66,7 +68,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
                 {
                     if (stack.Count <= 1)
                     {
-                        AddRoomInStack(room.Connections[0]);
+                        AddRoomInStack(room.Connections[0].Room);
                     }
                     else
                     {
@@ -80,7 +82,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
                                 continue;
                             }
 
-                            if (stack[j].Connections.All(x => visitedRooms.Contains(x)))
+                            if (stack[j].Connections
+                                .Select(x => x.Room)
+                                .All(x => visitedRooms.Contains(x)))
                             {
                                 continue;
                             }
@@ -95,14 +99,15 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
 
                 if (room.Connections.Count <= 2)
                 {
-                    var nextRoom = room.Connections.First(x => !visitedRooms.Contains(x)); 
-                    AddRoomInStack(nextRoom);
+                    var nextRoom = room.Connections.First(x => !visitedRooms.Contains(x.Room)); 
+                    AddRoomInStack(nextRoom.Room);
                     continue;
                 }
                 
                 if (room.Connections.Count >= 3)
                 {
                     var notVisitedRooms = room.Connections
+                        .Select(x => x.Room)
                         .Where(x => !visitedRooms.Contains(x))
                         .ToArray();
                     
@@ -122,6 +127,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
                     {
                         var doorKey = doorKeys.Count > 0 ? doorKeys.Peek() : null;
                         var roomWithRequiredDoorKey = room.Connections
+                            .Select(x => x.Room)
                             .FirstOrDefault(x => x.RequiredKey != null && x.RequiredKey == doorKey);
                         if (roomWithRequiredDoorKey == default)
                         {

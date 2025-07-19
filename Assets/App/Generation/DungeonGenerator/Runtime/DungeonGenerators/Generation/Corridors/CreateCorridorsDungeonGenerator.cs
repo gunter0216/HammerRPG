@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using App.Common.Utility.Runtime;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
@@ -27,28 +26,63 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
                 return Optional<DungeonGeneration>.Fail();
             }
 
-            CreateCorridors(generation.Dungeon, cash);
-            // CreateRooms(generation.Dungeon, cash);
+            CreateCorridors(generation, cash);
 
             return Optional<DungeonGeneration>.Success(generation);
         }
 
-        private void CreateCorridors(Dungeon dungeon, SpanningTreeGenerationCash spanningTree)
+        private void CreateCorridors(DungeonGeneration generation, SpanningTreeGenerationCash spanningTree)
         {
+            var dungeon = generation.Dungeon;
+            var rooms = dungeon.Data.RoomsData.Rooms;
             foreach (var edge in spanningTree.Tree)
             {
-                var room = CreateCorridor(edge.Room1, edge.Room2);
-                
-                dungeon.Data.RoomsData.Rooms.Add(room);
-                
-                edge.Room1.AddConnection(room);
-                edge.Room2.AddConnection(room);
-                room.AddConnection(edge.Room1);
-                room.AddConnection(edge.Room2);
+                var corridor = CreateCorridor(edge.Room1, edge.Room2);
+                SetConnections(edge.Room1, edge.Room2, corridor);
+                dungeon.Data.RoomsData.Rooms.Add(corridor.Room);
             }
         }
 
-        private DungeonRoomData CreateCorridor(DungeonRoomData room1, DungeonRoomData room2)
+        private void SetConnections(DungeonRoomData room1, DungeonRoomData room2, CorridorModel corridor)
+        {
+            var newRoom = corridor.Room;
+            if (corridor.IsHorizontal)
+            {
+                if (room1.Left < newRoom.Left)
+                {
+                    room1.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Right));
+                    room2.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Left));
+                    newRoom.AddConnection(new RoomConnection(room1, RoomConnectSide.Left));
+                    newRoom.AddConnection(new RoomConnection(room2, RoomConnectSide.Right));
+                }
+                else
+                {
+                    room1.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Left));
+                    room2.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Right));
+                    newRoom.AddConnection(new RoomConnection(room1, RoomConnectSide.Right));
+                    newRoom.AddConnection(new RoomConnection(room2, RoomConnectSide.Left));
+                }
+            }
+            else
+            {
+                if (room1.Bottom < newRoom.Bottom)
+                {
+                    room1.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Top));
+                    room2.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Bottom));
+                    newRoom.AddConnection(new RoomConnection(room1, RoomConnectSide.Bottom));
+                    newRoom.AddConnection(new RoomConnection(room2, RoomConnectSide.Top));
+                }
+                else
+                {
+                    room1.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Bottom));
+                    room2.AddConnection(new RoomConnection(newRoom, RoomConnectSide.Top));
+                    newRoom.AddConnection(new RoomConnection(room1, RoomConnectSide.Top));
+                    newRoom.AddConnection(new RoomConnection(room2, RoomConnectSide.Bottom));
+                }
+            }
+        }
+
+        private CorridorModel CreateCorridor(DungeonRoomData room1, DungeonRoomData room2)
         {
             var center1 = room1.GetCenter();
             var center2 = room2.GetCenter();
@@ -67,8 +101,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             {
                 newRoom = CreateVertical(room1, room2);
             }
-            
-            return newRoom;
+
+            return new CorridorModel(newRoom, isHorizontal);
             //
             // const int minSize = 20;
             //

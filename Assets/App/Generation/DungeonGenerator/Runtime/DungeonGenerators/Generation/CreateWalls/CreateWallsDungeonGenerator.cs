@@ -2,6 +2,7 @@
 using System.Linq;
 using App.Common.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
@@ -17,7 +18,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             var roomsData = generation.Dungeon.Data.RoomsData;
             var startRoom = roomsData.StartRoom;
             var rooms = roomsData.Rooms;
-            ExpandRooms(null, startRoom.Connections[0], 0);
+            ExpandRooms(null, startRoom.Connections[0].Room, 0);
 
             CreateWalls(rooms);
             
@@ -65,45 +66,33 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
                 return;
             }
             
-            IReadOnlyList<DungeonRoomData> rooms;
-            if (prevRoom != null)
-            {
-                rooms = curRoom.Connections.Where(x => x != prevRoom).ToArray();
-            }
-            else
-            {
-                rooms = curRoom.Connections;
-            }
+            var connections = curRoom.GetConnectionsExclude(prevRoom);
 
-            foreach (var room in rooms)
+            foreach (var connection in connections)
             {
-                if (curRoom.Top == room.Bottom)
+                if (connection.Side == RoomConnectSide.Top)
                 {
                     curRoom.IncreaseHeight(m_WallSize);
                 } 
-                else if (curRoom.Bottom == room.Top)
+                else if (connection.Side == RoomConnectSide.Bottom)
                 {
                     curRoom.IncreaseHeight(m_WallSize);
                     curRoom.Move(Vector2Int.Bottom * m_WallSize);
                 } 
-                else if (curRoom.Right == room.Left)
+                else if (connection.Side == RoomConnectSide.Right)
                 {
                     curRoom.IncreaseWidth(m_WallSize);
                 }
-                else if (curRoom.Left == room.Right)
+                else if (connection.Side == RoomConnectSide.Left)
                 {
                     curRoom.IncreaseWidth(m_WallSize);
                     curRoom.Move(Vector2Int.Left * m_WallSize);
                 }
-                else
-                {
-                    Debug.LogError($"Cant connect {curRoom} {room}");
-                }
             }
 
-            foreach (var room in rooms)
+            foreach (var connection in connections)
             {
-                ExpandRooms(curRoom, room, stupidCounter);
+                ExpandRooms(curRoom, connection.Room, stupidCounter);
             }
         }
 

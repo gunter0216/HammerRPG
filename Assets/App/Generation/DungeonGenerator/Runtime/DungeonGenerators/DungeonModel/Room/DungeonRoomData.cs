@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using App.Common.Algorithms.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 
 namespace App.Generation.DungeonGenerator.Runtime.Rooms
 {
@@ -12,7 +14,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private Vector2Int m_Position;
         private Vector2Int m_Size;
         private readonly List<DungeonKeyData> m_ContainsDoorKeys;
-        private readonly List<DungeonRoomData> m_Connections;
+        private readonly List<RoomConnection> m_Connections;
         private List<TileData> m_Tiles;
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
@@ -45,7 +47,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         }
 
         public IReadOnlyList<DungeonKeyData> ContainsDoorKeys => m_ContainsDoorKeys;
-        public IReadOnlyList<DungeonRoomData> Connections => m_Connections;
+        public IReadOnlyList<RoomConnection> Connections => m_Connections;
 
         public DungeonKeyData RequiredKey
         {
@@ -71,7 +73,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             m_UID = uid;
             m_Position = position;
             m_ContainsDoorKeys = new List<DungeonKeyData>();
-            m_Connections = new List<DungeonRoomData>();
+            m_Connections = new List<RoomConnection>();
             Tiles = new List<TileData>();
         }
 
@@ -86,11 +88,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             return false;
         }
         
-        public bool AddConnection(DungeonRoomData room)
+        public bool AddConnection(RoomConnection connection)
         {
-            if (!m_Connections.Contains(room))
+            if (!m_Connections.Contains(connection))
             {
-                m_Connections.Add(room);
+                m_Connections.Add(connection);
                 return true;
             }
 
@@ -164,6 +166,16 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         public void IncreaseWidth(int value)
         {
             m_Size.X += value;
+        }
+
+        public IReadOnlyList<RoomConnection> GetConnectionsExclude(DungeonRoomData room)
+        {
+            if (room == null)
+            {
+                return m_Connections;
+            }
+
+            return m_Connections.Where(x => x.Room != room).ToArray();
         }
     }
 }
