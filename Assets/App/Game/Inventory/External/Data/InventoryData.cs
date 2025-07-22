@@ -24,15 +24,5 @@ namespace App.Game.Inventory.External.Data
         {
             return nameof(InventoryData);
         }
-
-        public void WhenCreateNewData()
-        {
-            Debug.LogError($"created first time");
-        }
-
-        public void BeforeSerialize()
-        {
-            
-        }
     }
 }

@@ -25,15 +25,5 @@ namespace App.Menu.UI.External.Data
         {
             return nameof(GameRecordsData);
         }
-
-        public void WhenCreateNewData()
-        {
-            m_GameRecords = new();
-        }
-
-        public void BeforeSerialize()
-        {
-            
-        }
     }
 }
