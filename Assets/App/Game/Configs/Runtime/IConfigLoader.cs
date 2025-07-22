@@ -6,6 +6,6 @@ namespace App.Game.Configs.Runtime
     {
         // T LoadConfig<T>(string localKey, string serverKey) where T : class;
         // Optional<T> LoadConfigFromServer<T>(string serverKey) where T : class;
-        Optional<T> LoadLocalConfig<T>(string localKey) where T : class;
+        Optional<T> LoadConfig<T>(string localKey) where T : class;
     }
 }

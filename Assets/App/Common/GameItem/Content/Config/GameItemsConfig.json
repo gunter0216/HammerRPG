@@ -1,0 +1,16 @@
+﻿{
+  "items": [
+    {
+      "id": "Logger",
+      "modules": {
+        "logger": {
+          "messages": [
+            "Hello",
+            "World",
+            "!!!"
+          ]
+        }
+      }
+    }
+  ]
+}

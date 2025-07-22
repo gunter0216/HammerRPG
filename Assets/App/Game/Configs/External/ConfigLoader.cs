@@ -19,7 +19,7 @@ namespace App.Game.Configs.External
         private bool UseLocalConfigs => PlayerPrefs.GetInt(PlayerPrefsUseLocalConfigsKey, 0) == 1;
 
 
-        public Optional<T> LoadLocalConfig<T>(string localKey) where T : class
+        public Optional<T> LoadConfig<T>(string localKey) where T : class
         {
             var configKeyEvaluator = new StringKeyEvaluator(localKey);
             var configJsonResult = m_AssetManager.LoadSync<TextAsset>(configKeyEvaluator);
