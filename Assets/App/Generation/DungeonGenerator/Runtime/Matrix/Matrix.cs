@@ -55,6 +55,12 @@ namespace App.Generation.DungeonGenerator.Runtime.Matrix
         //     return GetCell(pos.Row, pos.Col);
         // }
 
+        public T this[int i, int j]
+        {
+            get => GetCell(i, j);
+            set => SetCell(i, j, value);
+        }
+
         public T GetCell(int row, int col)
         {
             return m_Matrix[row * m_Width + col];

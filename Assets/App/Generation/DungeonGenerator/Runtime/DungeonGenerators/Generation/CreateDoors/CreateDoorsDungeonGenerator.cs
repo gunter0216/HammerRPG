@@ -3,6 +3,7 @@ using System.Linq;
 using App.Common.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateDoors.Cash;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
@@ -17,6 +18,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             var startRoom = roomsData.StartRoom;
             var rooms = roomsData.Rooms;
             CreateDoor(null, startRoom, 0);
+
+            generation.AddCash(new CreateDoorsGenerationCash());
 
             return Optional<DungeonGeneration>.Success(generation);
         }
@@ -81,11 +84,13 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             // {
             //     Debug.LogError($"Error \n {room} \n {connection.Room}");
             // }
-            
-            room.Tiles.Add(new TileData(TileConstants.Door)
-            {
-                Position = position
-            });
+
+            var worldPosition = position; 
+            var localPosition = room.WorldToLocal(worldPosition);
+            room.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Door;
+            localPosition = otherRoom.WorldToLocal(worldPosition);
+            otherRoom.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Door;
+
             // var tile = room.Tiles.FirstOrDefault(x => x.Position == position);
             // if (tile != null)
             // {

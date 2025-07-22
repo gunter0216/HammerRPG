@@ -5,6 +5,7 @@ using App.Common.Algorithms.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
+using App.Generation.DungeonGenerator.Runtime.Matrix;
 
 namespace App.Generation.DungeonGenerator.Runtime.Rooms
 {
@@ -18,6 +19,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private List<TileData> m_Tiles;
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
+        private Matrix<TileData> m_Matrix;
 
         public int Col => m_Position.X;
         public int Row => m_Position.Y;
@@ -65,6 +67,12 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         {
             get => m_Tiles;
             set => m_Tiles = value;
+        }
+
+        public Matrix<TileData> Matrix
+        {
+            get => m_Matrix;
+            set => m_Matrix = value;
         }
 
         public DungeonRoomData(int uid, Vector2Int position, Vector2Int size)
@@ -133,26 +141,16 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             return Width * Height;
         }
 
-        public override int GetHashCode()
-        {
-            return m_UID;
-        }
-
-        public override string ToString()
-        {
-            return $"Room [ UID: {m_UID}, Center: {GetCenter()}, Size: {m_Size}, Position {m_Position}]";
-        }
-
         public void Move(Vector2Int value)
         {
             m_Position += value;
         }
-        
+
         public void DecreaseHeight(int value)
         {
             m_Size.Y -= value;
         }
-        
+
         public void DecreaseWidth(int value)
         {
             m_Size.X -= value;
@@ -162,10 +160,25 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         {
             m_Size.Y += value;
         }
-        
+
         public void IncreaseWidth(int value)
         {
             m_Size.X += value;
+        }
+
+        public Vector2Int LocalToWorld(int x, int y) 
+        {
+            return new Vector2Int(m_Position.X + x, m_Position.Y + Height - 1 - y);
+        }
+        
+        public Vector2Int WorldToLocal(int x, int y) 
+        {
+            return new Vector2Int(x - m_Position.X, m_Position.Y - y + Height - 1);
+        }
+
+        public Vector2Int WorldToLocal(Vector2Int worldPosition)
+        {
+            return WorldToLocal(worldPosition.X, worldPosition.Y);
         }
 
         public IReadOnlyList<RoomConnection> GetConnectionsExclude(DungeonRoomData room)
@@ -176,6 +189,16 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             }
 
             return m_Connections.Where(x => x.Room != room).ToArray();
+        }
+
+        public override int GetHashCode()
+        {
+            return m_UID;
+        }
+
+        public override string ToString()
+        {
+            return $"Room [ UID: {m_UID}, Center: {GetCenter()}, Size: {m_Size}, Position {m_Position}]";
         }
     }
 }

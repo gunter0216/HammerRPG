@@ -4,6 +4,7 @@ using App.Generation.DungeonGenerator.External;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding.Cash;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateDoors.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndPath.Cash;
@@ -13,18 +14,28 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using Logger = App.Common.Logger.Runtime.Logger;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Editor
 {
     [CustomEditor(typeof(MonoDungeonGenerator))]
     public class MonoDungeonGeneratorEditorV2 : UnityEditor.Editor 
     {
+        private class MonoTile
+        {
+            public SpriteRenderer SpriteRenderer;
+            public TileData TileData;
+        }
+        
         private readonly Runtime.DungeonGenerators.DungeonGenerator m_Generator = new(new Logger());
         private readonly DungeonGenerationDtoToConfigConverter m_DungeonGenerationDtoToConfigConverter = new();
         
         private DungeonGeneration m_Generation;
         private bool m_ShowLabel;
         private bool m_ShowRoomBorders;
+        private bool m_IsDoorShow;
+        private Transform m_TilesContent;
+        private Dictionary<Vector2Int, MonoTile> m_Tiles;
 
         void OnEnable()
         {
@@ -68,7 +79,13 @@ namespace App.Generation.DungeonGenerator.Editor
             var tiles = m_Generation.Dungeon.Data.RoomsData.Rooms[0].Tiles;
             if (tiles != null && tiles.Count > 0)
             {
-                DrawTiles();
+                DrawTiles(); 
+            }
+            
+            var matrix = m_Generation.Dungeon.Data.RoomsData.Rooms[0].Matrix;
+            if (matrix != null)
+            {
+                DrawMatrix();
             }
 
             if (m_ShowRoomBorders)
@@ -92,6 +109,85 @@ namespace App.Generation.DungeonGenerator.Editor
             else if (m_Generation.TryGetCash<TriangulationGenerationCash>(out var triangulation))
             {
                 DrawTriangulation(triangulation);
+            }
+        }
+
+        private void DrawMatrix()
+        {
+            if (m_Generation.HasCash<CreateDoorsGenerationCash>() && !m_IsDoorShow)
+            {
+                m_IsDoorShow = true;
+                UpdateMatrix();
+                return;
+            }
+            
+            if (m_TilesContent != null)
+            {
+                return;
+            }
+            
+            Debug.LogError("Create Tiles");
+
+            m_TilesContent = new GameObject().transform;
+            m_Tiles = new Dictionary<Vector2Int, MonoTile>(1000);
+            
+            var rooms = m_Generation.Dungeon.Data.RoomsData.Rooms;
+            foreach (var room in rooms)
+            {
+                var matrix = room.Matrix;
+                for (int i = 0; i < matrix.Height; ++i)
+                {
+                    for (int j = 0; j < matrix.Width; ++j)
+                    {
+                        var tile = matrix[i, j];
+                        var position = room.LocalToWorld(j, i);
+                        if (m_Tiles.ContainsKey(position))
+                        {
+                            continue;
+                        }
+
+                        if (tile.Id == TileConstants.Empty)
+                        {
+                            continue;
+                        }
+
+                        var color = Color.black;
+                        color = tile.Id == TileConstants.Door ? Color.red : color;
+                        
+                        var tileObj = new GameObject();
+                        tileObj.transform.parent = m_TilesContent;
+                        tileObj.transform.position = new Vector3(position.X, position.Y);
+                        var spriteRenderer = tileObj.AddComponent<SpriteRenderer>();
+                        spriteRenderer.sprite = Sprite.Create(
+                            new Texture2D(100, 100),
+                            new Rect(0, 0, 100, 100),
+                            new Vector2(0, 0),
+                            100.0f);
+                        spriteRenderer.color = color;
+                        
+                        m_Tiles.Add(position, new MonoTile()
+                        {
+                            SpriteRenderer = spriteRenderer,
+                            TileData = tile
+                        });
+                    }
+                }
+            }
+        }
+
+        private void UpdateMatrix()
+        {
+            foreach (var monoTile in m_Tiles)
+            {
+                var tileId = monoTile.Value.TileData.Id;
+                if (tileId == TileConstants.Empty)
+                {
+                    continue;
+                }
+                
+                var color = Color.black;
+                color = tileId == TileConstants.Door ? Color.red : color;
+                monoTile.Value.SpriteRenderer.color = color;
             }
         }
 
