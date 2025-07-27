@@ -2,6 +2,7 @@
 using System.Linq;
 using App.Common.Autumn.External;
 using App.Common.FSM.Runtime;
+using App.Common.SceneControllers.Runtime;
 using App.Common.Utility.Runtime.Extensions;
 using App.Game;
 using App.Game.Contexts;
@@ -26,6 +27,10 @@ namespace App.Menu
                 m_ServiceProvider.GetInterfaces<IPostInitSystem>().Cast<IPostInitSystem>().ToList());
             stateMachine.AddState(new DefaultStage(typeof(MenuInitPhase)));
             stateMachine.SyncRun();
+            
+            // todo
+            var sceneManager = m_ServiceProvider.GetService<ISceneManager>();
+            sceneManager.LoadScene(SceneConstants.GameScene);
         }
 
         private void OnDestroy()

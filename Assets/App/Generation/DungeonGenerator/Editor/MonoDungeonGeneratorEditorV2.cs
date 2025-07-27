@@ -24,7 +24,7 @@ namespace App.Generation.DungeonGenerator.Editor
         private class MonoTile
         {
             public SpriteRenderer SpriteRenderer;
-            public TileData TileData;
+            public GeneraitonTile GeneraitonTile;
         }
         
         private readonly Runtime.DungeonGenerators.DungeonGenerator m_Generator = new(new Logger());
@@ -76,13 +76,13 @@ namespace App.Generation.DungeonGenerator.Editor
         
         private void Draw()
         {
-            var tiles = m_Generation.Dungeon.Data.RoomsData.Rooms[0].Tiles;
+            var tiles = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms[0].Tiles;
             if (tiles != null && tiles.Count > 0)
             {
-                DrawTiles(); 
+                // DrawTiles(); 
             }
             
-            var matrix = m_Generation.Dungeon.Data.RoomsData.Rooms[0].Matrix;
+            var matrix = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms[0].Matrix;
             if (matrix != null)
             {
                 DrawMatrix();
@@ -131,7 +131,7 @@ namespace App.Generation.DungeonGenerator.Editor
             m_TilesContent = new GameObject().transform;
             m_Tiles = new Dictionary<Vector2Int, MonoTile>(1000);
             
-            var rooms = m_Generation.Dungeon.Data.RoomsData.Rooms;
+            var rooms = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms;
             foreach (var room in rooms)
             {
                 var matrix = room.Matrix;
@@ -168,7 +168,7 @@ namespace App.Generation.DungeonGenerator.Editor
                         m_Tiles.Add(position, new MonoTile()
                         {
                             SpriteRenderer = spriteRenderer,
-                            TileData = tile
+                            GeneraitonTile = tile
                         });
                     }
                 }
@@ -179,7 +179,7 @@ namespace App.Generation.DungeonGenerator.Editor
         {
             foreach (var monoTile in m_Tiles)
             {
-                var tileId = monoTile.Value.TileData.Id;
+                var tileId = monoTile.Value.GeneraitonTile.Id;
                 if (tileId == TileConstants.Empty)
                 {
                     continue;
@@ -191,24 +191,24 @@ namespace App.Generation.DungeonGenerator.Editor
             }
         }
 
-        private void DrawTiles()
-        {
-            var rooms = m_Generation.Dungeon.Data.RoomsData.Rooms;
-            foreach (var room in rooms)
-            {
-                foreach (var tile in room.Tiles)
-                {
-                    var tilePosition = tile.Position;
-                    var rect = new Rect();
-                    rect.xMin = tilePosition.X;
-                    rect.xMax = tilePosition.X + 1;
-                    rect.yMin = tilePosition.Y;
-                    rect.yMax = tilePosition.Y + 1;
-                    var color = tile.Id == TileConstants.Wall ? Color.black : Color.red;
-                    Handles.DrawSolidRectangleWithOutline(rect, color, color);
-                }
-            }
-        }
+        // private void DrawTiles()
+        // {
+        //     var rooms = m_Generation.Dungeon.Data.RoomsData.Rooms;
+        //     foreach (var room in rooms)
+        //     {
+        //         foreach (var tile in room.Tiles)
+        //         {
+        //             var tilePosition = tile.Position;
+        //             var rect = new Rect();
+        //             rect.xMin = tilePosition.X;
+        //             rect.xMax = tilePosition.X + 1;
+        //             rect.yMin = tilePosition.Y;
+        //             rect.yMax = tilePosition.Y + 1;
+        //             var color = tile.Id == TileConstants.Wall ? Color.black : Color.red;
+        //             Handles.DrawSolidRectangleWithOutline(rect, color, color);
+        //         }
+        //     }
+        // }
 
         private void DrawStartEndPath(StartEndPathGenerationCash startEndPath)
         {
@@ -256,7 +256,7 @@ namespace App.Generation.DungeonGenerator.Editor
 
         private void DrawRooms()
         {
-            var roomsData = m_Generation.Dungeon.Data.RoomsData;
+            var roomsData = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
             var rooms = roomsData.Rooms;
             if (rooms == null)
             {
@@ -288,12 +288,12 @@ namespace App.Generation.DungeonGenerator.Editor
                     }
                 }
 
-                if (roomsData.StartRoom != null && roomsData.StartRoom == room)
+                if (roomsData.StartGenerationRoom != null && roomsData.StartGenerationRoom == room)
                 {
                     Handles.color = Color.blue;
                 }
                 
-                if (roomsData.EndRoom != null && roomsData.EndRoom == room)
+                if (roomsData.EndGenerationRoom != null && roomsData.EndGenerationRoom == room)
                 {
                     Handles.color = Color.blue;
                 }
@@ -308,7 +308,7 @@ namespace App.Generation.DungeonGenerator.Editor
         
         private void DrawRoomLabels()
         {
-            var roomsData = m_Generation.Dungeon.Data.RoomsData;
+            var roomsData = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
             var rooms = roomsData.Rooms;
             if (rooms == null)
             {
@@ -327,33 +327,33 @@ namespace App.Generation.DungeonGenerator.Editor
             }
         }
 
-        private string RoomToString(DungeonRoomData room)
+        private string RoomToString(DungeonGenerationRoom generationRoom)
         {
-            var roomsData = m_Generation.Dungeon.Data.RoomsData;
-            var start = roomsData.StartRoom;
-            var end = roomsData.EndRoom;
+            var roomsData = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
+            var start = roomsData.StartGenerationRoom;
+            var end = roomsData.EndGenerationRoom;
             
             var str = new StringBuilder();
             str.Append("[ ");
-            if (room == start)
+            if (generationRoom == start)
             {
                 str.Append($"START\n");   
             } 
-            else if (room == end)
+            else if (generationRoom == end)
             {
                 str.Append($"END\n");   
             }
             
-            str.Append($"UID: {room.UID}");
-            str.Append($"\nIsMain: {room.IsMainPath}");
-            if (room.RequiredKey != null)
+            str.Append($"UID: {generationRoom.UID}");
+            str.Append($"\nIsMain: {generationRoom.IsMainPath}");
+            if (generationRoom.RequiredKey != null)
             {
-                str.Append($"\nRequiredKey: {room.RequiredKey.UID}");
+                str.Append($"\nRequiredKey: {generationRoom.RequiredKey.UID}");
             }
             
-            if (room.ContainsDoorKeys.Count > 0)
+            if (generationRoom.ContainsDoorKeys.Count > 0)
             {
-                str.Append($"\nContainsKey: {room.ContainsDoorKeys[0].UID}");
+                str.Append($"\nContainsKey: {generationRoom.ContainsDoorKeys[0].UID}");
             }
             
             // if (room.Connections.Count > 0)

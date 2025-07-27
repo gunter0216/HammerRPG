@@ -10,7 +10,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Matrix
         public Matrix(Matrix other) : base(other) {}
         public Matrix(int width, int height) : base(width, height) { }
     }
-
+    
     public class Matrix<T> : IEnumerable<T>
     {
         private readonly int m_Width;
@@ -33,6 +33,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Matrix
             m_Width = width;
             m_Height = height;
             m_Matrix = new T[m_Width * m_Height];
+        }
+        
+        public T[] GetMatrix()
+        {
+            return m_Matrix;
         }
 
         public void Fill(T value)

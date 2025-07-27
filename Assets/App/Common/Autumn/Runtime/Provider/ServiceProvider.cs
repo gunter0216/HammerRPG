@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace App.Common.Autumn.Runtime.Provider
 {
@@ -18,6 +19,19 @@ namespace App.Common.Autumn.Runtime.Provider
         
         public T GetService<T>() where T : class
         {
+            if (typeof(T).IsInterface)
+            {
+                if (m_Interfaces.TryGetValue(typeof(T).TypeHandle, out var interfaces))
+                {
+                    if (interfaces.Count > 1)
+                    {
+                        return null;
+                    }
+
+                    return interfaces[0] as T;
+                }
+            }
+            
             if (m_Services.TryGetValue(typeof(T).TypeHandle, out var instance))
             {
                 return instance as T;

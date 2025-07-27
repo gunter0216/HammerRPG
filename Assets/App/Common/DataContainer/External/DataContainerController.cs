@@ -16,7 +16,7 @@ namespace App.Common.DataContainer.External
     public class DataContainerController : IInitSystem, IDataContainerController
     {
         [Inject] private readonly IDataManager m_DataManager;
-        [Inject] private readonly List<IContainerData> m_DataContainers;
+        private readonly List<IContainerData> m_DataContainers = new List<IContainerData>();
 
         private ContainerDataController m_DataController;
 

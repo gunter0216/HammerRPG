@@ -23,8 +23,8 @@ namespace App.Common.GameItem.External
     {
         [Inject] private readonly IConfigLoader m_ConfigLoader;
         [Inject] private readonly IDataContainerController m_DataContainerController;
-        [Inject] private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
-        [Inject] private readonly List<ICreateGameItemHandler> m_Handlers;
+        private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters = new List<IModuleDtoToConfigConverter>();
+        private readonly List<ICreateGameItemHandler> m_Handlers = new List<ICreateGameItemHandler>();
 
         private GameItemConfigController m_ConfigController;
         private GameItemCreator m_GameItemCreator;

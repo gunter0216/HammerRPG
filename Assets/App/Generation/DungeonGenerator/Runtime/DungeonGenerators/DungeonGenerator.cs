@@ -54,16 +54,32 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             m_Generators = generators;
         }
 
+        public Optional<DungeonGeneration> Generate(DungeonGenerationConfig generationConfig)
+        {
+            StartGeneration(generationConfig);
+            for (int i = 0; i < 1000; ++i)
+            {
+                if (IsComplete())
+                {
+                    break;
+                }
+                
+                if (!NextIteration())
+                {
+                    return Optional<DungeonGeneration>.Fail();
+                }
+            }
+
+            return GetGeneration();
+        }
+
         public void StartGeneration(DungeonGenerationConfig generationConfig)
         {
-            // var matrix = new Matrix.Matrix(dungeonConfig.Width, dungeonConfig.Height);
-            var data = new DungeonData
+            var data = new DungeonGenerationData
             {
-                RoomsData = new DungeonRoomsData(),
-                // Matrix = matrix
+                GenerationRooms = new DungeonGenerationRooms()
             };
-            var config = new DungeonConfig();
-            var dungeon = new Dungeon(config, data);
+            var dungeon = new DungeonGenerationResult(data);
             
             m_Generation = new DungeonGeneration(dungeon, generationConfig);
             m_CurrentGeneratorIndex = 0;
