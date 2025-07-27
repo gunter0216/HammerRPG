@@ -8,7 +8,7 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
     [JsonObject(MemberSerialization.Fields)]
     public class SelectBorderingRoomsGenerationConfigDto
     {
-        [SerializeField, JsonProperty("Min Corridor Size")]
+        [SerializeField, JsonProperty("minCorridorSize")]
         private int m_MinCorridorSize = 3;
 
         public int MinCorridorSize => m_MinCorridorSize;
