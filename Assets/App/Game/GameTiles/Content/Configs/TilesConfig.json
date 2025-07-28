@@ -8,7 +8,7 @@
     {
       "id": "door",
       "generation_id": "Door",
-      "sprite": "ClosedDoor1"
+      "sprite": "ClosedDoor"
     },
     {
       "id": "floor",

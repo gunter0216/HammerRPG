@@ -171,6 +171,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             return new Vector2Int(m_Position.X + x, m_Position.Y + Height - 1 - y);
         }
         
+        public Vector2Int LocalToWorld(Vector2Int localPosition)
+        {
+            return LocalToWorld(localPosition.X, localPosition.Y);
+        }
+        
         public Vector2Int WorldToLocal(int x, int y) 
         {
             return new Vector2Int(x - m_Position.X, m_Position.Y - y + Height - 1);

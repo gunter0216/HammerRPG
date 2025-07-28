@@ -1,14 +1,15 @@
 using App.Generation.DungeonGenerator.External.Dto;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Generation;
 
 namespace App.Game.GameManagers.External.Config.Model
 {
     public class GenerationConfig
     {
-        private readonly DungeonGenerationConfigDto m_Generation;
+        private readonly DungeonGenerationConfig m_Generation;
 
-        public DungeonGenerationConfigDto Generation => m_Generation;
+        public DungeonGenerationConfig Generation => m_Generation;
 
-        public GenerationConfig(DungeonGenerationConfigDto generation)
+        public GenerationConfig(DungeonGenerationConfig generation)
         {
             m_Generation = generation;
         }

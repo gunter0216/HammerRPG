@@ -51,10 +51,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
                 matrix[0, i] = new GeneraitonTile(TileConstants.Wall);
                 matrix[matrix.Height - 1, i] = new GeneraitonTile(TileConstants.Wall);
             }
-                
+                 
             for (int i = 1; i < generationRoom.Height - 1; ++i)
             {
                 matrix[i, 0] = new GeneraitonTile(TileConstants.Wall);
+                matrix[i, matrix.Width - 1] = new GeneraitonTile(TileConstants.Wall); 
             }
             
             // var tilesAmount = room.Width * 2 + room.Height * 2 - 4;
