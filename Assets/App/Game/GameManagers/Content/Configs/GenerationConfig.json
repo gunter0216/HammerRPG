@@ -7,22 +7,22 @@
         "height": 4
       },
       "maxRoomSize": {
-        "width": 40,
-        "height": 40
+        "width": 16,
+        "height": 16
       },
-      "shape": 40
+      "shape": 16
     }, 
     "separation":{
-      "speed": 5
+      "speed": 2
     }, 
     "smallRooms":{
       "roomThreshold": {
-        "width": 15,
-        "height": 15
+        "width": 6,
+        "height": 6
       }
     }, 
     "borderingRooms": {
-      "minCorridorSize": 15
+      "minCorridorSize": 6
     }
   }
 }

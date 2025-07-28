@@ -54,7 +54,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
                  
             for (int i = 1; i < generationRoom.Height - 1; ++i)
             {
-                matrix[i, 0] = new GeneraitonTile(TileConstants.Wall);
+                matrix[i, 0] = new GeneraitonTile(TileConstants.Wall);  
                 matrix[i, matrix.Width - 1] = new GeneraitonTile(TileConstants.Wall); 
             }
             

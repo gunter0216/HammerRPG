@@ -6,5 +6,7 @@ namespace App.Game.GameManagers.External.View
     {
         void SetSprite(Sprite sprite);
         void SetPosition(Vector3 position);
+        void SetParent(Transform parent);
+        void DisableCollider();
     }
 }

@@ -23,7 +23,7 @@ namespace App.Game.GameManagers.External.Services
         public bool Initialize()
         {
             var prefab = m_AssetManager.LoadSync<GameObject>(new StringKeyEvaluator(m_TileViewAssetKey));
-            if (!prefab.HasValue)
+            if (!prefab.HasValue) 
             {
                 return false;
             }

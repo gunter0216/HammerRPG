@@ -75,6 +75,17 @@ namespace App.Game.GameTiles.External
             return Optional<ITile>.Success(tile);
         }
 
+        public Optional<Sprite> GetTileSprite(string tileID)
+        {
+            var config = m_ConfigService.GetTile(tileID);
+            if (!config.HasValue)
+            {
+                return Optional<Sprite>.Fail();
+            }
+            
+            return m_SpriteLoader.Load(config.Value.SpriteKey);
+        }
+        
         public Optional<Sprite> GetTileSprite(ITile tile)
         {
             return m_SpriteLoader.Load(tile.Config.SpriteKey);

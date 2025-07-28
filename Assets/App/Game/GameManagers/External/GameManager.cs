@@ -1,4 +1,5 @@
-﻿using App.Common.AssetSystem.Runtime;
+﻿using System.Collections.Generic;
+using App.Common.AssetSystem.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
@@ -13,7 +14,9 @@ using App.Game.GameManagers.External.Services;
 using App.Game.GameManagers.External.View;
 using App.Game.GameTiles.External;
 using App.Game.GameTiles.Runtime;
+using App.Game.Player.Runtime.Components;
 using App.Game.States.Game;
+using App.Game.Worlds.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
@@ -32,11 +35,16 @@ namespace App.Game.GameManagers.External
         [Inject] private readonly IConfigLoader m_ConfigLoader;
         [Inject] private readonly TilesController m_TilesController;
         [Inject] private readonly IAssetManager m_AssetManager;
+        [Inject] private readonly IWorldManager m_WorldManager;
 
         private DungeonGenerator m_Generator;
         private GenerationConfigService m_ConfigService;
         private DungeonGeneration m_Generation;
         private TileViewCreator m_TileViewCreator;
+
+        private List<GameRoom> m_Rooms;
+        private GameRoom m_EndRoom;
+        private GameRoom m_StartRoom;
 
         public void Init()
         {
@@ -51,11 +59,57 @@ namespace App.Game.GameManagers.External
                 HLogger.LogError("Cant generate dungeon");
                 return;
             }
+
+            CreateRooms();
             
             if (!CreateTiles())
             {
                 HLogger.LogError("Cant create tiles");
                 return;
+            }
+
+            PlacePlayerOnStartRoom();
+        }
+
+        private void CreateRooms()
+        {
+            var generationRooms = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
+            var startRoom = generationRooms.StartGenerationRoom;
+            var endRoom = generationRooms.EndGenerationRoom;
+            var rooms = generationRooms.Rooms;
+
+            m_Rooms = new List<GameRoom>(rooms.Count);
+            foreach (var generationRoom in rooms)
+            {
+                var content = new GameObject();
+                var view = new RoomView(content.transform);
+                var room = new GameRoom(view, generationRoom);
+                m_Rooms.Add(room);
+
+                if (startRoom == generationRoom)
+                {
+                    m_StartRoom = room;
+                } 
+                else if (endRoom == generationRoom)
+                {
+                    m_EndRoom = room;
+                }
+            }
+        }
+
+        private void PlacePlayerOnStartRoom()
+        {
+            var generationRooms = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
+            var startRoom = generationRooms.StartGenerationRoom;
+            var position = startRoom.GetCenter();
+            
+            var world = m_WorldManager.GetWorld();
+            var entityPool = world.GetPool<EntityComponent>();
+
+            foreach (var i in world.Filter<PlayerComponent>().End())
+            {
+                var entity = entityPool.Get(i);
+                entity.View.transform.position = new Vector3(position.X, position.Y);
             }
         }
 
@@ -81,9 +135,7 @@ namespace App.Game.GameManagers.External
                 return false;
             }
             
-            var generationRooms = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
-            var rooms = generationRooms.Rooms;
-            foreach (var room in rooms)
+            foreach (var room in m_Rooms)
             {
                 CreateRoom(room);
             }
@@ -91,9 +143,9 @@ namespace App.Game.GameManagers.External
             return true;
         }
 
-        private void CreateRoom(DungeonGenerationRoom room)
+        private void CreateRoom(GameRoom room)
         {
-            var matrix = room.Matrix;
+            var matrix = room.GenerationRoom.Matrix;
             for (int i = 0; i < matrix.Height; ++i)
             {
                 for (int j = 0; j < matrix.Width; ++j)
@@ -103,16 +155,42 @@ namespace App.Game.GameManagers.External
                     // todo
                 }
             }
+
+            CreateFloor(room);
         }
 
-        private Optional<GameTile> CreateTile(DungeonGenerationRoom room, GeneraitonTile generationTile, Vector2Int localPosition)
+        private void CreateFloor(GameRoom room)
         {
-            var worldPosition = room.LocalToWorld(localPosition);
+            var sprite = m_TilesController.GetTileSprite("floor");
+            if (!sprite.HasValue)
+            {
+                HLogger.LogError("Cant get tile sprite");
+                return;
+            }
+
+            var floor = new GameObject();
+            var position = room.GenerationRoom.GetCenter();
+            floor.transform.position = new Vector3(position.X - 0.5f, position.Y - 0.5f, 1);
+            floor.transform.parent = room.View.Content;
+            var spriteRenderer = floor.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = sprite.Value;
+            spriteRenderer.drawMode = SpriteDrawMode.Tiled;
+            spriteRenderer.size = new UnityEngine.Vector2(
+                room.GenerationRoom.Width, 
+                room.GenerationRoom.Height);
+        }
+
+        private Optional<GameTile> CreateTile(GameRoom room, GeneraitonTile generationTile, Vector2Int localPosition)
+        {
+            var worldPosition = room.GenerationRoom.LocalToWorld(localPosition);
             
             if (generationTile.Id == TileConstants.Empty)
             {
                 return Optional<GameTile>.Fail();
             }
+
+            var isDoor = generationTile.Id == TileConstants.Door;
+            var hasLockedDoor = room.GenerationRoom.RequiredKey != null;
 
             var tile = m_TilesController.CreateTileByGenerationID(generationTile.Id, worldPosition);
             if (!tile.HasValue)
@@ -121,7 +199,8 @@ namespace App.Game.GameManagers.External
                 return Optional<GameTile>.Fail();
             }
 
-            var sprite = m_TilesController.GetTileSprite(tile.Value);
+            var sprite = !isDoor || hasLockedDoor ? m_TilesController.GetTileSprite(tile.Value)
+                    : m_TilesController.GetTileSprite("opened_door");
             if (!sprite.HasValue)
             {
                 HLogger.LogError("Cant get tile sprite");
@@ -134,9 +213,14 @@ namespace App.Game.GameManagers.External
                 HLogger.LogError("Cant create tile view");
                 return Optional<GameTile>.Fail();
             }
-            
+
+            view.Value.SetParent(room.View.Content);
             view.Value.SetSprite(sprite.Value);
             view.Value.SetPosition(new Vector3(worldPosition.X, worldPosition.Y));
+            if (isDoor && !hasLockedDoor)
+            {
+                view.Value.DisableCollider();
+            }
 
             var gameTile = new GameTile(tile.Value, view.Value);
             return Optional<GameTile>.Success(gameTile);
