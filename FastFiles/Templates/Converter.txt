@@ -1,0 +1,15 @@
+using App.Common.Utility.Runtime;
+using {featureNamespace}.External.Config.Dto;
+using {featureNamespace}.External.Config.Model;
+
+namespace {featureNamespace}.External.Config.Converter
+{
+    public class {config}DtoToConfigConverter
+    {
+        public Optional<{config}Config> Convert({config}ConfigDto dto)
+        {
+            var config = new {config}Config(id: dto.ID);
+            return Optional<{config}Config>.Success(config);
+        }
+    }
+}

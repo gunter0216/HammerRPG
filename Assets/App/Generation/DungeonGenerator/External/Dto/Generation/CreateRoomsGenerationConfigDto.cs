@@ -9,16 +9,16 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
     [JsonObject(MemberSerialization.Fields)]
     public class CreateRoomsGenerationConfigDto
     {
-        [SerializeField, JsonProperty("Rooms Amount")]
+        [SerializeField, JsonProperty("roomsAmount")]
         private int m_CountRooms = 20;
 
-        [SerializeField, JsonProperty("Min Room Size")]
+        [SerializeField, JsonProperty("minRoomSize")]
         private SizeIntDto m_MinRoomSize;
 
-        [SerializeField, JsonProperty("Max Room Size")]
+        [SerializeField, JsonProperty("maxRoomSize")]
         private SizeIntDto m_MaxRoomSize;
 
-        [SerializeField, JsonProperty("Shape")]
+        [SerializeField, JsonProperty("shape")]
         private int m_Radius = 1;
 
         public int CountRooms => m_CountRooms;

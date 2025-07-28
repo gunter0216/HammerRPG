@@ -8,10 +8,10 @@ namespace App.Generation.DungeonGenerator.External.Dto.Common
     [JsonObject(MemberSerialization.Fields)]
     public class SizeIntDto
     {
-        [SerializeField, JsonProperty("Width")]
+        [SerializeField, JsonProperty("width")]
         private int m_Width;
         
-        [SerializeField, JsonProperty("Height")]
+        [SerializeField, JsonProperty("height")]
         private int m_Height;
 
         public int Width => m_Width;

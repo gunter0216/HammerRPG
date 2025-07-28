@@ -9,7 +9,7 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
     [JsonObject(MemberSerialization.Fields)]
     public class SelectSmallRoomsGenerationConfigDto
     {
-        [SerializeField, JsonProperty("Room Threshold")]
+        [SerializeField, JsonProperty("roomThreshold")]
         private SizeIntDto m_RoomThreshold;
 
         public SizeIntDto RoomThreshold => m_RoomThreshold;

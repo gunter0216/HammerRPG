@@ -8,7 +8,7 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
     [JsonObject(MemberSerialization.Fields)]
     public class SeparateRoomsGenerationConfigDto
     {
-        [SerializeField, JsonProperty("Speed")]
+        [SerializeField, JsonProperty("speed")]
         private int m_Speed = 1;
 
         public int Speed => m_Speed;

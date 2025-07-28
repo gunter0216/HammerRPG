@@ -4,7 +4,7 @@ using App.Common.Utility.Runtime;
 
 namespace App.Common.GameItem.Tests.Mock
 {
-    public class MockDataContainerController : IDataContainerController
+    public class MockDataContainerController : IContainersDataManager
     {
         private readonly List<object> m_Objects = new List<object>();
         
@@ -41,6 +41,11 @@ namespace App.Common.GameItem.Tests.Mock
             }
             
             return Optional<object>.Success(m_Objects[dataReference.Index]);
+        }
+
+        public Optional<T> GetData<T>(IDataReference dataReference) where T : class
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

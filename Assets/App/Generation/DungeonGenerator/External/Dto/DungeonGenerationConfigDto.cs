@@ -9,16 +9,16 @@ namespace App.Generation.DungeonGenerator.External.Dto
     [JsonObject(MemberSerialization.Fields)]
     public class DungeonGenerationConfigDto
     {
-        [SerializeField, JsonProperty("Rooms")]
+        [SerializeField, JsonProperty("rooms")]
         private CreateRoomsGenerationConfigDto m_RoomsGeneration;
 
-        [SerializeField, JsonProperty("Separation")]
+        [SerializeField, JsonProperty("separation")]
         private SeparateRoomsGenerationConfigDto m_SeparationConfig;
 
-        [SerializeField, JsonProperty("Small rooms")]
+        [SerializeField, JsonProperty("smallRooms")]
         private SelectSmallRoomsGenerationConfigDto m_SmallRooms;
 
-        [SerializeField, JsonProperty("Bordering rooms")]
+        [SerializeField, JsonProperty("borderingRooms")]
         private SelectBorderingRoomsGenerationConfigDto m_BorderingRooms;
 
         public CreateRoomsGenerationConfigDto RoomsGeneration => m_RoomsGeneration;

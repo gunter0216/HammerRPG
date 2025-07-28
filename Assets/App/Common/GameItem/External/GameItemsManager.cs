@@ -22,7 +22,7 @@ namespace App.Common.GameItem.External
     public class GameItemsManager : IInitSystem, IGameItemsManager
     {
         [Inject] private readonly IConfigLoader m_ConfigLoader;
-        [Inject] private readonly IDataContainerController m_DataContainerController;
+        [Inject] private readonly IContainersDataManager m_ContainersDataManager;
         private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters = new List<IModuleDtoToConfigConverter>();
         private readonly List<ICreateGameItemHandler> m_Handlers = new List<ICreateGameItemHandler>();
 
@@ -39,7 +39,7 @@ namespace App.Common.GameItem.External
         {
             m_GameItemCreator = new GameItemCreator(
                 m_ConfigController, 
-                m_DataContainerController, 
+                m_ContainersDataManager, 
                 m_Handlers);
         }
 

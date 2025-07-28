@@ -1,0 +1,28 @@
+﻿{
+  "generation": {
+    "rooms":{
+      "roomsAmount": 100,
+      "minRoomSize": {
+        "width": 4,
+        "height": 4
+      },
+      "maxRoomSize": {
+        "width": 40,
+        "height": 40
+      },
+      "shape": 40
+    }, 
+    "separation":{
+      "speed": 5
+    }, 
+    "smallRooms":{
+      "roomThreshold": {
+        "width": 15,
+        "height": 15
+      }
+    }, 
+    "borderingRooms": {
+      "minCorridorSize": 15
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "tiles": [
+    {
+      "id": "wall",
+      "generation_id": "Wall",
+      "sprite": "BricksWall1"
+    },
+    {
+      "id": "door",
+      "generation_id": "Door",
+      "sprite": "ClosedDoor1"
+    },
+    {
+      "id": "floor",
+      "generation_id": "",
+      "sprite": "Floor1"
+    }
+  ]
+}
