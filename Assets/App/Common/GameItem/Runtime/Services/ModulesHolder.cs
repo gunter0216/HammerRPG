@@ -8,16 +8,16 @@ namespace App.Common.GameItem.Runtime.Services
 {
     public class ModulesHolder : IModulesHolder
     {
-        private readonly IDataContainerController m_DataContainerController;
+        private readonly IContainersDataManager m_ContainersDataManager;
         private readonly IList<DataReference> m_ModuleRefs;
         
         private IList m_ModuleDatas;
 
         public ModulesHolder(
-            IDataContainerController dataContainerController, 
+            IContainersDataManager containersDataManager, 
             IList<DataReference> moduleRefs)
         {
-            m_DataContainerController = dataContainerController;
+            m_ContainersDataManager = containersDataManager;
             m_ModuleRefs = moduleRefs;
         }
 
@@ -26,7 +26,7 @@ namespace App.Common.GameItem.Runtime.Services
             m_ModuleDatas = new List<object>(m_ModuleRefs.Count);
             foreach (var reference in m_ModuleRefs)
             {
-                var data = m_DataContainerController.GetData(reference);
+                var data = m_ContainersDataManager.GetData(reference);
                 if (!data.HasValue)
                 {
                     return false;
@@ -40,7 +40,7 @@ namespace App.Common.GameItem.Runtime.Services
 
         public bool AddModule(IModuleData data)
         {
-            var reference = m_DataContainerController.AddData(data.GetModuleKey(), data);
+            var reference = m_ContainersDataManager.AddData(data.GetModuleKey(), data);
             if (!reference.HasValue)
             {
                 return false;
@@ -53,7 +53,7 @@ namespace App.Common.GameItem.Runtime.Services
 
         public bool RemoveModule(IModuleData data)
         {
-            var reference = m_DataContainerController.RemoveData(data.GetModuleKey(), data);
+            var reference = m_ContainersDataManager.RemoveData(data.GetModuleKey(), data);
             if (!reference.HasValue)
             {
                 return false;

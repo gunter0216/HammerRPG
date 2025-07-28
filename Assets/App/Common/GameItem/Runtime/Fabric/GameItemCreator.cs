@@ -11,12 +11,12 @@ namespace App.Common.GameItem.Runtime.Fabric
     public class GameItemCreator : IGameItemCreator
     {
         private readonly IGameItemConfigController m_ConfigController;
-        private readonly IDataContainerController m_ContainerController;
+        private readonly IContainersDataManager m_ContainerController;
         private readonly IReadOnlyList<ICreateGameItemHandler> m_Handlers;
 
         public GameItemCreator(
             IGameItemConfigController configController, 
-            IDataContainerController containerController, 
+            IContainersDataManager containerController, 
             IReadOnlyList<ICreateGameItemHandler> handlers)
         {
             m_ConfigController = configController;

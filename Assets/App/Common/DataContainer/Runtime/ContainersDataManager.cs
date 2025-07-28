@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
+using App.Common.DataContainer.Runtime.Data;
 using App.Common.DataContainer.Runtime.Data.Loader;
 using App.Common.Utility.Runtime;
 
-namespace App.Common.DataContainer.Runtime.Data
+namespace App.Common.DataContainer.Runtime
 {
     // todo если среднее кол-во дат будет большим, добавить список пустых слотов для каждого контейнера, изменив сложность добавления с O(n) до O(1)
-    public class ContainerDataController : IContainerDataController
+    public class ContainersDataManager : IContainersDataManager
     {
         private readonly IContainerDataLoader m_DataLoader;
 
         private Dictionary<string, IContainerData> m_DataContainers;
 
-        public ContainerDataController(IContainerDataLoader dataLoader)
+        public ContainersDataManager(IContainerDataLoader dataLoader)
         {
             m_DataLoader = dataLoader;
         }

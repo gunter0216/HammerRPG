@@ -3,16 +3,17 @@ using App.Common.AssetSystem.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
+using App.Common.Utility.Runtime;
 using App.Common.Utility.Runtime.Extensions;
-using App.Game.IconLoaders.Runtime;
+using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Start;
 using UnityEngine;
 
-namespace App.Game.IconLoaders.External
+namespace App.Game.SpriteLoaders.External
 {
     [Singleton]
     [Stage(typeof(StartInitPhase), -10)]
-    public class IconLoader : IInitSystem, IIconLoader
+    public class SpriteLoader : IInitSystem, ISpriteLoader
     {
         private const string m_TransparentImageKey = "TransparentImage";
         
@@ -27,25 +28,24 @@ namespace App.Game.IconLoaders.External
             m_TransparentImage = m_AssetManager.LoadSync<Sprite>(new StringKeyEvaluator(m_TransparentImageKey)).Value;
         }
 
-        public Sprite Load(string iconKey)
+        public Optional<Sprite> Load(string key)
         {
-            if (iconKey.IsNullOrEmpty())
+            if (key.IsNullOrEmpty())
             {
-                Debug.LogError($"[IconController] In method LoadSprite, iconKey is null or empty.");
-                return m_TransparentImage;
+                Debug.LogError($"[SpriteLoader] In method Load, key is null or empty.");
+                return Optional<Sprite>.Fail();
             }
             
-            var sprite = m_AssetManager.LoadSync<Sprite>(new StringKeyEvaluator(iconKey));
+            var sprite = m_AssetManager.LoadSync<Sprite>(new StringKeyEvaluator(key));
             if (!sprite.HasValue)
             {
-                Debug.LogError(
-                    $"[IconController] In method LoadSprite, error load sprite {iconKey}.");
-                return m_TransparentImage;
+                Debug.LogError($"[SpriteLoader] In method Load, error load sprite {key}.");
+                return Optional<Sprite>.Fail();
             }
             
-            m_LoadedIcons.Add(iconKey);
+            m_LoadedIcons.Add(key);
             
-            return sprite.Value;
+            return Optional<Sprite>.Success(sprite.Value);
         }
 
         public Sprite GetTransparentImage()

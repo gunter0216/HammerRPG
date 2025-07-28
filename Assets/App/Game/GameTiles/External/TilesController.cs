@@ -4,36 +4,36 @@ using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Game.Configs.Runtime;
 using App.Game.Contexts;
-using App.Game.GameManagers.External.Config.Converter;
-using App.Game.GameManagers.External.Config.Loader;
-using App.Game.GameManagers.External.Config.Service;
+using App.Game.GameTiles.External.Config.Converter;
+using App.Game.GameTiles.External.Config.Loader;
+using App.Game.GameTiles.External.Config.Service;
 using App.Game.States.Game;
 
-namespace App.Game.GameManagers.External
+namespace App.Game.GameTiles.External
 {
     [Scoped(typeof(GameSceneContext))]
     [Stage(typeof(GameInitPhase), 0)]
-    public class GameManager : IInitSystem
+    public class TilesController : IInitSystem
     {
         [Inject] private readonly IConfigLoader m_ConfigLoader;
 
-        private GenerationConfigService m_ConfigService;
+        private TilesConfigService m_ConfigService;
         
         public void Init()
         {
             if (!InitConfig())
             {
-                HLogger.LogError("Cant inti config service.");
+                Logger.LogError("Cant inti config service.");
                 return;
             }
 
-            
+
         }
 
         private bool InitConfig()
         {
-            var loader = new GenerationConfigLoader(m_ConfigLoader);
-            var converter = new GenerationDtoToConfigConverter();
+            var loader = new TilesConfigLoader(m_ConfigLoader);
+            var converter = new TilesDtoToConfigConverter();
             var dto = loader.Load();
             if (!dto.HasValue)
             {
@@ -46,7 +46,7 @@ namespace App.Game.GameManagers.External
                 return false;
             }
             
-            m_ConfigService = new GenerationConfigService(config.Value);
+            m_ConfigService = new TilesConfigService(config.Value);
             
             return true;
         }

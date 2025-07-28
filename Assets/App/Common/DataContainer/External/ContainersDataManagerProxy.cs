@@ -13,37 +13,37 @@ namespace App.Common.DataContainer.External
 {
     [Singleton]
     [Stage(typeof(StartInitPhase), 0)]
-    public class DataContainerController : IInitSystem, IDataContainerController
+    public class ContainersDataManagerProxy : IInitSystem, IContainersDataManager
     {
         [Inject] private readonly IDataManager m_DataManager;
         private readonly List<IContainerData> m_DataContainers = new List<IContainerData>();
 
-        private ContainerDataController m_DataController;
+        private ContainersDataManager m_ContainersDataManager;
 
         public void Init()
         {
-            m_DataController = new ContainerDataController(new ContainerDataLoader(m_DataManager, m_DataContainers));
-            m_DataController.Initialize();
+            m_ContainersDataManager = new ContainersDataManager(new ContainerDataLoader(m_DataManager, m_DataContainers));
+            m_ContainersDataManager.Initialize();
         }
 
         public Optional<DataReference> AddData(string key, object data)
         {
-            return m_DataController.AddData(key, data);
+            return m_ContainersDataManager.AddData(key, data);
         }
 
         public Optional<DataReference> RemoveData(string key, object data)
         {
-            return m_DataController.RemoveData(key, data);
+            return m_ContainersDataManager.RemoveData(key, data);
         }
 
         public Optional<object> GetData(IDataReference dataReference)
         {
-            return m_DataController.GetData(dataReference);
+            return m_ContainersDataManager.GetData(dataReference);
         }
 
         public Optional<T> GetData<T>(IDataReference dataReference) where T : class
         {
-            return m_DataController.GetData<T>(dataReference);
+            return m_ContainersDataManager.GetData<T>(dataReference);
         }
     }
 }

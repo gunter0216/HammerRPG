@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using App.Common.DataContainer.Runtime;
 using App.Common.DataContainer.Runtime.Data;
 using App.Common.DataContainer.Runtime.Data.Loader;
 using App.Common.DataContainer.Tests.Mock;
@@ -9,12 +10,12 @@ using Assert = NUnit.Framework.Assert;
 
 namespace App.Common.DataContainer.Tests
 {
-    public class ContainerDataControllerTests
+    public class ContainersDataManagerTests
     {
         public const string Test1DataKey = Constants.Test1DataKey;
         public const string Test2DataKey = Constants.Test2DataKey;
         
-        private ContainerDataController m_DataController;
+        private ContainersDataManager m_DataManager;
         private Test1ContainerData m_Test1ContainerData;
         private Test2ContainerData m_Test2ContainerData;
         
@@ -30,8 +31,8 @@ namespace App.Common.DataContainer.Tests
                 m_Test2ContainerData
             };
             dataLoader.Load().Returns(Optional<IReadOnlyList<IContainerData>>.Success(containers));
-            m_DataController = new ContainerDataController(dataLoader);
-            m_DataController.Initialize();
+            m_DataManager = new ContainersDataManager(dataLoader);
+            m_DataManager.Initialize();
         }
         
         [Test]
@@ -39,7 +40,7 @@ namespace App.Common.DataContainer.Tests
         {
             var data = string.Empty;
             
-            var reference = m_DataController.AddData(Test1DataKey, data);
+            var reference = m_DataManager.AddData(Test1DataKey, data);
             
             Assert.True(reference.HasValue);
             Assert.AreEqual(Test1DataKey, reference.Value.Key);
@@ -51,8 +52,8 @@ namespace App.Common.DataContainer.Tests
         {
             var data = string.Empty;
             
-            var reference1 = m_DataController.AddData(Test1DataKey, data);
-            var reference2 = m_DataController.AddData(Test1DataKey, data);
+            var reference1 = m_DataManager.AddData(Test1DataKey, data);
+            var reference2 = m_DataManager.AddData(Test1DataKey, data);
             
             Assert.True(reference1.HasValue);
             Assert.True(reference2.HasValue);
@@ -67,8 +68,8 @@ namespace App.Common.DataContainer.Tests
         {
             var data = string.Empty;
             
-            var reference = m_DataController.AddData(Test1DataKey, data);
-            var returnData = m_DataController.GetData(reference.Value);
+            var reference = m_DataManager.AddData(Test1DataKey, data);
+            var returnData = m_DataManager.GetData(reference.Value);
             
             Assert.True(returnData.HasValue);
             Assert.AreEqual(data, returnData.Value);
@@ -80,10 +81,10 @@ namespace App.Common.DataContainer.Tests
             var data1 = string.Empty;
             var data2 = string.Empty;
             
-            var reference1 = m_DataController.AddData(Test1DataKey, data1);
-            var reference2 = m_DataController.AddData(Test1DataKey, data2);
-            var returnData1 = m_DataController.GetData(reference1.Value);
-            var returnData2 = m_DataController.GetData(reference2.Value);
+            var reference1 = m_DataManager.AddData(Test1DataKey, data1);
+            var reference2 = m_DataManager.AddData(Test1DataKey, data2);
+            var returnData1 = m_DataManager.GetData(reference1.Value);
+            var returnData2 = m_DataManager.GetData(reference2.Value);
             
             Assert.True(returnData1.HasValue);
             Assert.True(returnData2.HasValue);
@@ -98,10 +99,10 @@ namespace App.Common.DataContainer.Tests
             string data2 = string.Empty;
             string data3 = string.Empty;
             
-            m_DataController.AddData(Test1DataKey, data1);
-            m_DataController.AddData(Test1DataKey, data2);
-            m_DataController.AddData(Test1DataKey, data3);
-            var removedDataReference = m_DataController.RemoveData(Test1DataKey, data1);
+            m_DataManager.AddData(Test1DataKey, data1);
+            m_DataManager.AddData(Test1DataKey, data2);
+            m_DataManager.AddData(Test1DataKey, data3);
+            var removedDataReference = m_DataManager.RemoveData(Test1DataKey, data1);
             
             Assert.True(removedDataReference.HasValue);
             Assert.AreEqual(0, removedDataReference.Value.Index);
@@ -115,11 +116,11 @@ namespace App.Common.DataContainer.Tests
             string data3 = "3";
             string data4 = "4";
             
-            m_DataController.AddData(Test1DataKey, data1);
-            m_DataController.AddData(Test1DataKey, data2);
-            m_DataController.AddData(Test1DataKey, data3);
-            m_DataController.RemoveData(Test1DataKey, data2);
-            var reference = m_DataController.AddData(Test1DataKey, data4);
+            m_DataManager.AddData(Test1DataKey, data1);
+            m_DataManager.AddData(Test1DataKey, data2);
+            m_DataManager.AddData(Test1DataKey, data3);
+            m_DataManager.RemoveData(Test1DataKey, data2);
+            var reference = m_DataManager.AddData(Test1DataKey, data4);
             
             Assert.True(reference.HasValue);
             Assert.AreEqual(1, reference.Value.Index);
@@ -132,10 +133,10 @@ namespace App.Common.DataContainer.Tests
             string data2 = string.Empty;
             string data3 = string.Empty;
             
-            m_DataController.AddData(Test1DataKey, data1);
-            m_DataController.AddData(Test1DataKey, data2);
+            m_DataManager.AddData(Test1DataKey, data1);
+            m_DataManager.AddData(Test1DataKey, data2);
             
-            m_DataController.AddData(Test2DataKey, data3);
+            m_DataManager.AddData(Test2DataKey, data3);
             
             Assert.AreEqual(2, m_Test1ContainerData.Data.Count);
             Assert.AreEqual(1, m_Test2ContainerData.Data.Count);
