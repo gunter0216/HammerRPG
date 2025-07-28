@@ -1,0 +1,14 @@
+namespace {0}
+{{
+    public class {1}
+    {{
+        private readonly string m_ID;
+
+        public string ID => m_ID;
+
+        public {2}(string id)
+        {{
+            m_ID = id;
+        }}
+    }}
+}}

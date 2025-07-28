@@ -1,0 +1,16 @@
+using App.Common.Utility.Runtime;
+using App.Game.Configs.Runtime;
+using {featureNamespace}.External.Config.Model;
+
+namespace {featureNamespace}.External.Config.Service
+{
+    public class {config}ConfigService
+    {
+        private readonly {config}Config m_Config;
+
+        public {config}ConfigService({config}Config config)
+        {
+            m_Config = config;
+        }
+    }
+}

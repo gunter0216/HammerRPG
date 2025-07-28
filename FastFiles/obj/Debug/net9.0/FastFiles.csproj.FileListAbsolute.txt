@@ -1,0 +1,15 @@
+C:\Projects\HammerRPG\FastFiles\bin\Debug\net9.0\FastFiles.exe
+C:\Projects\HammerRPG\FastFiles\bin\Debug\net9.0\FastFiles.deps.json
+C:\Projects\HammerRPG\FastFiles\bin\Debug\net9.0\FastFiles.runtimeconfig.json
+C:\Projects\HammerRPG\FastFiles\bin\Debug\net9.0\FastFiles.dll
+C:\Projects\HammerRPG\FastFiles\bin\Debug\net9.0\FastFiles.pdb
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.AssemblyInfoInputs.cache
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.AssemblyInfo.cs
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.csproj.CoreCompileInputs.cache
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.sourcelink.json
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.dll
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\refint\FastFiles.dll
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.pdb
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\FastFiles.genruntimeconfig.cache
+C:\Projects\HammerRPG\FastFiles\obj\Debug\net9.0\ref\FastFiles.dll

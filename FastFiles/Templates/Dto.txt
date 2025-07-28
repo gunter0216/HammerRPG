@@ -1,0 +1,15 @@
+using System;
+using Newtonsoft.Json;
+
+namespace {0}
+{{
+    [Serializable]
+    [JsonObject(MemberSerialization.Fields)]
+    public class {1}
+    {{
+        [JsonProperty("id")]
+        private string m_ID;
+
+        public string ID => m_ID;
+    }}
+}}

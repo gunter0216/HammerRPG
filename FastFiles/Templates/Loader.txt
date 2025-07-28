@@ -1,0 +1,24 @@
+using App.Common.Utility.Runtime;
+using App.Game.Configs.Runtime;
+using {featureNamespace}.External.Config.Dto;
+using {featureNamespace}.External.Config.Model;
+
+namespace {featureNamespace}.External.Config.Loader
+{
+    public class {config}ConfigLoader
+    {
+        private const string m_LocalConfigKey = "{config}Config";
+        
+        private readonly IConfigLoader m_ConfigLoader;
+
+        public {config}ConfigLoader(IConfigLoader configLoader)
+        {
+            m_ConfigLoader = configLoader;
+        }
+
+        public Optional<{config}ConfigDto> Load()
+        {
+            return m_ConfigLoader.LoadConfig<{config}ConfigDto>(m_LocalConfigKey);
+        }
+    }
+}
