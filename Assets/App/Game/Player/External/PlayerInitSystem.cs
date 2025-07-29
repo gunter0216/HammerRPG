@@ -20,7 +20,7 @@ namespace App.Game.Player.External
     sealed class PlayerInitSystem : IInitSystem
     {
         private const string m_PlayerAssetKey = "Player";
-        private const float m_DefaultMoveSpeed = 5.0f;
+        private const float m_DefaultMoveSpeed = 10.0f;
         
         [Inject] private IWorldManager m_WorldManager;
         [Inject] private IAssetManager m_AssetManager;

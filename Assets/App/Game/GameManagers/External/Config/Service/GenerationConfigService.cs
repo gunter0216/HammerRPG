@@ -2,6 +2,7 @@ using App.Common.Utility.Runtime;
 using App.Game.Configs.Runtime;
 using App.Game.GameManagers.External.Config.Model;
 using App.Generation.DungeonGenerator.External.Dto;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Generation;
 
 namespace App.Game.GameManagers.External.Config.Service
 {
@@ -14,7 +15,7 @@ namespace App.Game.GameManagers.External.Config.Service
             m_Config = config;
         }
 
-        public DungeonGenerationConfigDto GetGeneration()
+        public DungeonGenerationConfig GetGeneration()
         {
             return m_Config.Generation;
         }

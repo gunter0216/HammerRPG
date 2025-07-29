@@ -6,9 +6,14 @@
       "sprite": "BricksWall1"
     },
     {
-      "id": "door",
+      "id": "closed_door",
       "generation_id": "Door",
-      "sprite": "ClosedDoor1"
+      "sprite": "ClosedDoor"
+    },
+    {
+      "id": "opened_door",
+      "generation_id": "OpenedDoor",
+      "sprite": "OpenedDoor"
     },
     {
       "id": "floor",
