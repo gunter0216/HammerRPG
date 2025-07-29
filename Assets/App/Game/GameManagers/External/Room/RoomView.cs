@@ -2,7 +2,7 @@
 
 namespace App.Game.GameManagers.External.View
 {
-    public class RoomView
+    public class RoomView : IRoomView
     {
         private readonly Transform m_Content;
 
