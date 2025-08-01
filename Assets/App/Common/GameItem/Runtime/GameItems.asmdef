@@ -1,5 +1,0 @@
-﻿{
-  "name": "GameItems",
-  "references":[ "DataContainers", "CommonUtility" ],
-  "noEngineReferences": true
-}

@@ -1,14 +1,22 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
+﻿using System.Collections.Generic;
+using App.Common.Autumn.Runtime.Attributes;
+using App.Common.DataContainer.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
+using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.External.Config;
+using App.Common.ModuleItem.External.Config.Interfaces;
+using App.Common.ModuleItem.Runtime.Config;
+using App.Common.ModuleItem.Runtime.Data;
+using App.Common.ModuleItem.Runtime.Fabric;
+using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
 using App.Common.Utility.Runtime;
 using App.Game.Configs.Runtime;
 using App.Game.Contexts;
-using App.Game.GameTiles.External.Config.Converter;
+using App.Game.GameTiles.External.Config.Data;
 using App.Game.GameTiles.External.Config.Loader;
-using App.Game.GameTiles.External.Config.Service;
+using App.Game.GameTiles.External.Config.Model;
 using App.Game.GameTiles.Runtime;
-using App.Game.GameTiles.Runtime.Data;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Game;
 using UnityEngine;
@@ -23,72 +31,160 @@ namespace App.Game.GameTiles.External
     {
         [Inject] private readonly IConfigLoader m_ConfigLoader;
         [Inject] private readonly ISpriteLoader m_SpriteLoader;
+        [Inject] private readonly IContainersDataManager m_ContainersDataManager;
+        [Inject] private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
+        
+        private readonly List<ICreateModuleItemHandler> m_Handlers = new List<ICreateModuleItemHandler>();
 
-        private TilesConfigService m_ConfigService;
+        private ModuleItemsConfigController m_ConfigController;
+        private ModuleItemCreator m_ModuleItemCreator;
         
         public void Init()
         {
             if (!InitConfig())
             {
-                Logger.LogError("Cant inti config service.");
+                HLogger.LogError("Cant inti config service.");
                 return;
             }
+
+            InitConfigController();
+            InitItemsFabric();
+        }
+
+        private void InitConfigController()
+        {
+            var loader = new TileModuleItemsConfigLoader(m_ConfigLoader);
+            var dto = loader.Load();
+            if (!dto.HasValue)
+            {
+                Debug.LogError($"[NewGameItemsController] In method Init, cant load file.");
+                return;
+            }
+
+            var dtoConverter = new ModuleItemsDtoToConfigConverter(m_ModuleDtoToConfigConverters);
+            var configs = dtoConverter.Convert(dto.Value);
+            if (!configs.HasValue)
+            {
+                Debug.LogError($"[NewGameItemsController] In method Init, cant convert dto to configs.");
+                return;
+            }
+            
+            m_ConfigController = new ModuleItemsConfigController(configs.Value);
+            m_ConfigController.Initialize();
+        }
+
+        private void InitItemsFabric()
+        {
+            m_ModuleItemCreator = new ModuleItemCreator(
+                m_ConfigController, 
+                m_ContainersDataManager, 
+                m_Handlers);
+        }
+
+        public Optional<ITileModuleItem> Create(IModuleItemData data)
+        {
+            var item = m_ModuleItemCreator.Create(data);
+            if (!item.HasValue)
+            {
+                return Optional<ITileModuleItem>.Fail();
+            }
+            
+            return Optional<ITileModuleItem>.Success(new TileModuleItem(item.Value));
+        }
+
+        public Optional<ITileModuleItem> Create(string id)
+        {
+            var item = m_ModuleItemCreator.Create(id);
+            if (!item.HasValue)
+            {
+                return Optional<ITileModuleItem>.Fail();
+            }
+            
+            return Optional<ITileModuleItem>.Success(new TileModuleItem(item.Value));
+        }
+
+        public bool Destroy(ITileModuleItem data)
+        {
+            return false;
+            // return m_ModuleItemCreator.Create(data);
         }
 
         private bool InitConfig()
         {
-            var loader = new TilesConfigLoader(m_ConfigLoader);
-            var converter = new TilesDtoToConfigConverter();
-            var dto = loader.Load();
-            if (!dto.HasValue)
-            {
-                return false;
-            }
-
-            var config = converter.Convert(dto.Value);
-            if (!config.HasValue)
-            {
-                return false;
-            }
-            
-            m_ConfigService = new TilesConfigService(config.Value);
-            m_ConfigService.Initialize();
+            // var loader = new TilesConfigLoader(m_ConfigLoader);
+            // var converter = new TilesDtoToConfigConverter();
+            // var dto = loader.Load();
+            // if (!dto.HasValue)
+            // {
+            //     return false;
+            // }
+            //
+            // var config = converter.Convert(dto.Value);
+            // if (!config.HasValue)
+            // {
+            //     return false;
+            // }
+            //
+            // m_ConfigService = new TilesConfigService(config.Value);
+            // m_ConfigService.Initialize();
             
             return true;
         }
 
-        public Optional<ITile> CreateTileByGenerationID(string generationID, Vector2Int position)
+        public Optional<ITileModuleItem> CreateTileByGenerationID(string generationID, Vector2Int position)
         {
-            var config = m_ConfigService.GetTileByGenerationId(generationID);
-            if (!config.HasValue)
+            var tileID = GenerationIdToTileConvert(generationID);
+            var tile = Create(tileID);
+            if (!tile.HasValue)
             {
-                return Optional<ITile>.Fail();
+                return Optional<ITileModuleItem>.Fail();
             }
 
-            var data = new TileData()
-            {
-                ID = config.Value.ID,
-                PositionX = position.X,
-                PositionY = position.Y
-            };
-            var tile = new Tile(config.Value, data);
-            return Optional<ITile>.Success(tile);
+            tile.Value.AddDataModule(new TilePositionModuleData(position.X, position.Y));
+            
+            return Optional<ITileModuleItem>.Success(tile.Value);
         }
 
         public Optional<Sprite> GetTileSprite(string tileID)
         {
-            var config = m_ConfigService.GetTile(tileID);
+            var config = m_ConfigController.GetConfig(tileID);
             if (!config.HasValue)
             {
                 return Optional<Sprite>.Fail();
             }
+
+            var tileSprite = config.Value.GetModule<TileSpriteModuleConfig>();
+            if (!tileSprite.HasValue)
+            {
+                return Optional<Sprite>.Fail();
+            }
             
-            return m_SpriteLoader.Load(config.Value.SpriteKey);
+            return m_SpriteLoader.Load(tileSprite.Value.Key);
         }
         
-        public Optional<Sprite> GetTileSprite(ITile tile)
+        public Optional<Sprite> GetTileSprite(ITileModuleItem tileModuleItem)
         {
-            return m_SpriteLoader.Load(tile.Config.SpriteKey);
+            return GetTileSprite(tileModuleItem.Id);
+        }
+
+        private string GenerationIdToTileConvert(string generationId)
+        {
+            if (generationId == "Wall")
+            {
+                return "wall";
+            }
+            
+            if (generationId == "Door")
+            {
+                return "closed_door";
+            }
+            
+            if (generationId == "OpenedDoor")
+            {
+                return "opened_door";
+            }
+
+            return null;
         }
     }
 }

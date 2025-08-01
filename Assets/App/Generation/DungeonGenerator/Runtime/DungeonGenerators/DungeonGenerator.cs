@@ -95,7 +95,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
 
             var generator = m_Generators[m_CurrentGeneratorIndex];
             
-            m_Logger.LogError($"Next iteration generation: {generator.GetName()}"); 
+            m_Logger.Log($"Next iteration generation: {generator.GetName()}"); 
             
             var generation = generator.Process(m_Generation);
             if (!generation.HasValue)

@@ -1,7 +1,0 @@
-﻿{
-  "name": "GameItemTests",
-  "references":[ "GameItems", "DataContainers", "CommonUtility" ],
-  "includePlatforms": [
-    "Editor"
-  ]
-}

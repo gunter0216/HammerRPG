@@ -5,16 +5,16 @@ namespace App.Game.GameManagers.External
 {
     public class GameTile
     {
-        private readonly ITile m_Tile;
+        private readonly ITileModuleItem m_TileModuleItem;
         private readonly ITileView m_View;
 
-        public ITile Tile => m_Tile;
+        public ITileModuleItem TileModuleItem => m_TileModuleItem;
 
         public ITileView View => m_View;
 
-        public GameTile(ITile tile, ITileView view)
+        public GameTile(ITileModuleItem tileModuleItem, ITileView view)
         {
-            m_Tile = tile;
+            m_TileModuleItem = tileModuleItem;
             m_View = view;
         }
     }

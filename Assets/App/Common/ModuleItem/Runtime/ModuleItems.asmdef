@@ -1,0 +1,5 @@
+﻿{
+  "name": "ModuleItems",
+  "references":[ "DataContainers", "CommonUtility" ],
+  "noEngineReferences": true
+}
