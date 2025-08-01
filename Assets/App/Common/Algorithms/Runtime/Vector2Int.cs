@@ -2,6 +2,7 @@
 
 namespace App.Common.Algorithms.Runtime
 {
+    [Serializable]
     public struct Vector2Int : IEquatable<Vector2Int>
     {
         private int m_X;

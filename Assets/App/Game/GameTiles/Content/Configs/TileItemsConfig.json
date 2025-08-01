@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "wall",
+      "generation_id": "Wall",
+      "modules": {
+        "sprite": {
+          "key": "BricksWall1"
+        }
+      }
+    },
+    {
+      "id": "closed_door",
+      "generation_id": "Door",
+      "modules": {
+        "sprite": {
+          "key": "ClosedDoor"
+        }
+      }
+    },
+    {
+      "id": "opened_door",
+      "generation_id": "OpenedDoor",
+      "modules": {
+        "sprite": {
+          "key": "OpenedDoor"
+        }
+      }
+    },
+    {
+      "id": "floor",
+      "generation_id": "",
+      "modules": {
+        "sprite": {
+          "key": "Floor1"
+        }
+      }
+    }
+  ]
+}

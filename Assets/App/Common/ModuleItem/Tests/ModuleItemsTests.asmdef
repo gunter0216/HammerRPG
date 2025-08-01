@@ -1,0 +1,7 @@
+﻿{
+  "name": "ModuleItemsTests",
+  "references":[ "ModuleItems", "DataContainers", "CommonUtility" ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}
