@@ -32,13 +32,13 @@ namespace App.Game.GameManagers.External.Services
             var hasLockedDoor = room.GenerationRoom.RequiredKey != null;
 
             var tile = m_TilesController.CreateTileByGenerationID(generationTile.Id, worldPosition);
-            if (!tile.HasValue)
+            if (!tile.IsSuccess)
             {
-                HLogger.LogError("Cant create tile");
+                HLogger.LogError($"Cant create tile {tile.ErrorMessage}");
                 return Optional<GameTile>.Fail();
             }
 
-            var sprite = !isDoor || hasLockedDoor ? m_TilesController.GetTileSprite(tile.Value)
+            var sprite = !isDoor || hasLockedDoor ? m_TilesController.GetTileSprite(tile.ModuleItem)
                 : m_TilesController.GetTileSprite("opened_door");
             if (!sprite.HasValue)
             {
@@ -61,7 +61,7 @@ namespace App.Game.GameManagers.External.Services
                 view.Value.DisableCollider();
             }
 
-            var gameTile = new GameTile(tile.Value, view.Value);
+            var gameTile = new GameTile(tile.ModuleItem, view.Value);
             return Optional<GameTile>.Success(gameTile);
         }
         

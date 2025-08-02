@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
@@ -55,6 +56,24 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
         }
 
         public Optional<DungeonGeneration> Generate(DungeonGenerationConfig generationConfig)
+        {
+            for (int i = 0; i < 10; ++i)
+            {
+                try
+                {
+                    var generate = TryGenerate(generationConfig);
+                    return generate;
+                }
+                catch (Exception e)
+                {
+                    HLogger.LogError(e);
+                }
+            }
+            
+            return Optional<DungeonGeneration>.Fail();
+        }
+        
+        private Optional<DungeonGeneration> TryGenerate(DungeonGenerationConfig generationConfig)
         {
             StartGeneration(generationConfig);
             for (int i = 0; i < 1000; ++i)

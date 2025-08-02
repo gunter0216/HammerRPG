@@ -57,7 +57,7 @@ namespace App.Common.Data.Runtime
             }
             
             Load(m_FilePath);
-            // CreateNewDatas();
+            CreateNewDatas();
         }
 
         public void SetDatas(List<IData> datas)
@@ -94,17 +94,17 @@ namespace App.Common.Data.Runtime
             return Optional<T>.Empty;
         }
 
-        // private void CreateNewDatas()
-        // {
-        //     foreach (var data in m_Datas)
-        //     {
-        //         if (!m_NameToData.ContainsKey(data.Name()))
-        //         {
-        //             data.WhenCreateNewData();
-        //             m_NameToData.Add(data.Name(), data);
-        //         }
-        //     }
-        // }
+        private void CreateNewDatas()
+        {
+            foreach (var data in m_Datas)
+            {
+                if (!m_NameToData.ContainsKey(data.Name()))
+                {
+                    // data.WhenCreateNewData();
+                    m_NameToData.Add(data.Name(), data);
+                }
+            }
+        }
 
         private void Load(string path)
         {

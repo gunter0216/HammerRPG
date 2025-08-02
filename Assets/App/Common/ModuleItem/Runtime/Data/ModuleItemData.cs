@@ -7,8 +7,10 @@ namespace App.Common.ModuleItem.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
-    public class ModuleItemData : IModuleItemData
+    public class ModuleItemData : IModuleItemData, IModuleData
     {
+        public static string ContainerKey => "ModuleItemData";
+        
         [JsonProperty("id")] private string m_Id;
         [JsonProperty("modules")] private List<DataReference> m_ModuleRefs;
         
@@ -24,6 +26,11 @@ namespace App.Common.ModuleItem.Runtime.Data
         {
             m_Id = id;
             m_ModuleRefs = moduleRefs;
+        }
+
+        public string GetModuleKey()
+        {
+            return ContainerKey;
         }
     }
 }

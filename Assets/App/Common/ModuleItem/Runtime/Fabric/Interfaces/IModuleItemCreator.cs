@@ -1,11 +1,10 @@
-﻿using App.Common.ModuleItem.Runtime.Data;
-using App.Common.Utility.Runtime;
+﻿using App.Common.DataContainer.Runtime;
 
 namespace App.Common.ModuleItem.Runtime.Fabric.Interfaces
 {
     public interface IModuleItemCreator
     {
-        Optional<IModuleItem> Create(string id);
-        Optional<IModuleItem> Create(IModuleItemData data);
+        ModuleItemResult<IModuleItem> Create(string id);
+        ModuleItemResult<IModuleItem> Create(DataReference dataReference);
     }
 }

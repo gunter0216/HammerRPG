@@ -6,6 +6,7 @@ using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External.Config;
 using App.Common.ModuleItem.External.Config.Interfaces;
+using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config;
 using App.Common.ModuleItem.Runtime.Data;
 using App.Common.ModuleItem.Runtime.Fabric;
@@ -81,26 +82,26 @@ namespace App.Game.GameTiles.External
                 m_Handlers);
         }
 
-        public Optional<ITileModuleItem> Create(IModuleItemData data)
+        public ModuleItemResult<ITileModuleItem> Create(DataReference dataReference)
         {
-            var item = m_ModuleItemCreator.Create(data);
-            if (!item.HasValue)
+            var item = m_ModuleItemCreator.Create(dataReference);
+            if (!item.IsSuccess)
             {
-                return Optional<ITileModuleItem>.Fail();
+                return ModuleItemResult<ITileModuleItem>.Fail();
             }
             
-            return Optional<ITileModuleItem>.Success(new TileModuleItem(item.Value));
+            return ModuleItemResult<ITileModuleItem>.Success(new TileModuleItem(item.ModuleItem), item.DataReference);
         }
 
-        public Optional<ITileModuleItem> Create(string id)
+        public ModuleItemResult<ITileModuleItem> Create(string id)
         {
             var item = m_ModuleItemCreator.Create(id);
-            if (!item.HasValue)
+            if (!item.IsSuccess)
             {
-                return Optional<ITileModuleItem>.Fail();
+                return ModuleItemResult<ITileModuleItem>.Fail(item.ErrorMessage);
             }
             
-            return Optional<ITileModuleItem>.Success(new TileModuleItem(item.Value));
+            return ModuleItemResult<ITileModuleItem>.Success(new TileModuleItem(item.ModuleItem), item.DataReference);
         }
 
         public bool Destroy(ITileModuleItem data)
@@ -131,18 +132,18 @@ namespace App.Game.GameTiles.External
             return true;
         }
 
-        public Optional<ITileModuleItem> CreateTileByGenerationID(string generationID, Vector2Int position)
+        public ModuleItemResult<ITileModuleItem> CreateTileByGenerationID(string generationID, Vector2Int position)
         {
             var tileID = GenerationIdToTileConvert(generationID);
             var tile = Create(tileID);
-            if (!tile.HasValue)
+            if (!tile.IsSuccess)
             {
-                return Optional<ITileModuleItem>.Fail();
+                return ModuleItemResult<ITileModuleItem>.Fail(tile.ErrorMessage);
             }
 
-            tile.Value.AddDataModule(new TilePositionModuleData(position.X, position.Y));
+            tile.ModuleItem.AddDataModule(new TilePositionModuleData(position.X, position.Y));
             
-            return Optional<ITileModuleItem>.Success(tile.Value);
+            return tile;
         }
 
         public Optional<Sprite> GetTileSprite(string tileID)

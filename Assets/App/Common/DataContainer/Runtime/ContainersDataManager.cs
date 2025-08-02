@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using App.Common.DataContainer.Runtime.Data;
 using App.Common.DataContainer.Runtime.Data.Loader;
+using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 
 namespace App.Common.DataContainer.Runtime
@@ -9,12 +10,14 @@ namespace App.Common.DataContainer.Runtime
     public class ContainersDataManager : IContainersDataManager
     {
         private readonly IContainerDataLoader m_DataLoader;
+        private readonly ILogger m_Logger;
 
         private Dictionary<string, IContainerData> m_DataContainers;
 
-        public ContainersDataManager(IContainerDataLoader dataLoader)
+        public ContainersDataManager(IContainerDataLoader dataLoader, ILogger logger)
         {
             m_DataLoader = dataLoader;
+            m_Logger = logger;
         }
 
         public bool Initialize()
@@ -43,6 +46,7 @@ namespace App.Common.DataContainer.Runtime
         {
             if (!m_DataContainers.TryGetValue(key, out var containerData))
             {
+                m_Logger.LogError($"Container with key '{key}' not found.");
                 return Optional<DataReference>.Fail();
             }
             
