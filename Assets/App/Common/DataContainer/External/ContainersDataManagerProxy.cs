@@ -16,13 +16,16 @@ namespace App.Common.DataContainer.External
     public class ContainersDataManagerProxy : IInitSystem, IContainersDataManager
     {
         [Inject] private readonly IDataManager m_DataManager;
-        private readonly List<IContainerData> m_DataContainers = new List<IContainerData>();
+        [Inject] private readonly List<IContainerData> m_DataContainers;
 
         private ContainersDataManager m_ContainersDataManager;
 
         public void Init()
         {
-            m_ContainersDataManager = new ContainersDataManager(new ContainerDataLoader(m_DataManager, m_DataContainers));
+            var logger = new Logger.Runtime.Logger();
+            m_ContainersDataManager = new ContainersDataManager(
+                new ContainerDataLoader(m_DataManager, m_DataContainers),
+                logger);
             m_ContainersDataManager.Initialize();
         }
 

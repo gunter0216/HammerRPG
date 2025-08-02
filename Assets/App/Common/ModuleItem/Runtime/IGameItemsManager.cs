@@ -5,8 +5,8 @@ namespace App.Common.ModuleItem.Runtime
 {
     public interface IGameItemsManager
     {
-        Optional<IModuleItem> Create(string id);
-        Optional<IModuleItem> Create(IModuleItemData data);
-        bool Destroy(IModuleItemData data);
+        // ModuleItemResult<IModuleItem> Create(string id);
+        // ModuleItemResult<IModuleItem> Create(IModuleItemData data);
+        // bool Destroy(IModuleItemData data);
     }
 }

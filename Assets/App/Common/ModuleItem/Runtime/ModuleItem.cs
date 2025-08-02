@@ -12,6 +12,7 @@ namespace App.Common.ModuleItem.Runtime
         private readonly IModuleItemConfig m_Config;
         
         public string Id => m_Config.Id;
+        internal IModuleItemData Data => m_Data;
 
         public ModuleItem(
             IModulesHolder modulesHolder,

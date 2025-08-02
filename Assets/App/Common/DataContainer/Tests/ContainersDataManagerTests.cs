@@ -3,6 +3,7 @@ using App.Common.DataContainer.Runtime;
 using App.Common.DataContainer.Runtime.Data;
 using App.Common.DataContainer.Runtime.Data.Loader;
 using App.Common.DataContainer.Tests.Mock;
+using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
 using NSubstitute;
 using NUnit.Framework;
@@ -31,7 +32,7 @@ namespace App.Common.DataContainer.Tests
                 m_Test2ContainerData
             };
             dataLoader.Load().Returns(Optional<IReadOnlyList<IContainerData>>.Success(containers));
-            m_DataManager = new ContainersDataManager(dataLoader);
+            m_DataManager = new ContainersDataManager(dataLoader, new StubLogger());
             m_DataManager.Initialize();
         }
         

@@ -65,15 +65,15 @@ namespace App.Common.ModuleItem.External
             m_ConfigController.Initialize();
         }
         
-        public Optional<IModuleItem> Create(string id)
+        public ModuleItemResult<IModuleItem> Create(string id)
         {
             return m_ModuleItemCreator.Create(id);
         }
 
-        public Optional<IModuleItem> Create(IModuleItemData data)
-        {
-            return m_ModuleItemCreator.Create(data);
-        }
+        // public ModuleItemResult<IModuleItem> Create(IModuleItemData data)
+        // {
+        //     return m_ModuleItemCreator.Create(data);
+        // }
 
         public bool Destroy(IModuleItemData data)
         {

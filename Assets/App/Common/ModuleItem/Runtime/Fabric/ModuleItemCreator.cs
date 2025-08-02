@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.ModuleItem.Runtime.Data;
@@ -24,35 +25,66 @@ namespace App.Common.ModuleItem.Runtime.Fabric
             m_Handlers = handlers;
         }
 
-        public Optional<IModuleItem> Create(string id)
+        public ModuleItemResult<IModuleItem> Create(string id)
         {
             var dataReferences = new List<DataReference>();
             var data = new ModuleItemData(id, dataReferences);
-            return Create(data);
+            
+            var moduleItemResult = Create(data);
+            if (!moduleItemResult.success)
+            {
+                return ModuleItemResult<IModuleItem>.Fail(moduleItemResult.errorMessage);
+            }
+            
+            var dataReference = m_ContainerController.AddData(ModuleItemData.ContainerKey, data);
+            if (!dataReference.HasValue)
+            {
+                return ModuleItemResult<IModuleItem>.Fail("Failed to add data reference.");
+            }
+            
+            return ModuleItemResult<IModuleItem>.Success(moduleItemResult.moduleItem, dataReference.Value);
         }
 
-        public Optional<IModuleItem> Create(IModuleItemData data)
+        public ModuleItemResult<IModuleItem> Create(DataReference dataReference)
+        {
+            var data = m_ContainerController.GetData<ModuleItemData>(dataReference);
+            if (!data.HasValue)
+            {
+                return ModuleItemResult<IModuleItem>.Fail("Data not found for the given reference.");
+            }
+            
+            var moduleItemResult = Create(data.Value);
+            if (!moduleItemResult.success)
+            {
+                return ModuleItemResult<IModuleItem>.Fail(moduleItemResult.errorMessage);
+            }
+            
+            return ModuleItemResult<IModuleItem>.Success(moduleItemResult.moduleItem, dataReference);
+        }
+
+        private (IModuleItem moduleItem, string errorMessage, bool success) Create(IModuleItemData data)
         {
             var config = m_ConfigController.GetConfig(data.Id);
             if (!config.HasValue)
             {
-                return Optional<IModuleItem>.Fail();
+                return (null, "Config not found", false);
             }
 
             var modulesHolder = new ModulesHolder(m_ContainerController, data.ModuleRefs);
+            modulesHolder.Initialize();
             IModuleItem moduleItem = new ModuleItem(modulesHolder, config.Value, data);
             foreach (var handler in m_Handlers)
             {
                 var handledGameItem = handler.Handle(moduleItem);
                 if (!handledGameItem.HasValue)
                 {
-                    return Optional<IModuleItem>.Fail();
+                    return (null, "Handler fuck up it.", false);
                 }
 
                 moduleItem = handledGameItem.Value;
             }
             
-            return Optional<IModuleItem>.Success(moduleItem);
+            return (moduleItem, "", true);
         }
     }
 }

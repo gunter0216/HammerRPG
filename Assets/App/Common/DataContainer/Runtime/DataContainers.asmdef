@@ -1,4 +1,4 @@
 ﻿{
   "name": "DataContainers",
-  "references":[ "CommonUtility", "DataManager" ]
+  "references":[ "CommonUtility", "DataManager", "Logger" ]
 }
