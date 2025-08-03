@@ -11,12 +11,12 @@ namespace App.Common.ModuleItem.Runtime.Fabric
 {
     public class ModuleItemCreator : IModuleItemCreator
     {
-        private readonly IGameItemConfigController m_ConfigController;
+        private readonly IModuleItemConfigController m_ConfigController;
         private readonly IContainersDataManager m_ContainerController;
         private readonly IReadOnlyList<ICreateModuleItemHandler> m_Handlers;
 
         public ModuleItemCreator(
-            IGameItemConfigController configController, 
+            IModuleItemConfigController configController, 
             IContainersDataManager containerController, 
             IReadOnlyList<ICreateModuleItemHandler> handlers)
         {

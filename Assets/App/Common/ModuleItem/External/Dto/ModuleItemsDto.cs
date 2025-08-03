@@ -6,7 +6,7 @@ namespace App.Common.ModuleItem.External.Dto
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
-    public class GameItemsDto
+    public class ModuleItemsDto
     {
         [JsonProperty("items")] 
         private ModuleItemDto[] m_Items;

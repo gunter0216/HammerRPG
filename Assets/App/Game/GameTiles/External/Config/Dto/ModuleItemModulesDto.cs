@@ -6,7 +6,7 @@ namespace App.Common.ModuleItem.External.Dto
 {
     public partial class ModuleItemModulesDto
     {
-        [JsonProperty("sprite")]
+        [JsonProperty("icon")]
         private TileSpriteModuleDto m_TileSpriteModule;
 
         public TileSpriteModuleDto TileSpriteModule => m_TileSpriteModule;

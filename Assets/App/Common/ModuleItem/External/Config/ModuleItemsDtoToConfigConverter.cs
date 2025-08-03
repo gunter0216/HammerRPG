@@ -7,7 +7,7 @@ using App.Common.Utility.Runtime;
 
 namespace App.Common.ModuleItem.External.Config
 {
-    public class ModuleItemsDtoToConfigConverter : IGameItemsDtoToConfigConverter
+    public class ModuleItemsDtoToConfigConverter : IModuleItemsDtoToConfigConverter
     {
         private readonly IReadOnlyList<IModuleDtoToConfigConverter> m_ModuleConverters;
 
@@ -16,7 +16,7 @@ namespace App.Common.ModuleItem.External.Config
             m_ModuleConverters = moduleConverters;
         }
 
-        public Optional<IGameItemsConfig> Convert(GameItemsDto dto)
+        public Optional<IModuleItemsConfig> Convert(ModuleItemsDto dto, string type)
         {
             var configs = new ModuleItemConfig[dto.Items.Count];
             for (int i = 0; i < dto.Items.Count; ++i)
@@ -36,12 +36,12 @@ namespace App.Common.ModuleItem.External.Config
                     }
                 }
 
-                configs[i] = new ModuleItemConfig(itemDto.Id, itemDto.Tags, modules);
+                configs[i] = new ModuleItemConfig(itemDto.Id, itemDto.Tags, modules, type);
             }
             
-            var gameItemsConfig = new GameItemsConfig(configs);
+            var gameItemsConfig = new ModuleItemsConfig(configs);
             
-            return Optional<IGameItemsConfig>.Success(gameItemsConfig);
+            return Optional<IModuleItemsConfig>.Success(gameItemsConfig);
         }
     }
 }

@@ -1,0 +1,52 @@
+﻿{
+  "items": [
+    {
+      "id": "LeatherArmor",
+      "modules": {
+        "icon": {
+          "key": "LeatherArmorIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherBoots",
+      "modules": {
+        "icon": {
+          "key": "LeatherBootsIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherHelmet",
+      "modules": {
+        "icon": {
+          "key": "LeatherHelmetIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherPants",
+      "modules": {
+        "icon": {
+          "key": "LeatherPantsIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherGloves",
+      "modules": {
+        "icon": {
+          "key": "LeatherGlovesIcon"
+        }
+      }
+    },
+    {
+      "id": "IronSword",
+      "modules": {
+        "icon": {
+          "key": "IronSwordIcon"
+        }
+      }
+    }
+  ]
+}

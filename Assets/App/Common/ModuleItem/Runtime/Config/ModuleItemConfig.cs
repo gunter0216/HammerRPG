@@ -9,20 +9,24 @@ namespace App.Common.ModuleItem.Runtime.Config
     public class ModuleItemConfig : IModuleItemConfig, IComparable<ModuleItemConfig>
     {
         private readonly string m_Id;
+        private readonly string m_Type;
         private readonly IReadOnlyList<IModuleConfig> m_Modules;
         private readonly long m_Tags;
 
         public string Id => m_Id;
+        public string Type => m_Type;
         public IReadOnlyList<IModuleConfig> Modules => m_Modules;
 
         public ModuleItemConfig(
             string id, 
             long tags, 
-            IReadOnlyList<IModuleConfig> modules)
+            IReadOnlyList<IModuleConfig> modules,
+            string type = "default")
         {
             m_Id = id;
             m_Tags = tags;
             m_Modules = modules;
+            m_Type = type;
         }
 
         public bool HasTag(long tag)

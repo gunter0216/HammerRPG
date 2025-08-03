@@ -5,7 +5,7 @@ using App.Game.Configs.Runtime;
 
 namespace App.Game.GameTiles.External.Config.Loader
 {
-    public class TileModuleItemsConfigLoader : IGameItemsConfigLoader
+    public class TileModuleItemsConfigLoader : IModuleItemsConfigLoader
     {
         private const string m_LocalConfigKey = "TileItemsConfig";
         
@@ -16,9 +16,9 @@ namespace App.Game.GameTiles.External.Config.Loader
             m_ConfigLoader = configLoader;
         }
 
-        public Optional<GameItemsDto> Load()
+        public Optional<ModuleItemsDto> Load()
         {
-            return m_ConfigLoader.LoadConfig<GameItemsDto>(m_LocalConfigKey);
+            return m_ConfigLoader.LoadConfig<ModuleItemsDto>(m_LocalConfigKey);
         }
     }
 }
