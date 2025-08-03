@@ -1,3 +1,4 @@
 ﻿{
-  "name": "Inventory"
+  "name": "Inventory",
+  "references":[ "DataManager" ]
 }

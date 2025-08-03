@@ -46,6 +46,11 @@ namespace App.Common.Data.External
             return m_DataManager.GetData(name);
         }
 
+        public Optional<T> GetData<T>(string name) where T : IData
+        {
+            return m_DataManager.GetData<T>(name);
+        }
+
         public static void RegisterDataType<T>() where T : IData
         {
             var type = typeof(T);

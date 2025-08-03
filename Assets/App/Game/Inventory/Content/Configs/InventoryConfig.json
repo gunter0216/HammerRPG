@@ -1,0 +1,28 @@
+﻿{
+  "groups": [
+    {
+      "id": "Weapons",
+      "icon": "WeaponInventoryGroupIcon"
+    },
+    {
+      "id": "Armor",
+      "icon": "ArmorInventoryGroupIcon"
+    },
+    {
+      "id": "Potions",
+      "icon": "PotionInventoryGroupIcon"
+    },
+    {
+      "id": "Keys",
+      "icon": "KeyInventoryGroupIcon"
+    },
+    {
+      "id": "Other",
+      "icon": "OtherInventoryGroupIcon"
+    }
+  ],
+  "cols": 7,
+  "rows": 10,
+  "slot_width": 100,
+  "slot_height": 100
+}

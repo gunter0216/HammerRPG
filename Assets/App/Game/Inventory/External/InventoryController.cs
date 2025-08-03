@@ -1,32 +1,93 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
+﻿using App.Common.AssetSystem.Runtime;
+using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
+using App.Common.Windows.External;
 using App.Game;
+using App.Game.Configs.Runtime;
 using App.Game.Contexts;
+using App.Game.Inventory.External.Config;
 using App.Game.Inventory.External.Data;
+using App.Game.Inventory.External.View;
+using App.Game.Inventory.External.ViewModel;
+using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Data;
 using App.Game.States.Menu;
 
 namespace App.Menu.Inventory.External
 {
     [Scoped(typeof(MenuSceneContext))]
     [Stage(typeof(MenuInitPhase), 0)]
-    public class InventoryController : IInitSystem
+    public class InventoryController : IInitSystem, IInventoryController
     {
-        [Inject] private IDataManager m_DataManager;
+        [Inject] private readonly IDataManager m_DataManager;
+        [Inject] private readonly IConfigLoader m_ConfigLoader;
+        [Inject] private readonly IWindowManager m_WindowManager;
+        [Inject] private readonly IAssetManager m_AssetManager;
+        
+        private InventoryDataController m_InventoryDataController;
+        private InventoryConfigController m_InventoryConfigController;
+        private InventoryWindowModel m_InventoryWindowModel;
         
         public void Init()
         {
-             var data = m_DataManager.GetData(nameof(InventoryData)).Value as InventoryData;
-             if (data == null)
-             {
-                 HLogger.LogError("data is null");
-                 return;
-             }
-             
-             // HLogger.LogError($"{data.CountSlots}");
-             // data.CountSlots = 99;
+            InitData();
+            InitConfig();
+            InitWindow();
+        }
+
+        private void InitWindow()
+        {
+            m_InventoryWindowModel = new InventoryWindowModel(m_WindowManager, m_AssetManager);
+        }
+
+        private bool InitConfig()
+        {
+            var configLoader = new InventoryConfigLoader(m_ConfigLoader);
+            var dto = configLoader.Load();
+            if (!dto.HasValue)
+            {
+                HLogger.LogError("InventoryConfig is null");
+                return false;
+            }
+            
+            var converter = new InventoryDtoToConfigConverter();
+            var config = converter.Convert(dto.Value);
+            if (!config.HasValue)
+            {
+                HLogger.LogError("InventoryConfig conversion failed");
+                return false;
+            }
+
+            m_InventoryConfigController = new InventoryConfigController(config.Value);
+            return true;
+        }
+
+        private bool InitData()
+        {
+            var dataLoader = new InventoryDataLoader(m_DataManager);
+            var data = dataLoader.Load();
+            if (!data.HasValue)
+            {
+                HLogger.LogError("InventoryData is null");
+                return false;
+            }
+
+            m_InventoryDataController = new InventoryDataController(data.Value);
+
+            return true;
+        }
+
+        public void OpenWindow()
+        {
+            m_InventoryWindowModel.Open();
+        }
+
+        public void CloseWindow()
+        {
+            m_InventoryWindowModel.Close();
         }
     }
 }

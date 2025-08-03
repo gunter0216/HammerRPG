@@ -84,14 +84,19 @@ namespace App.Common.Data.Runtime
         
         public Optional<T> GetData<T>(string name) where T : IData
         {
-            // TODO
-            // if (m_NameToData.TryGetValue(name, out var data))
-            // {
-            //     return new Optional<T>(data);
-            // }
-            //
-            // HLogger.LogError($"Data not found {name}");
-            return Optional<T>.Empty;
+            if (m_NameToData.TryGetValue(name, out var data))
+            {
+                if (data is not T typedData)
+                {
+                    HLogger.LogError($"Data {name} is not of type {typeof(T)}");
+                    return Optional<T>.Fail();
+                }
+                
+                return new Optional<T>(typedData);
+            }
+            
+            HLogger.LogError($"Data not found {name}");
+            return Optional<T>.Fail();
         }
 
         private void CreateNewDatas()

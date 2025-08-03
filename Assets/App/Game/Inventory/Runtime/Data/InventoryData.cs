@@ -7,10 +7,9 @@ using UnityEngine;
 
 namespace App.Game.Inventory.External.Data
 {
-    [Data]
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
-    public class InventoryData : IData, IInventoryData
+    public class InventoryData : IData
     {
         [SerializeField, JsonProperty("count_slots")] private int m_CountSlots;
 
