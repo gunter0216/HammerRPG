@@ -12,9 +12,20 @@ namespace App.Game.Inventory.External.View
         [Space]
         [SerializeField] private Transform m_ItemsContent;
         
+        public InventoryGroupHeaderView InventoryGroupHeaderViewPrefab => m_InventoryGroupHeaderViewPrefab;
+        public Transform HeaderGroupContent => m_HeaderGroupContent;
+        public InventorySlotView InventorySlotViewPrefab => m_InventorySlotViewPrefab;
+        public Transform SlotsContent => m_SlotsContent;
+        public Transform ItemsContent => m_ItemsContent;
+        
         public void SetActive(bool isActive)
         {
             gameObject.SetActive(isActive);
+        }
+
+        public bool IsActive()
+        {
+            return gameObject.activeSelf;
         }
     }
 }

@@ -6,6 +6,7 @@ using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Windows.External;
 using App.Game;
+using App.Game.Canvases.External;
 using App.Game.Configs.Runtime;
 using App.Game.Contexts;
 using App.Game.Inventory.External.Config;
@@ -14,18 +15,22 @@ using App.Game.Inventory.External.View;
 using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
+using App.Game.SpriteLoaders.Runtime;
+using App.Game.States.Game;
 using App.Game.States.Menu;
 
 namespace App.Menu.Inventory.External
 {
-    [Scoped(typeof(MenuSceneContext))]
-    [Stage(typeof(MenuInitPhase), 0)]
+    [Scoped(typeof(GameSceneContext))]
+    [Stage(typeof(GameInitPhase), 0)]
     public class InventoryController : IInitSystem, IInventoryController
     {
         [Inject] private readonly IDataManager m_DataManager;
         [Inject] private readonly IConfigLoader m_ConfigLoader;
         [Inject] private readonly IWindowManager m_WindowManager;
         [Inject] private readonly IAssetManager m_AssetManager;
+        [Inject] private readonly PopupCanvas m_PopupCanvas;
+        [Inject] private readonly ISpriteLoader m_SpriteLoader;
         
         private InventoryDataController m_InventoryDataController;
         private InventoryConfigController m_InventoryConfigController;
@@ -40,7 +45,13 @@ namespace App.Menu.Inventory.External
 
         private void InitWindow()
         {
-            m_InventoryWindowModel = new InventoryWindowModel(m_WindowManager, m_AssetManager);
+            m_InventoryWindowModel = new InventoryWindowModel(
+                m_WindowManager,
+                m_AssetManager,
+                m_InventoryDataController,
+                m_InventoryConfigController,
+                m_PopupCanvas,
+                m_SpriteLoader);
         }
 
         private bool InitConfig()
@@ -88,6 +99,11 @@ namespace App.Menu.Inventory.External
         public void CloseWindow()
         {
             m_InventoryWindowModel.Close();
+        }
+
+        public bool IsOpen()
+        {
+            return m_InventoryWindowModel.IsOpen();
         }
     }
 }

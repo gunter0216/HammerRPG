@@ -1,7 +1,5 @@
 ﻿using System;
 using App.Common.Data.Runtime;
-using App.Common.Data.Runtime.Attributes;
-using App.Game.Inventory.Runtime.Data;
 using Newtonsoft.Json;
 using UnityEngine;
 

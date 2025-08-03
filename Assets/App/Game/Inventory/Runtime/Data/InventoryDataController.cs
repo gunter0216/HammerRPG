@@ -2,7 +2,7 @@
 
 namespace App.Game.Inventory.Runtime.Data
 {
-    public class InventoryDataController
+    public class InventoryDataController : IInventoryDataController
     {
         private readonly InventoryData m_Data;
         

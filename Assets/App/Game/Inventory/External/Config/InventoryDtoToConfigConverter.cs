@@ -12,10 +12,10 @@ namespace App.Game.Inventory.External.Config
             if (dto == null || dto.Groups == null)
                 return Optional<InventoryConfig>.Fail();
 
-            var groups = new List<InventoryGroup>();
+            var groups = new List<IInventoryGroupConfig>();
             foreach (var groupDto in dto.Groups)
             {
-                var group = new InventoryGroup(groupDto.Id, groupDto.Icon);
+                var group = new InventoryGroupConfig(groupDto.Id, groupDto.Icon);
                 groups.Add(group);
             }
 

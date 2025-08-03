@@ -2,12 +2,12 @@
 
 namespace App.Game.Inventory.Runtime.Config
 {
-    public class InventoryGroup
+    public class InventoryGroupConfig : IInventoryGroupConfig
     {
         private readonly string m_Id;
         private readonly string m_Icon;
 
-        public InventoryGroup(string id, string icon)
+        public InventoryGroupConfig(string id, string icon)
         {
             m_Id = id;
             m_Icon = icon;

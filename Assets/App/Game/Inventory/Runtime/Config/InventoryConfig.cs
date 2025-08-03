@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace App.Game.Inventory.Runtime.Config
 {
-    public class InventoryConfig
+    public class InventoryConfig : IInventoryConfig
     {
-        private readonly List<InventoryGroup> m_Groups;
+        private readonly List<IInventoryGroupConfig> m_Groups;
         private readonly int m_Cols;
         private readonly int m_SlotWidth;
         private readonly int m_SlotHeight;
         private readonly int m_Rows;
 
-        public InventoryConfig(List<InventoryGroup> groups, int cols, int slotWidth, int slotHeight, int rows)
+        public InventoryConfig(List<IInventoryGroupConfig> groups, int cols, int slotWidth, int slotHeight, int rows)
         {
             m_Groups = groups;
             m_Cols = cols;
@@ -20,7 +20,7 @@ namespace App.Game.Inventory.Runtime.Config
             m_Rows = rows;
         }
 
-        public List<InventoryGroup> Groups => m_Groups;
+        public IReadOnlyList<IInventoryGroupConfig> Groups => m_Groups;
         public int Cols => m_Cols;
         public int SlotWidth => m_SlotWidth;
         public int SlotHeight => m_SlotHeight;

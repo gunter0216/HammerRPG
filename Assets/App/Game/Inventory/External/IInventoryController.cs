@@ -4,5 +4,6 @@
     {
         void OpenWindow();
         void CloseWindow();
+        bool IsOpen();
     }
 }

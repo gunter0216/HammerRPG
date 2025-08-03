@@ -1,4 +1,5 @@
 ﻿using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Logger.Runtime;
 using App.Game.Contexts;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
@@ -17,7 +18,14 @@ namespace App.Game.Inventory.External
         {
             if (Input.GetKeyDown(KeyCode.I))
             {
-                m_InventoryController.OpenWindow();
+                if (m_InventoryController.IsOpen())
+                {
+                    m_InventoryController.CloseWindow();
+                }
+                else
+                {
+                    m_InventoryController.OpenWindow();   
+                }
             }
         }
     }
