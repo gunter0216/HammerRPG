@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using App.Common.Utility.Runtime;
+﻿using App.Common.Utility.Runtime;
 
 namespace App.Common.Utility.Pool.Runtime
 {
     public interface IPool<T>
     {
-        Optional<PoolItemHolder<T>> Get();
-        bool Release(PoolItemHolder<T> item);
-        void ReleaseAll();
+        Optional<T> Get();
+        bool Release(T item);
         int Capacity { get; }
-        IReadOnlyList<PoolItemHolder<T>> ActiveItems { get; }
     }
 }

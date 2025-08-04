@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using App.Common.Timer.Runtime;
 using App.Common.Utility.Pool.External;
 using App.Game.Utility.Runtime.MenuSM;
@@ -18,6 +19,8 @@ namespace App.Menu.UI.Runtime.States
         private readonly ITimeToStringConverter m_TimeToStringConverter;
         private readonly ComponentPool<SingleplayerSaveRow> m_Pool;
         
+        private List<SingleplayerSaveRow> m_ActiveRows;
+        
         public SingleplayerMenuState(MenuMachine menuMachine, 
             SingleplayerPanel singleplayerPanel, 
             CreateGameMenuState createGameMenuState, 
@@ -30,6 +33,7 @@ namespace App.Menu.UI.Runtime.States
             m_StartGameStrategy = startGameStrategy;
             m_MenuMachine = menuMachine;
 
+            m_ActiveRows = new List<SingleplayerSaveRow>();
             m_TimeToStringConverter = new TimeToStringConverter();
             m_Pool = new ComponentPool<SingleplayerSaveRow>(
                 m_SingleplayerPanel.SaveRowPrefab,
@@ -49,17 +53,22 @@ namespace App.Menu.UI.Runtime.States
         public void Enter()
         {
             m_SingleplayerPanel.SetActive(true);
+
+            foreach (var activeRow in m_ActiveRows)
+            {
+                m_Pool.Release(activeRow);
+            }
             
-            m_Pool.ReleaseAll();
             var records = m_GameRecordsDataController.GetRecords();
             records.Sort((a, b) => b.LastLogin.CompareTo(a.LastLogin));
             foreach (var gameRecord in records)
             {
                 var view = m_Pool.Get();
-                view.Value.Item.SetCreateDate( "created " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.DateOfCreation));
-                view.Value.Item.SetLastLoginText("login " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.LastLogin));
-                view.Value.Item.SetNameText(gameRecord.Name);
-                view.Value.Item.SetPlayButtonAction(() =>
+                m_ActiveRows.Add(view.Value);
+                view.Value.SetCreateDate( "created " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.DateOfCreation));
+                view.Value.SetLastLoginText("login " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.LastLogin));
+                view.Value.SetNameText(gameRecord.Name);
+                view.Value.SetPlayButtonAction(() =>
                 {
                     m_StartGameStrategy.StartGame(gameRecord.Name);
                 });

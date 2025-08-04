@@ -12,14 +12,11 @@ namespace App.Common.Utility.Pool.Runtime
         private readonly Action<T> m_ActionOnRelease;
         private readonly Action<T> m_ActionOnDestroy;
         
-        private readonly Action<PoolItemHolder<T>> m_ActionOnCreateSuccessful;
+        private readonly Action<T> m_ActionOnCreateSuccessful;
 
-        private readonly List<PoolItemHolder<T>> m_Items;
-        private readonly List<PoolItemHolder<T>> m_ActiveItems;
+        private readonly List<T> m_Items;
 
-        public int Capacity => m_Items.Count + m_ActiveItems.Count;
-        public IReadOnlyList<PoolItemHolder<T>> ActiveItems => m_ActiveItems;
-        public int CountActiveItems => m_ActiveItems.Count;
+        public int Capacity => m_Items.Count;
 
         public ListPool(
             Func<Optional<T>> createFunc, 
@@ -34,12 +31,11 @@ namespace App.Common.Utility.Pool.Runtime
             m_ActionOnGet = actionOnGet;
             m_ActionOnRelease = actionOnRelease;
             m_ActionOnDestroy = actionOnDestroy;
-            m_Items = new List<PoolItemHolder<T>>(capacity);
-            m_ActiveItems = new List<PoolItemHolder<T>>();
+            m_Items = new List<T>(capacity);
 
             if (typeof(IPoolItem).IsAssignableFrom(typeof(T)))
             {
-                m_ActionOnCreateSuccessful = itemHolder => ((IPoolItem)itemHolder.Item).ReturnInPool = () => Release(itemHolder);
+                m_ActionOnCreateSuccessful = itemHolder => ((IPoolItem)itemHolder).ReturnInPool = () => Release(itemHolder);
             }
             
             if (typeof(IPoolGetListener).IsAssignableFrom(typeof(T)))
@@ -59,29 +55,19 @@ namespace App.Common.Utility.Pool.Runtime
                     var item = m_CreateFunc.Invoke();
                     if (item.HasValue)
                     {
-                        var itemHolder = new PoolItemHolder<T>()
-                        {
-                            Item = item.Value,
-                            IsActive = false
-                        };
-                        m_Items.Add(itemHolder);
-                        m_ActionOnCreateSuccessful?.Invoke(itemHolder);
+                        m_Items.Add(item.Value);
+                        m_ActionOnCreateSuccessful?.Invoke(item.Value);
                     }
                 }
             }
         }
 
-        public Optional<PoolItemHolder<T>> Get()
+        public Optional<T> Get()
         {
-            if (m_ActiveItems.Count >= m_MaxItems)
-            {
-                return Optional<PoolItemHolder<T>>.Fail();
-            }
-            
-            PoolItemHolder<T> itemHolder;
+            T item;
             if (m_Items.Count > 0)
             {
-                itemHolder = m_Items[^1];
+                item = m_Items[^1];
                 m_Items.RemoveAt(m_Items.Count - 1);
             }
             else
@@ -89,52 +75,26 @@ namespace App.Common.Utility.Pool.Runtime
                 var itemResult = m_CreateFunc.Invoke();
                 if (itemResult.HasValue)
                 {
-                    itemHolder = new PoolItemHolder<T>()
-                    {
-                        Item = itemResult.Value
-                    };
-                    
-                    m_ActionOnCreateSuccessful?.Invoke(itemHolder);
+                    item = itemResult.Value;
+                    m_ActionOnCreateSuccessful?.Invoke(itemResult.Value);
                 }
                 else
                 {
-                    return Optional<PoolItemHolder<T>>.Fail();
+                    return Optional<T>.Fail();
                 }
             }
 
-            itemHolder.IsActive = true;
-            m_ActiveItems.Add(itemHolder);
-            m_ActionOnGet?.Invoke(itemHolder.Item);
+            m_ActionOnGet?.Invoke(item);
             
-            return Optional<PoolItemHolder<T>>.Success(itemHolder);
+            return Optional<T>.Success(item);
         }
 
-        public bool Release(PoolItemHolder<T> itemHolder)
+        public bool Release(T item)
         {
-            if (!m_ActiveItems.Remove(itemHolder))
-            {
-                return false;
-            }
-
-            itemHolder.IsActive = false;
-            m_Items.Add(itemHolder);
-            m_ActionOnRelease?.Invoke(itemHolder.Item);
+            m_Items.Add(item);
+            m_ActionOnRelease?.Invoke(item);
             
             return true;
-        }
-
-        public void ReleaseAll()
-        {
-            for (int i = 0; i < m_ActiveItems.Count; ++i)
-            {
-                var itemHolder = m_ActiveItems[i];
-                itemHolder.IsActive = false;
-                m_ActionOnRelease?.Invoke(itemHolder.Item);
-            }
-            
-            m_Items.AddRange(m_ActiveItems);
-            
-            m_ActiveItems.Clear();
         }
 
         public void Dispose()
@@ -143,17 +103,11 @@ namespace App.Common.Utility.Pool.Runtime
             {
                 for (int i = 0; i < m_Items.Count; ++i)
                 {
-                    m_ActionOnDestroy.Invoke(m_Items[i].Item);
-                }
-            
-                for (int i = 0; i < m_ActiveItems.Count; ++i)
-                {
-                    m_ActionOnDestroy.Invoke(m_ActiveItems[i].Item);
+                    m_ActionOnDestroy.Invoke(m_Items[i]);
                 }
             }
 
             m_Items.Clear();
-            m_ActiveItems.Clear();
         }
     }
 }

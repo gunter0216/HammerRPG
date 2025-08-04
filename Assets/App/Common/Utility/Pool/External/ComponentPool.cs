@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using App.Common.Utility.Pool.Runtime;
 using App.Common.Utility.Runtime;
 using UnityEngine;
@@ -12,7 +11,6 @@ namespace App.Common.Utility.Pool.External
         private readonly ListPool<T> m_Pool;
 
         public int Capacity => m_Pool.Capacity;
-        public IReadOnlyList<PoolItemHolder<T>> ActiveItems => m_Pool.ActiveItems;
         
         public ComponentPool(
             T prefab,
@@ -47,44 +45,54 @@ namespace App.Common.Utility.Pool.External
                 capacity: capacity);
         }
 
-        public Optional<PoolItemHolder<T>> Get()
+        public Optional<T> Get()
         {
             return m_Pool.Get();
         }
 
-        public PoolItemHolder<T> Get(Transform parent)
+        public Optional<T> Get(Transform parent)
         {
             var item = m_Pool.Get();
-            item.Value.Item.transform.SetParent(parent);
+            if (!item.HasValue)
+            {
+                return Optional<T>.Fail();
+            }
             
-            return item.Value;
+            item.Value.transform.SetParent(parent);
+            
+            return item;
         }
 
-        public PoolItemHolder<T> Get(Transform parent, Vector3 position)
+        public Optional<T> Get(Transform parent, Vector3 position)
         {
             var item = m_Pool.Get();
-            item.Value.Item.transform.SetParent(parent);
-            item.Value.Item.transform.position = position;
+            if (!item.HasValue)
+            {
+                return Optional<T>.Fail();
+            }
             
-            return item.Value;
+            item.Value.transform.SetParent(parent);
+            item.Value.transform.position = position;
+            
+            return item;
         }
 
-        public PoolItemHolder<T> Get(Vector3 position)
+        public Optional<T> Get(Vector3 position)
         {
             var item = m_Pool.Get();
-            item.Value.Item.transform.position = position;
+            if (!item.HasValue)
+            {
+                return Optional<T>.Fail();
+            }
             
-            return item.Value;
+            item.Value.transform.position = position;
+            
+            return item;
         }
 
-        public bool Release(PoolItemHolder<T> item)
+        public bool Release(T item)
         {
             return m_Pool.Release(item);
-        }
-
-        public void ReleaseAll()
-        {
-            m_Pool.ReleaseAll();
         }
 
         public void Dispose()

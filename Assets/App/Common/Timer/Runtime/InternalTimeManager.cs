@@ -9,11 +9,13 @@ namespace App.Common.Timer.Runtime
     {
         private ListPool<RealtimeTimer> m_RealtimeTimers;
 
-        private List<PoolItemHolder<RealtimeTimer>> m_CompletedTimers;
+        private List<RealtimeTimer> m_CompletedTimers;
+        private List<RealtimeTimer> m_ActiveTimers;
         
         public void Init()
         {
-            m_CompletedTimers = new List<PoolItemHolder<RealtimeTimer>>();
+            m_CompletedTimers = new List<RealtimeTimer>();
+            m_ActiveTimers = new List<RealtimeTimer>();
             
             m_RealtimeTimers = new ListPool<RealtimeTimer>(
                 createFunc: CreateRealtimeTimer,
@@ -23,22 +25,22 @@ namespace App.Common.Timer.Runtime
 
         public void Run(float deltaTime)
         {
-            for (int i = 0; i < m_RealtimeTimers.ActiveItems.Count; ++i)
+            for (int i = 0; i < m_ActiveTimers.Count; ++i)
             {
-                var timer = m_RealtimeTimers.ActiveItems[i];
-                timer.Item.Decrease(deltaTime);
+                var timer = m_ActiveTimers[i];
+                timer.Decrease(deltaTime);
             }
             
-            for (int i = 0; i < m_RealtimeTimers.ActiveItems.Count; ++i)
+            for (int i = 0; i < m_ActiveTimers.Count; ++i)
             {
-                var timer = m_RealtimeTimers.ActiveItems[i];
-                timer.Item.ProduceTickSignal();
+                var timer = m_ActiveTimers[i];
+                timer.ProduceTickSignal();
             }
             
-            for (int i = 0; i < m_RealtimeTimers.ActiveItems.Count; ++i)
+            for (int i = 0; i < m_ActiveTimers.Count; ++i)
             {
-                var timer = m_RealtimeTimers.ActiveItems[i];
-                if (timer.Item.IsCompleted())
+                var timer = m_ActiveTimers[i];
+                if (timer.IsCompleted())
                 {
                     m_CompletedTimers.Add(timer);
                 }
@@ -47,8 +49,9 @@ namespace App.Common.Timer.Runtime
             for (int i = 0; i < m_CompletedTimers.Count; ++i)
             {
                 var timer = m_CompletedTimers[i];
-                timer.Item.ProduceCompleteSignal();
+                timer.ProduceCompleteSignal();
                 m_RealtimeTimers.Release(timer);
+                m_ActiveTimers.Remove(timer); // todo up
             }
             
             m_CompletedTimers.Clear();
@@ -56,18 +59,22 @@ namespace App.Common.Timer.Runtime
 
         public RealtimeTimer CreateRealtimeTimer(float duration, Action onCompleteAction = null, Action onTickAction = null)
         {
+            // todo optional
             var timer = m_RealtimeTimers.Get();
-            timer.Value.Item.Init(duration);
-            timer.Value.Item.SetSignals(onCompleteAction, onTickAction);
-            return timer.Value.Item;
+            timer.Value.Init(duration);
+            timer.Value.SetSignals(onCompleteAction, onTickAction);
+            m_ActiveTimers.Add(timer.Value);
+            return timer.Value;
         }
 
         public RealtimeTimer CreateRealtimeTimer(RealtimeTimer other, Action onCompleteAction = null, Action onTickAction = null)
         {
+            // todo optional
             var timer = m_RealtimeTimers.Get();
-            timer.Value.Item.Init(other);
-            timer.Value.Item.SetSignals(onCompleteAction, onTickAction);
-            return timer.Value.Item;
+            timer.Value.Init(other);
+            timer.Value.SetSignals(onCompleteAction, onTickAction);
+            m_ActiveTimers.Add(timer.Value);
+            return timer.Value;
         }
 
         private Optional<RealtimeTimer> CreateRealtimeTimer()
