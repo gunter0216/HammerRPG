@@ -1,4 +1,5 @@
-﻿using App.Common.AssetSystem.Runtime;
+﻿using System.Collections.Generic;
+using App.Common.AssetSystem.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime;
@@ -104,6 +105,11 @@ namespace App.Menu.Inventory.External
         public bool IsOpen()
         {
             return m_InventoryWindowModel.IsOpen();
+        }
+        
+        public IReadOnlyList<IInventoryGroupConfig> GetGroups()
+        {
+            return m_InventoryConfigController.GetGroups();
         }
     }
 }
