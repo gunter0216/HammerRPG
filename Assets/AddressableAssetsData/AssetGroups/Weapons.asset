@@ -16,7 +16,22 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 73334a138c2665f4193cc8c4a4f78b12
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: b14c5fb6a8b9edc4f9ca00bd37ce1560
+    m_Address: IronAxeIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17fa062d9a484774ea3dd8efcdeede4a
+    m_Address: IronSwordIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa696ed3275594b4f8417e0fa7a79082
+    m_Address: WoodenBowIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
   m_SchemaSet:
