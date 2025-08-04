@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using App.Common.Utility.Runtime.Pool;
+using App.Common.Utility.Pool.Runtime;
+using App.Common.Utility.Runtime;
 
 namespace App.Common.Timer.Runtime
 {
-    public struct InternalTimeManager : ITimeManager
+    public class InternalTimeManager : ITimeManager
     {
         private ListPool<RealtimeTimer> m_RealtimeTimers;
 
-        private List<RealtimeTimer> m_CompletedTimers;
+        private List<PoolItemHolder<RealtimeTimer>> m_CompletedTimers;
         
         public void Init()
         {
-            m_CompletedTimers = new List<RealtimeTimer>();
+            m_CompletedTimers = new List<PoolItemHolder<RealtimeTimer>>();
             
             m_RealtimeTimers = new ListPool<RealtimeTimer>(
                 createFunc: CreateRealtimeTimer,
@@ -25,19 +26,19 @@ namespace App.Common.Timer.Runtime
             for (int i = 0; i < m_RealtimeTimers.ActiveItems.Count; ++i)
             {
                 var timer = m_RealtimeTimers.ActiveItems[i];
-                timer.Decrease(deltaTime);
+                timer.Item.Decrease(deltaTime);
             }
             
             for (int i = 0; i < m_RealtimeTimers.ActiveItems.Count; ++i)
             {
                 var timer = m_RealtimeTimers.ActiveItems[i];
-                timer.ProduceTickSignal();
+                timer.Item.ProduceTickSignal();
             }
             
             for (int i = 0; i < m_RealtimeTimers.ActiveItems.Count; ++i)
             {
                 var timer = m_RealtimeTimers.ActiveItems[i];
-                if (timer.IsCompleted())
+                if (timer.Item.IsCompleted())
                 {
                     m_CompletedTimers.Add(timer);
                 }
@@ -46,7 +47,7 @@ namespace App.Common.Timer.Runtime
             for (int i = 0; i < m_CompletedTimers.Count; ++i)
             {
                 var timer = m_CompletedTimers[i];
-                timer.ProduceCompleteSignal();
+                timer.Item.ProduceCompleteSignal();
                 m_RealtimeTimers.Release(timer);
             }
             
@@ -56,22 +57,22 @@ namespace App.Common.Timer.Runtime
         public RealtimeTimer CreateRealtimeTimer(float duration, Action onCompleteAction = null, Action onTickAction = null)
         {
             var timer = m_RealtimeTimers.Get();
-            timer.Init(duration);
-            timer.SetSignals(onCompleteAction, onTickAction);
-            return timer;
+            timer.Value.Item.Init(duration);
+            timer.Value.Item.SetSignals(onCompleteAction, onTickAction);
+            return timer.Value.Item;
         }
 
         public RealtimeTimer CreateRealtimeTimer(RealtimeTimer other, Action onCompleteAction = null, Action onTickAction = null)
         {
             var timer = m_RealtimeTimers.Get();
-            timer.Init(other);
-            timer.SetSignals(onCompleteAction, onTickAction);
-            return timer;
+            timer.Value.Item.Init(other);
+            timer.Value.Item.SetSignals(onCompleteAction, onTickAction);
+            return timer.Value.Item;
         }
 
-        private RealtimeTimer CreateRealtimeTimer()
+        private Optional<RealtimeTimer> CreateRealtimeTimer()
         {
-            return new RealtimeTimer();
+            return Optional<RealtimeTimer>.Success(new RealtimeTimer());
         }
         
         private void ReleaseTimer(RealtimeTimer timer)

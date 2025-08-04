@@ -1,0 +1,7 @@
+﻿{
+  "name": "PoolTests",
+  "includePlatforms": [
+    "Editor"
+  ],
+  "references":[ "Pool", "CommonUtility" ]
+}

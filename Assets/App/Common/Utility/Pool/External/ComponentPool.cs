@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using App.Common.Utility.Pool.Runtime;
+using App.Common.Utility.Runtime;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace App.Common.Utility.Runtime.Pool
+namespace App.Common.Utility.Pool.External
 {
     public class ComponentPool<T> : IComponentPool<T>, IDisposable where T : Component
     {
         private readonly ListPool<T> m_Pool;
 
         public int Capacity => m_Pool.Capacity;
-        public IReadOnlyCollection<T> ActiveItems => m_Pool.ActiveItems;
+        public IReadOnlyList<PoolItemHolder<T>> ActiveItems => m_Pool.ActiveItems;
         
         public ComponentPool(
             T prefab,
@@ -26,7 +28,7 @@ namespace App.Common.Utility.Runtime.Pool
                 {
                     var item = Object.Instantiate(prefab, parent);
                     onCreate?.Invoke(item);
-                    return item;
+                    return Optional<T>.Success(item);
                 },
                 actionOnGet: (item) =>
                 {
@@ -45,39 +47,39 @@ namespace App.Common.Utility.Runtime.Pool
                 capacity: capacity);
         }
 
-        public T Get()
+        public Optional<PoolItemHolder<T>> Get()
         {
             return m_Pool.Get();
         }
 
-        public T Get(Transform parent)
+        public PoolItemHolder<T> Get(Transform parent)
         {
             var item = m_Pool.Get();
-            item.transform.SetParent(parent);
+            item.Value.Item.transform.SetParent(parent);
             
-            return item;
+            return item.Value;
         }
 
-        public T Get(Transform parent, Vector3 position)
+        public PoolItemHolder<T> Get(Transform parent, Vector3 position)
         {
             var item = m_Pool.Get();
-            item.transform.SetParent(parent);
-            item.transform.position = position;
+            item.Value.Item.transform.SetParent(parent);
+            item.Value.Item.transform.position = position;
             
-            return item;
+            return item.Value;
         }
 
-        public T Get(Vector3 position)
+        public PoolItemHolder<T> Get(Vector3 position)
         {
             var item = m_Pool.Get();
-            item.transform.position = position;
+            item.Value.Item.transform.position = position;
             
-            return item;
+            return item.Value;
         }
 
-        public void Release(T item)
+        public bool Release(PoolItemHolder<T> item)
         {
-            m_Pool.Release(item);
+            return m_Pool.Release(item);
         }
 
         public void ReleaseAll()

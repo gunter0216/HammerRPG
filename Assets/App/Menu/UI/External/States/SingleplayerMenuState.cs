@@ -1,6 +1,6 @@
 ﻿using System;
 using App.Common.Timer.Runtime;
-using App.Common.Utility.Runtime.Pool;
+using App.Common.Utility.Pool.External;
 using App.Game.Utility.Runtime.MenuSM;
 using App.Menu.UI.Runtime.Data;
 using App.Menu.UI.Runtime.View.Panels.Singleplayer;
@@ -56,10 +56,10 @@ namespace App.Menu.UI.Runtime.States
             foreach (var gameRecord in records)
             {
                 var view = m_Pool.Get();
-                view.SetCreateDate( "created " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.DateOfCreation));
-                view.SetLastLoginText("login " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.LastLogin));
-                view.SetNameText(gameRecord.Name);
-                view.SetPlayButtonAction(() =>
+                view.Value.Item.SetCreateDate( "created " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.DateOfCreation));
+                view.Value.Item.SetLastLoginText("login " + m_TimeToStringConverter.ReturnTimeToShow(gameRecord.LastLogin));
+                view.Value.Item.SetNameText(gameRecord.Name);
+                view.Value.Item.SetPlayButtonAction(() =>
                 {
                     m_StartGameStrategy.StartGame(gameRecord.Name);
                 });
