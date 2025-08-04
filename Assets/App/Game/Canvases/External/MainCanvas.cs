@@ -4,7 +4,7 @@ using UnityEngine;
 namespace App.Game.Canvases.External
 {
     [MonoScoped]
-    public class MainCanvas : MonoBehaviour
+    public class MainCanvas : MonoBehaviour, ICanvas
     {
         public Transform GetContent()
         {

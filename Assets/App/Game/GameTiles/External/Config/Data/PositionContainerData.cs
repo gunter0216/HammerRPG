@@ -8,8 +8,6 @@ using Newtonsoft.Json;
 
 namespace App.Game.GameTiles.External.Config.Data
 {
-    [Data]
-    [Singleton]
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
     public class PositionContainerData : IContainerData

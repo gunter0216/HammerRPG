@@ -1,16 +1,10 @@
-﻿using System.Collections.Generic;
-using App.Common.Autumn.Runtime.Attributes;
+﻿using App.Common.Autumn.Runtime.Attributes;
 using App.Common.DataContainer.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
-using App.Common.ModuleItem.External.Config;
-using App.Common.ModuleItem.External.Config.Interfaces;
+using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
-using App.Common.ModuleItem.Runtime.Config;
-using App.Common.ModuleItem.Runtime.Data;
-using App.Common.ModuleItem.Runtime.Fabric;
-using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
 using App.Common.Utility.Runtime;
 using App.Game.Configs.Runtime;
 using App.Game.Contexts;
@@ -21,7 +15,6 @@ using App.Game.GameTiles.Runtime;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Game;
 using UnityEngine;
-using Logger = App.Common.Logger.Runtime.Logger;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameTiles.External
@@ -32,14 +25,8 @@ namespace App.Game.GameTiles.External
     {
         [Inject] private readonly IConfigLoader m_ConfigLoader;
         [Inject] private readonly ISpriteLoader m_SpriteLoader;
-        [Inject] private readonly IContainersDataManager m_ContainersDataManager;
-        [Inject] private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
-        
-        private readonly List<ICreateModuleItemHandler> m_Handlers = new List<ICreateModuleItemHandler>();
+        [Inject] private readonly ModuleItemsManager m_ModuleItemsManager;
 
-        private ModuleItemsConfigController m_ConfigController;
-        private ModuleItemCreator m_ModuleItemCreator;
-        
         public void Init()
         {
             if (!InitConfig())
@@ -48,43 +35,13 @@ namespace App.Game.GameTiles.External
                 return;
             }
 
-            InitConfigController();
-            InitItemsFabric();
-        }
-
-        private void InitConfigController()
-        {
-            var loader = new TileModuleItemsConfigLoader(m_ConfigLoader);
-            var dto = loader.Load();
-            if (!dto.HasValue)
-            {
-                Debug.LogError($"[NewGameItemsController] In method Init, cant load file.");
-                return;
-            }
-
-            var dtoConverter = new ModuleItemsDtoToConfigConverter(m_ModuleDtoToConfigConverters);
-            var configs = dtoConverter.Convert(dto.Value);
-            if (!configs.HasValue)
-            {
-                Debug.LogError($"[NewGameItemsController] In method Init, cant convert dto to configs.");
-                return;
-            }
-            
-            m_ConfigController = new ModuleItemsConfigController(configs.Value);
-            m_ConfigController.Initialize();
-        }
-
-        private void InitItemsFabric()
-        {
-            m_ModuleItemCreator = new ModuleItemCreator(
-                m_ConfigController, 
-                m_ContainersDataManager, 
-                m_Handlers);
+            var configLoader = new TileModuleItemsConfigLoader(m_ConfigLoader);
+            m_ModuleItemsManager.RegisterItems(configLoader, TileConstants.ModuleItemType);
         }
 
         public ModuleItemResult<ITileModuleItem> Create(DataReference dataReference)
         {
-            var item = m_ModuleItemCreator.Create(dataReference);
+            var item = m_ModuleItemsManager.Create(dataReference);
             if (!item.IsSuccess)
             {
                 return ModuleItemResult<ITileModuleItem>.Fail();
@@ -95,7 +52,7 @@ namespace App.Game.GameTiles.External
 
         public ModuleItemResult<ITileModuleItem> Create(string id)
         {
-            var item = m_ModuleItemCreator.Create(id);
+            var item = m_ModuleItemsManager.Create(id);
             if (!item.IsSuccess)
             {
                 return ModuleItemResult<ITileModuleItem>.Fail(item.ErrorMessage);
@@ -106,8 +63,7 @@ namespace App.Game.GameTiles.External
 
         public bool Destroy(ITileModuleItem data)
         {
-            return false;
-            // return m_ModuleItemCreator.Create(data);
+            return m_ModuleItemsManager.Destroy(data);
         }
 
         private bool InitConfig()
@@ -148,7 +104,7 @@ namespace App.Game.GameTiles.External
 
         public Optional<Sprite> GetTileSprite(string tileID)
         {
-            var config = m_ConfigController.GetConfig(tileID);
+            var config = m_ModuleItemsManager.GetConfig(tileID);
             if (!config.HasValue)
             {
                 return Optional<Sprite>.Fail();

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Armor
+  m_EditorClassIdentifier: 
+  m_GroupName: Armor
+  m_Data:
+    m_SerializedData: []
+  m_GUID: fc7fca94a584172449332e276b997f07
+  m_SerializeEntries:
+  - m_GUID: b9fb709a37a300c46889e4bc4776499f
+    m_Address: LeatherArmorIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0bef72894c9e4dd40aee0dde15157bfb
+    m_Address: LeatherBootsIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 933eeaeb1811be348b0c47072c661393
+    m_Address: LeatherGlovesIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e4c543fe215ef44b950d4f332df4475
+    m_Address: LeatherHelmetIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e24bb9e15d9d694a826471e44999cf4
+    m_Address: WoodenShieldIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b412fa04f1edb9c4da6abb1604d3c7ec, type: 2}
+    - {fileID: 11400000, guid: 7f17b67826c5907449d14cbef52a52cb, type: 2}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using App.Common.AssemblyManager.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Autumn.Runtime.Collection;
@@ -18,6 +19,8 @@ namespace App.Common.Data.External
     [Stage(typeof(StartInitPhase), -100_000)]
     public class DataManagerProxy : IDataManager, IInitSystem, ISingleton
     {
+        private static List<Type> m_DataTypes = new List<Type>();
+        
         [Inject] private readonly IJsonLoader m_Loader;
         [Inject] private readonly IJsonSaver m_Saver;
         
@@ -43,13 +46,31 @@ namespace App.Common.Data.External
             return m_DataManager.GetData(name);
         }
 
+        public Optional<T> GetData<T>(string name) where T : IData
+        {
+            return m_DataManager.GetData<T>(name);
+        }
+
+        public static void RegisterDataType<T>() where T : IData
+        {
+            var type = typeof(T);
+            if (!m_DataTypes.Contains(type))
+            {
+                m_DataTypes.Add(type);
+            }
+        }
+        
         public void SetDatas(IReadOnlyList<AttributeNode> datasAttributeNodes)
         {
-            var datas = new List<IData>(datasAttributeNodes.Count);
-            for (int i = 0; i < datasAttributeNodes.Count; ++i)
+            var dataTypes = datasAttributeNodes
+                .Select(x => x.Holder)
+                .Concat(m_DataTypes)
+                .ToArray();
+            var datas = new List<IData>(dataTypes.Length);
+            for (int i = 0; i < dataTypes.Length; ++i)
             {
-                var holder = datasAttributeNodes[i].Holder;
-                var instance = Activator.CreateInstance(holder) as IData;
+                var dataType = dataTypes[i];
+                var instance = Activator.CreateInstance(dataType) as IData;
                 if (instance == null)
                 {
                     HLogger.LogError($"data {datasAttributeNodes[i].Holder.Name} contains attribute but no interface");

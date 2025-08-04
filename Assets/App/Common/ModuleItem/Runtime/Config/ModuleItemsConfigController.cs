@@ -4,25 +4,26 @@ using App.Common.Utility.Runtime;
 
 namespace App.Common.ModuleItem.Runtime.Config
 {
-    public class ModuleItemsConfigController : IGameItemConfigController
+    public class ModuleItemsConfigController : IModuleItemConfigController
     {
-        private readonly IReadOnlyList<IModuleItemConfig> m_ListConfigs;
-
         private Dictionary<string, IModuleItemConfig> m_Configs;
+        private Dictionary<string, IReadOnlyList<IModuleItemConfig>> m_TypeToConfigs;
 
-        public ModuleItemsConfigController(IGameItemsConfig config)
+        public ModuleItemsConfigController()
         {
-            m_ListConfigs = config.Configs;
+            m_TypeToConfigs = new Dictionary<string, IReadOnlyList<IModuleItemConfig>>();
         }
 
-        public bool Initialize()
+        public bool RegisterItems(IReadOnlyList<IModuleItemConfig> configs, string type)
         {
-            m_Configs = new Dictionary<string, IModuleItemConfig>(m_ListConfigs.Count);
-            for (int i = 0; i < m_ListConfigs.Count; ++i)
+            m_Configs = new Dictionary<string, IModuleItemConfig>(configs.Count);
+            for (int i = 0; i < configs.Count; ++i)
             {
-                var config = m_ListConfigs[i];
+                var config = configs[i];
                 m_Configs.Add(config.Id, config);
             }
+            
+            m_TypeToConfigs.Add(type, configs);
 
             return true;
         }
@@ -35,6 +36,16 @@ namespace App.Common.ModuleItem.Runtime.Config
             }
             
             return Optional<IModuleItemConfig>.Fail();
+        }
+        
+        public Optional<IReadOnlyList<IModuleItemConfig>> GetConfigs(string type)
+        {
+            if (m_TypeToConfigs.TryGetValue(type, out var configs))
+            {
+                return Optional<IReadOnlyList<IModuleItemConfig>>.Success(configs);
+            }
+            
+            return Optional<IReadOnlyList<IModuleItemConfig>>.Fail();
         }
     }
 }

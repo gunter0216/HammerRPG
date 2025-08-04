@@ -1,0 +1,124 @@
+﻿{
+  "items": [
+    {
+      "id": "LeatherArmor",
+      "modules": {
+        "icon": {
+          "key": "LeatherArmorIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherBoots",
+      "modules": {
+        "icon": {
+          "key": "LeatherBootsIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherHelmet",
+      "modules": {
+        "icon": {
+          "key": "LeatherHelmetIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherPants",
+      "modules": {
+        "icon": {
+          "key": "LeatherPantsIcon"
+        }
+      }
+    },
+    {
+      "id": "LeatherGloves",
+      "modules": {
+        "icon": {
+          "key": "LeatherGlovesIcon"
+        }
+      }
+    },
+    {
+      "id": "WoodenShield",
+      "modules": {
+        "icon": {
+          "key": "WoodenShieldIcon"
+        }
+      }
+    },
+    {
+      "id": "IronSword",
+      "modules": {
+        "icon": {
+          "key": "IronSwordIcon"
+        }
+      }
+    },
+    {
+      "id": "IronAxe",
+      "modules": {
+        "icon": {
+          "key": "IronAxeIcon"
+        }
+      }
+    },
+    {
+      "id": "IronBow",
+      "modules": {
+        "icon": {
+          "key": "IronBowIcon"
+        }
+      }
+    },
+    {
+      "id": "IronDagger",
+      "modules": {
+        "icon": {
+          "key": "IronDaggerIcon"
+        }
+      }
+    },
+    {
+      "id": "WoodenBow",
+      "modules": {
+        "icon": {
+          "key": "WoodenBowIcon"
+        }
+      }
+    },
+    {
+      "id": "FeatherIcon",
+      "modules": {
+        "icon": {
+          "key": "FeatherIcon"
+        }
+      }
+    },
+    {
+      "id": "HealthPotion",
+      "modules": {
+        "icon": {
+          "key": "HealthPotionIcon"
+        }
+      }
+    },
+    {
+      "id": "ManaPotion",
+      "modules": {
+        "icon": {
+          "key": "ManaPotionIcon"
+        }
+      }
+    },
+    {
+      "id": "StaminaPotion",
+      "modules": {
+        "icon": {
+          "key": "StaminaPotionIcon"
+        }
+      }
+    }
+  ]
+}

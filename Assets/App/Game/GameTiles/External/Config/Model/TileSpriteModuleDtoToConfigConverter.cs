@@ -1,5 +1,6 @@
 ﻿using System;
 using App.Common.Autumn.Runtime.Attributes;
+using App.Common.ModuleItem.External.Config.Interfaces;
 using App.Common.ModuleItem.External.Dto;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utility.Runtime;
@@ -7,7 +8,7 @@ using App.Common.Utility.Runtime;
 namespace App.Game.GameTiles.External.Config.Model
 {
     [Singleton]
-    public class TileSpriteModuleDtoToConfigConverter : ITileModuleDtoToConfigConverter
+    public class TileSpriteModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {
         public Optional<IModuleConfig> Convert(ModuleItemModulesDto modules)
         {

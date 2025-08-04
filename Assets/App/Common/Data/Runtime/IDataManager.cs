@@ -6,5 +6,6 @@ namespace App.Common.Data.Runtime
     {
         void SaveProgress();
         Optional<IData> GetData(string name);
+        Optional<T> GetData<T>(string name) where T : IData;
     }
 }

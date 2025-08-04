@@ -4,7 +4,7 @@
       "id": "wall",
       "generation_id": "Wall",
       "modules": {
-        "sprite": {
+        "icon": {
           "key": "BricksWall1"
         }
       }
@@ -13,7 +13,7 @@
       "id": "closed_door",
       "generation_id": "Door",
       "modules": {
-        "sprite": {
+        "icon": {
           "key": "ClosedDoor"
         }
       }
@@ -22,7 +22,7 @@
       "id": "opened_door",
       "generation_id": "OpenedDoor",
       "modules": {
-        "sprite": {
+        "icon": {
           "key": "OpenedDoor"
         }
       }
@@ -31,7 +31,7 @@
       "id": "floor",
       "generation_id": "",
       "modules": {
-        "sprite": {
+        "icon": {
           "key": "Floor1"
         }
       }

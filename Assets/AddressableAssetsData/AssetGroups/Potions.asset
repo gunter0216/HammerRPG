@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Potions
+  m_EditorClassIdentifier: 
+  m_GroupName: Potions
+  m_Data:
+    m_SerializedData: []
+  m_GUID: a54b0b8b9c181a143870337fb2911e4b
+  m_SerializeEntries:
+  - m_GUID: 9b89fb75235a5974db0d9cb83b965ca7
+    m_Address: HealthPotionIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7d173c8677a85c4c96c34a86549b1fd
+    m_Address: ManaPotionIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc55fc39dc115cd40b50954cc67a0bb0
+    m_Address: StaminaPotionIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 24472dcb96ba6604584e0056a5d13f89, type: 2}
+    - {fileID: 11400000, guid: 11b7f2b3507de674e9d7046744ab671d, type: 2}

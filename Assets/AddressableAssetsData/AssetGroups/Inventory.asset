@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Inventory
+  m_EditorClassIdentifier: 
+  m_GroupName: Inventory
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 6272e820d4e4f104f9058e56645722b4
+  m_SerializeEntries:
+  - m_GUID: b70b897d615dbf3498ec3be8576c8818
+    m_Address: WeaponInventoryGroupIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b05fa9481440536429ae2c143fa618b0
+    m_Address: PotionInventoryGroupIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3de03537344e6324688f69156bdc75e5
+    m_Address: OtherInventoryGroupIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7ac99e5e46cd7a41a8b0a67a8457c2c
+    m_Address: KeyInventoryGroupIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78ad774ddf4c42248a748b2a46183331
+    m_Address: ArmorInventoryGroupIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c62548afe9bd8264f9cfbc0e65685167
+    m_Address: InventoryWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88d01dfee82f49d888f26d9077853a35
+    m_Address: InventoryConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7dab7037ef800774da628a08217aeefa, type: 2}
+    - {fileID: 11400000, guid: b31066dd4de15f94cb289f524f1c3457, type: 2}
