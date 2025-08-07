@@ -8,20 +8,28 @@ using App.Game.Canvases.External;
 using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
 using App.Game.GameItems.Runtime;
-using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.SpriteLoaders.Runtime;
-using App.Generation.DungeonGenerator.Runtime.Matrix;
+using App.Menu.Inventory.External;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.ViewModel
 {
     public class CheatsWindowModel
     {
+        private const string m_GroundOption = "Ground";
+        private const string m_InventoryOption = "Inventory";
+        private readonly List<string> m_PlaceItemsDropdownOptions = new List<string>
+        {
+            m_GroundOption,
+            m_InventoryOption,
+        };
+        
         private readonly IGameItemsManager m_GameItemsManager;
         private readonly IAssetManager m_AssetManager;
         private readonly ICanvas m_Canvas;
         private readonly ISpriteLoader m_SpriteLoader;
+        private readonly IInventoryController m_InventoryController;
         private readonly IReadOnlyList<IModuleItemConfig> m_Configs;
         private readonly IReadOnlyList<IInventoryGroupConfig> m_Groups;
 
@@ -38,6 +46,7 @@ namespace App.Game.Cheats.External.ViewModel
             ICanvas canvas, 
             ISpriteLoader spriteLoader, 
             IGameItemsManager gameItemsManager,
+            IInventoryController inventoryController,
             IReadOnlyList<IModuleItemConfig> configs, 
             IReadOnlyList<IInventoryGroupConfig> groups)
         {
@@ -46,6 +55,7 @@ namespace App.Game.Cheats.External.ViewModel
             m_SpriteLoader = spriteLoader;
             m_Configs = configs;
             m_Groups = groups;
+            m_InventoryController = inventoryController;
             m_GameItemsManager = gameItemsManager;
         }
 
@@ -92,6 +102,10 @@ namespace App.Game.Cheats.External.ViewModel
         {
             CreateGroups();
 
+            var dropdown = m_Window.CreateItemDropdown;
+            dropdown.ClearOptions();
+            dropdown.AddOptions(m_PlaceItemsDropdownOptions);
+            
             m_Slots = new ListPool<CheatsSlotViewModel>(CreateSlot, 32);
             m_ActiveSlots = new List<CheatsSlotViewModel>();
             
@@ -104,8 +118,21 @@ namespace App.Game.Cheats.External.ViewModel
                 m_Window.CheatsSlotViewPrefab,
                 m_Window.SlotsContent);
                     
-            var viewModel = new CheatsSlotViewModel(m_SpriteLoader, view);
+            var viewModel = new CheatsSlotViewModel(m_SpriteLoader, view, OnSlotClick);
             return Optional<CheatsSlotViewModel>.Success(viewModel);
+        }
+
+        private void OnSlotClick(CheatsSlotViewModel viewModel)
+        {
+            var value = m_PlaceItemsDropdownOptions[m_Window.CreateItemDropdown.value];
+            if (value == m_InventoryOption)
+            {
+                m_InventoryController.AddItem(viewModel.Item);
+            }
+            else if (value == m_GroundOption)
+            {
+                HLogger.LogError("not implemented yet: place item on ground");
+            }
         }
 
         private void CreateGroups()

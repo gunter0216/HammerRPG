@@ -1,4 +1,5 @@
 ﻿using App.Game.Inventory.External.View;
+using TMPro;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.View
@@ -16,13 +17,13 @@ namespace App.Game.Cheats.External.View
         private Transform m_SlotsContent;
         [Space]
         [SerializeField]
-        private Transform m_ItemsContent;
+        private TMP_Dropdown m_CreateItemDropdown;
 
         public CheatsGroupHeaderView CheatsGroupHeaderViewPrefab => m_CheatsGroupHeaderViewPrefab;
         public Transform HeaderGroupContent => m_HeaderGroupContent;
         public CheatsSlotView CheatsSlotViewPrefab => m_CheatsSlotViewPrefab;
         public Transform SlotsContent => m_SlotsContent;
-        public Transform ItemsContent => m_ItemsContent;
+        public TMP_Dropdown CreateItemDropdown => m_CreateItemDropdown;
 
         public void SetActive(bool isActive)
         {

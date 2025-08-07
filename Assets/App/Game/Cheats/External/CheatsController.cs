@@ -37,6 +37,7 @@ namespace App.Game.Cheats.External
                 m_PopupCanvas,
                 m_SpriteLoader,
                 m_GameItemsManager,
+                m_InventoryController,
                 configs.Value,
                 groups);
         }

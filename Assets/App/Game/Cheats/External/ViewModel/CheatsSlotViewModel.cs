@@ -1,4 +1,5 @@
-﻿using App.Common.Logger.Runtime;
+﻿using System;
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utility.Pool.Runtime;
 using App.Game.GameItems.Runtime;
@@ -13,17 +14,31 @@ namespace App.Game.Cheats.External.ViewModel
         private readonly ISpriteLoader m_SpriteLoader;
         private readonly CheatsSlotView m_View;
         private IModuleItemConfig m_Item;
+        private event Action<CheatsSlotViewModel> m_ClickCallback;
 
-        public CheatsSlotViewModel(ISpriteLoader spriteLoader, CheatsSlotView view)
+        public IModuleItemConfig Item => m_Item;
+
+        public CheatsSlotViewModel(
+            ISpriteLoader spriteLoader, 
+            CheatsSlotView view, 
+            Action<CheatsSlotViewModel> clickCallback)
         {
             m_View = view;
             m_SpriteLoader = spriteLoader;
+            m_ClickCallback = clickCallback;
+            
+            m_View.SetButtonClickCallback(OnButtonClick);
+        }
+
+        private void OnButtonClick()
+        {
+            m_ClickCallback?.Invoke(this);
         }
 
         public void SetItem(IModuleItemConfig item)
         {
             m_Item = item;
-            var spriteModule = m_Item.GetModule<SpriteModuleConfig>();
+            var spriteModule = Item.GetModule<SpriteModuleConfig>();
             if (!spriteModule.HasValue)
             {
                 HLogger.LogError($"Not found sprite for item {item.Id}");
