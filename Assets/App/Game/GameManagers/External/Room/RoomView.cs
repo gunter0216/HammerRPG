@@ -7,6 +7,11 @@ namespace App.Game.GameManagers.External.View
         private readonly Transform m_Content;
 
         public Transform Content => m_Content;
+        
+        public void SetParent(Transform parent)
+        {
+            m_Content.SetParent(parent);
+        }
 
         public RoomView(Transform content)
         {

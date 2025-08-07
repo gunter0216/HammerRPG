@@ -32,6 +32,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51265dacf24407b4cb54903d2e00b501
+    m_Address: IronDaggerIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6dca5bbaf3fae4e4d9e83544df0a34db
+    m_Address: IronBowIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
   m_SchemaSet:

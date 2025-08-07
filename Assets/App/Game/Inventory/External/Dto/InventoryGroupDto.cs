@@ -11,9 +11,13 @@ namespace App.Game.Inventory.External.Dto
         private string m_Id;
         [JsonProperty("icon")]
         private string m_Icon;
+        [JsonProperty("game_type")]
+        private string m_GameType;
 
         public string Id => m_Id;
 
         public string Icon => m_Icon;
+
+        public string GameType => m_GameType;
     }
 }

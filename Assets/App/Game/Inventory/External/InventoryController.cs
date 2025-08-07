@@ -1,9 +1,12 @@
-﻿using App.Common.AssetSystem.Runtime;
+﻿using System.Collections.Generic;
+using App.Common.AssetSystem.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Windows.External;
 using App.Game;
 using App.Game.Canvases.External;
@@ -18,6 +21,7 @@ using App.Game.Inventory.Runtime.Data;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Game;
 using App.Game.States.Menu;
+using Unity.VisualScripting;
 
 namespace App.Menu.Inventory.External
 {
@@ -31,6 +35,7 @@ namespace App.Menu.Inventory.External
         [Inject] private readonly IAssetManager m_AssetManager;
         [Inject] private readonly PopupCanvas m_PopupCanvas;
         [Inject] private readonly ISpriteLoader m_SpriteLoader;
+        [Inject] private readonly IModuleItemsManager m_ModuleItemsManager;
         
         private InventoryDataController m_InventoryDataController;
         private InventoryConfigController m_InventoryConfigController;
@@ -104,6 +109,51 @@ namespace App.Menu.Inventory.External
         public bool IsOpen()
         {
             return m_InventoryWindowModel.IsOpen();
+        }
+
+        public bool AddItem(IModuleItemConfig moduleItemConfig)
+        {
+            if (moduleItemConfig == null)
+            {
+                HLogger.LogError("Cannot add null item to inventory");
+                return false;
+            }
+
+            return AddItem(moduleItemConfig.Id);
+
+            
+        }
+
+        public bool AddItem(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                HLogger.LogError("Cannot add item with null or empty id to inventory");
+                return false;
+            }
+            
+            var item = m_ModuleItemsManager.Create(id);
+            if (!item.IsSuccess)
+            {
+                HLogger.LogError($"Failed to create item with id {id}");
+                return false;
+            }
+            
+            HLogger.LogError("Adding item to inventory: " + item.ModuleItem.Id);
+
+            // if (!m_InventoryDataController.AddItem(moduleItemConfig))
+            // {
+            //     HLogger.LogError($"Failed to add item {moduleItemConfig.Id} to inventory");
+            //     return false;
+            // }
+            //
+            // m_InventoryWindowModel.Refresh();
+            return true;
+        }
+
+        public IReadOnlyList<IInventoryGroupConfig> GetGroups()
+        {
+            return m_InventoryConfigController.GetGroups();
         }
     }
 }

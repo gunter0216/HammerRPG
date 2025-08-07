@@ -4,6 +4,7 @@
     {
         string Id { get; }
         string Icon { get; }
+        string GameType { get; }
     }
 }
 

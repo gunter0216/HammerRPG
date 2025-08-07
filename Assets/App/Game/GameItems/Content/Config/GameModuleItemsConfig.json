@@ -5,6 +5,9 @@
       "modules": {
         "icon": {
           "key": "LeatherArmorIcon"
+        },
+        "game_item_type": {
+          "type": "Armor"
         }
       }
     },
@@ -13,6 +16,9 @@
       "modules": {
         "icon": {
           "key": "LeatherBootsIcon"
+        },
+        "game_item_type": {
+          "type": "Armor"
         }
       }
     },
@@ -21,14 +27,9 @@
       "modules": {
         "icon": {
           "key": "LeatherHelmetIcon"
-        }
-      }
-    },
-    {
-      "id": "LeatherPants",
-      "modules": {
-        "icon": {
-          "key": "LeatherPantsIcon"
+        },
+        "game_item_type": {
+          "type": "Armor"
         }
       }
     },
@@ -37,6 +38,9 @@
       "modules": {
         "icon": {
           "key": "LeatherGlovesIcon"
+        },
+        "game_item_type": {
+          "type": "Armor"
         }
       }
     },
@@ -45,6 +49,9 @@
       "modules": {
         "icon": {
           "key": "WoodenShieldIcon"
+        },
+        "game_item_type": {
+          "type": "Armor"
         }
       }
     },
@@ -53,6 +60,9 @@
       "modules": {
         "icon": {
           "key": "IronSwordIcon"
+        },
+        "game_item_type": {
+          "type": "Weapon"
         }
       }
     },
@@ -61,6 +71,9 @@
       "modules": {
         "icon": {
           "key": "IronAxeIcon"
+        },
+        "game_item_type": {
+          "type": "Weapon"
         }
       }
     },
@@ -69,6 +82,9 @@
       "modules": {
         "icon": {
           "key": "IronBowIcon"
+        },
+        "game_item_type": {
+          "type": "Weapon"
         }
       }
     },
@@ -77,6 +93,9 @@
       "modules": {
         "icon": {
           "key": "IronDaggerIcon"
+        },
+        "game_item_type": {
+          "type": "Weapon"
         }
       }
     },
@@ -85,14 +104,9 @@
       "modules": {
         "icon": {
           "key": "WoodenBowIcon"
-        }
-      }
-    },
-    {
-      "id": "FeatherIcon",
-      "modules": {
-        "icon": {
-          "key": "FeatherIcon"
+        },
+        "game_item_type": {
+          "type": "Weapon"
         }
       }
     },
@@ -101,6 +115,9 @@
       "modules": {
         "icon": {
           "key": "HealthPotionIcon"
+        },
+        "game_item_type": {
+          "type": "Potion"
         }
       }
     },
@@ -109,6 +126,9 @@
       "modules": {
         "icon": {
           "key": "ManaPotionIcon"
+        },
+        "game_item_type": {
+          "type": "Potion"
         }
       }
     },
@@ -117,6 +137,9 @@
       "modules": {
         "icon": {
           "key": "StaminaPotionIcon"
+        },
+        "game_item_type": {
+          "type": "Potion"
         }
       }
     }

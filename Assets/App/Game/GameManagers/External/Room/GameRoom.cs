@@ -1,5 +1,6 @@
 ﻿using App.Game.GameManagers.External.View;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
+using UnityEngine;
 
 namespace App.Game.GameManagers.External
 {
@@ -16,6 +17,11 @@ namespace App.Game.GameManagers.External
         {
             m_View = view;
             m_GenerationRoom = generationRoom;
+        }
+
+        public void SetParent(Transform parent)
+        {
+            m_View.SetParent(parent);
         }
     }
 }
