@@ -5,7 +5,7 @@ namespace App.Game.GameTiles.External.Config.Dto
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
-    public class TileSpriteModuleDto
+    public class SpriteModuleDto
     {
         [JsonProperty("key")]
         private string m_Key;

@@ -59,6 +59,11 @@ namespace App.Common.Utility.Pool.Runtime
                         m_ActionOnCreateSuccessful?.Invoke(item.Value);
                     }
                 }
+
+                for (int i = 0; i < m_Items.Count; ++i)
+                {
+                    m_ActionOnRelease?.Invoke(m_Items[i]);
+                }
             }
         }
 

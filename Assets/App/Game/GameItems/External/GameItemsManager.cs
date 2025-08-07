@@ -3,15 +3,15 @@ using App.Common.Autumn.Runtime.Attributes;
 using App.Common.DataContainer.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
-using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
-using App.Common.ModuleItem.External.Config.Interfaces;
 using App.Common.ModuleItem.Runtime;
-using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.Utility.Runtime;
 using App.Game.Configs.Runtime;
 using App.Game.Contexts;
 using App.Game.GameItems.External.Config.Loader;
 using App.Game.GameItems.Runtime;
+using App.Game.GameTiles.External.Config.Model;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Game;
 
@@ -24,11 +24,22 @@ namespace App.Game.GameItems.External
         [Inject] private readonly IConfigLoader m_ConfigLoader;
         [Inject] private readonly ISpriteLoader m_SpriteLoader;
         [Inject] private readonly ModuleItemsManager m_ModuleItemsManager;
+
+        private GameItemsConfigService m_ConfigService;
         
         public void Init()
         {
             var configLoader = new GameModuleItemsConfigLoader(m_ConfigLoader);
             m_ModuleItemsManager.RegisterItems(configLoader, GameItemsConstants.ModuleItemType);
+
+            var configs = m_ModuleItemsManager.GetConfigs(GameItemsConstants.ModuleItemType);
+            if (!configs.HasValue)
+            {
+                return;
+            }
+
+            m_ConfigService = new GameItemsConfigService();
+            m_ConfigService.SetItems(configs.Value);
         }
 
         public ModuleItemResult<IGameModuleItem> Create(DataReference dataReference)
@@ -56,6 +67,11 @@ namespace App.Game.GameItems.External
         public bool Destroy(IGameModuleItem data)
         {
             return m_ModuleItemsManager.Destroy(data);
+        }
+
+        public Optional<IReadOnlyList<IModuleItemConfig>> GetItemsByType(string type)
+        {
+            return m_ConfigService.GetItemsByType(type);
         }
     }
 }

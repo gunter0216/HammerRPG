@@ -2,9 +2,12 @@
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.Utility.Pool.Runtime;
+using App.Common.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
+using App.Game.GameItems.Runtime;
 using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.SpriteLoaders.Runtime;
@@ -15,6 +18,7 @@ namespace App.Game.Cheats.External.ViewModel
 {
     public class CheatsWindowModel
     {
+        private readonly IGameItemsManager m_GameItemsManager;
         private readonly IAssetManager m_AssetManager;
         private readonly ICanvas m_Canvas;
         private readonly ISpriteLoader m_SpriteLoader;
@@ -24,7 +28,8 @@ namespace App.Game.Cheats.External.ViewModel
         private CheatsWindow m_Window;
         
         private List<CheatsGroupHeaderViewModel> m_GroupHeaderViewModels;
-        private Matrix<CheatsSlotViewModel> m_Slots;
+        private ListPool<CheatsSlotViewModel> m_Slots;
+        private List<CheatsSlotViewModel> m_ActiveSlots;
         
         private CheatsGroupHeaderViewModel m_SelectedGroup;
 
@@ -32,6 +37,7 @@ namespace App.Game.Cheats.External.ViewModel
             IAssetManager assetManager, 
             ICanvas canvas, 
             ISpriteLoader spriteLoader, 
+            IGameItemsManager gameItemsManager,
             IReadOnlyList<IModuleItemConfig> configs, 
             IReadOnlyList<IInventoryGroupConfig> groups)
         {
@@ -40,6 +46,7 @@ namespace App.Game.Cheats.External.ViewModel
             m_SpriteLoader = spriteLoader;
             m_Configs = configs;
             m_Groups = groups;
+            m_GameItemsManager = gameItemsManager;
         }
 
         public void Open()
@@ -84,28 +91,21 @@ namespace App.Game.Cheats.External.ViewModel
         private void InitWindow()
         {
             CreateGroups();
-            CreateSlots();
+
+            m_Slots = new ListPool<CheatsSlotViewModel>(CreateSlot, 32);
+            m_ActiveSlots = new List<CheatsSlotViewModel>();
             
             SelectGroup(m_GroupHeaderViewModels[0]);
         }
 
-        private void CreateSlots()
+        private Optional<CheatsSlotViewModel> CreateSlot()
         {
-            // var rows = m_ConfigController.GetRows();
-            // var columns = m_ConfigController.GetCols();
-            // m_Slots = new Matrix<CheatsSlotViewModel>(columns, rows);
-            // for (int row = 0; row < rows; ++row)
-            // {
-            //     for (int col = 0; col < columns; ++col)
-            //     {
-            //         var view = Object.Instantiate(
-            //             m_Window.CheatsSlotViewPrefab,
-            //             m_Window.SlotsContent);
-            //         
-            //         var viewModel = new CheatsSlotViewModel(view);
-            //         m_Slots.SetCell(row, col, viewModel);
-            //     }
-            // }
+            var view = Object.Instantiate(
+                m_Window.CheatsSlotViewPrefab,
+                m_Window.SlotsContent);
+                    
+            var viewModel = new CheatsSlotViewModel(m_SpriteLoader, view);
+            return Optional<CheatsSlotViewModel>.Success(viewModel);
         }
 
         private void CreateGroups()
@@ -144,6 +144,26 @@ namespace App.Game.Cheats.External.ViewModel
             foreach (var groupViewModel in m_GroupHeaderViewModels)
             {
                 groupViewModel.SetActiveStatus(groupViewModel == viewModel);
+            }
+
+            for (int i = 0; i < m_ActiveSlots.Count; ++i)
+            {
+                m_Slots.Release(m_ActiveSlots[i]);
+            }
+            
+            m_ActiveSlots.Clear();
+            
+            var items = m_GameItemsManager.GetItemsByType(m_SelectedGroup.Group.GameType);
+            if (!items.HasValue)
+            {
+                return;
+            }
+
+            foreach (var itemConfig in items.Value)
+            {
+                var slot = m_Slots.Get();
+                slot.Value.SetItem(itemConfig);
+                m_ActiveSlots.Add(slot.Value);
             }
         }
     }

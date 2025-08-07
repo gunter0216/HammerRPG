@@ -19,6 +19,7 @@ namespace App.Common.Timer.External
         
         public void Init()
         {
+            m_InternalTimeManager = new InternalTimeManager();
             m_InternalTimeManager.Init();
         }
 

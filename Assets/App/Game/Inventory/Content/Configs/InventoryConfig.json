@@ -2,22 +2,27 @@
   "groups": [
     {
       "id": "Weapons",
+      "game_type": "Weapon",
       "icon": "WeaponInventoryGroupIcon"
     },
     {
       "id": "Armor",
+      "game_type": "Armor",
       "icon": "ArmorInventoryGroupIcon"
     },
     {
       "id": "Potions",
+      "game_type": "Potion",
       "icon": "PotionInventoryGroupIcon"
     },
     {
       "id": "Keys",
+      "game_type": "Keys",
       "icon": "KeyInventoryGroupIcon"
     },
     {
       "id": "Other",
+      "game_type": "Other",
       "icon": "OtherInventoryGroupIcon"
     }
   ],

@@ -7,6 +7,7 @@ using App.Game.Canvases.External;
 using App.Game.Cheats.External.ViewModel;
 using App.Game.Contexts;
 using App.Game.GameItems.External;
+using App.Game.GameItems.Runtime;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Game;
 using App.Menu.Inventory.External;
@@ -22,6 +23,7 @@ namespace App.Game.Cheats.External
         [Inject] private readonly ISpriteLoader m_SpriteLoader;
         [Inject] private readonly PopupCanvas m_PopupCanvas;
         [Inject] private readonly IAssetManager m_AssetManager;
+        [Inject] private readonly IGameItemsManager m_GameItemsManager;
         
         private CheatsWindowModel m_CheatsWindowModel;
         
@@ -34,6 +36,7 @@ namespace App.Game.Cheats.External
                 m_AssetManager,
                 m_PopupCanvas,
                 m_SpriteLoader,
+                m_GameItemsManager,
                 configs.Value,
                 groups);
         }

@@ -12,12 +12,12 @@ namespace App.Game.GameTiles.External.Config.Model
     {
         public Optional<IModuleConfig> Convert(ModuleItemModulesDto modules)
         {
-            if (modules.TileSpriteModule == null)
+            if (modules.SpriteModule == null)
             {
                 return Optional<IModuleConfig>.Fail();
             }
             
-            var module = new TileSpriteModuleConfig(modules.TileSpriteModule.Key);
+            var module = new SpriteModuleConfig(modules.SpriteModule.Key);
             
             return Optional<IModuleConfig>.Success(module);
         }

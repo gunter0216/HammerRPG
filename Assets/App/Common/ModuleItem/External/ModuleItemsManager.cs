@@ -18,12 +18,12 @@ using App.Game.States.Game;
 namespace App.Common.ModuleItem.External
 {
     [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
+    [Stage(typeof(GameInitPhase), -100_000)]
     public class ModuleItemsManager : IInitSystem, IModuleItemsManager
     {
         [Inject] private readonly IContainersDataManager m_ContainersDataManager;
-        [Inject] private readonly IReadOnlyList<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
-        [Inject] private readonly IReadOnlyList<ICreateModuleItemHandler> m_Handlers;
+        [Inject] private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
+        [Inject] private readonly List<ICreateModuleItemHandler> m_Handlers;
 
         private ModuleItemsConfigController m_ConfigController;
         private ModuleItemCreator m_ModuleItemCreator;

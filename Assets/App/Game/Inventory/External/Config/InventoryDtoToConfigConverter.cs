@@ -15,7 +15,10 @@ namespace App.Game.Inventory.External.Config
             var groups = new List<IInventoryGroupConfig>();
             foreach (var groupDto in dto.Groups)
             {
-                var group = new InventoryGroupConfig(groupDto.Id, groupDto.Icon);
+                var group = new InventoryGroupConfig(
+                    groupDto.Id, 
+                    groupDto.Icon,
+                    groupDto.GameType);
                 groups.Add(group);
             }
 

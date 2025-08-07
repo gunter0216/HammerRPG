@@ -14,7 +14,7 @@ namespace App.Game.Cheats.External
         
         public void Run()
         {
-            if (Input.GetKeyDown(KeyCode.I))
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 if (m_CheatsController.IsOpen())
                 {
