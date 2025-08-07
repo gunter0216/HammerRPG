@@ -110,7 +110,7 @@ namespace App.Game.GameTiles.External
                 return Optional<Sprite>.Fail();
             }
 
-            var tileSprite = config.Value.GetModule<TileSpriteModuleConfig>();
+            var tileSprite = config.Value.GetModule<SpriteModuleConfig>();
             if (!tileSprite.HasValue)
             {
                 return Optional<Sprite>.Fail();

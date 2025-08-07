@@ -8,7 +8,7 @@ using App.Common.Utility.Runtime;
 namespace App.Game.GameTiles.External.Config.Model
 {
     [Singleton]
-    public class TileSpriteModuleDtoToConfigConverter : IModuleDtoToConfigConverter
+    public class SpriteModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {
         public Optional<IModuleConfig> Convert(ModuleItemModulesDto modules)
         {

@@ -6,6 +6,7 @@ using App.Game.GameTiles.External;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
+using UnityEngine;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameManagers.External.Services
@@ -27,6 +28,8 @@ namespace App.Game.GameManagers.External.Services
         private GameRoom m_StartRoom;
 
         private RoomFloorCreator m_RoomFloorCreator;
+        
+        private Transform m_RoomsParent;
 
         public RoomsCreator(IAssetManager assetManager, TilesController tilesController)
         {
@@ -47,6 +50,8 @@ namespace App.Game.GameManagers.External.Services
         public Optional<CreateRoomsResult> CreateRooms(DungeonGeneration generation)
         {
             m_Generation = generation;
+
+            m_RoomsParent = new GameObject("Rooms").transform;
             
             CreateRooms();
             
@@ -70,6 +75,8 @@ namespace App.Game.GameManagers.External.Services
                 {
                     return false;
                 }
+                
+                room.Value.SetParent(m_RoomsParent);
                 
                 m_Rooms.Add(room.Value);
 
