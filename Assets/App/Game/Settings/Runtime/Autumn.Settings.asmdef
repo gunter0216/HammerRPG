@@ -1,0 +1,4 @@
+﻿{
+  "name": "Autumn.Settings",
+  "references":[ "Autumn.GameUtility" ]
+}

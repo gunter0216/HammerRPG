@@ -1,9 +1,0 @@
-{
-    "name": "TestServiceCollection",
-    "rootNamespace": "",
-    "references": [
-    "GUID:b39ae81ee73e4cda8888b7906bcf32b4"],
-    "includePlatforms": [
-        "Editor"
-    ]
-}

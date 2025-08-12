@@ -1,14 +1,13 @@
 ﻿using System;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace App.Common.Data.Runtime
 {
     [Serializable, JsonObject(MemberSerialization.Fields)]
     public class DataWrapper
     {
-        [SerializeField, JsonProperty("type")] private string m_Type;
-        [SerializeField, JsonProperty("object")] private string m_Object;
+        [JsonProperty("type")] private string m_Type;
+        [JsonProperty("object")] private string m_Object;
 
         public string Type
         {

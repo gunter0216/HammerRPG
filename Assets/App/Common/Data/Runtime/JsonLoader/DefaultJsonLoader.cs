@@ -3,7 +3,6 @@ using System.IO;
 using App.Common.Data.Runtime.Deserializer;
 using App.Common.Logger.Runtime;
 using App.Common.Utility.Runtime;
-using UnityEngine;
 
 namespace App.Common.Data.Runtime.JsonLoader
 {
@@ -38,7 +37,7 @@ namespace App.Common.Data.Runtime.JsonLoader
             }
             catch (Exception e)
             {
-                Debug.LogError(e.Message);
+                HLogger.LogError(e.Message);
             }
             
             return Optional<T>.Empty;

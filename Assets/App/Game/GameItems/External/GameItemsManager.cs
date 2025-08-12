@@ -3,15 +3,16 @@ using App.Common.Autumn.Runtime.Attributes;
 using App.Common.DataContainer.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utility.Runtime;
 using App.Game.Configs.Runtime;
 using App.Game.Contexts;
-using App.Game.GameItems.External.Config.Loader;
 using App.Game.GameItems.Runtime;
-using App.Game.GameTiles.External.Config.Model;
+using App.Game.GameItems.Runtime.Config;
+using App.Game.GameItems.Runtime.Config.Loader;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Game;
 
@@ -24,6 +25,7 @@ namespace App.Game.GameItems.External
         [Inject] private readonly IConfigLoader m_ConfigLoader;
         [Inject] private readonly ISpriteLoader m_SpriteLoader;
         [Inject] private readonly ModuleItemsManager m_ModuleItemsManager;
+        [Inject] private readonly ILogger m_Logger;
 
         private GameItemsConfigService m_ConfigService;
         
@@ -38,7 +40,7 @@ namespace App.Game.GameItems.External
                 return;
             }
 
-            m_ConfigService = new GameItemsConfigService();
+            m_ConfigService = new GameItemsConfigService(m_Logger);
             m_ConfigService.SetItems(configs.Value);
         }
 

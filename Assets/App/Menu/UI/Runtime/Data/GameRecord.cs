@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace App.Menu.UI.Runtime.Data
 {
@@ -8,9 +7,9 @@ namespace App.Menu.UI.Runtime.Data
     [JsonObject(MemberSerialization.Fields)]
     public class GameRecord
     {
-        [SerializeField, JsonProperty("Name")] private string m_Name;
-        [SerializeField, JsonProperty("DateOfCreation")] private long m_DateOfCreation;
-        [SerializeField, JsonProperty("LastLogin")] private long m_LastLogin;
+        [JsonProperty("Name")] private string m_Name;
+        [JsonProperty("DateOfCreation")] private long m_DateOfCreation;
+        [JsonProperty("LastLogin")] private long m_LastLogin;
 
         public string Name
         {

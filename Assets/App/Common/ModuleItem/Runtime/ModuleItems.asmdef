@@ -1,8 +1,0 @@
-﻿{
-  "name": "ModuleItems",
-  "references":[ "DataContainers", "CommonUtility", "DataManager" ],
-  "noEngineReferences": true,
-  "precompiledReferences": [
-    "newtonsoft.json.dll"
-  ]
-}

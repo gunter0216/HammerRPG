@@ -1,7 +1,0 @@
-﻿{
-  "name": "DataContainersTests",
-  "references":[ "DataContainers", "CommonUtility", "DataManager", "Logger" ],
-  "includePlatforms": [
-    "Editor"
-  ]
-}

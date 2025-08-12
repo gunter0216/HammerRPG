@@ -1,0 +1,6 @@
+{
+    "name": "Autumn.CommonUtility",
+    "references": [
+        "Unity.TextMeshPro"
+    ]
+}

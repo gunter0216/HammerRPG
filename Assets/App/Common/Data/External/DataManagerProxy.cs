@@ -28,7 +28,7 @@ namespace App.Common.Data.External
 
         public void OnInjectEnd()
         {
-            m_DataManager = new DataManager(m_Loader, m_Saver);
+            m_DataManager = new DataManager(m_Loader, m_Saver, new DataSavePathCreator());
         }
         
         public void Init()

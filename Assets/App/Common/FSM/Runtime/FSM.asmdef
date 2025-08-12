@@ -1,4 +1,0 @@
-﻿{
-  "name": "FSM",
-  "references":[ "Logger", "CommonUtility" ]
-}

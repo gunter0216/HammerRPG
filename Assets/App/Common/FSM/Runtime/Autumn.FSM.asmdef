@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.FSM",
+  "references":[ "Autumn.Logger", "Autumn.CommonUtility" ],
+  "noEngineReferences": true
+}

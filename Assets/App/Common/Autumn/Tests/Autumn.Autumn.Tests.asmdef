@@ -1,0 +1,11 @@
+{
+  "name": "Autumn.Autumn.Tests",
+  "rootNamespace": "",
+  "references": [
+    "Autumn.Autumn"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "noEngineReferences": true
+}

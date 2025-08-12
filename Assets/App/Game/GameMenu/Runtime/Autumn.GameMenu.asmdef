@@ -1,0 +1,9 @@
+﻿{
+  "name": "Autumn.GameMenu",
+  "references": [
+    "Autumn.GameUtility",
+    "Autumn.Settings",
+    "Autumn.Scenes",
+    "Autumn.Pause"
+  ]
+}

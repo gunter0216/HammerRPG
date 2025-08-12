@@ -1,0 +1,8 @@
+﻿{
+  "name": "Autumn.ModuleItems.Tests",
+  "references":[ "Autumn.ModuleItems", "Autumn.DataContainers", "Autumn.CommonUtility" ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "noEngineReferences": true
+}

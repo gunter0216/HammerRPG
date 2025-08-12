@@ -8,6 +8,8 @@ using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.External;
 using App.Common.Data.Runtime.Attributes;
 using App.Common.FSM.Runtime;
+using App.Common.Logger.External;
+using App.Common.Logger.Runtime;
 using App.Common.SceneControllers.External;
 using App.Common.SceneControllers.Runtime;
 using App.Common.Utility.Runtime.Extensions;
@@ -26,6 +28,8 @@ namespace App.Start
 
         void Start()
         {
+            HLogger.SetInstance(new UnityLogger());    
+            
             var assemblyProvider = new AssemblyManager()
                 .CreateAssemblyProviderBuilder()
                 .AddAttribute<TransientAttribute>()

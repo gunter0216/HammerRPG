@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.KruskalAlgorithm",
+  "references":[ "Autumn.Algorithms", "Autumn.CommonUtility" ],
+  "noEngineReferences": true
+}

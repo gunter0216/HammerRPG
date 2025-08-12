@@ -5,7 +5,6 @@ using System.Reflection;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Autumn.Runtime.Provider;
 using App.Common.Autumn.Runtime.Services;
-using UnityEngine;
 using IServiceProvider = App.Common.Autumn.Runtime.Provider.IServiceProvider;
 
 namespace App.Common.Autumn.Runtime.Collection

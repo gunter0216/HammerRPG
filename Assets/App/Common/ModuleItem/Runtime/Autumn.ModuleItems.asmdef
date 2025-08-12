@@ -1,0 +1,8 @@
+﻿{
+  "name": "Autumn.ModuleItems",
+  "references":[ "Autumn.DataContainers", "Autumn.CommonUtility", "Autumn.DataManager", "Autumn.Logger" ],
+  "noEngineReferences": true,
+  "precompiledReferences": [
+    "newtonsoft.json.dll"
+  ]
+}

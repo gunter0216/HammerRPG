@@ -1,0 +1,13 @@
+{
+    "name": "Autumn.DungeonGenerator",
+    "references": [
+        "Autumn.DelaunayTriangulation",
+        "Autumn.KruskalAlgorithm",
+        "Autumn.CommonUtility",
+        "Autumn.Logger",
+        "Autumn.Algorithms",
+        "Autumn.BFS",
+        "Autumn.DFS"
+    ],
+    "noEngineReferences": true
+}

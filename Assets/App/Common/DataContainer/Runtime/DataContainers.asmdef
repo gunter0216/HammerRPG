@@ -1,4 +1,0 @@
-﻿{
-  "name": "DataContainers",
-  "references":[ "CommonUtility", "DataManager", "Logger" ]
-}

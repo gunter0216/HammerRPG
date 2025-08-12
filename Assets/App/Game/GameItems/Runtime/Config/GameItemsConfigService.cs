@@ -3,13 +3,20 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utility.Runtime;
 
-namespace App.Game.GameTiles.External.Config.Model
+namespace App.Game.GameItems.Runtime.Config
 {
     public class GameItemsConfigService : IGameItemsConfigService
     {
+        private readonly ILogger m_Logger; 
+        
         private IReadOnlyList<IModuleItemConfig> m_Items;
         private Dictionary<string, List<IModuleItemConfig>> m_TypeToItems;
-        
+
+        public GameItemsConfigService(ILogger logger)
+        {
+            m_Logger = logger;
+        }
+
         public void SetItems(IReadOnlyList<IModuleItemConfig> items)
         {
             m_Items = items;
@@ -18,7 +25,7 @@ namespace App.Game.GameTiles.External.Config.Model
             {
                 if (!item.TryGetModule<GameItemTypeModuleConfig>(out var typeModule))
                 {
-                    HLogger.LogError($"Not found type for item {item.Id}");
+                    m_Logger.LogError($"Not found type for item {item.Id}");
                     continue;
                 }
 
