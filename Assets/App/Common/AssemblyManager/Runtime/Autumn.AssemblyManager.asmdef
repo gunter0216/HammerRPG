@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.AssemblyManager",
+  "references":[ "Autumn.Logger" ],
+  "noEngineReferences": true
+}

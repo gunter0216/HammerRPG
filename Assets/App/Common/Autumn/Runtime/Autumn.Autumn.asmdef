@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.Autumn",
+  "references":[ "Autumn.Logger" ],
+  "noEngineReferences": true
+}

@@ -1,6 +1,4 @@
-﻿using App.Game.Inventory.External.Data;
-
-namespace App.Game.Inventory.Runtime.Data
+﻿namespace App.Game.Inventory.Runtime.Data
 {
     public class InventoryDataController : IInventoryDataController
     {

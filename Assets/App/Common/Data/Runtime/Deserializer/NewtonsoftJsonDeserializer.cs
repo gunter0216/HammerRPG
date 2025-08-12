@@ -1,8 +1,7 @@
 ﻿using System;
 using App.Common.Logger.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace App.Common.Data.Runtime.Deserializer
 {
@@ -14,6 +13,21 @@ namespace App.Common.Data.Runtime.Deserializer
         public NewtonsoftJsonDeserializer(JsonSerializerSettings settings)
         {
             m_Settings = settings;
+        }
+
+        public Optional<object> Deserialize(string json, Type type)
+        {
+            try
+            {
+                var item = JsonConvert.DeserializeObject(json, type, m_Settings);
+                return new Optional<object>(item);
+            }
+            catch (Exception e)
+            {
+                HLogger.LogError(e.Message);
+            }
+            
+            return Optional<object>.Empty;
         }
 
         public Optional<T> Deserialize<T>(string json, Type type)

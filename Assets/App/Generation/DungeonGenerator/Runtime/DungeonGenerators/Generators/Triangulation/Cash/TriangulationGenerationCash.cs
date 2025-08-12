@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using App.Common.Algorithms.Runtime;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
+using Assets.App.Common.Algorithms.Runtime;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation.Cash
 {

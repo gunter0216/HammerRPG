@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.DataContainer.Runtime.Data.Loader
 {

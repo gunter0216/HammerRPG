@@ -2,7 +2,7 @@
 using App.Common.FSM.Runtime.Attributes;
 using App.Game.Contexts;
 using App.Game.Pause.Runtime;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 using UnityEngine;
 
 namespace App.Game.Pause.External

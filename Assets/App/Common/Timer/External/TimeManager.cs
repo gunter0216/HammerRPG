@@ -4,7 +4,7 @@ using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Timer.Runtime;
 using App.Game.Contexts;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
 

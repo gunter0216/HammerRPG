@@ -1,4 +1,4 @@
-﻿using App.Common.ModuleItem.Runtime.Data;
+﻿using Assets.App.Common.ModuleItem.Runtime.Data;
 
 namespace App.Common.ModuleItem.Tests.Mock
 {

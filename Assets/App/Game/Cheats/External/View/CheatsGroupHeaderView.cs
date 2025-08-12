@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace App.Game.Inventory.External.View
+namespace App.Game.Cheats.External.View
 {
     public class CheatsGroupHeaderView : MonoBehaviour
     {

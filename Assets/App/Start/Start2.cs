@@ -3,7 +3,7 @@ using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Game;
 using App.Game.Contexts;
-using App.Game.States.Start;
+using App.Game.States.Runtime.Start;
 using UnityEngine;
 
 namespace App.Start

@@ -1,0 +1,10 @@
+{
+    "name": "Autumn.DungeonGenerator.Tests",
+    "references": [
+        "Autumn.DungeonGenerator"
+    ],
+    "excludePlatforms": [
+        "Editor"
+    ],
+    "noEngineReferences": true
+}

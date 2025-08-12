@@ -1,29 +1,25 @@
 ﻿using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Configs.Runtime;
 using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
-using App.Common.ModuleItem.Runtime;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Windows.External;
-using App.Game;
 using App.Game.Canvases.External;
-using App.Game.Configs.Runtime;
 using App.Game.Contexts;
 using App.Game.Inventory.External.Config;
 using App.Game.Inventory.External.Data;
-using App.Game.Inventory.External.View;
 using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
 using App.Game.SpriteLoaders.Runtime;
-using App.Game.States.Game;
-using App.Game.States.Menu;
-using Unity.VisualScripting;
+using App.Game.States.Runtime.Game;
+using Assets.App.Common.ModuleItem.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Menu.Inventory.External
+namespace App.Game.Inventory.External
 {
     [Scoped(typeof(GameSceneContext))]
     [Stage(typeof(GameInitPhase), 0)]

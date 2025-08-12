@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace App.Common.Algorithms.Runtime
+namespace Assets.App.Common.Algorithms.Runtime
 {
     [Serializable]
     public struct Vector2Int : IEquatable<Vector2Int>

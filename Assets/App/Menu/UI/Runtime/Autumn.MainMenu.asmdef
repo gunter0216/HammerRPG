@@ -1,0 +1,12 @@
+﻿{
+  "name": "Autumn.MainMenu",
+  "references": [
+    "Autumn.Logger",
+    "Autumn.Time",
+    "Autumn.Utility",
+    "Autumn.Scenes",
+    "Autumn.GameUtility",
+    "Autumn.Settings"
+  ],
+  "noEngineReferences": true
+}

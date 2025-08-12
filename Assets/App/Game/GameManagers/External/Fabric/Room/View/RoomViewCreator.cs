@@ -1,8 +1,8 @@
-﻿using App.Common.Utility.Runtime;
-using App.Game.GameManagers.External.View;
+﻿using App.Common.Utilities.Utility.Runtime;
+using App.Game.GameManagers.External.Room;
 using UnityEngine;
 
-namespace App.Game.GameManagers.External.Services
+namespace App.Game.GameManagers.External.Fabric.Room.View
 {
     public class RoomViewCreator
     {

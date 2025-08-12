@@ -1,4 +1,0 @@
-﻿{
-  "name": "DataManager",
-  "references":[ "Logger", "CommonUtility" ]
-}

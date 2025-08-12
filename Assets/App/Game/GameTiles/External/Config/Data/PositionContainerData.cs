@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.Data.Runtime.Attributes;
 using App.Common.DataContainer.Runtime.Data;
 using Newtonsoft.Json;
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using App.Common.Algorithms.Runtime;
+using Assets.App.Common.Algorithms.Runtime;
 
 namespace App.Generation.KruskalAlgorithm.Runtime
 {

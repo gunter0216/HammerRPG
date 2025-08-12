@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.GameUtility",
+  "references":[ "Autumn.Logger" ],
+  "noEngineReferences": true
+}

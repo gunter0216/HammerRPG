@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using App.Game.GameManagers.External.Room;
 
-namespace App.Game.GameManagers.External.Services
+namespace App.Game.GameManagers.External.Fabric
 {
     public readonly struct CreateRoomsResult
     {

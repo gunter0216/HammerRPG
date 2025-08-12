@@ -1,12 +1,12 @@
 ﻿using App.Common.Autumn.Runtime.Attributes;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
-using App.Common.Utility.Runtime.Extensions;
+using App.Common.Utilities.UtilityUnity.Runtime.Extensions;
 using App.Game.Contexts;
 using App.Game.EcsWorlds.Runtime;
 using App.Game.Inputs.Runtime.Events;
 using App.Game.Player.Runtime.Components;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;

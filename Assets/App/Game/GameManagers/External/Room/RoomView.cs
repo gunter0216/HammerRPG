@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace App.Game.GameManagers.External.View
+namespace App.Game.GameManagers.External.Room
 {
     public class RoomView : IRoomView
     {

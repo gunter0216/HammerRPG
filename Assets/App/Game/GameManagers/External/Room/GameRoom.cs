@@ -1,8 +1,7 @@
-﻿using App.Game.GameManagers.External.View;
-using App.Generation.DungeonGenerator.Runtime.Rooms;
+﻿using App.Generation.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
 
-namespace App.Game.GameManagers.External
+namespace App.Game.GameManagers.External.Room
 {
     public class GameRoom
     {

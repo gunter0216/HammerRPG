@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.DelaunayTriangulation",
+  "references": [ "Autumn.Algorithms" ],
+  "noEngineReferences": true
+}

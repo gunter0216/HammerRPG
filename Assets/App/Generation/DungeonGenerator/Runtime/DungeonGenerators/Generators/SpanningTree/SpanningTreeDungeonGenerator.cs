@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using App.Common.Logger.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation.Cash;
 

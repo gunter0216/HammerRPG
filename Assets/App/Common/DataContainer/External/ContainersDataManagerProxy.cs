@@ -6,8 +6,8 @@ using App.Common.DataContainer.Runtime.Data;
 using App.Common.DataContainer.Runtime.Data.Loader;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
-using App.Common.Utility.Runtime;
-using App.Game.States.Start;
+using App.Common.Utilities.Utility.Runtime;
+using App.Game.States.Runtime.Start;
 
 namespace App.Common.DataContainer.External
 {

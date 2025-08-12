@@ -1,4 +1,4 @@
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.GameManagers.External.Config.Dto;
 using App.Game.GameManagers.External.Config.Model;
 using App.Generation.DungeonGenerator.External;

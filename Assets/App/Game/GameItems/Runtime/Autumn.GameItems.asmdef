@@ -1,0 +1,11 @@
+﻿{
+  "name": "Autumn.GameItems",
+  "noEngineReferences": true,
+  "references": [
+    "Autumn.Utility",
+    "Autumn.ModuleItems",
+    "Autumn.ConfigLoader",
+    "Autumn.DataContainers",
+    "Autumn.Logger"
+  ]
+}

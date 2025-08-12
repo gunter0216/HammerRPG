@@ -1,7 +1,7 @@
 ﻿using System;
 using App.Common.DataContainer.Runtime;
 
-namespace App.Common.ModuleItem.Runtime
+namespace Assets.App.Common.ModuleItem.Runtime
 {
     public readonly struct ModuleItemResult<T> where T : class, IModuleItem
     {

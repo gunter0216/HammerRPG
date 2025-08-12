@@ -1,6 +1,6 @@
-﻿using App.Common.Utility.Runtime;
+﻿using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Common.ModuleItem.Runtime.Fabric.Interfaces
+namespace Assets.App.Common.ModuleItem.Runtime.Fabric.Interfaces
 {
     public interface ICreateModuleItemHandler
     {

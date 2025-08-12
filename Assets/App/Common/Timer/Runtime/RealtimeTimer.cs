@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace App.Common.Timer.Runtime
 {
@@ -9,8 +8,8 @@ namespace App.Common.Timer.Runtime
     [JsonObject(MemberSerialization.Fields)]
     public class RealtimeTimer : IDisposable
     {
-        [SerializeField, JsonProperty("left_time")] private float m_LeftTime;
-        [SerializeField, JsonProperty("duration")] private float m_Duration;
+        [JsonProperty("left_time")] private float m_LeftTime;
+        [JsonProperty("duration")] private float m_Duration;
 
         private event Action m_OnCompleteAction; 
         private event Action m_OnTickAction; 

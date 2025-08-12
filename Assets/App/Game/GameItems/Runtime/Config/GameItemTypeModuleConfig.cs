@@ -1,6 +1,7 @@
-﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
+﻿using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+using Assets.App.Game.GameItems.Runtime.Config.Dto;
 
-namespace App.Game.GameTiles.External.Config.Model
+namespace Assets.App.Game.GameItems.Runtime.Config
 {
     public class GameItemTypeModuleConfig : IModuleConfig
     {
@@ -11,6 +12,11 @@ namespace App.Game.GameTiles.External.Config.Model
         public GameItemTypeModuleConfig(string type)
         {
             m_Type = type;
+        }
+
+        public GameItemTypeModuleConfig(GameItemTypeModuleDto dto)
+        {
+            m_Type = dto.Type;
         }
     }
 }

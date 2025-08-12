@@ -4,20 +4,20 @@ using System.IO;
 using App.Common.Data.Runtime.JsonLoader;
 using App.Common.Data.Runtime.JsonSaver;
 using App.Common.Logger.Runtime;
-using App.Common.Utility.Runtime;
-using UnityEngine;
+using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.Data.Runtime
 {
     public class DataManager : IDataManager
     {
         private const string m_FileName = "Save.json";
+
+        private readonly IDataSavePathCreator m_DataSavePathCreator;
+        private readonly IJsonLoader m_Loader;
+        private readonly IJsonSaver m_Saver;
         
         private string m_SaveDirectory;
         private string m_FilePath;
-
-        private readonly IJsonLoader m_Loader;
-        private readonly IJsonSaver m_Saver;
 
         private List<IData> m_Datas;
         private Dictionary<string, IData> m_NameToData;
@@ -25,10 +25,11 @@ namespace App.Common.Data.Runtime
 
         private bool m_IsInitialized = false;
 
-        public DataManager(IJsonLoader loader, IJsonSaver saver)
+        public DataManager(IJsonLoader loader, IJsonSaver saver, IDataSavePathCreator dataSavePathCreator)
         {
             m_Loader = loader;
             m_Saver = saver;
+            m_DataSavePathCreator = dataSavePathCreator;
         }
 
         public void Init()
@@ -40,7 +41,7 @@ namespace App.Common.Data.Runtime
 
             m_IsInitialized = true;
             
-            m_SaveDirectory = Path.Combine(Application.persistentDataPath, "Data");
+            m_SaveDirectory = m_DataSavePathCreator.Create();
             m_FilePath = Path.Combine(m_SaveDirectory, m_FileName);
             
             m_NameToData = new Dictionary<string, IData>(m_Datas.Count);

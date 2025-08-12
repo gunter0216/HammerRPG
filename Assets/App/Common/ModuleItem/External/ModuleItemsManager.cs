@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Data.Runtime.Deserializer;
 using App.Common.DataContainer.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
-using App.Common.ModuleItem.External.Config;
-using App.Common.ModuleItem.External.Config.Interfaces;
-using App.Common.ModuleItem.Runtime;
-using App.Common.ModuleItem.Runtime.Config;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.ModuleItem.Runtime.Fabric;
-using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Contexts;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
+using Assets.App.Common.ModuleItem.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+using Assets.App.Common.ModuleItem.Runtime.Fabric;
+using Assets.App.Common.ModuleItem.Runtime.Fabric.Interfaces;
 
 namespace App.Common.ModuleItem.External
 {
@@ -24,7 +23,9 @@ namespace App.Common.ModuleItem.External
         [Inject] private readonly IContainersDataManager m_ContainersDataManager;
         [Inject] private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
         [Inject] private readonly List<ICreateModuleItemHandler> m_Handlers;
-
+        [Inject] private readonly IJsonDeserializer m_JsonDeserializer;
+        [Inject] private readonly ILogger m_Logger;
+        
         private ModuleItemsConfigController m_ConfigController;
         private ModuleItemCreator m_ModuleItemCreator;
 
@@ -56,7 +57,10 @@ namespace App.Common.ModuleItem.External
                 return false;
             }
 
-            var dtoConverter = new ModuleItemsDtoToConfigConverter(m_ModuleDtoToConfigConverters);
+            var dtoConverter = new ModuleItemsDtoToConfigConverter(
+                m_JsonDeserializer,
+                m_Logger,
+                m_ModuleDtoToConfigConverters);
             var config = dtoConverter.Convert(dto.Value, type);
             if (!config.HasValue)
             {

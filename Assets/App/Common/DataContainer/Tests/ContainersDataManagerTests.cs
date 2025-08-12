@@ -4,7 +4,7 @@ using App.Common.DataContainer.Runtime.Data;
 using App.Common.DataContainer.Runtime.Data.Loader;
 using App.Common.DataContainer.Tests.Mock;
 using App.Common.Logger.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using NSubstitute;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;

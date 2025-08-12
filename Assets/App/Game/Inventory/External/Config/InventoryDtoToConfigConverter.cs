@@ -1,7 +1,7 @@
 ﻿using App.Game.Inventory.External.Dto;
 using App.Game.Inventory.Runtime.Config;
-using App.Common.Utility.Runtime;
 using System.Collections.Generic;
+using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Game.Inventory.External.Config
 {

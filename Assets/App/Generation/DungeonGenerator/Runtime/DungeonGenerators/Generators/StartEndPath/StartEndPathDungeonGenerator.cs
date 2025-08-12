@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DFS.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;

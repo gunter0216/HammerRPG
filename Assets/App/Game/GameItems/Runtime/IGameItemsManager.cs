@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
-using App.Common.ModuleItem.Runtime;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using Assets.App.Common.ModuleItem.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Game.GameItems.Runtime
+namespace Assets.App.Game.GameItems.Runtime
 {
     public interface IGameItemsManager
     {

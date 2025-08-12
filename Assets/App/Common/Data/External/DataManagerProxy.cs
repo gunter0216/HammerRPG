@@ -10,8 +10,8 @@ using App.Common.Data.Runtime.JsonSaver;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
-using App.Common.Utility.Runtime;
-using App.Game.States.Start;
+using App.Common.Utilities.Utility.Runtime;
+using App.Game.States.Runtime.Start;
 
 namespace App.Common.Data.External
 {
@@ -28,7 +28,7 @@ namespace App.Common.Data.External
 
         public void OnInjectEnd()
         {
-            m_DataManager = new DataManager(m_Loader, m_Saver);
+            m_DataManager = new DataManager(m_Loader, m_Saver, new DataSavePathCreator());
         }
         
         public void Init()

@@ -1,5 +1,0 @@
-﻿{
-  "name": "KruskalAlgorithm",
-  "references":[ "Algorithms", "CommonUtility" ],
-  "noEngineReferences": true
-}

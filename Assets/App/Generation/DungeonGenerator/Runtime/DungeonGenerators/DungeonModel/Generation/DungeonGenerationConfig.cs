@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Generation

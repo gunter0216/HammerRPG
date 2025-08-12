@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.ModuleItem.Tests.Mock
 {

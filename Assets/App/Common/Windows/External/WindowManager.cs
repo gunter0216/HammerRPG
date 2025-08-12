@@ -1,7 +1,7 @@
 ﻿using App.Common.Autumn.Runtime.Attributes;
 using App.Common.FSM.Runtime.Attributes;
 using App.Game.Contexts;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 
 namespace App.Common.Windows.External
 {

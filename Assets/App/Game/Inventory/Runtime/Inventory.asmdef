@@ -1,4 +1,0 @@
-﻿{
-  "name": "Inventory",
-  "references":[ "DataManager" ]
-}

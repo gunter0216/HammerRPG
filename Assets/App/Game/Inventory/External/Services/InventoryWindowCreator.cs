@@ -1,9 +1,9 @@
 ﻿using App.Common.AssetSystem.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Inventory.External.View;
 
-namespace App.Game.Inventory.External.ViewController
+namespace App.Game.Inventory.External.Services
 {
     public class InventoryWindowCreator
     {

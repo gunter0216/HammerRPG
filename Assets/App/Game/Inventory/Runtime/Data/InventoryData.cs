@@ -1,15 +1,14 @@
 ﻿using System;
 using App.Common.Data.Runtime;
 using Newtonsoft.Json;
-using UnityEngine;
 
-namespace App.Game.Inventory.External.Data
+namespace App.Game.Inventory.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
     public class InventoryData : IData
     {
-        [SerializeField, JsonProperty("count_slots")] private int m_CountSlots;
+        [JsonProperty("count_slots")] private int m_CountSlots;
 
         public int CountSlots
         {

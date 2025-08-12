@@ -8,7 +8,7 @@ using App.Game.EcsEvent.Runtime;
 using App.Game.Player.External.View;
 using App.Game.Player.Runtime.Components;
 using App.Game.Player.Runtime.Events;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 using App.Game.Worlds.Runtime;
 using UnityEngine;
 

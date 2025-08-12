@@ -1,4 +1,4 @@
-﻿namespace App.Game.States.Game
+﻿namespace App.Game.States.Runtime.Game
 {
     public class GameInitPhase
     {

@@ -1,9 +1,9 @@
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.ModuleItem.Runtime.Data;
-using App.Common.ModuleItem.Runtime.Services;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+using Assets.App.Common.ModuleItem.Runtime.Data;
+using Assets.App.Common.ModuleItem.Runtime.Services;
 
-namespace App.Common.ModuleItem.Runtime
+namespace Assets.App.Common.ModuleItem.Runtime
 {
     public class ModuleItem : IModuleItem
     {

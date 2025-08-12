@@ -1,25 +1,36 @@
 ﻿using System;
 using App.Common.Autumn.Runtime.Attributes;
-using App.Common.ModuleItem.External.Config.Interfaces;
-using App.Common.ModuleItem.External.Dto;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using App.Game.GameTiles.External.Config.Dto;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace App.Game.GameTiles.External.Config.Model
 {
     [Singleton]
     public class SpriteModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {
-        public Optional<IModuleConfig> Convert(ModuleItemModulesDto modules)
+        private const string m_ModuleKey = "icon";
+        
+        public Optional<IModuleConfig> Convert(object module)
         {
-            if (modules.SpriteModule == null)
+            if (module is not SpriteModuleDto dto)
             {
                 return Optional<IModuleConfig>.Fail();
             }
             
-            var module = new SpriteModuleConfig(modules.SpriteModule.Key);
+            var config = new SpriteModuleConfig(dto);
             
-            return Optional<IModuleConfig>.Success(module);
+            return Optional<IModuleConfig>.Success(config);
+        }
+
+        public string GetModuleKey()
+        {
+            return m_ModuleKey;
+        }
+
+        public Type GetModuleDtoType()
+        {
+            return typeof(SpriteModuleDto);
         }
     }
 }
