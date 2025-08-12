@@ -1,5 +1,5 @@
 ﻿{
   "name": "Autumn.DataContainers",
-  "references":[ "Autumn.CommonUtility", "Autumn.DataManager", "Autumn.Logger" ],
+  "references":[ "Autumn.Utility", "Autumn.DataManager", "Autumn.Logger" ],
   "noEngineReferences": true
 }

@@ -3,7 +3,7 @@
     "references": [
         "Autumn.DelaunayTriangulation",
         "Autumn.KruskalAlgorithm",
-        "Autumn.CommonUtility",
+        "Autumn.Utility",
         "Autumn.Logger",
         "Autumn.Algorithms",
         "Autumn.BFS",

@@ -3,7 +3,7 @@
   "references": [
     "Autumn.Logger",
     "Autumn.Time",
-    "Autumn.CommonUtility",
+    "Autumn.Utility",
     "Autumn.Scenes",
     "Autumn.GameUtility",
     "Autumn.Settings"

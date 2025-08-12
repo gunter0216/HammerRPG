@@ -1,5 +1,5 @@
 ﻿{
   "name": "Autumn.Pool",
-  "references":[ "Autumn.CommonUtility" ],
+  "references":[ "Autumn.Utility" ],
   "noEngineReferences": true
 }

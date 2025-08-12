@@ -3,6 +3,6 @@
   "includePlatforms": [
     "Editor"
   ],
-  "references":[ "Autumn.Pool", "Autumn.CommonUtility" ],
+  "references":[ "Autumn.Pool", "Autumn.Utility" ],
   "noEngineReferences": true
 }
