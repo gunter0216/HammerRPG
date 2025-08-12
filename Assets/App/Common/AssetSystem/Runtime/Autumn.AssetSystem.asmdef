@@ -1,7 +1,7 @@
 {
     "name": "Autumn.AssetSystem",
     "references": [
-        "Autumn.CommonUtility",
+        "Autumn.Utility",
         "Unity.Addressables",
         "Autumn.Logger",
         "Unity.ResourceManager"
