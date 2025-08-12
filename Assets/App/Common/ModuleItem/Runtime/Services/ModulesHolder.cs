@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
-using App.Common.ModuleItem.Runtime.Data;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Data;
 
-namespace App.Common.ModuleItem.Runtime.Services
+namespace Assets.App.Common.ModuleItem.Runtime.Services
 {
     public class ModulesHolder : IModulesHolder
     {

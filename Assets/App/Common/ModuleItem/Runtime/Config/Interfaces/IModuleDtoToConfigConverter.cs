@@ -1,8 +1,7 @@
 ﻿using System;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Common.ModuleItem.External.Config.Interfaces
+namespace Assets.App.Common.ModuleItem.Runtime.Config.Interfaces
 {
     public interface IModuleDtoToConfigConverter
     {

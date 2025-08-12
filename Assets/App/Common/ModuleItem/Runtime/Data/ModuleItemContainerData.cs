@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using App.Common.DataContainer.Runtime.Data;
-using App.Common.ModuleItem.Runtime.Data;
 using Newtonsoft.Json;
 
-namespace App.Common.ModuleItem.External
+namespace Assets.App.Common.ModuleItem.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

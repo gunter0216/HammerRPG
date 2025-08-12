@@ -1,6 +1,6 @@
-﻿using App.Common.Utility.Runtime;
+﻿using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Game.Configs.Runtime
+namespace App.Common.Configs.Runtime
 {
     public interface IConfigLoader
     {

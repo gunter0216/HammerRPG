@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using App.Common.Algorithms.Runtime;
-using App.Common.Algorithms.Runtime.Extensions;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator.Config;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
+using Assets.App.Common.Algorithms.Runtime;
+using Assets.App.Common.Algorithms.Runtime.Extensions;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator
 {

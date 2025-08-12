@@ -2,7 +2,7 @@
 using App.Common.DataContainer.Runtime.Data;
 using App.Common.DataContainer.Runtime.Data.Loader;
 using App.Common.Logger.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.DataContainer.Runtime
 {

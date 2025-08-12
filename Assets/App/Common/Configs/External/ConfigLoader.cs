@@ -1,12 +1,11 @@
 ﻿using App.Common.AssetSystem.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Configs.Runtime;
 using App.Common.Data.Runtime.Deserializer;
-using App.Common.Utility.Runtime;
-using App.Game.Configs.Runtime;
-using Newtonsoft.Json;
+using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
 
-namespace App.Game.Configs.External
+namespace App.Common.Configs.External
 {
     [Singleton]
     public class ConfigLoader : IConfigLoader

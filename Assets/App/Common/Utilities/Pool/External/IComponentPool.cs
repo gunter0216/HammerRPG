@@ -1,8 +1,8 @@
-﻿using App.Common.Utility.Pool.Runtime;
-using App.Common.Utility.Runtime;
+﻿using App.Common.Utilities.Pool.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
 
-namespace App.Common.Utility.Pool.External
+namespace App.Common.Utilities.Pool.External
 {
     public interface IComponentPool<T> : IPool<T> where T : Component
     {

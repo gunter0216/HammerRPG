@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace App.Common.Algorithms.Runtime.Extensions
+namespace Assets.App.Common.Algorithms.Runtime.Extensions
 {
     public static class RandomExtensions
     {

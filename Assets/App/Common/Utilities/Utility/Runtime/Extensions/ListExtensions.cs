@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 
-namespace App.Common.Utility.Runtime.Extensions
+namespace App.Common.Utilities.Utility.Runtime.Extensions
 {
     public static class ListExtensions
     {

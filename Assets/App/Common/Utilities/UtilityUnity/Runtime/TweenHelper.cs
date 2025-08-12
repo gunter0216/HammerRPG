@@ -1,4 +1,4 @@
-﻿using App.Common.Utility.Runtime.Extensions;
+﻿using App.Common.Utilities.UtilityUnity.Runtime.Extensions;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace App.Common.Utility.Runtime
+namespace App.Common.Utilities.UtilityUnity.Runtime
 {
     public static class TweenHelper
     {

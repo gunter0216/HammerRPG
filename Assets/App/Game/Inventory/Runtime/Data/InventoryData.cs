@@ -2,7 +2,7 @@
 using App.Common.Data.Runtime;
 using Newtonsoft.Json;
 
-namespace App.Game.Inventory.External.Data
+namespace App.Game.Inventory.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

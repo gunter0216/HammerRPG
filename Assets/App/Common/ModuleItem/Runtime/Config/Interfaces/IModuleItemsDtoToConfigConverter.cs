@@ -1,8 +1,7 @@
-﻿using App.Common.ModuleItem.External.Dto;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.Utility.Runtime;
+﻿using App.Common.Utilities.Utility.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Dto;
 
-namespace App.Common.ModuleItem.External.Config.Interfaces
+namespace Assets.App.Common.ModuleItem.Runtime.Config.Interfaces
 {
     public interface IModuleItemsDtoToConfigConverter
     {

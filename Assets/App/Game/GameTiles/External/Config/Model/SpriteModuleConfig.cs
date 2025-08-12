@@ -1,5 +1,5 @@
-﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Game.GameTiles.External.Config.Dto;
+﻿using App.Game.GameTiles.External.Config.Dto;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace App.Game.GameTiles.External.Config.Model
 {

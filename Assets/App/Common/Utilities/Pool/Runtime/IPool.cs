@@ -1,6 +1,6 @@
-﻿using App.Common.Utility.Runtime;
+﻿using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Common.Utility.Pool.Runtime
+namespace App.Common.Utilities.Pool.Runtime
 {
     public interface IPool<T>
     {

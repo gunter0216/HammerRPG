@@ -1,5 +1,5 @@
 ﻿using System;
-using App.Common.ModuleItem.Runtime.Data;
+using Assets.App.Common.ModuleItem.Runtime.Data;
 using Newtonsoft.Json;
 
 namespace App.Game.GameTiles.External.Config.Data

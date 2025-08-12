@@ -12,7 +12,7 @@ using App.Game.GameMenu.Runtime;
 using App.Game.GameMenu.Runtime.View;
 using App.Game.Pause.Runtime;
 using App.Game.Settings.Runtime;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
 using App.Game.Utility.Runtime.MenuSM;

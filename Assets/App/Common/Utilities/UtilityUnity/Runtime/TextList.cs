@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace App.Common.Utility.Runtime
+namespace App.Common.Utilities.UtilityUnity.Runtime
 {
     public class TextList : MonoBehaviour
     {

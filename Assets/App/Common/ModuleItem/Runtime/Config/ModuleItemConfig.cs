@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Common.ModuleItem.Runtime.Config
+namespace Assets.App.Common.ModuleItem.Runtime.Config
 {
     public class ModuleItemConfig : IModuleItemConfig, IComparable<ModuleItemConfig>
     {

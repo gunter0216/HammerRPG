@@ -1,4 +1,4 @@
-﻿namespace App.Common.Utility.Pool.Runtime
+﻿namespace App.Common.Utilities.Pool.Runtime
 {
     public interface IPoolReleaseListener
     {

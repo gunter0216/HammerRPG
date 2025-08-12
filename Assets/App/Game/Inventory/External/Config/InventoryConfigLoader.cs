@@ -1,5 +1,5 @@
-﻿using App.Common.Utility.Runtime;
-using App.Game.Configs.Runtime;
+﻿using App.Common.Configs.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Inventory.External.Dto;
 
 namespace App.Game.Inventory.External.Config

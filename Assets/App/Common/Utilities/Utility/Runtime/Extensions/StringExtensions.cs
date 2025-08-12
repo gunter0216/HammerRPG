@@ -1,4 +1,4 @@
-﻿namespace App.Common.Utility.Runtime.Extensions
+﻿namespace App.Common.Utilities.Utility.Runtime.Extensions
 {
     public static class StringExtensions
     {

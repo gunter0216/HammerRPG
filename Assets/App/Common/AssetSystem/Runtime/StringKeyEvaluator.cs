@@ -1,4 +1,4 @@
-﻿using App.Common.Utility.Runtime.Extensions;
+﻿using App.Common.Utilities.Utility.Runtime.Extensions;
 using UnityEngine.AddressableAssets;
 
 namespace App.Common.AssetSystem.Runtime

@@ -5,7 +5,7 @@ using App.Game.Contexts;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Inputs.Runtime;
 using App.Game.Inputs.Runtime.Events;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
 using Input = UnityEngine.Input;

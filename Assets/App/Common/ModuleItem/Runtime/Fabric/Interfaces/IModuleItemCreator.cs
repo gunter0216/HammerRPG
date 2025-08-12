@@ -1,6 +1,6 @@
 ﻿using App.Common.DataContainer.Runtime;
 
-namespace App.Common.ModuleItem.Runtime.Fabric.Interfaces
+namespace Assets.App.Common.ModuleItem.Runtime.Fabric.Interfaces
 {
     public interface IModuleItemCreator
     {

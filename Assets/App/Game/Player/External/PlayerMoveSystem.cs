@@ -6,7 +6,7 @@ using App.Game.EcsWorlds.Runtime;
 using App.Game.Inputs.Runtime.Events;
 using App.Game.Player.Runtime;
 using App.Game.Player.Runtime.Components;
-using App.Game.States.Game;
+using App.Game.States.Runtime.Game;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;

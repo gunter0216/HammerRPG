@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace App.Common.ModuleItem.Runtime.Config.Interfaces
+namespace Assets.App.Common.ModuleItem.Runtime.Config.Interfaces
 {
     public interface IModuleItemsConfig
     {

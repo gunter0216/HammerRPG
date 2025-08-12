@@ -1,4 +1,4 @@
-﻿namespace App.Common.Utility.Pool.Tests.Items
+﻿namespace App.Common.Utilities.Pool.Tests.Items
 {
     internal class SimpleItem
     {

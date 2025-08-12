@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.GameManagers.External.Config.Service;
+using App.Game.GameManagers.External.Fabric.Room.Floor;
+using App.Game.GameManagers.External.Fabric.Room.View;
+using App.Game.GameManagers.External.Fabric.Tile;
+using App.Game.GameManagers.External.Fabric.Tile.View;
+using App.Game.GameManagers.External.Room;
 using App.Game.GameTiles.External;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
-using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
+using Vector2Int = Assets.App.Common.Algorithms.Runtime.Vector2Int;
 
-namespace App.Game.GameManagers.External.Services
+namespace App.Game.GameManagers.External.Fabric.Room
 {
     public class RoomsCreator
     {

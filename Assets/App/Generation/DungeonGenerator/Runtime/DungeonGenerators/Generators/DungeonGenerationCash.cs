@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation
 {

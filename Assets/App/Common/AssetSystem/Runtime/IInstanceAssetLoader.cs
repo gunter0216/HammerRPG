@@ -1,5 +1,4 @@
-﻿using App.Common.Utility;
-using App.Common.Utility.Runtime;
+﻿using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 

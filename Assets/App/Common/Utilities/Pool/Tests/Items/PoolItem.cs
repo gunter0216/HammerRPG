@@ -1,7 +1,7 @@
 ﻿using System;
-using App.Common.Utility.Pool.Runtime;
+using App.Common.Utilities.Pool.Runtime;
 
-namespace App.Common.Utility.Pool.Tests.Items
+namespace App.Common.Utilities.Pool.Tests.Items
 {
     internal class PoolItem : IPoolItem
     {

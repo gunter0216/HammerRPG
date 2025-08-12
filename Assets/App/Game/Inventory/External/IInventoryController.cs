@@ -1,6 +1,6 @@
-﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
+﻿using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Menu.Inventory.External
+namespace App.Game.Inventory.External
 {
     public interface IInventoryController
     {

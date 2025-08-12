@@ -1,7 +1,6 @@
-﻿using App.Common.Algorithms.Runtime;
-using App.Common.DataContainer.Runtime;
-using App.Common.ModuleItem.Runtime;
-using App.Common.ModuleItem.Runtime.Data;
+﻿using App.Common.DataContainer.Runtime;
+using Assets.App.Common.Algorithms.Runtime;
+using Assets.App.Common.ModuleItem.Runtime;
 
 namespace App.Game.GameTiles.Runtime
 {

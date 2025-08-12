@@ -1,8 +1,9 @@
 ﻿using App.Common.Logger.Runtime;
+using App.Game.GameManagers.External.Room;
 using App.Game.GameTiles.External;
 using UnityEngine;
 
-namespace App.Game.GameManagers.External.Services
+namespace App.Game.GameManagers.External.Fabric.Room.Floor
 {
     public class RoomFloorCreator
     {

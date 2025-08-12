@@ -1,5 +1,5 @@
-﻿using App.Common.Utility.Runtime;
-using App.Common.Utility.Runtime.Extensions;
+﻿using App.Common.Utilities.UtilityUnity.Runtime;
+using App.Common.Utilities.UtilityUnity.Runtime.Extensions;
 using App.Game.Player.External.View;
 using App.Game.Player.Runtime;
 using DG.Tweening;

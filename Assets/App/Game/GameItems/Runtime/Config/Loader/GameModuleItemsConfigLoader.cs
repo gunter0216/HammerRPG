@@ -1,9 +1,9 @@
-﻿using App.Common.ModuleItem.External.Config.Interfaces;
-using App.Common.ModuleItem.External.Dto;
-using App.Common.Utility.Runtime;
-using App.Game.Configs.Runtime;
+﻿using App.Common.Configs.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Dto;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Game.GameItems.Runtime.Config.Loader
+namespace Assets.App.Game.GameItems.Runtime.Config.Loader
 {
     public class GameModuleItemsConfigLoader : IModuleItemsConfigLoader
     {

@@ -1,4 +1,4 @@
-﻿namespace App.Common.Utility.Runtime
+﻿namespace App.Common.Utilities.Utility.Runtime
 {
     public readonly struct Optional<T>
     {

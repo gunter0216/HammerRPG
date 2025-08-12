@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using App.Common.Algorithms.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DelaunayTriangulation.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation.Cash;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
+using Assets.App.Common.Algorithms.Runtime;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation
 {

@@ -1,10 +1,9 @@
 ﻿using System;
-using App.Common.ModuleItem.External.Config.Interfaces;
-using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.Utility.Runtime;
-using App.Game.GameItems.Runtime.Config.Dto;
+using App.Common.Utilities.Utility.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+using Assets.App.Game.GameItems.Runtime.Config.Dto;
 
-namespace App.Game.GameItems.Runtime.Config.DtoConverter
+namespace Assets.App.Game.GameItems.Runtime.Config.DtoConverter
 {
     public class GameItemTypeModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {

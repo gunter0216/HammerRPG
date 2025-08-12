@@ -3,7 +3,6 @@ using App.Common.Logger.Runtime;
 using App.Game.Contexts;
 using App.Game.Update.Runtime;
 using App.Game.Update.Runtime.Attributes;
-using App.Menu.Inventory.External;
 using UnityEngine;
 
 namespace App.Game.Inventory.External

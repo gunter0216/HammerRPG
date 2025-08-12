@@ -1,11 +1,11 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.GameManagers.External.View;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace App.Game.GameManagers.External.Services
+namespace App.Game.GameManagers.External.Fabric.Tile.View
 {
     public class TileViewCreator : IDisposable
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using App.Common.Logger.Runtime;
-using App.Common.Utility.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using Newtonsoft.Json;
 
 namespace App.Common.Data.Runtime.Deserializer
