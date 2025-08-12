@@ -1,4 +1,5 @@
 ﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Game.GameTiles.External.Config.Dto;
 
 namespace App.Game.GameTiles.External.Config.Model
 {
@@ -11,6 +12,11 @@ namespace App.Game.GameTiles.External.Config.Model
         public GameItemTypeModuleConfig(string type)
         {
             m_Type = type;
+        }
+
+        public GameItemTypeModuleConfig(GameItemTypeModuleDto dto)
+        {
+            m_Type = dto.Type;
         }
     }
 }

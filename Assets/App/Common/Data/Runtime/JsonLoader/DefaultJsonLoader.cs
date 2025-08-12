@@ -44,6 +44,12 @@ namespace App.Common.Data.Runtime.JsonLoader
             return Optional<T>.Empty;
         }
 
+
+        public Optional<object> Deserialize(string json, Type type)
+        {
+            return m_Deserializer.Deserialize(json, type);
+        }
+
         public Optional<T> Deserialize<T>(string json, Type type)
         {
             return m_Deserializer.Deserialize<T>(json, type);

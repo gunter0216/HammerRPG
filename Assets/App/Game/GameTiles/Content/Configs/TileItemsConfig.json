@@ -2,39 +2,39 @@
   "items": [
     {
       "id": "wall",
-      "generation_id": "Wall",
-      "modules": {
-        "icon": {
-          "key": "BricksWall1"
+      "modules": [
+        {
+          "key": "icon",
+          "content": "{\"key\": \"BricksWall1\"}"
         }
-      }
+      ]
     },
     {
       "id": "closed_door",
-      "generation_id": "Door",
-      "modules": {
-        "icon": {
-          "key": "ClosedDoor"
+      "modules": [
+        {
+          "key": "icon",
+          "content": "{\"key\": \"ClosedDoor\"}"
         }
-      }
+      ]
     },
     {
       "id": "opened_door",
-      "generation_id": "OpenedDoor",
-      "modules": {
-        "icon": {
-          "key": "OpenedDoor"
+      "modules": [
+        {
+          "key": "icon",
+          "content": "{\"key\": \"OpenedDoor\"}"
         }
-      }
+      ]
     },
     {
       "id": "floor",
-      "generation_id": "",
-      "modules": {
-        "icon": {
-          "key": "Floor1"
+      "modules": [
+        {
+          "key": "icon",
+          "content": "{\"key\": \"Floor1\"}"
         }
-      }
+      ]
     }
   ]
 }

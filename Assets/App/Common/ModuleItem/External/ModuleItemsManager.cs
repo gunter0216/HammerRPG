@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Data.Runtime.Deserializer;
 using App.Common.DataContainer.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
@@ -24,7 +25,9 @@ namespace App.Common.ModuleItem.External
         [Inject] private readonly IContainersDataManager m_ContainersDataManager;
         [Inject] private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
         [Inject] private readonly List<ICreateModuleItemHandler> m_Handlers;
-
+        [Inject] private readonly IJsonDeserializer m_JsonDeserializer;
+        [Inject] private readonly ILogger m_Logger;
+        
         private ModuleItemsConfigController m_ConfigController;
         private ModuleItemCreator m_ModuleItemCreator;
 
@@ -56,7 +59,10 @@ namespace App.Common.ModuleItem.External
                 return false;
             }
 
-            var dtoConverter = new ModuleItemsDtoToConfigConverter(m_ModuleDtoToConfigConverters);
+            var dtoConverter = new ModuleItemsDtoToConfigConverter(
+                m_JsonDeserializer,
+                m_Logger,
+                m_ModuleDtoToConfigConverters);
             var config = dtoConverter.Convert(dto.Value, type);
             if (!config.HasValue)
             {

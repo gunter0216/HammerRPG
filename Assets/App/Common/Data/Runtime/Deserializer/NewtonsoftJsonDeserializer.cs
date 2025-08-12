@@ -16,6 +16,21 @@ namespace App.Common.Data.Runtime.Deserializer
             m_Settings = settings;
         }
 
+        public Optional<object> Deserialize(string json, Type type)
+        {
+            try
+            {
+                var item = JsonConvert.DeserializeObject(json, type, m_Settings);
+                return new Optional<object>(item);
+            }
+            catch (Exception e)
+            {
+                HLogger.LogError(e.Message);
+            }
+            
+            return Optional<object>.Empty;
+        }
+
         public Optional<T> Deserialize<T>(string json, Type type)
         {
             try

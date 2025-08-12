@@ -1,7 +1,6 @@
 ﻿using System;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.ModuleItem.External.Config.Interfaces;
-using App.Common.ModuleItem.External.Dto;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utility.Runtime;
 using App.Game.GameTiles.External.Config.Dto;
@@ -9,18 +8,18 @@ using App.Game.GameTiles.External.Config.Dto;
 namespace App.Game.GameTiles.External.Config.Model
 {
     [Singleton]
-    public class SpriteModuleDtoToConfigConverter : IModuleDtoToConfigConverter
+    public class GameItemTypeModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {
-        private const string m_ModuleKey = "icon";
+        private const string m_ModuleKey = "game_item_type";
         
         public Optional<IModuleConfig> Convert(object module)
         {
-            if (module is not SpriteModuleDto dto)
+            if (module is not GameItemTypeModuleDto dto)
             {
                 return Optional<IModuleConfig>.Fail();
             }
             
-            var config = new SpriteModuleConfig(dto);
+            var config = new GameItemTypeModuleConfig(dto);
             
             return Optional<IModuleConfig>.Success(config);
         }
@@ -32,7 +31,7 @@ namespace App.Game.GameTiles.External.Config.Model
 
         public Type GetModuleDtoType()
         {
-            return typeof(SpriteModuleDto);
+            return typeof(GameItemTypeModuleDto);
         }
     }
 }
