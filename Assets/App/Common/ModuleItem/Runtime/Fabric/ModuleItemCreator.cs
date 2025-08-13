@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
+using App.Common.Logger.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 using Assets.App.Common.ModuleItem.Runtime.Data;
 using Assets.App.Common.ModuleItem.Runtime.Fabric.Interfaces;
@@ -23,66 +25,70 @@ namespace Assets.App.Common.ModuleItem.Runtime.Fabric
             m_Handlers = handlers;
         }
 
-        public ModuleItemResult<IModuleItem> Create(string id)
+        public Optional<IModuleItem> Create(string id)
         {
             var dataReferences = new List<DataReference>();
             var data = new ModuleItemData(id, dataReferences);
             
-            var moduleItemResult = Create(data);
-            if (!moduleItemResult.success)
-            {
-                return ModuleItemResult<IModuleItem>.Fail(moduleItemResult.errorMessage);
-            }
-            
             var dataReference = m_ContainerController.AddData(ModuleItemData.ContainerKey, data);
             if (!dataReference.HasValue)
             {
-                return ModuleItemResult<IModuleItem>.Fail("Failed to add data reference.");
+                return Optional<IModuleItem>.Fail();
             }
             
-            return ModuleItemResult<IModuleItem>.Success(moduleItemResult.moduleItem, dataReference.Value);
+            var moduleItemResult = Create(data, dataReference.Value);
+            if (!moduleItemResult.HasValue)
+            {
+                return Optional<IModuleItem>.Fail();
+            }
+
+            m_ContainerController.RemoveData(ModuleItemData.ContainerKey, data);
+            
+            return Optional<IModuleItem>.Success(moduleItemResult.Value);
         }
 
-        public ModuleItemResult<IModuleItem> Create(DataReference dataReference)
+        public Optional<IModuleItem> Create(DataReference dataReference)
         {
             var data = m_ContainerController.GetData<ModuleItemData>(dataReference);
             if (!data.HasValue)
             {
-                return ModuleItemResult<IModuleItem>.Fail("Data not found for the given reference.");
+                return Optional<IModuleItem>.Fail();
             }
             
-            var moduleItemResult = Create(data.Value);
-            if (!moduleItemResult.success)
+            var moduleItemResult = Create(data.Value, dataReference);
+            if (!moduleItemResult.HasValue)
             {
-                return ModuleItemResult<IModuleItem>.Fail(moduleItemResult.errorMessage);
+                return Optional<IModuleItem>.Fail();
             }
             
-            return ModuleItemResult<IModuleItem>.Success(moduleItemResult.moduleItem, dataReference);
+            return Optional<IModuleItem>.Success(moduleItemResult.Value);
         }
 
-        private (IModuleItem moduleItem, string errorMessage, bool success) Create(IModuleItemData data)
+        private Optional<IModuleItem> Create(IModuleItemData data, DataReference referenceSelf)
         {
             var config = m_ConfigController.GetConfig(data.Id);
             if (!config.HasValue)
             {
-                return (null, "Config not found", false);
+                HLogger.LogError("Config not found for id: " + data.Id);
+                return Optional<IModuleItem>.Fail();
             }
 
             var modulesHolder = new ModulesHolder(m_ContainerController, data.ModuleRefs);
             modulesHolder.Initialize();
-            IModuleItem moduleItem = new ModuleItem(modulesHolder, config.Value, data);
+            IModuleItem moduleItem = new ModuleItem(modulesHolder, config.Value, data, referenceSelf);
             foreach (var handler in m_Handlers)
             {
                 var handledGameItem = handler.Handle(moduleItem);
                 if (!handledGameItem.HasValue)
                 {
-                    return (null, "Handler fuck up it.", false);
+                    HLogger.LogError($"Handler {handler.GetType().Name} failed to handle item with id: {data.Id}");
+                    return Optional<IModuleItem>.Fail();
                 }
 
                 moduleItem = handledGameItem.Value;
             }
             
-            return (moduleItem, "", true);
+            return Optional<IModuleItem>.Success(moduleItem);
         }
     }
 }

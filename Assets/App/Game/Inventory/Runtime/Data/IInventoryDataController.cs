@@ -4,6 +4,8 @@ namespace App.Game.Inventory.Runtime.Data
 {
     public interface IInventoryDataController
     {
-        List<InventoryItemData> GetItems();
+        IReadOnlyList<InventoryItemData> GetItems();
+        bool RemoveItem(InventoryItemData itemData);
+        bool AddItem(InventoryItemData itemData);
     }
 }

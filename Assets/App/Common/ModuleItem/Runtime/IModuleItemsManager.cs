@@ -7,8 +7,8 @@ namespace Assets.App.Common.ModuleItem.Runtime
 {
     public interface IModuleItemsManager
     {
-        ModuleItemResult<IModuleItem> Create(DataReference dataReference);
-        ModuleItemResult<IModuleItem> Create(string id);
+        Optional<IModuleItem> Create(DataReference dataReference);
+        Optional<IModuleItem> Create(string id);
         bool Destroy(IModuleItem data);
         Optional<IModuleItemConfig> GetConfig(string id);
         Optional<IReadOnlyList<IModuleItemConfig>> GetConfigs(string type);

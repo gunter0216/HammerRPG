@@ -8,8 +8,8 @@ namespace Assets.App.Game.GameItems.Runtime
 {
     public interface IGameItemsManager
     {
-        ModuleItemResult<IGameModuleItem> Create(DataReference dataReference);
-        ModuleItemResult<IGameModuleItem> Create(string id);
+        Optional<IGameModuleItem> Create(DataReference dataReference);
+        Optional<IGameModuleItem> Create(string id);
         bool Destroy(IGameModuleItem data);
         Optional<IReadOnlyList<IModuleItemConfig>> GetItemsByType(string type);
     }

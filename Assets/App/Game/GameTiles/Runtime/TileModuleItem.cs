@@ -1,4 +1,5 @@
-﻿using App.Common.Utilities.Utility.Runtime;
+﻿using App.Common.DataContainer.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using Assets.App.Common.ModuleItem.Runtime;
 using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 using Assets.App.Common.ModuleItem.Runtime.Data;
@@ -10,6 +11,7 @@ namespace App.Game.GameTiles.Runtime
         private readonly IModuleItem m_ModuleItem;
 
         public string Id => m_ModuleItem.Id;
+        public DataReference ReferenceSelf => m_ModuleItem.ReferenceSelf;
 
         public TileModuleItem(IModuleItem moduleItem)
         {

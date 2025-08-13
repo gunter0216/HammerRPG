@@ -1,4 +1,5 @@
-﻿using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+﻿using Assets.App.Common.ModuleItem.Runtime;
+using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace App.Game.Inventory.External
 {
@@ -9,5 +10,6 @@ namespace App.Game.Inventory.External
         bool IsOpen();
         bool AddItem(IModuleItemConfig moduleItemConfig);
         bool AddItem(string id);
+        bool AddItem(IModuleItem moduleItem);
     }
 }

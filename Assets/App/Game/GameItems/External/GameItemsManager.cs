@@ -44,26 +44,26 @@ namespace App.Game.GameItems.External
             m_ConfigService.SetItems(configs.Value);
         }
 
-        public ModuleItemResult<IGameModuleItem> Create(DataReference dataReference)
+        public Optional<IGameModuleItem> Create(DataReference dataReference)
         {
             var item = m_ModuleItemsManager.Create(dataReference);
-            if (!item.IsSuccess)
+            if (!item.HasValue)
             {
-                return ModuleItemResult<IGameModuleItem>.Fail();
+                return Optional<IGameModuleItem>.Fail();
             }
             
-            return ModuleItemResult<IGameModuleItem>.Success(new GameModuleItem(item.ModuleItem), item.DataReference);
+            return Optional<IGameModuleItem>.Success(new GameModuleItem(item.Value));
         }
 
-        public ModuleItemResult<IGameModuleItem> Create(string id)
+        public Optional<IGameModuleItem> Create(string id)
         {
             var item = m_ModuleItemsManager.Create(id);
-            if (!item.IsSuccess)
+            if (!item.HasValue)
             {
-                return ModuleItemResult<IGameModuleItem>.Fail(item.ErrorMessage);
+                return Optional<IGameModuleItem>.Fail();
             }
             
-            return ModuleItemResult<IGameModuleItem>.Success(new GameModuleItem(item.ModuleItem), item.DataReference);
+            return Optional<IGameModuleItem>.Success(new GameModuleItem(item.Value));
         }
 
         public bool Destroy(IGameModuleItem data)

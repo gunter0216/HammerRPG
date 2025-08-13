@@ -102,13 +102,13 @@ namespace App.Game.Inventory.External
             }
             
             var item = m_ModuleItemsManager.Create(id);
-            if (!item.IsSuccess)
+            if (!item.HasValue)
             {
                 HLogger.LogError($"Failed to create item with id {id}");
                 return false;
             }
             
-            HLogger.LogError("Adding item to inventory: " + item.ModuleItem.Id);
+            HLogger.LogError("Adding item to inventory: " + item.Value.Id);
 
             // if (!m_InventoryDataController.AddItem(moduleItemConfig))
             // {
@@ -118,6 +118,25 @@ namespace App.Game.Inventory.External
             //
             // m_InventoryWindowModel.Refresh();
             return true;
+        }
+
+        public bool AddItem(IModuleItem moduleItem)
+        {
+            return true;
+            // if (moduleItem == null)
+            // {
+            //     HLogger.LogError("Cannot add null item to inventory");
+            //     return false;
+            // }
+            //
+            // var moduleItemConfig = moduleItem.Config;
+            // if (moduleItemConfig == null)
+            // {
+            //     HLogger.LogError($"Cannot add item {moduleItem.Id} with null config to inventory");
+            //     return false;
+            // }
+            //
+            // return AddItem(moduleItemConfig);
         }
 
         public IReadOnlyList<IInventoryGroupConfig> GetGroups()

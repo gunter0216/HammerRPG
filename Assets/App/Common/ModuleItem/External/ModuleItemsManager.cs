@@ -76,12 +76,12 @@ namespace App.Common.ModuleItem.External
             return m_ConfigController.RegisterItems(configs, type);
         }
 
-        public ModuleItemResult<IModuleItem> Create(DataReference dataReference)
+        public Optional<IModuleItem> Create(DataReference dataReference)
         {
             return m_ModuleItemCreator.Create(dataReference);
         }
 
-        public ModuleItemResult<IModuleItem> Create(string id)
+        public Optional<IModuleItem> Create(string id)
         {
             return m_ModuleItemCreator.Create(id);
         }

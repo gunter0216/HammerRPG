@@ -34,9 +34,20 @@ namespace App.Game.Inventory.Runtime.Data
         }
 
 
-        public List<InventoryItemData> GetItems()
+        public IReadOnlyList<InventoryItemData> GetItems()
         {
             return m_Data.Items;
+        }
+
+        public bool RemoveItem(InventoryItemData itemData)
+        {
+            return m_Data.Items.Remove(itemData);
+        }
+
+        public bool AddItem(InventoryItemData itemData)
+        {
+            m_Data.Items.Add(itemData);
+            return true;
         }
     }
 }

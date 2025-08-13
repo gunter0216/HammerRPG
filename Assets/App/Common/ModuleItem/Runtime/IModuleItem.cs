@@ -1,4 +1,5 @@
-﻿using App.Common.Utilities.Utility.Runtime;
+﻿using App.Common.DataContainer.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 using Assets.App.Common.ModuleItem.Runtime.Data;
 
@@ -7,6 +8,7 @@ namespace Assets.App.Common.ModuleItem.Runtime
     public interface IModuleItem
     {
         string Id { get; }
+        DataReference ReferenceSelf { get; }
         
         bool AddDataModule(IModuleData data);
         bool RemoveDataModule(IModuleData data);
