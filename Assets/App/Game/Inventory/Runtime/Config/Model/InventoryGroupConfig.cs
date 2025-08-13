@@ -17,7 +17,6 @@ namespace App.Game.Inventory.Runtime.Config
 
         public string Id => m_Id;
         public string Icon => m_Icon;
-
         public string GameType => m_GameType;
     }
 }

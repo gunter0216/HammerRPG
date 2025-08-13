@@ -33,8 +33,8 @@ namespace App.Game.Inventory.External
         [Inject] private readonly ISpriteLoader m_SpriteLoader;
         [Inject] private readonly IModuleItemsManager m_ModuleItemsManager;
         
-        private InventoryDataController m_InventoryDataController;
-        private InventoryConfigController m_InventoryConfigController;
+        private InventoryDataController m_DataController;
+        private InventoryConfigController m_ConfigController;
         private InventoryWindowModel m_InventoryWindowModel;
         
         public void Init()
@@ -49,47 +49,22 @@ namespace App.Game.Inventory.External
             m_InventoryWindowModel = new InventoryWindowModel(
                 m_WindowManager,
                 m_AssetManager,
-                m_InventoryDataController,
-                m_InventoryConfigController,
+                m_DataController,
+                m_ConfigController,
                 m_PopupCanvas,
                 m_SpriteLoader);
         }
 
         private bool InitConfig()
         {
-            var configLoader = new InventoryConfigLoader(m_ConfigLoader);
-            var dto = configLoader.Load();
-            if (!dto.HasValue)
-            {
-                HLogger.LogError("InventoryConfig is null");
-                return false;
-            }
-            
-            var converter = new InventoryDtoToConfigConverter();
-            var config = converter.Convert(dto.Value);
-            if (!config.HasValue)
-            {
-                HLogger.LogError("InventoryConfig conversion failed");
-                return false;
-            }
-
-            m_InventoryConfigController = new InventoryConfigController(config.Value);
-            return true;
+            m_ConfigController = new InventoryConfigController(m_ConfigLoader);
+            return m_ConfigController.Initialize();
         }
 
         private bool InitData()
         {
-            var dataLoader = new InventoryDataLoader(m_DataManager);
-            var data = dataLoader.Load();
-            if (!data.HasValue)
-            {
-                HLogger.LogError("InventoryData is null");
-                return false;
-            }
-
-            m_InventoryDataController = new InventoryDataController(data.Value);
-
-            return true;
+            m_DataController = new InventoryDataController(m_DataManager);
+            return m_DataController.Initialize();
         }
 
         public void OpenWindow()
@@ -116,8 +91,6 @@ namespace App.Game.Inventory.External
             }
 
             return AddItem(moduleItemConfig.Id);
-
-            
         }
 
         public bool AddItem(string id)
@@ -149,7 +122,7 @@ namespace App.Game.Inventory.External
 
         public IReadOnlyList<IInventoryGroupConfig> GetGroups()
         {
-            return m_InventoryConfigController.GetGroups();
+            return m_ConfigController.GetGroups();
         }
     }
 }

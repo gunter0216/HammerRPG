@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using App.Game.Inventory.External.Dto;
 
 namespace App.Game.Inventory.Runtime.Config
 {
@@ -11,13 +12,22 @@ namespace App.Game.Inventory.Runtime.Config
         private readonly int m_SlotHeight;
         private readonly int m_Rows;
 
-        public InventoryConfig(List<IInventoryGroupConfig> groups, int cols, int slotWidth, int slotHeight, int rows)
+        public InventoryConfig(InventoryConfigDto dto)
         {
-            m_Groups = groups;
-            m_Cols = cols;
-            m_SlotWidth = slotWidth;
-            m_SlotHeight = slotHeight;
-            m_Rows = rows;
+            m_Cols = dto.Cols;
+            m_SlotWidth = dto.SlotWidth;
+            m_SlotHeight = dto.SlotHeight;
+            m_Rows = dto.Rows;
+            
+            m_Groups = new List<IInventoryGroupConfig>();
+            foreach (var groupDto in dto.Groups)
+            {
+                var group = new InventoryGroupConfig(
+                    groupDto.Id, 
+                    groupDto.Icon,
+                    groupDto.GameType);
+                m_Groups.Add(group);
+            }
         }
 
         public IReadOnlyList<IInventoryGroupConfig> Groups => m_Groups;
