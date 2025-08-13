@@ -24,8 +24,8 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
 using Logger = App.Common.Logger.Runtime.Logger;
-using Vector2 = Assets.App.Common.Algorithms.Runtime.Vector2;
-using Vector2Int = Assets.App.Common.Algorithms.Runtime.Vector2Int;
+using Vector2 = App.Common.Algorithms.Runtime.Vector2;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameManagers.External
 {

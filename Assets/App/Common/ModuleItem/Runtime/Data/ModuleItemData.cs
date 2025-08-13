@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
 using Newtonsoft.Json;
 
-namespace Assets.App.Common.ModuleItem.Runtime.Data
+namespace App.Common.ModuleItem.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

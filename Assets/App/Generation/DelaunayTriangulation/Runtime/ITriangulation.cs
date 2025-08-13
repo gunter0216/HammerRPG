@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.App.Common.Algorithms.Runtime;
+using App.Common.Algorithms.Runtime;
 
 namespace App.Generation.DelaunayTriangulation.Runtime
 {

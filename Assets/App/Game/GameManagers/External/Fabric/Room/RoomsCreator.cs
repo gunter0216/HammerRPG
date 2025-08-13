@@ -12,7 +12,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
-using Vector2Int = Assets.App.Common.Algorithms.Runtime.Vector2Int;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameManagers.External.Fabric.Room
 {

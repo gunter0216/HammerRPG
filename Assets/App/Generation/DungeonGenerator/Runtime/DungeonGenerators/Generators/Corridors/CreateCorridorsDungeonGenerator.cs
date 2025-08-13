@@ -3,7 +3,7 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
-using Vector2Int = Assets.App.Common.Algorithms.Runtime.Vector2Int;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors
 {

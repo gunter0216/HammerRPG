@@ -1,8 +1,8 @@
 ﻿using App.Common.DataContainer.Runtime;
+using App.Common.ModuleItem.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.ModuleItem.Runtime.Data;
 using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.ModuleItem.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
-using Assets.App.Common.ModuleItem.Runtime.Data;
 
 namespace App.Game.GameTiles.Runtime
 {

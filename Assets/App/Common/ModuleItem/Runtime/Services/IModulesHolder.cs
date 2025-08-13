@@ -1,7 +1,7 @@
-﻿using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Data;
+﻿using App.Common.ModuleItem.Runtime.Data;
+using App.Common.Utilities.Utility.Runtime;
 
-namespace Assets.App.Common.ModuleItem.Runtime.Services
+namespace App.Common.ModuleItem.Runtime.Services
 {
     public interface IModulesHolder
     {

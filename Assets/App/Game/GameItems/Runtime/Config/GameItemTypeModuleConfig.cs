@@ -1,4 +1,4 @@
-﻿using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using Assets.App.Game.GameItems.Runtime.Config.Dto;
 
 namespace Assets.App.Game.GameItems.Runtime.Config

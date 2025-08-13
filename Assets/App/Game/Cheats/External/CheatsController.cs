@@ -2,6 +2,7 @@
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
+using App.Common.ModuleItem.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.ViewModel;
 using App.Game.Contexts;
@@ -9,7 +10,6 @@ using App.Game.GameItems.External;
 using App.Game.Inventory.External;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Runtime.Game;
-using Assets.App.Common.ModuleItem.Runtime;
 using Assets.App.Game.GameItems.Runtime;
 
 namespace App.Game.Cheats.External

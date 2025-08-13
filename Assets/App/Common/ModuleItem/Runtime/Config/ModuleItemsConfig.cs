@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace Assets.App.Common.ModuleItem.Runtime.Config
+namespace App.Common.ModuleItem.Runtime.Config
 {
     public class ModuleItemsConfig : IModuleItemsConfig
     {

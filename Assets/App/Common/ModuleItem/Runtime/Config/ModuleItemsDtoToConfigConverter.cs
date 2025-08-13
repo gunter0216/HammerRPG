@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using App.Common.Data.Runtime.Deserializer;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Dto;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Dto;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace Assets.App.Common.ModuleItem.Runtime.Config
+namespace App.Common.ModuleItem.Runtime.Config
 {
     public class ModuleItemsDtoToConfigConverter : IModuleItemsDtoToConfigConverter
     {

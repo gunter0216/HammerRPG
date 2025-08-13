@@ -14,7 +14,7 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using Logger = App.Common.Logger.Runtime.Logger;
-using Vector2Int = Assets.App.Common.Algorithms.Runtime.Vector2Int;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Editor
 {

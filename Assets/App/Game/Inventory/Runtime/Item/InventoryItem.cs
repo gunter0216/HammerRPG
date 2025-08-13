@@ -1,5 +1,5 @@
-﻿using App.Game.Inventory.Runtime.Data;
-using Assets.App.Common.ModuleItem.Runtime;
+﻿using App.Common.ModuleItem.Runtime;
+using App.Game.Inventory.Runtime.Data;
 
 namespace App.Game.Inventory.External
 {

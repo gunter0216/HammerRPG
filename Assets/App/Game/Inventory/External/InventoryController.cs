@@ -6,6 +6,8 @@ using App.Common.Data.Runtime;
 using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
 using App.Game.Contexts;
@@ -16,8 +18,6 @@ using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Runtime.Game;
-using Assets.App.Common.ModuleItem.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace App.Game.Inventory.External
 {

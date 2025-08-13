@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Assets.App.Common.ModuleItem.Runtime.Config.Dto
+namespace App.Common.ModuleItem.Runtime.Config.Dto
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using App.Common.Algorithms.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.Algorithms.Runtime;
 
 // Основной класс для алгоритма Краскала
 namespace App.Generation.KruskalAlgorithm.Runtime

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace Assets.App.Game.GameItems.Runtime.Config
 {

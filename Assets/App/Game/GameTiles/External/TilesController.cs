@@ -13,9 +13,8 @@ using App.Game.GameTiles.External.Config.Model;
 using App.Game.GameTiles.Runtime;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Runtime.Game;
-using Assets.App.Common.ModuleItem.Runtime;
 using UnityEngine;
-using Vector2Int = Assets.App.Common.Algorithms.Runtime.Vector2Int;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameTiles.External
 {

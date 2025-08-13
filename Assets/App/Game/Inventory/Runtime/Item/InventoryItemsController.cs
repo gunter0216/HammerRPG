@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using App.Common.ModuleItem.Runtime;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
-using Assets.App.Common.ModuleItem.Runtime;
 
 namespace App.Game.Inventory.External
 {
