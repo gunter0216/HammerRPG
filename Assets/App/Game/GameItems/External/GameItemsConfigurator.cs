@@ -1,7 +1,7 @@
 ﻿using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Autumn.Runtime.Collection;
-using App.Game.GameItems.Runtime.Config.DtoConverter;
 using App.Game.GameTiles.External.Config.Model;
+using App.Game.ModuleItemType.Runtime.Config.Converter;
 
 namespace App.Game.GameItems.External
 {

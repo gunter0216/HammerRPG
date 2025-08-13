@@ -1,7 +1,7 @@
 ﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Game.GameItems.Runtime.Config.Dto;
+using App.Game.ModuleItemType.Runtime.Config.Dto;
 
-namespace App.Game.GameItems.Runtime.Config
+namespace App.Game.ModuleItemType.Runtime.Config.Model
 {
     public class GameItemTypeModuleConfig : IModuleConfig
     {
