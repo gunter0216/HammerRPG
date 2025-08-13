@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
@@ -27,17 +28,19 @@ namespace App.Game.Inventory.External
         {
             var items = m_DataController.GetItems();
             m_Items = new List<InventoryItem>(items.Count);
-            // foreach (var itemData in items)
-            // {
-            //     var moduleItem = m_ModuleItemsManager.Create(itemData.ModuleItemId);
-            //     if (moduleItem == null)
-            //     {
-            //         continue;
-            //     }
-            //
-            //     var item = new InventoryItem(itemData, moduleItem);
-            //     m_Items.Add(item);
-            // }
+            foreach (var inventoryItemData in items)
+            {
+                var moduleItem = m_ModuleItemsManager.Create(inventoryItemData.DataReference);
+                if (moduleItem.HasValue)
+                {
+                    HLogger.LogError("Failed to create module item for inventory item: ");
+                    continue;
+                }
+            
+                var item = new InventoryItem(inventoryItemData, moduleItem.Value);
+                m_Items.Add(item);
+            }
+            
             return true;
         }
     }

@@ -4,7 +4,7 @@ using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.ModuleItem.Runtime.Data;
 using App.Common.Utilities.Utility.Runtime;
 
-namespace Assets.App.Game.GameItems.Runtime
+namespace App.Game.GameItems.Runtime
 {
     public class GameModuleItem : IGameModuleItem
     {

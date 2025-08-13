@@ -7,10 +7,10 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
+using App.Game.GameItems.Runtime;
 using App.Game.Inventory.External;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.SpriteLoaders.Runtime;
-using Assets.App.Game.GameItems.Runtime;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.ViewModel

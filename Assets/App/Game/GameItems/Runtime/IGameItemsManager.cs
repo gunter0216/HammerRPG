@@ -3,7 +3,7 @@ using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 
-namespace Assets.App.Game.GameItems.Runtime
+namespace App.Game.GameItems.Runtime
 {
     public interface IGameItemsManager
     {

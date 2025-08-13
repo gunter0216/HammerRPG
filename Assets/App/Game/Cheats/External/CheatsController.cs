@@ -7,10 +7,10 @@ using App.Game.Canvases.External;
 using App.Game.Cheats.External.ViewModel;
 using App.Game.Contexts;
 using App.Game.GameItems.External;
+using App.Game.GameItems.Runtime;
 using App.Game.Inventory.External;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Runtime.Game;
-using Assets.App.Game.GameItems.Runtime;
 
 namespace App.Game.Cheats.External
 {

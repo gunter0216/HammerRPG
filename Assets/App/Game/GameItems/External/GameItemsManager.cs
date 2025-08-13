@@ -9,11 +9,11 @@ using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Contexts;
+using App.Game.GameItems.Runtime;
+using App.Game.GameItems.Runtime.Config;
+using App.Game.GameItems.Runtime.Config.Loader;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Runtime.Game;
-using Assets.App.Game.GameItems.Runtime;
-using Assets.App.Game.GameItems.Runtime.Config;
-using Assets.App.Game.GameItems.Runtime.Config.Loader;
 
 namespace App.Game.GameItems.External
 {
