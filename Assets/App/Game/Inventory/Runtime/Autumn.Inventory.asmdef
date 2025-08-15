@@ -6,7 +6,8 @@
     "Autumn.Logger",
     "Autumn.ConfigLoader",
     "Autumn.ModuleItems",
-    "Autumn.DataContainers"
+    "Autumn.DataContainers",
+    "Autumn.ModuleItemType"
   ],
   "noEngineReferences": true
 }
