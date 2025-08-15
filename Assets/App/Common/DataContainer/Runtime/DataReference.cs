@@ -26,5 +26,10 @@ namespace App.Common.DataContainer.Runtime
             m_Key = key;
             m_Index = index;
         }
+
+        public override string ToString()
+        {
+            return $"DataReference(Key: {m_Key}, Index: {m_Index})";
+        }
     }
 }

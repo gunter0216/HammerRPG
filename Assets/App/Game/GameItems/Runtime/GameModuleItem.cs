@@ -1,15 +1,17 @@
-﻿using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.ModuleItem.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
-using Assets.App.Common.ModuleItem.Runtime.Data;
+﻿using App.Common.DataContainer.Runtime;
+using App.Common.ModuleItem.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.ModuleItem.Runtime.Data;
+using App.Common.Utilities.Utility.Runtime;
 
-namespace Assets.App.Game.GameItems.Runtime
+namespace App.Game.GameItems.Runtime
 {
     public class GameModuleItem : IGameModuleItem
     {
         private readonly IModuleItem m_ModuleItem;
 
         public string Id => m_ModuleItem.Id;
+        public DataReference ReferenceSelf => m_ModuleItem.ReferenceSelf;
 
         public GameModuleItem(IModuleItem moduleItem)
         {

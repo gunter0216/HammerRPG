@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
+using App.Common.ModuleItem.Runtime.Services;
 using App.Common.ModuleItem.Tests.Mock;
-using Assets.App.Common.ModuleItem.Runtime.Services;
 using NUnit.Framework;
 
 namespace App.Common.ModuleItem.Tests

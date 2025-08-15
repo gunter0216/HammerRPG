@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Game.ModuleItemType.Runtime.Config.Model;
 
-namespace Assets.App.Game.GameItems.Runtime.Config
+namespace App.Game.GameItems.Runtime.Config
 {
     public class GameItemsConfigService : IGameItemsConfigService
     {

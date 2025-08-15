@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.App.Common.Algorithms.Runtime;
+using App.Common.Algorithms.Runtime;
 
 // Основной класс для триангуляции Делоне
 namespace App.Generation.DelaunayTriangulation.Runtime

@@ -1,7 +1,7 @@
 ﻿using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Autumn.Runtime.Collection;
 using App.Common.Data.External;
-using Assets.App.Common.ModuleItem.Runtime.Data;
+using App.Common.ModuleItem.Runtime.Data;
 
 namespace App.Common.ModuleItem.External
 {

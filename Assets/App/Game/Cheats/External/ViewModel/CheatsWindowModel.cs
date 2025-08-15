@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Pool.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
+using App.Game.GameItems.Runtime;
 using App.Game.Inventory.External;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.SpriteLoaders.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
-using Assets.App.Game.GameItems.Runtime;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.ViewModel
@@ -21,8 +21,8 @@ namespace App.Game.Cheats.External.ViewModel
         private const string m_InventoryOption = "Inventory";
         private readonly List<string> m_PlaceItemsDropdownOptions = new List<string>
         {
-            m_GroundOption,
             m_InventoryOption,
+            m_GroundOption,
         };
         
         private readonly IGameItemsManager m_GameItemsManager;

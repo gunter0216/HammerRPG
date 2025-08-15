@@ -1,5 +1,14 @@
 ﻿{
   "name": "Autumn.Inventory",
-  "references":[ "Autumn.DataManager" ],
+  "references": [
+    "Autumn.DataManager",
+    "Autumn.Utility",
+    "Autumn.Logger",
+    "Autumn.ConfigLoader",
+    "Autumn.ModuleItems",
+    "Autumn.DataContainers",
+    "Autumn.ModuleItemType",
+    "Autumn.DungeonGenerator"
+  ],
   "noEngineReferences": true
 }

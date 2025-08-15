@@ -1,4 +1,4 @@
-﻿namespace Assets.App.Common.ModuleItem.Runtime.Data
+﻿namespace App.Common.ModuleItem.Runtime.Data
 {
     public interface IModuleData
     {

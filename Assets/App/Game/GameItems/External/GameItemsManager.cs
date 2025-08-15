@@ -6,15 +6,14 @@ using App.Common.FSM.Runtime;
 using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Contexts;
+using App.Game.GameItems.Runtime;
+using App.Game.GameItems.Runtime.Config;
+using App.Game.GameItems.Runtime.Config.Loader;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Runtime.Game;
-using Assets.App.Common.ModuleItem.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
-using Assets.App.Game.GameItems.Runtime;
-using Assets.App.Game.GameItems.Runtime.Config;
-using Assets.App.Game.GameItems.Runtime.Config.Loader;
 
 namespace App.Game.GameItems.External
 {
@@ -44,26 +43,26 @@ namespace App.Game.GameItems.External
             m_ConfigService.SetItems(configs.Value);
         }
 
-        public ModuleItemResult<IGameModuleItem> Create(DataReference dataReference)
+        public Optional<IGameModuleItem> Create(DataReference dataReference)
         {
             var item = m_ModuleItemsManager.Create(dataReference);
-            if (!item.IsSuccess)
+            if (!item.HasValue)
             {
-                return ModuleItemResult<IGameModuleItem>.Fail();
+                return Optional<IGameModuleItem>.Fail();
             }
             
-            return ModuleItemResult<IGameModuleItem>.Success(new GameModuleItem(item.ModuleItem), item.DataReference);
+            return Optional<IGameModuleItem>.Success(new GameModuleItem(item.Value));
         }
 
-        public ModuleItemResult<IGameModuleItem> Create(string id)
+        public Optional<IGameModuleItem> Create(string id)
         {
             var item = m_ModuleItemsManager.Create(id);
-            if (!item.IsSuccess)
+            if (!item.HasValue)
             {
-                return ModuleItemResult<IGameModuleItem>.Fail(item.ErrorMessage);
+                return Optional<IGameModuleItem>.Fail();
             }
             
-            return ModuleItemResult<IGameModuleItem>.Success(new GameModuleItem(item.ModuleItem), item.DataReference);
+            return Optional<IGameModuleItem>.Success(new GameModuleItem(item.Value));
         }
 
         public bool Destroy(IGameModuleItem data)

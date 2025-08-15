@@ -41,8 +41,6 @@ namespace App.Game.Player.External
             
             var world = m_WorldManager.GetWorld();
             var playerEntity = world.NewEntity();
-            
-            Debug.LogError($"player {playerEntity}");
 
             var entities = world.GetPool<EntityComponent>();
             var playerPool = world.GetPool<PlayerComponent>();

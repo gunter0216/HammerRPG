@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.App.Common.Algorithms.Runtime
+namespace App.Common.Algorithms.Runtime
 {
     public struct Triangle
     {

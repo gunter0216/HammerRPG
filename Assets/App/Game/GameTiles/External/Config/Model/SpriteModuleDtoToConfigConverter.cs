@@ -1,8 +1,8 @@
 ﻿using System;
 using App.Common.Autumn.Runtime.Attributes;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.GameTiles.External.Config.Dto;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace App.Game.GameTiles.External.Config.Model
 {

@@ -13,9 +13,8 @@ using App.Game.GameTiles.External.Config.Model;
 using App.Game.GameTiles.Runtime;
 using App.Game.SpriteLoaders.Runtime;
 using App.Game.States.Runtime.Game;
-using Assets.App.Common.ModuleItem.Runtime;
 using UnityEngine;
-using Vector2Int = Assets.App.Common.Algorithms.Runtime.Vector2Int;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameTiles.External
 {
@@ -39,26 +38,26 @@ namespace App.Game.GameTiles.External
             m_ModuleItemsManager.RegisterItems(configLoader, TileConstants.ModuleItemType);
         }
 
-        public ModuleItemResult<ITileModuleItem> Create(DataReference dataReference)
+        public Optional<ITileModuleItem> Create(DataReference dataReference)
         {
             var item = m_ModuleItemsManager.Create(dataReference);
-            if (!item.IsSuccess)
+            if (!item.HasValue)
             {
-                return ModuleItemResult<ITileModuleItem>.Fail();
+                return Optional<ITileModuleItem>.Fail();
             }
             
-            return ModuleItemResult<ITileModuleItem>.Success(new TileModuleItem(item.ModuleItem), item.DataReference);
+            return Optional<ITileModuleItem>.Success(new TileModuleItem(item.Value));
         }
 
-        public ModuleItemResult<ITileModuleItem> Create(string id)
+        public Optional<ITileModuleItem> Create(string id)
         {
             var item = m_ModuleItemsManager.Create(id);
-            if (!item.IsSuccess)
+            if (!item.HasValue)
             {
-                return ModuleItemResult<ITileModuleItem>.Fail(item.ErrorMessage);
+                return Optional<ITileModuleItem>.Fail();
             }
             
-            return ModuleItemResult<ITileModuleItem>.Success(new TileModuleItem(item.ModuleItem), item.DataReference);
+            return Optional<ITileModuleItem>.Success(new TileModuleItem(item.Value));
         }
 
         public bool Destroy(ITileModuleItem data)
@@ -88,16 +87,16 @@ namespace App.Game.GameTiles.External
             return true;
         }
 
-        public ModuleItemResult<ITileModuleItem> CreateTileByGenerationID(string generationID, Vector2Int position)
+        public Optional<ITileModuleItem> CreateTileByGenerationID(string generationID, Vector2Int position)
         {
             var tileID = GenerationIdToTileConvert(generationID);
             var tile = Create(tileID);
-            if (!tile.IsSuccess)
+            if (!tile.HasValue)
             {
-                return ModuleItemResult<ITileModuleItem>.Fail(tile.ErrorMessage);
+                return Optional<ITileModuleItem>.Fail();
             }
 
-            tile.ModuleItem.AddDataModule(new TilePositionModuleData(position.X, position.Y));
+            tile.Value.AddDataModule(new TilePositionModuleData(position.X, position.Y));
             
             return tile;
         }

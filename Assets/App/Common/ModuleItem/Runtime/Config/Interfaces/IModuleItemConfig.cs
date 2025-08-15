@@ -1,6 +1,6 @@
 ﻿using App.Common.Utilities.Utility.Runtime;
 
-namespace Assets.App.Common.ModuleItem.Runtime.Config.Interfaces
+namespace App.Common.ModuleItem.Runtime.Config.Interfaces
 {
     public interface IModuleItemConfig
     {

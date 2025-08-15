@@ -1,7 +1,7 @@
 ﻿using System;
+using App.Common.ModuleItem.Runtime.Config;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.ModuleItem.Tests.Mock;
-using Assets.App.Common.ModuleItem.Runtime.Config;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
 using NUnit.Framework;
 
 namespace App.Common.ModuleItem.Tests

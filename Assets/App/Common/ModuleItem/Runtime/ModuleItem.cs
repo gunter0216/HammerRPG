@@ -1,27 +1,32 @@
+using App.Common.DataContainer.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.ModuleItem.Runtime.Data;
+using App.Common.ModuleItem.Runtime.Services;
 using App.Common.Utilities.Utility.Runtime;
-using Assets.App.Common.ModuleItem.Runtime.Config.Interfaces;
-using Assets.App.Common.ModuleItem.Runtime.Data;
-using Assets.App.Common.ModuleItem.Runtime.Services;
 
-namespace Assets.App.Common.ModuleItem.Runtime
+namespace App.Common.ModuleItem.Runtime
 {
     public class ModuleItem : IModuleItem
     {
         private readonly IModulesHolder m_ModulesHolder;
         private readonly IModuleItemData m_Data;
         private readonly IModuleItemConfig m_Config;
-        
+        private readonly DataReference m_ReferenceSelf;
+
         public string Id => m_Config.Id;
+        public DataReference ReferenceSelf => m_ReferenceSelf;
         internal IModuleItemData Data => m_Data;
 
         public ModuleItem(
             IModulesHolder modulesHolder,
             IModuleItemConfig moduleItemConfig, 
-            IModuleItemData moduleItemData)
+            IModuleItemData moduleItemData, 
+            DataReference referenceSelf)
         {
             m_ModulesHolder = modulesHolder;
             m_Config = moduleItemConfig;
             m_Data = moduleItemData;
+            m_ReferenceSelf = referenceSelf;
         }
 
         public bool Initialize()

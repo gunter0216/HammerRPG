@@ -1,5 +1,5 @@
 ﻿
-namespace Assets.App.Game.GameItems.Runtime
+namespace App.Game.GameItems.Runtime
 {
     public class GameItemsConstants
     {

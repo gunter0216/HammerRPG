@@ -13,12 +13,16 @@ namespace App.Generation.DungeonGenerator.Runtime.Matrix
     
     public class Matrix<T> : IEnumerable<T>
     {
+        public static readonly ValueTuple<int, int> InvalidPosition = (-1, -1);
+        
         private readonly int m_Width;
         private readonly int m_Height;
         private readonly T[] m_Matrix;
 
         public int Width => m_Width;
         public int Height => m_Height;
+        public int Cols => m_Width;
+        public int Rows => m_Height;
 
         public Matrix(Matrix<T> other)
         {
@@ -79,6 +83,22 @@ namespace App.Generation.DungeonGenerator.Runtime.Matrix
         public void SetCell(int row, int col, T value)
         {
             m_Matrix[row * m_Width + col] = value;
+        }
+        
+        public (int Row, int Col) GetFirstDefaultCell()
+        {
+            for (int row = 0; row < m_Height; ++row)
+            {
+                for (int col = 0; col < m_Width; ++col)
+                {
+                    if (EqualityComparer<T>.Default.Equals(GetCell(row, col), default(T)))
+                    {
+                        return (row, col);
+                    }
+                }
+            }
+
+            return InvalidPosition;
         }
 
         public Matrix<T> Scale(int scale)

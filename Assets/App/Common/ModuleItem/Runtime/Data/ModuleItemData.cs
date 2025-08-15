@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
 using Newtonsoft.Json;
 
-namespace Assets.App.Common.ModuleItem.Runtime.Data
+namespace App.Common.ModuleItem.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
@@ -31,6 +31,11 @@ namespace Assets.App.Common.ModuleItem.Runtime.Data
         public string GetModuleKey()
         {
             return ContainerKey;
+        }
+
+        public override string ToString()
+        {
+            return $"ModuleItemData(Id: {m_Id}, ModuleRefs: [{string.Join(", ", m_ModuleRefs)}])";
         }
     }
 }
