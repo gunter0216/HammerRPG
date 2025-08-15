@@ -21,8 +21,8 @@ namespace App.Game.Cheats.External.ViewModel
         private const string m_InventoryOption = "Inventory";
         private readonly List<string> m_PlaceItemsDropdownOptions = new List<string>
         {
-            m_GroundOption,
             m_InventoryOption,
+            m_GroundOption,
         };
         
         private readonly IGameItemsManager m_GameItemsManager;

@@ -15,7 +15,7 @@ using App.Game.States.Runtime.Game;
 namespace App.Game.Cheats.External
 {
     [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 1000)]
+    [Stage(typeof(GameInitPhase), 100000)]
     public class CheatsController : IInitSystem
     {
         [Inject] private readonly IModuleItemsManager m_ModuleItemsManager;

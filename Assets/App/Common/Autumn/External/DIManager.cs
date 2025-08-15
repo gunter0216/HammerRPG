@@ -11,6 +11,7 @@ namespace App.Common.Autumn.External
     {
         private static DiManager m_Instance;
         private readonly ServiceCollection m_ServiceCollection = new();
+        private IServiceProvider m_CurrentServiceProvider;
 
         public static DiManager Instance
         {
@@ -66,7 +67,13 @@ namespace App.Common.Autumn.External
         public IServiceProvider BuildServiceProvider(object context)
         {
             var sceneScopeds = GetScopedFromCurrentScene();
-            return m_ServiceCollection.BuildServiceProvider(context, sceneScopeds);
+            m_CurrentServiceProvider = m_ServiceCollection.BuildServiceProvider(context, sceneScopeds);
+            return m_CurrentServiceProvider;
+        }
+        
+        public IServiceProvider GetCurrentServiceProvider()
+        {
+            return m_CurrentServiceProvider;
         }
         
         private List<object> GetScopedFromCurrentScene()

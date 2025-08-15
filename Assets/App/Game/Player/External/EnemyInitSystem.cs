@@ -40,8 +40,6 @@ namespace App.Game.Player.External
             
             var world = m_WorldManager.GetWorld();
             var enemyEntity = world.NewEntity();
-            
-            Debug.LogError($"enemy {enemyEntity}");
 
             var entities = world.GetPool<EntityComponent>();
             var healthPool = world.GetPool<HealthComponent>();

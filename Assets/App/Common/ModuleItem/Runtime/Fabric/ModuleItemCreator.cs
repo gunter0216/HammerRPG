@@ -36,13 +36,15 @@ namespace App.Common.ModuleItem.Runtime.Fabric
                 return Optional<IModuleItem>.Fail();
             }
             
+            HLogger.LogError($"Module item CREATED {dataReference.Value}");
+            
             var moduleItemResult = Create(data, dataReference.Value);
             if (!moduleItemResult.HasValue)
             {
+                m_ContainerController.RemoveData(ModuleItemData.ContainerKey, data);
+                HLogger.LogError("Failed to create module item for id: " + id);
                 return Optional<IModuleItem>.Fail();
             }
-
-            m_ContainerController.RemoveData(ModuleItemData.ContainerKey, data);
             
             return Optional<IModuleItem>.Success(moduleItemResult.Value);
         }
@@ -52,12 +54,14 @@ namespace App.Common.ModuleItem.Runtime.Fabric
             var data = m_ContainerController.GetData<ModuleItemData>(dataReference);
             if (!data.HasValue)
             {
+                HLogger.LogError("Data not found for reference: " + dataReference);
                 return Optional<IModuleItem>.Fail();
             }
             
             var moduleItemResult = Create(data.Value, dataReference);
             if (!moduleItemResult.HasValue)
             {
+                HLogger.LogError("Failed to create module item for data: " + data.Value);
                 return Optional<IModuleItem>.Fail();
             }
             

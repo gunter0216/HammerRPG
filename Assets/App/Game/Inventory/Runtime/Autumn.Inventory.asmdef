@@ -7,7 +7,8 @@
     "Autumn.ConfigLoader",
     "Autumn.ModuleItems",
     "Autumn.DataContainers",
-    "Autumn.ModuleItemType"
+    "Autumn.ModuleItemType",
+    "Autumn.DungeonGenerator"
   ],
   "noEngineReferences": true
 }

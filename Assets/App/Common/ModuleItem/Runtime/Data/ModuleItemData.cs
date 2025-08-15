@@ -32,5 +32,10 @@ namespace App.Common.ModuleItem.Runtime.Data
         {
             return ContainerKey;
         }
+
+        public override string ToString()
+        {
+            return $"ModuleItemData(Id: {m_Id}, ModuleRefs: [{string.Join(", ", m_ModuleRefs)}])";
+        }
     }
 }

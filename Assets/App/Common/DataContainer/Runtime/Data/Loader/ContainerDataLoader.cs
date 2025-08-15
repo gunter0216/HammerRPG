@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using App.Common.Data.Runtime;
+using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.DataContainer.Runtime.Data.Loader
@@ -28,6 +29,15 @@ namespace App.Common.DataContainer.Runtime.Data.Loader
                 }
                 
                 dataContainers.Add(data.Value as IContainerData);
+            }
+
+            foreach (var dataContainer in dataContainers)
+            {
+                HLogger.LogError($">>> {dataContainer.Name()}");
+                foreach (var data in dataContainer.Data)
+                {
+                    HLogger.LogError($"> {data}");
+                }
             }
             
             return Optional<IReadOnlyList<IContainerData>>.Success(dataContainers);

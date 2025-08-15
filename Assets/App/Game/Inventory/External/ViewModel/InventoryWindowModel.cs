@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
+using App.Common.Utilities.External;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
+using App.Game.Inventory.External.Group;
 using App.Game.Inventory.External.Services;
 using App.Game.Inventory.External.View;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
 using App.Game.SpriteLoaders.Runtime;
-using App.Generation.DungeonGenerator.Runtime.Matrix;
 using UnityEngine;
 
 namespace App.Game.Inventory.External.ViewModel
@@ -17,25 +19,30 @@ namespace App.Game.Inventory.External.ViewModel
     {
         private readonly IWindowManager m_WindowManager;
         private readonly IAssetManager m_AssetManager;
-        private readonly IInventoryDataController m_DataController;
-        private readonly IInventoryConfigController m_ConfigController;
         private readonly ICanvas m_Canvas;
         private readonly ISpriteLoader m_SpriteLoader;
+        
+        private readonly IInventoryDataController m_DataController;
+        private readonly IInventoryConfigController m_ConfigController;
+        private readonly InventoryGroupController m_GroupController;
+        private readonly InventoryItemsController m_ItemsController;
 
         private InventoryWindow m_Window;
         
-        private List<InventoryGroupHeaderViewModel> m_GroupHeaderViewModels;
-        private Matrix<InventorySlotViewModel> m_Slots;
+        private List<InventoryGroupViewModel> m_GroupHeaderViewModels;
         
-        private InventoryGroupHeaderViewModel m_SelectedGroup;
+        private InventorySlotsViewModel m_SlotsViewModel;
+        private InventoryGroupsViewModel m_GroupsViewModel;
 
         public InventoryWindowModel(
             IWindowManager windowManager,
             IAssetManager assetManager,
             IInventoryDataController dataController,
-            IInventoryConfigController configController, 
-            ICanvas canvas, 
-            ISpriteLoader spriteLoader)
+            IInventoryConfigController configController,
+            ICanvas canvas,
+            ISpriteLoader spriteLoader, 
+            InventoryGroupController groupController,
+            InventoryItemsController itemsController)
         {
             m_WindowManager = windowManager;
             m_AssetManager = assetManager;
@@ -43,6 +50,8 @@ namespace App.Game.Inventory.External.ViewModel
             m_ConfigController = configController;
             m_Canvas = canvas;
             m_SpriteLoader = spriteLoader;
+            m_GroupController = groupController;
+            m_ItemsController = itemsController;
         }
 
         public void Open()
@@ -55,10 +64,18 @@ namespace App.Game.Inventory.External.ViewModel
                     return;
                 }
             }
-            
+
             m_Window.SetActive(true);
+            CoroutineProvider.DoCoroutine(OpenCoroutine());
         }
-        
+
+        // todo wait rebuild grid 
+        private IEnumerator OpenCoroutine()
+        {
+            yield return new WaitForEndOfFrame();
+            ShowSelectedGroup();
+        }
+
         public void Close()
         {
             m_Window.SetActive(false);
@@ -86,68 +103,57 @@ namespace App.Game.Inventory.External.ViewModel
 
         private void InitWindow()
         {
-            CreateGroups();
-            CreateSlots();
-            
-            SelectGroup(m_GroupHeaderViewModels[0]);
+            InitGroups();
+            InitSlots();
         }
 
-        private void CreateSlots()
+        private void InitGroups()
         {
-            var rows = m_ConfigController.GetRows();
-            var columns = m_ConfigController.GetCols();
-            m_Slots = new Matrix<InventorySlotViewModel>(columns, rows);
-            for (int row = 0; row < rows; ++row)
+            m_GroupsViewModel = new InventoryGroupsViewModel(
+                m_ConfigController, 
+                new InventoryGroupViewCreator(m_Window), 
+                m_SpriteLoader, 
+                OnGroupClick);
+            m_GroupsViewModel.Initialize();
+        }
+
+        private void InitSlots()
+        {
+            m_SlotsViewModel = new InventorySlotsViewModel(
+                m_ConfigController, 
+                new InventorySlotViewCreator(m_Window),
+                m_ItemsController,
+                new InventoryItemViewCreator(m_Window),
+                m_SpriteLoader);
+            m_SlotsViewModel.Initialize();
+            m_Window.ItemsContent.transform.SetAsLastSibling();
+        }
+
+        private void OnGroupClick(InventoryGroupViewModel _)
+        {
+            ShowSelectedGroup();
+        }
+
+        private void ShowSelectedGroup()
+        {
+            var selectedGroup = m_GroupsViewModel.GetSelectedGroup();
+            m_SlotsViewModel.ShowGroup(selectedGroup.Group);
+        }
+
+        public void AddItem(InventoryItem item)
+        {
+            if (!IsOpen())
             {
-                for (int col = 0; col < columns; ++col)
-                {
-                    var view = Object.Instantiate(
-                        m_Window.InventorySlotViewPrefab,
-                        m_Window.SlotsContent);
-                    
-                    var viewModel = new InventorySlotViewModel(view);
-                    m_Slots.SetCell(row, col, viewModel);
-                }
+                return;
             }
-        }
 
-        private void CreateGroups()
-        {
-            var groups = m_ConfigController.GetGroups();
-            m_GroupHeaderViewModels = new List<InventoryGroupHeaderViewModel>(groups.Count);
-            foreach (var group in groups)
-            {
-                var view = Object.Instantiate(
-                    m_Window.InventoryGroupHeaderViewPrefab,
-                    m_Window.HeaderGroupContent);
-                
-                var viewModel = new InventoryGroupHeaderViewModel(
-                    view, 
-                    group, 
-                    m_SpriteLoader,
-                    OnGroupClick);
-                viewModel.Initialize();
-                m_GroupHeaderViewModels.Add(viewModel);
-            }
-        }
-
-        private void OnGroupClick(InventoryGroupHeaderViewModel viewModel)
-        {
-            if (m_SelectedGroup == viewModel)
+            var selectedGroup = m_GroupsViewModel.GetSelectedGroup();
+            if (selectedGroup.Group != item.Group)
             {
                 return;
             }
             
-            SelectGroup(viewModel);
-        }
-
-        private void SelectGroup(InventoryGroupHeaderViewModel viewModel)
-        {
-            m_SelectedGroup = viewModel;
-            foreach (var groupViewModel in m_GroupHeaderViewModels)
-            {
-                groupViewModel.SetActiveStatus(groupViewModel == viewModel);
-            }
+            m_SlotsViewModel.ShowItem(item);
         }
     }
 }

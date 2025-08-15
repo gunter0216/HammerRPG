@@ -11,8 +11,8 @@ using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
 using App.Game.Contexts;
-using App.Game.Inventory.External.Config;
-using App.Game.Inventory.External.Data;
+using App.Game.Inventory.External.AddItemStrategy;
+using App.Game.Inventory.External.Group;
 using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
@@ -22,7 +22,7 @@ using App.Game.States.Runtime.Game;
 namespace App.Game.Inventory.External
 {
     [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
+    [Stage(typeof(GameInitPhase), 1000)]
     public class InventoryController : IInitSystem, IInventoryController
     {
         [Inject] private readonly IDataManager m_DataManager;
@@ -36,12 +36,21 @@ namespace App.Game.Inventory.External
         private InventoryDataController m_DataController;
         private InventoryConfigController m_ConfigController;
         private InventoryWindowModel m_InventoryWindowModel;
+        private InventoryItemsController m_ItemsController;
+        private InventoryGroupController m_GroupController;
+        private InventoryAddItemStrategy m_AddItemStrategy;
         
         public void Init()
         {
             InitData();
             InitConfig();
+            InitGroup();
+            InitItems();
             InitWindow();
+            m_AddItemStrategy = new InventoryAddItemStrategy(
+                m_ModuleItemsManager,
+                m_ItemsController,
+                m_InventoryWindowModel);
         }
 
         private void InitWindow()
@@ -52,7 +61,9 @@ namespace App.Game.Inventory.External
                 m_DataController,
                 m_ConfigController,
                 m_PopupCanvas,
-                m_SpriteLoader);
+                m_SpriteLoader,
+                m_GroupController,
+                m_ItemsController);
         }
 
         private bool InitConfig()
@@ -65,6 +76,34 @@ namespace App.Game.Inventory.External
         {
             m_DataController = new InventoryDataController(m_DataManager);
             return m_DataController.Initialize();
+        }
+
+        private bool InitGroup()
+        {
+            m_GroupController = new InventoryGroupController(m_ConfigController);
+            if (!m_GroupController.Initialize())
+            {
+                HLogger.LogError("Failed to initialize InventoryGroupController");
+                return false; 
+            }
+
+            return true;
+        }
+
+        private bool InitItems()
+        {
+            m_ItemsController = new InventoryItemsController(
+                m_ConfigController,
+                m_DataController,
+                m_ModuleItemsManager,
+                m_GroupController);
+            if (!m_ItemsController.Initialize())
+            {
+                HLogger.LogError("Failed to initialize InventoryItemsController");
+                return false; 
+            }
+
+            return true;
         }
 
         public void OpenWindow()
@@ -84,59 +123,17 @@ namespace App.Game.Inventory.External
 
         public bool AddItem(IModuleItemConfig moduleItemConfig)
         {
-            if (moduleItemConfig == null)
-            {
-                HLogger.LogError("Cannot add null item to inventory");
-                return false;
-            }
-
-            return AddItem(moduleItemConfig.Id);
+            return m_AddItemStrategy.AddItem(moduleItemConfig);
         }
 
         public bool AddItem(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                HLogger.LogError("Cannot add item with null or empty id to inventory");
-                return false;
-            }
-            
-            var item = m_ModuleItemsManager.Create(id);
-            if (!item.HasValue)
-            {
-                HLogger.LogError($"Failed to create item with id {id}");
-                return false;
-            }
-            
-            HLogger.LogError("Adding item to inventory: " + item.Value.Id);
-
-            // if (!m_InventoryDataController.AddItem(moduleItemConfig))
-            // {
-            //     HLogger.LogError($"Failed to add item {moduleItemConfig.Id} to inventory");
-            //     return false;
-            // }
-            //
-            // m_InventoryWindowModel.Refresh();
-            return true;
+            return m_AddItemStrategy.AddItem(id);
         }
 
         public bool AddItem(IModuleItem moduleItem)
         {
-            return true;
-            // if (moduleItem == null)
-            // {
-            //     HLogger.LogError("Cannot add null item to inventory");
-            //     return false;
-            // }
-            //
-            // var moduleItemConfig = moduleItem.Config;
-            // if (moduleItemConfig == null)
-            // {
-            //     HLogger.LogError($"Cannot add item {moduleItem.Id} with null config to inventory");
-            //     return false;
-            // }
-            //
-            // return AddItem(moduleItemConfig);
+            return m_AddItemStrategy.AddItem(moduleItem);
         }
 
         public IReadOnlyList<IInventoryGroupConfig> GetGroups()

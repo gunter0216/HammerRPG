@@ -6,21 +6,21 @@ using App.Game.SpriteLoaders.Runtime;
 
 namespace App.Game.Inventory.External.ViewModel
 {
-    public class InventoryGroupHeaderViewModel
+    public class InventoryGroupViewModel
     {
         private readonly InventoryGroupHeaderView m_View;
         private readonly IInventoryGroupConfig m_Group;
         private readonly ISpriteLoader m_SpriteLoader;
         
-        private event Action<InventoryGroupHeaderViewModel> m_OnButtonClick;
+        private event Action<InventoryGroupViewModel> m_OnButtonClick;
 
         public IInventoryGroupConfig Group => m_Group;
 
-        public InventoryGroupHeaderViewModel(
+        public InventoryGroupViewModel(
             InventoryGroupHeaderView view, 
             IInventoryGroupConfig group, 
             ISpriteLoader spriteLoader,
-            Action<InventoryGroupHeaderViewModel> onButtonClick)
+            Action<InventoryGroupViewModel> onButtonClick)
         {
             m_View = view;
             m_Group = group;
