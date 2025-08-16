@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Configs.Runtime;
@@ -23,7 +24,7 @@ namespace App.Game.Inventory.External
 {
     [Scoped(typeof(GameSceneContext))]
     [Stage(typeof(GameInitPhase), 1000)]
-    public class InventoryController : IInitSystem, IInventoryController
+    public class InventoryController : IInitSystem, IInventoryController, IDisposable
     {
         [Inject] private readonly IDataManager m_DataManager;
         [Inject] private readonly IConfigLoader m_ConfigLoader;
@@ -139,6 +140,11 @@ namespace App.Game.Inventory.External
         public IReadOnlyList<IInventoryGroupConfig> GetGroups()
         {
             return m_ConfigController.GetGroups();
+        }
+
+        public void Dispose()
+        {
+            m_InventoryWindowModel?.Dispose();
         }
     }
 }

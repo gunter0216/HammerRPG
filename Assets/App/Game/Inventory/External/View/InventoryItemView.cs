@@ -50,5 +50,15 @@ namespace App.Game.Inventory.External.View
         {
             transform.localScale = new Vector3(scale, scale, 1f);
         }
+
+        public void SetPosition(Vector2 position)
+        {
+            transform.position = new Vector3(position.x, position.y, transform.position.z);
+        }
+
+        public void SetParent(Transform parent)
+        {
+            transform.SetParent(parent);
+        }
     }
 }

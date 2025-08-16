@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using App.Common.Logger.Runtime;
-using App.Common.Utilities.Pool.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Inventory.External.Services;
+using App.Game.Inventory.External.View;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.SpriteLoaders.Runtime;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
+using UniRx;
+using UnityEngine;
 
 namespace App.Game.Inventory.External.ViewModel
 {
-    public class InventorySlotsViewModel
+    public class InventorySlotsViewModel : IDisposable
     {
+        private readonly InventoryWindow m_Window;
         private readonly IInventoryConfigController m_ConfigController;
         private readonly InventorySlotViewCreator m_SlotViewCreator;
         private readonly InventoryItemsController m_ItemsController;
@@ -19,23 +23,27 @@ namespace App.Game.Inventory.External.ViewModel
         
         private Matrix<InventorySlotViewModel> m_SlotsMatrix;
         
-        private ListPool<InventoryItemViewModel> m_ItemsPool;
+        private Common.Utilities.Pool.Runtime.ListPool<InventoryItemViewModel> m_ItemsPool;
         private List<InventoryItemViewModel> m_ActiveItems;
         
         private InventoryItemViewModel m_SelectedItem;
+        private IDisposable m_Disposable;
+        private Camera m_Camera;
 
         public InventorySlotsViewModel(
             IInventoryConfigController configController, 
             InventorySlotViewCreator slotViewCreator, 
             InventoryItemsController itemsController, 
             InventoryItemViewCreator itemViewCreator, 
-            ISpriteLoader spriteLoader)
+            ISpriteLoader spriteLoader, 
+            InventoryWindow window)
         {
             m_ConfigController = configController;
             m_SlotViewCreator = slotViewCreator;
             m_ItemsController = itemsController;
             m_ItemViewCreator = itemViewCreator;
             m_SpriteLoader = spriteLoader;
+            m_Window = window;
         }
 
         public void Initialize()
@@ -44,13 +52,34 @@ namespace App.Game.Inventory.External.ViewModel
             var maxItems = m_ConfigController.GetRows() * m_ConfigController.GetCols();
             var capacity = maxItems / 2;
 
-            m_ItemsPool = new ListPool<InventoryItemViewModel>(
+            m_ItemsPool = new Common.Utilities.Pool.Runtime.ListPool<InventoryItemViewModel>(
                 createFunc: Create, 
                 capacity: capacity,
                 maxItems: maxItems,
                 actionOnGet: item => item.SetActive(true),
                 actionOnRelease: item => item.SetActive(false));
             m_ActiveItems = new List<InventoryItemViewModel>(capacity);
+
+            m_Camera = Camera.main;
+            
+            m_Window.SetBlockButtonClickCallback(OnBlockButtonClick);
+            m_Disposable = Observable.EveryUpdate()
+                .Where(_ => m_SelectedItem != null)
+                .Subscribe(_ =>
+                {
+                    m_SelectedItem.SetPosition(m_Camera.ScreenToWorldPoint(Input.mousePosition));
+                });
+        }
+
+        private void OnBlockButtonClick()
+        {
+            if (m_SelectedItem == null)
+            {
+                return;
+            }
+            
+            HLogger.LogError("Drop items from inventory is not implemented yet.");
+            // todo
         }
 
         private Optional<InventoryItemViewModel> Create()
@@ -116,7 +145,7 @@ namespace App.Game.Inventory.External.ViewModel
             itemViewModel.Value.SetItem(item);
             var slot = m_SlotsMatrix.GetCell(item.Data.PositionY, item.Data.PositionX);
             var position = slot.GetLocalPosition();
-            itemViewModel.Value.SetPosition(position);
+            itemViewModel.Value.SetLocalPosition(position);
             slot.SetItem(itemViewModel.Value);
             m_ActiveItems.Add(itemViewModel.Value);
         }
@@ -168,10 +197,12 @@ namespace App.Game.Inventory.External.ViewModel
         private void DropSelectedItemInSlot(InventorySlotViewModel slot)
         {
             var position = slot.GetLocalPosition();
-            m_SelectedItem.SetPosition(position);
+            m_SelectedItem.SetParent(m_Window.ItemsContent);
+            m_SelectedItem.SetLocalPosition(position);
             m_SelectedItem.SetScale(1.0f);
             m_SelectedItem.SetButtonActive(true);
             m_SelectedItem = null;
+            SetBlockButtonActive(false);
         } 
 
         private void OnItemClick(InventoryItemViewModel itemViewModel)
@@ -182,9 +213,15 @@ namespace App.Game.Inventory.External.ViewModel
             }
 
             m_SelectedItem = itemViewModel;
-            m_SelectedItem.SetAsLastSibling();
             m_SelectedItem.SetButtonActive(false);
             m_SelectedItem.SetScale(1.25f);
+            m_SelectedItem.SetParent(m_Window.SelectedItemContent);
+            SetBlockButtonActive(true);
+        }
+        
+        private void SetBlockButtonActive(bool status)
+        {
+            m_Window.SetBlockButtonActive(status);
         }
 
         private void HideAllItems()
@@ -200,6 +237,11 @@ namespace App.Game.Inventory.External.ViewModel
             }
             
             m_ActiveItems.Clear();
+        }
+
+        public void Dispose()
+        {
+            m_Disposable?.Dispose();
         }
     }
 }

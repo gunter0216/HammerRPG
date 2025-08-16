@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
@@ -15,7 +16,7 @@ using UnityEngine;
 
 namespace App.Game.Inventory.External.ViewModel
 {
-    public class InventoryWindowModel
+    public class InventoryWindowModel : IDisposable
     {
         private readonly IWindowManager m_WindowManager;
         private readonly IAssetManager m_AssetManager;
@@ -79,6 +80,7 @@ namespace App.Game.Inventory.External.ViewModel
         public void Close()
         {
             m_Window.SetActive(false);
+            m_SlotsViewModel.OnWindowClosed();
         }
         
         public bool IsOpen()
@@ -105,6 +107,14 @@ namespace App.Game.Inventory.External.ViewModel
         {
             InitGroups();
             InitSlots();
+            
+            m_Window.SetBlockButtonActive(false);
+            m_Window.SetCloseButtonClickCallback(OnCloseButtonClick);
+        }
+        
+        private void OnCloseButtonClick()
+        {
+            Close();
         }
 
         private void InitGroups()
@@ -124,7 +134,8 @@ namespace App.Game.Inventory.External.ViewModel
                 new InventorySlotViewCreator(m_Window),
                 m_ItemsController,
                 new InventoryItemViewCreator(m_Window),
-                m_SpriteLoader);
+                m_SpriteLoader,
+                m_Window);
             m_SlotsViewModel.Initialize();
             m_Window.ItemsContent.transform.SetAsLastSibling();
         }
@@ -154,6 +165,11 @@ namespace App.Game.Inventory.External.ViewModel
             }
             
             m_SlotsViewModel.ShowItem(item);
+        }
+
+        public void Dispose()
+        {
+            m_SlotsViewModel?.Dispose();
         }
     }
 }

@@ -74,9 +74,19 @@ namespace App.Game.Inventory.External.ViewModel
             m_View.SetScale(scale);
         }
 
-        public void SetPosition(Vector2 position)
+        public void SetLocalPosition(Vector2 position)
         {
             m_View.SetLocalPosition(position);
+        }
+        
+        public void SetPosition(Vector2 position)
+        {
+            m_View.SetPosition(position);
+        }
+
+        public void SetParent(Transform parent)
+        {
+            m_View.SetParent(parent);
         }
     }
 }
