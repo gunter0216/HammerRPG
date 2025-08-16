@@ -73,6 +73,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-
 Assets/Sprites/Temp/
 Assets/Sprites/Temp.meta
+
+Assets/Sprites/FromMimimi/
+Assets/Sprites/FromMimimi.meta
