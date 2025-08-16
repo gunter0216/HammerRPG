@@ -1,4 +1,5 @@
-﻿using App.Common.Logger.Runtime;
+﻿using System;
+using App.Common.Logger.Runtime;
 using App.Game.GameTiles.External.Config.Model;
 using App.Game.Inventory.External.View;
 using App.Game.SpriteLoaders.Runtime;
@@ -11,14 +12,22 @@ namespace App.Game.Inventory.External.ViewModel
         private readonly InventoryItemView m_View;
         private readonly ISpriteLoader m_SpriteLoader;
         
+        private event Action<InventoryItemViewModel> m_ClickCallback;
+        
         private InventoryItem m_Item;
 
-        public InventoryItemViewModel(InventoryItemView view, ISpriteLoader spriteLoader)
+        public InventoryItem Item => m_Item;
+
+        public InventoryItemViewModel(
+            InventoryItemView view, 
+            ISpriteLoader spriteLoader, 
+            Action<InventoryItemViewModel> clickCallback)
         {
             m_View = view;
             m_SpriteLoader = spriteLoader;
+            m_ClickCallback = clickCallback;
         }
-        
+
         public void SetActive(bool isActive)
         {
             m_View.SetActive(isActive);
@@ -27,7 +36,7 @@ namespace App.Game.Inventory.External.ViewModel
         public void SetItem(InventoryItem item)
         {
             m_Item = item;
-            var spriteModule = m_Item.Item.GetConfigModule<SpriteModuleConfig>();
+            var spriteModule = Item.Item.GetConfigModule<SpriteModuleConfig>();
             if (!spriteModule.HasValue)
             {
                 HLogger.LogError("SpriteModuleConfig is not available for the item.");
@@ -42,6 +51,27 @@ namespace App.Game.Inventory.External.ViewModel
             }
             
             m_View.SetIcon(sprite.Value);
+            m_View.SetButtonClickCallback(OnButtonClick);
+        }
+
+        private void OnButtonClick()
+        {
+            m_ClickCallback?.Invoke(this);
+        }
+
+        public void SetAsLastSibling()
+        {
+            m_View.SetAsLastSibling();
+        }
+        
+        public void SetButtonActive(bool status)
+        {
+            m_View.SetButtonActive(status);
+        }
+        
+        public void SetScale(float scale)
+        {
+            m_View.SetScale(scale);
         }
 
         public void SetPosition(Vector2 position)

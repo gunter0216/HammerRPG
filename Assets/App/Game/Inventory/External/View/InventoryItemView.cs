@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace App.Game.Inventory.External.View
@@ -7,6 +8,7 @@ namespace App.Game.Inventory.External.View
     {
         [SerializeField] private RectTransform m_RectTransform;
         [SerializeField] private Image m_Image;
+        [SerializeField] private Button m_Button;
 
         public void SetActive(bool isActive)
         {
@@ -26,6 +28,27 @@ namespace App.Game.Inventory.External.View
         public void SetIcon(Sprite sprite)
         {
             m_Image.sprite = sprite;
+        }
+        
+        public void SetAsLastSibling()
+        {
+            transform.SetAsLastSibling();
+        }
+
+        public void SetButtonClickCallback(UnityAction callback)
+        {
+            m_Button.onClick.RemoveAllListeners();
+            m_Button.onClick.AddListener(callback);
+        }
+        
+        public void SetButtonActive(bool status)
+        {
+            m_Button.gameObject.SetActive(status);
+        }
+
+        public void SetScale(float scale)
+        {
+            transform.localScale = new Vector3(scale, scale, 1f);
         }
     }
 }

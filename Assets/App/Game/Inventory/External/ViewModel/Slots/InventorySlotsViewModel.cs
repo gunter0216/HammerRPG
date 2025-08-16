@@ -21,6 +21,8 @@ namespace App.Game.Inventory.External.ViewModel
         
         private ListPool<InventoryItemViewModel> m_ItemsPool;
         private List<InventoryItemViewModel> m_ActiveItems;
+        
+        private InventoryItemViewModel m_SelectedItem;
 
         public InventorySlotsViewModel(
             IInventoryConfigController configController, 
@@ -60,7 +62,7 @@ namespace App.Game.Inventory.External.ViewModel
                 return Optional<InventoryItemViewModel>.Empty;
             }
             
-            var viewModel = new InventoryItemViewModel(itemView.Value, m_SpriteLoader);
+            var viewModel = new InventoryItemViewModel(itemView.Value, m_SpriteLoader, OnItemClick);
             return Optional<InventoryItemViewModel>.Success(viewModel);
         }
 
@@ -80,7 +82,12 @@ namespace App.Game.Inventory.External.ViewModel
                         return;
                     }
                     
-                    var viewModel = new InventorySlotViewModel(view.Value);
+                    var viewModel = new InventorySlotViewModel(
+                        view.Value,
+                        row,
+                        col,
+                        OnSlotClick);
+                    viewModel.Initialize();
                     m_SlotsMatrix.SetCell(row, col, viewModel);
                 }
             }
@@ -110,11 +117,83 @@ namespace App.Game.Inventory.External.ViewModel
             var slot = m_SlotsMatrix.GetCell(item.Data.PositionY, item.Data.PositionX);
             var position = slot.GetLocalPosition();
             itemViewModel.Value.SetPosition(position);
+            slot.SetItem(itemViewModel.Value);
             m_ActiveItems.Add(itemViewModel.Value);
         }
-        
+
+        private void OnSlotClick(InventorySlotViewModel slot)
+        {
+            if (m_SelectedItem == null)
+            {
+                return;
+            }
+            
+            if (slot.Item != null)
+            {
+                if (slot.Item == m_SelectedItem)
+                {
+                    DropSelectedItemInTheSameSlot();
+                }
+                
+                return;
+            }
+            
+            var itemData = m_SelectedItem.Item.Data;
+            var prevSlot = m_SlotsMatrix.GetCell(itemData.PositionY, itemData.PositionX);
+            prevSlot.SetItem(null);
+            
+            slot.SetItem(m_SelectedItem);
+            
+            itemData.PositionX = slot.Col;
+            itemData.PositionY = slot.Row;
+            
+            DropSelectedItemInSlot(slot);
+        }
+
+        public void OnWindowClosed()
+        {
+            if (m_SelectedItem != null)
+            {
+                DropSelectedItemInTheSameSlot();
+            }
+        }
+
+        private void DropSelectedItemInTheSameSlot()
+        {
+            var itemData = m_SelectedItem.Item.Data;
+            var slot = m_SlotsMatrix.GetCell(itemData.PositionY, itemData.PositionX);
+            DropSelectedItemInSlot(slot);
+        }
+
+        private void DropSelectedItemInSlot(InventorySlotViewModel slot)
+        {
+            var position = slot.GetLocalPosition();
+            m_SelectedItem.SetPosition(position);
+            m_SelectedItem.SetScale(1.0f);
+            m_SelectedItem.SetButtonActive(true);
+            m_SelectedItem = null;
+        } 
+
+        private void OnItemClick(InventoryItemViewModel itemViewModel)
+        {
+            if (m_SelectedItem != null)
+            {
+                return;
+            }
+
+            m_SelectedItem = itemViewModel;
+            m_SelectedItem.SetAsLastSibling();
+            m_SelectedItem.SetButtonActive(false);
+            m_SelectedItem.SetScale(1.25f);
+        }
+
         private void HideAllItems()
         {
+            foreach (var slot in m_SlotsMatrix)
+            {
+                slot.SetItem(null);
+            }
+            
             foreach (var item in m_ActiveItems)
             {
                 m_ItemsPool.Release(item);
