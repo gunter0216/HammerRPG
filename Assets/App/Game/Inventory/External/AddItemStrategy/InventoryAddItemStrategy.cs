@@ -47,8 +47,6 @@ namespace App.Game.Inventory.External.AddItemStrategy
                 return false;
             }
             
-            HLogger.LogError($">>> Created item {item.Value.ReferenceSelf} for inventory");
-            
             return AddItem(item.Value);
         }
 

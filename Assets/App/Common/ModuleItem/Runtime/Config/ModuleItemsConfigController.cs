@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 
@@ -16,13 +17,13 @@ namespace App.Common.ModuleItem.Runtime.Config
 
         public bool RegisterItems(IReadOnlyList<IModuleItemConfig> configs, string type)
         {
-            m_Configs = new Dictionary<string, IModuleItemConfig>(configs.Count);
+            m_Configs ??= new Dictionary<string, IModuleItemConfig>(configs.Count);
             for (int i = 0; i < configs.Count; ++i)
             {
                 var config = configs[i];
                 m_Configs.Add(config.Id, config);
             }
-            
+
             m_TypeToConfigs.Add(type, configs);
 
             return true;
@@ -34,6 +35,8 @@ namespace App.Common.ModuleItem.Runtime.Config
             {
                 return Optional<IModuleItemConfig>.Success(config);
             }
+            
+            HLogger.LogError($"Not found item with id = \"{id}\"");
             
             return Optional<IModuleItemConfig>.Fail();
         }
