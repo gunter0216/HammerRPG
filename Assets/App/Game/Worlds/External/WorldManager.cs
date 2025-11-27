@@ -1,21 +1,11 @@
 ﻿using System;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
-using App.Game.EcsEvent.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsWorlds.Runtime;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
 
 namespace App.Game.Worlds.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), -100_000)]
-    [RunSystem(-100_000)]
     public class WorldManager : IInitSystem, IPostInitSystem, IRunSystem, IWorldManager, IDisposable
     {
         private EcsWorld m_World;

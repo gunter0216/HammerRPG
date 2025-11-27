@@ -1,17 +1,17 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Game.Contexts;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
+﻿using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
 
 namespace App.Game.Cheats.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [RunSystem(0)]
     public class OpenCheatsSystem : IRunSystem
     {
-        [Inject] private readonly CheatsController m_CheatsController;
-        
+        private readonly CheatsController m_CheatsController;
+
+        public OpenCheatsSystem(CheatsController cheatsController)
+        {
+            m_CheatsController = cheatsController;
+        }
+
         public void Run()
         {
             if (Input.GetKeyDown(KeyCode.P))

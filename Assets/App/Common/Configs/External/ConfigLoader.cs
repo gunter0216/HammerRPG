@@ -1,22 +1,25 @@
 ﻿using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Configs.Runtime;
-using App.Common.Data.Runtime.Deserializer;
+using App.Common.Json.Runtime.Deserializer;
 using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
 
 namespace App.Common.Configs.External
 {
-    [Singleton]
     public class ConfigLoader : IConfigLoader
     {
         public const string PlayerPrefsUseLocalConfigsKey = "TestingPanel_UseLocalConfigs";
 
-        [Inject] private readonly IAssetManager m_AssetManager;
-        [Inject] private readonly IJsonDeserializer m_JsonDeserializer;
+        private readonly IAssetManager m_AssetManager;
+        private readonly IJsonDeserializer m_JsonDeserializer;
+
+        public ConfigLoader(IAssetManager assetManager, IJsonDeserializer jsonDeserializer)
+        {
+            m_AssetManager = assetManager;
+            m_JsonDeserializer = jsonDeserializer;
+        }
 
         private bool UseLocalConfigs => PlayerPrefs.GetInt(PlayerPrefsUseLocalConfigsKey, 0) == 1;
-
 
         public Optional<T> LoadConfig<T>(string localKey) where T : class
         {

@@ -9,28 +9,22 @@ namespace App.Common.SceneControllers.Editor
     public class SceneEditor
     {
 #if UNITY_EDITOR
-        [MenuItem("Helper/Scenes/StartScene", false, 1)]
+        [MenuItem("Helper/Scenes/Start", false, 1)]
         public static void GoToStartScene()
         {
             OpenScene($"Assets/Scenes/{SceneConstants.StartScene}.unity");
         }
         
-        [MenuItem("Helper/Scenes/MenuScene", false, 2)]
-        public static void GoToMetaScene()
+        [MenuItem("Helper/Scenes/Menu", false, 2)]
+        public static void GoToMenuScene()
         {
             OpenScene($"Assets/Scenes/{SceneConstants.MenuScene}.unity");
         }
         
-        [MenuItem("Helper/Scenes/GameScene", false, 3)]
+        [MenuItem("Helper/Scenes/Core", false, 3)]
         public static void GoToCoreScene()
         {
-            OpenScene($"Assets/Scenes/{SceneConstants.GameScene}.unity");
-        }
-        
-        [MenuItem("Helper/Scenes/DungeonTest", false, 4)]
-        public static void GoToDungeonTest()
-        {
-            OpenScene($"Assets/Scenes/{SceneConstants.DungeonTest}.unity");
+            OpenScene($"Assets/Scenes/{SceneConstants.CoreScene}.unity");
         }
 
         private static void OpenScene(string name)
@@ -41,8 +35,6 @@ namespace App.Common.SceneControllers.Editor
                 return;
             }
             
-            bool isSaved = EditorSceneManager.SaveScene(SceneManager.GetActiveScene(), SceneManager.GetActiveScene().path);
-            Debug.Log("Saved Scene " + (isSaved ? "OK" : "Error!"));
             EditorSceneManager.OpenScene(name);
         }
 #endif

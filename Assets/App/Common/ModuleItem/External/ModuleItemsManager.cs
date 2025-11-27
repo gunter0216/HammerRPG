@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.Data.Runtime.Deserializer;
 using App.Common.DataContainer.Runtime;
 using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
+using App.Common.Json.Runtime.Deserializer;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config;
@@ -11,23 +9,33 @@ using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.ModuleItem.Runtime.Fabric;
 using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Contexts;
-using App.Game.States.Runtime.Game;
 
 namespace App.Common.ModuleItem.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), -100_000)]
     public class ModuleItemsManager : IInitSystem, IModuleItemsManager
     {
-        [Inject] private readonly IContainersDataManager m_ContainersDataManager;
-        [Inject] private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
-        [Inject] private readonly List<ICreateModuleItemHandler> m_Handlers;
-        [Inject] private readonly IJsonDeserializer m_JsonDeserializer;
-        [Inject] private readonly ILogger m_Logger;
+        private readonly IContainersDataManager m_ContainersDataManager;
+        private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
+        private readonly List<ICreateModuleItemHandler> m_Handlers;
+        private readonly IJsonDeserializer m_JsonDeserializer;
+        private readonly ILogger m_Logger;
         
         private ModuleItemsConfigController m_ConfigController;
         private ModuleItemCreator m_ModuleItemCreator;
+
+        public ModuleItemsManager(
+            IContainersDataManager containersDataManager,
+            List<IModuleDtoToConfigConverter> moduleDtoToConfigConverters,
+            List<ICreateModuleItemHandler> handlers, 
+            IJsonDeserializer jsonDeserializer,
+            ILogger logger)
+        {
+            m_ContainersDataManager = containersDataManager;
+            m_ModuleDtoToConfigConverters = moduleDtoToConfigConverters;
+            m_Handlers = handlers;
+            m_JsonDeserializer = jsonDeserializer;
+            m_Logger = logger;
+        }
 
         public void Init()
         {

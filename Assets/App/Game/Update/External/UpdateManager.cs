@@ -1,26 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Contexts;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
-using Unity.VisualScripting;
-using UnityEngine;
+using UniRx;
 
 namespace App.Game.Update.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), -100)]
-    public class UpdateManager : IInitSystem
+    public class UpdateManager : IInitSystem, IDisposable
     {
-        [Inject] private List<IRunSystem> m_RunSystems;
+        private readonly List<IRunSystem> m_RunSystems;
 
         private List<IRunSystem> m_SortedRunSystems;
+        
+        private CompositeDisposable m_Disposables = new();
+
+        public UpdateManager(List<IRunSystem> runSystems)
+        {
+            m_RunSystems = runSystems;
+        }
 
         public void Init()
         {
@@ -28,21 +26,29 @@ namespace App.Game.Update.External
             foreach (var runSystem in m_RunSystems)
             {
                 var type = runSystem.GetType();
-                var attribute = type.GetAttribute<RunSystemAttribute>();
-                if (attribute == null)
+                var order = UpdateRegistrar.GetOrder(type);
+                if (!order.HasValue)
                 {
-                    HLogger.LogError($"{type.Name} implement IRunSystem but not have attribute");
+                    HLogger.LogError("Order not found");
                     continue;
                 }
                 
-                systems.Add(new OrderedItem<IRunSystem>(runSystem, attribute.GetOrder()));
+                systems.Add(new OrderedItem<IRunSystem>(runSystem, order.Value));
             }
             
             systems.Sort((a, b) => a.Order.CompareTo(b.Order));
             m_SortedRunSystems = systems.Select(x => x.Item).ToList();
+            
+            Observable.EveryUpdate()
+                .Subscribe(_ =>
+                {
+                    Run();
+                })
+                // AddTo(this) ensures the subscription is disposed when the GameObject is destroyed
+                .AddTo(m_Disposables); 
         }
 
-        public void Run()
+        private void Run()
         {
             // Debug.LogError("Run");
             if (m_SortedRunSystems == null)
@@ -54,6 +60,11 @@ namespace App.Game.Update.External
             {
                 runSystem.Run();
             }
+        }
+
+        public void Dispose()
+        {
+            m_Disposables?.Dispose();
         }
     }
 }

@@ -1,14 +1,12 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
-using App.Game.States.Runtime.Game;
+﻿using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.Windows.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    public class WindowManager : IWindowManager
+    public class WindowManager : IInitSystem, IWindowManager
     {
-        
+        public void Init()
+        {
+            
+        }
     }
 }

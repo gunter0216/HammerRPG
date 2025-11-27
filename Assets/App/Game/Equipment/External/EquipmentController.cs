@@ -1,30 +1,29 @@
-﻿using System;
-using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
+﻿using App.Common.AssetSystem.Runtime;
 using App.Common.Configs.Runtime;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Common.Logger.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
-using App.Game.Contexts;
 using App.Game.Equipment.External.ViewModel;
 using App.Game.Equipment.External.ViewModel.Fabric;
 using App.Game.Equipment.Runtime;
 using App.Game.Equipment.Runtime.Config;
-using App.Game.States.Runtime.Game;
 
 namespace App.Game.Equipment.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 1000)]
     public class EquipmentController : IInitSystem, IEquipmentController
     {
-        [Inject] private readonly IConfigLoader m_ConfigLoader;
-        [Inject] private readonly PopupCanvas m_PopupCanvas;
-        [Inject] private readonly IAssetManager m_AssetManager;
+        private readonly IConfigLoader m_ConfigLoader;
+        private readonly PopupCanvas m_PopupCanvas;
+        private readonly IAssetManager m_AssetManager;
         
         private EquipmentConfigController m_ConfigController;
         private EquipmentWindowModel m_EquipmentWindowModel;
+
+        public EquipmentController(IConfigLoader configLoader, PopupCanvas popupCanvas, IAssetManager assetManager)
+        {
+            m_ConfigLoader = configLoader;
+            m_PopupCanvas = popupCanvas;
+            m_AssetManager = assetManager;
+        }
 
         public void Init()
         {

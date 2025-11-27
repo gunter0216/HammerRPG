@@ -10,7 +10,7 @@ namespace App.Common.DataContainer.Runtime.Data.Loader
         private readonly IDataManager m_DataManager;
         private readonly IReadOnlyList<IContainerData> m_DataContainers;
 
-        public ContainerDataLoader(IDataManager dataManager, IReadOnlyList<IContainerData> dataContainers)
+        public ContainerDataLoader(IDataManager dataManager, List<IContainerData> dataContainers)
         {
             m_DataManager = dataManager;
             m_DataContainers = dataContainers;

@@ -1,30 +1,33 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.Configs.Runtime;
+﻿using App.Common.Configs.Runtime;
 using App.Common.DataContainer.Runtime;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
+using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Contexts;
 using App.Game.GameTiles.External.Config.Data;
 using App.Game.GameTiles.External.Config.Loader;
 using App.Game.GameTiles.External.Config.Model;
 using App.Game.GameTiles.Runtime;
-using App.Game.SpriteLoaders.Runtime;
-using App.Game.States.Runtime.Game;
 using UnityEngine;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameTiles.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
     public class TilesController : IInitSystem, ITilesController
     {
-        [Inject] private readonly IConfigLoader m_ConfigLoader;
-        [Inject] private readonly ISpriteLoader m_SpriteLoader;
-        [Inject] private readonly ModuleItemsManager m_ModuleItemsManager;
+        private readonly IConfigLoader m_ConfigLoader;
+        private readonly ISpriteLoader m_SpriteLoader;
+        private readonly ModuleItemsManager m_ModuleItemsManager;
+
+        public TilesController(
+            IConfigLoader configLoader,
+            ISpriteLoader spriteLoader,
+            ModuleItemsManager moduleItemsManager)
+        {
+            m_ConfigLoader = configLoader;
+            m_SpriteLoader = spriteLoader;
+            m_ModuleItemsManager = moduleItemsManager;
+        }
 
         public void Init()
         {

@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using App.Common.Data.Runtime.JsonLoader;
-using App.Common.Data.Runtime.JsonSaver;
-using App.Common.Logger.Runtime;
+using App.Common.Json.Runtime.JsonLoader;
+using App.Common.Json.Runtime.JsonSaver;
 using App.Common.Utilities.Utility.Runtime;
+using UnityEngine;
 
 namespace App.Common.Data.Runtime
 {
-    public class DataManager : IDataManager
+    public class DataManager : IInitSystem, IDataManager
     {
         private const string m_FileName = "Save.json";
 
         private readonly IDataSavePathCreator m_DataSavePathCreator;
+        private readonly DataRegistrar m_DataRegistrar;
         private readonly IJsonLoader m_Loader;
         private readonly IJsonSaver m_Saver;
         
@@ -25,11 +26,16 @@ namespace App.Common.Data.Runtime
 
         private bool m_IsInitialized = false;
 
-        public DataManager(IJsonLoader loader, IJsonSaver saver, IDataSavePathCreator dataSavePathCreator)
+        public DataManager(
+            IJsonLoader loader, 
+            IJsonSaver saver, 
+            IDataSavePathCreator dataSavePathCreator, 
+            DataRegistrar dataRegistrar)
         {
             m_Loader = loader;
             m_Saver = saver;
             m_DataSavePathCreator = dataSavePathCreator;
+            m_DataRegistrar = dataRegistrar;
         }
 
         public void Init()
@@ -38,6 +44,8 @@ namespace App.Common.Data.Runtime
             {
                 return;
             }
+
+            m_Datas = m_DataRegistrar.GetDatas();
 
             m_IsInitialized = true;
             
@@ -61,14 +69,9 @@ namespace App.Common.Data.Runtime
             CreateNewDatas();
         }
 
-        public void SetDatas(List<IData> datas)
-        {
-            m_Datas = datas;
-        }
-
         public void SaveProgress()
         {
-            HLogger.Log("SaveByExit");
+            Debug.Log("SaveByExit");
             Save(m_FilePath);
         }
 
@@ -79,7 +82,7 @@ namespace App.Common.Data.Runtime
                 return new Optional<IData>(data);
             }
             
-            HLogger.LogError($"Data not found {name}");
+            Debug.LogError($"Data not found {name}");
             return Optional<IData>.Empty;
         }
         
@@ -89,14 +92,14 @@ namespace App.Common.Data.Runtime
             {
                 if (data is not T typedData)
                 {
-                    HLogger.LogError($"Data {name} is not of type {typeof(T)}");
+                    Debug.LogError($"Data {name} is not of type {typeof(T)}");
                     return Optional<T>.Fail();
                 }
                 
                 return new Optional<T>(typedData);
             }
             
-            HLogger.LogError($"Data not found {name}");
+            Debug.LogError($"Data not found {name}");
             return Optional<T>.Fail();
         }
 
@@ -122,7 +125,7 @@ namespace App.Common.Data.Runtime
             var fullData = m_Loader.Load<FullDataContainer>(path);
             if (!fullData.HasValue)
             {
-                HLogger.LogError($"Cant load data {path}");
+                Debug.LogError($"Cant load data {path}");
                 return;
             }
 
@@ -131,14 +134,14 @@ namespace App.Common.Data.Runtime
             {
                 if (!m_DataToType.TryGetValue(dataWrapper.Type, out var dataType))
                 {
-                    HLogger.LogError($"Not found type");
+                    Debug.LogError($"Not found type");
                     continue;
                 }
                 
                 var data = m_Loader.Deserialize<IData>(dataWrapper.Object, dataType);
                 if (!data.HasValue)
                 {
-                    HLogger.LogError($"Cant deserialize {dataWrapper.Object}");
+                    Debug.LogError($"Cant deserialize {dataWrapper.Object}");
                     return;
                 }
                 

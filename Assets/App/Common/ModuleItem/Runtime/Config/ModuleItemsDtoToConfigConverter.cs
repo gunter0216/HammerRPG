@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using App.Common.Data.Runtime.Deserializer;
+using App.Common.Json.Runtime.Deserializer;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Dto;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;

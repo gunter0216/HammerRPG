@@ -1,32 +1,41 @@
 ﻿using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.ModuleItem.Runtime;
+using App.Common.SpriteLoaders.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.ViewModel;
-using App.Game.Contexts;
-using App.Game.GameItems.External;
 using App.Game.GameItems.Runtime;
 using App.Game.Inventory.External;
-using App.Game.SpriteLoaders.Runtime;
-using App.Game.States.Runtime.Game;
 
 namespace App.Game.Cheats.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 100000)]
     public class CheatsController : IInitSystem
     {
-        [Inject] private readonly IModuleItemsManager m_ModuleItemsManager;
-        [Inject] private readonly InventoryController m_InventoryController;
-        [Inject] private readonly ISpriteLoader m_SpriteLoader;
-        [Inject] private readonly PopupCanvas m_PopupCanvas;
-        [Inject] private readonly IAssetManager m_AssetManager;
-        [Inject] private readonly IGameItemsManager m_GameItemsManager;
-        
+        private readonly IModuleItemsManager m_ModuleItemsManager;
+        private readonly InventoryController m_InventoryController;
+        private readonly ISpriteLoader m_SpriteLoader;
+        private readonly PopupCanvas m_PopupCanvas;
+        private readonly IAssetManager m_AssetManager;
+        private readonly IGameItemsManager m_GameItemsManager;
+
         private CheatsWindowModel m_CheatsWindowModel;
-        
+
+        public CheatsController(
+            IModuleItemsManager moduleItemsManager, 
+            InventoryController inventoryController,
+            ISpriteLoader spriteLoader,
+            PopupCanvas popupCanvas,
+            IAssetManager assetManager,
+            IGameItemsManager gameItemsManager)
+        {
+            m_ModuleItemsManager = moduleItemsManager;
+            m_InventoryController = inventoryController;
+            m_SpriteLoader = spriteLoader;
+            m_PopupCanvas = popupCanvas;
+            m_AssetManager = assetManager;
+            m_GameItemsManager = gameItemsManager;
+        }
+
         public void Init()
         {
             var configs = m_ModuleItemsManager.GetConfigs(GameItemsConstants.ModuleItemType);

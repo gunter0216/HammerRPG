@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
+using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.External;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
@@ -11,7 +12,6 @@ using App.Game.Inventory.External.Services;
 using App.Game.Inventory.External.View;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
-using App.Game.SpriteLoaders.Runtime;
 using UnityEngine;
 
 namespace App.Game.Inventory.External.ViewModel

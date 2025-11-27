@@ -1,30 +1,24 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
+﻿using App.Common.Utilities.Utility.Runtime;
 using App.Common.Utilities.UtilityUnity.Runtime.Extensions;
-using App.Game.Contexts;
-using App.Game.EcsWorlds.Runtime;
-using App.Game.Inputs.Runtime.Events;
 using App.Game.Player.Runtime.Components;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace App.Game.CameraFollow.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(100)]
     public class CameraFollowController : IInitSystem, IRunSystem
     {
-        [Inject] private IWorldManager m_WorldManager;
+        private readonly IWorldManager m_WorldManager;
         
         private EcsFilter m_PlayersFilter;
         private EcsPool<EntityComponent> m_EntitiesPool;
         private Camera m_Camera;
+
+        public CameraFollowController(IWorldManager worldManager)
+        {
+            m_WorldManager = worldManager;
+        }
 
         public void Init()
         {

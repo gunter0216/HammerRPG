@@ -1,8 +1,8 @@
 ﻿using System;
 using App.Common.Logger.Runtime;
+using App.Common.SpriteLoaders.Runtime;
 using App.Game.GameTiles.External.Config.Model;
 using App.Game.Inventory.External.View;
-using App.Game.SpriteLoaders.Runtime;
 using UnityEngine;
 
 namespace App.Game.Inventory.External.ViewModel

@@ -17,18 +17,13 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 819bbd1d95c153e49af24b05c693e482
   m_SerializeEntries:
-  - m_GUID: e77a7866b86bdbc4d910ca4d31d3222d
-    m_Address: MenuSceneMenuView
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 48d48128c4998ff439894a54016fb968
-    m_Address: TransparentImage
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1b0bde44c46ee3547aecf4ee24f7739a
     m_Address: GameMenuView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e77a7866b86bdbc4d910ca4d31d3222d
+    m_Address: MenuSceneMenuView
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

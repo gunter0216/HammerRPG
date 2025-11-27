@@ -1,26 +1,22 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
+﻿using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Inputs.Runtime;
 using App.Game.Inputs.Runtime.Events;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using Input = UnityEngine.Input;
 
 namespace App.Game.Inputs.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), -1_000)]
-    [RunSystem(-1_000)]
     public class InputManager : IRunSystem, IInitSystem, IInputManager
     {
-        [Inject] private IEcsEventManager m_EventManager;
+        private readonly IEcsEventManager m_EventManager;
         
         private EcsEventPool<AxisRawEvent> m_AxisRawEventPool;
         private EcsEventPool<MousePressedEvent> m_MousePressedEventPool;
+
+        public InputManager(IEcsEventManager eventManager)
+        {
+            m_EventManager = eventManager;
+        }
 
         public void Init()
         {

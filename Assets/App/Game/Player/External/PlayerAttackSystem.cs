@@ -1,16 +1,7 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
+﻿using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsEvent.Runtime;
-using App.Game.Inputs.Runtime;
-using App.Game.Inputs.Runtime.Events;
-using App.Game.Player.Runtime;
 using App.Game.Player.Runtime.Components;
 using App.Game.Player.Runtime.Events;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
@@ -18,17 +9,20 @@ using UnityEngine;
 
 namespace App.Game.Player.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(0)]
     public class PlayerAttackSystem : IInitSystem, IRunSystem
     {
-        [Inject] private IEcsEventManager m_EcsEventManager;
-        [Inject] private IWorldManager m_WorldManager;
+        private readonly IEcsEventManager m_EcsEventManager;
+        private readonly IWorldManager m_WorldManager;
         
         private EcsEventPool<AttackEvent> m_AttackEventPool;
         private EcsFilter m_PlayerFilter;
         private Camera m_Camera;
+
+        public PlayerAttackSystem(IEcsEventManager ecsEventManager, IWorldManager worldManager)
+        {
+            m_EcsEventManager = ecsEventManager;
+            m_WorldManager = worldManager;
+        }
 
         public void Init()
         {

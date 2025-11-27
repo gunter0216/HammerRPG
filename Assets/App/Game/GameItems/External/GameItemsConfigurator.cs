@@ -1,16 +1,29 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.Autumn.Runtime.Collection;
-using App.Game.GameTiles.External.Config.Model;
-using App.Game.ModuleItemType.Runtime.Config.Converter;
+using App.Common.FSM.External;
+using App.Core.Startups.External;
+using App.Core.Startups.External.Attributes;
+using App.Core.Startups.External.Constants;
+using App.Game.GameItems.External.Config;
+using App.Game.Update.External;
 
 namespace App.Game.GameItems.External
 {
-    [Configurator]
-    public class GameItemsConfigurator : IConfigurator
+    [Configurator(DIContext.CoreContext)]
+    public class GameItemsConfigurator : Configurator
     {
-        public void Configuration(IConfigurationCollection collection)
+        public override void Configuration()
         {
-            collection.AddSingleton(typeof(GameItemTypeModuleDtoToConfigConverter));
+            BindSingle<GameItemsManager>();
+
+            RegisterFSM<GameItemsManager>(FSMStage.CoreInitStage, StageOrders.GameItems);
+        }
+    }
+    
+    [Configurator(DIContext.GlobalContext)]
+    public class GlobalGameItemsConfigurator : Configurator
+    {
+        public override void Configuration()
+        {
+            BindSingle<StubCreateModuleItemHandler>();
         }
     }
 }

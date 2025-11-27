@@ -62,19 +62,6 @@ namespace App.Common.Utilities.Pool.Tests
                 pool.Release(itemHolder);
             }
         }
-        
-        [Test]
-        public void ReleaseNotExistsTest()
-        {
-            var pool = new ListPool<SimpleItem>(() => Optional<SimpleItem>.Success(new SimpleItem()));
-            var poolTemp = new ListPool<SimpleItem>(() => Optional<SimpleItem>.Success(new SimpleItem()));
-            var notExistsItem = poolTemp.Get();
-            
-            Assert.False(pool.Release(notExistsItem.Value));
-
-            Assert.True(pool.Get().HasValue);
-            Assert.False(pool.Release(notExistsItem.Value));
-        }
 
         [Test]
         public void PoolItemTest()

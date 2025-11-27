@@ -16,27 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 1498444158f4aa04395ec9cdc8b301f1
-  m_SerializeEntries:
-  - m_GUID: 53e4f34e9a696384d91f35039a83b085
-    m_Address: BricksWall1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 38edaf776603c6c48a22bbff316156ca
-    m_Address: Floor1
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0efd663edd9b3674ab2078836cd5e576
-    m_Address: ClosedDoor
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: af4f9e558beae50489db3fa66ccb0360
-    m_Address: OpenedDoor
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
   m_SchemaSet:

@@ -1,34 +1,35 @@
 ﻿using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
-using App.Game.Contexts;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Player.External.View;
 using App.Game.Player.Runtime.Components;
 using App.Game.Player.Runtime.Events;
-using App.Game.States.Runtime.Game;
 using App.Game.Worlds.Runtime;
-using UnityEngine;
 
 namespace App.Game.Player.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
     sealed class EnemyInitSystem : IInitSystem
     {
         private const string m_EnemyAssetKey = "Enemy";
         private const float m_DefaultMoveSpeed = 5.0f;
         
-        [Inject] private IWorldManager m_WorldManager;
-        [Inject] private IAssetManager m_AssetManager;
-        [Inject] private IEcsEventManager m_EcsEventManager;
+        private readonly IWorldManager m_WorldManager;
+        private readonly IAssetManager m_AssetManager;
+        private readonly IEcsEventManager m_EcsEventManager;
         
         private EcsEventPool<WeaponCollisionEvent> m_WeaponCollisionEventPool;
 
+        public EnemyInitSystem(IWorldManager worldManager, IAssetManager assetManager, IEcsEventManager ecsEventManager)
+        {
+            m_WorldManager = worldManager;
+            m_AssetManager = assetManager;
+            m_EcsEventManager = ecsEventManager;
+        }
+
         public void Init()
         {
+            return;
             var entityView = m_AssetManager.InstantiateSync<EntityView>(new StringKeyEvaluator(m_EnemyAssetKey));
             if (!entityView.HasValue)
             {

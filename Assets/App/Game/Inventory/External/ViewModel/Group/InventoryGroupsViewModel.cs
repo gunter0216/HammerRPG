@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
+using App.Common.SpriteLoaders.Runtime;
 using App.Game.Inventory.External.Services;
 using App.Game.Inventory.Runtime.Config;
-using App.Game.SpriteLoaders.Runtime;
 
 namespace App.Game.Inventory.External.ViewModel
 {

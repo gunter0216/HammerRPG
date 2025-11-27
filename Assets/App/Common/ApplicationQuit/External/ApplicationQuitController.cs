@@ -1,14 +1,27 @@
 ﻿using System;
-using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
-using UnityEngine;
+using App.Common.Utilities.Utility.Runtime;
+using UniRx;
 
 namespace App.Common.ApplicationQuit.External
 {
-    [MonoScoped]
-    public class ApplicationQuitController : MonoBehaviour
+    public class ApplicationQuitController : IInitSystem, IDisposable
     {
-        [Inject] private IDataManager m_DataManager;
+        private readonly IDataManager m_DataManager;
+        private readonly CompositeDisposable m_Disposables = new();
+
+        public ApplicationQuitController(IDataManager dataManager)
+        {
+            m_DataManager = dataManager;
+        }
+
+        public void Init()
+        {
+            Observable.EveryApplicationFocus().Subscribe(OnFocusChange).AddTo(m_Disposables);
+#if UNITY_EDITOR
+            Observable.OnceApplicationQuit().Subscribe(_ => OnApplicationQuit()).AddTo(m_Disposables);
+#endif
+        }
 
         private void SaveProgress()
         {
@@ -18,7 +31,7 @@ namespace App.Common.ApplicationQuit.External
             }
         }
 
-        private void OnApplicationFocus(bool hasFocus)
+        private void OnFocusChange(bool hasFocus)
         {
             if (!hasFocus)
             {
@@ -27,11 +40,15 @@ namespace App.Common.ApplicationQuit.External
         }
 
 #if UNITY_EDITOR
+
         private void OnApplicationQuit()
         {
-            Debug.LogError("qqwqeqweqweqweqwe");
             SaveProgress();
         }
 #endif
+        public void Dispose()
+        {
+            m_Disposables?.Dispose();
+        }
     }
 }

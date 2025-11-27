@@ -1,33 +1,38 @@
 ﻿using System.Collections.Generic;
-using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Configs.Runtime;
 using App.Common.DataContainer.Runtime;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Contexts;
 using App.Game.GameItems.Runtime;
 using App.Game.GameItems.Runtime.Config;
 using App.Game.GameItems.Runtime.Config.Loader;
-using App.Game.SpriteLoaders.Runtime;
-using App.Game.States.Runtime.Game;
 
 namespace App.Game.GameItems.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 100)]
     public class GameItemsManager : IInitSystem, IGameItemsManager
     {
-        [Inject] private readonly IConfigLoader m_ConfigLoader;
-        [Inject] private readonly ISpriteLoader m_SpriteLoader;
-        [Inject] private readonly ModuleItemsManager m_ModuleItemsManager;
-        [Inject] private readonly ILogger m_Logger;
+        private readonly IConfigLoader m_ConfigLoader;
+        private readonly ISpriteLoader m_SpriteLoader;
+        private readonly ModuleItemsManager m_ModuleItemsManager;
+        private readonly ILogger m_Logger;
 
         private GameItemsConfigService m_ConfigService;
-        
+
+        public GameItemsManager(
+            IConfigLoader configLoader, 
+            ISpriteLoader spriteLoader, 
+            ModuleItemsManager moduleItemsManager, 
+            ILogger logger)
+        {
+            m_ConfigLoader = configLoader;
+            m_SpriteLoader = spriteLoader;
+            m_ModuleItemsManager = moduleItemsManager;
+            m_Logger = logger;
+        }
+
         public void Init()
         {
             var configLoader = new GameModuleItemsConfigLoader(m_ConfigLoader);

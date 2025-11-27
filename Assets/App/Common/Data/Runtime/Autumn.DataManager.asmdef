@@ -1,5 +1,5 @@
 ﻿{
   "name": "Autumn.DataManager",
-  "references":[ "Autumn.Logger", "Autumn.Utility" ],
-  "noEngineReferences": true
+  "references":[ "Autumn.Utility", "Autumn.Json"],
+  "noEngineReferences": false
 }

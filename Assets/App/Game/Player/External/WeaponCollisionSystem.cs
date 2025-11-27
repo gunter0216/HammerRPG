@@ -1,28 +1,17 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
+﻿using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Player.External.Animations;
-using App.Game.Player.Runtime;
 using App.Game.Player.Runtime.Components;
 using App.Game.Player.Runtime.Events;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
-using UnityEngine;
 
 namespace App.Game.Player.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(300)]
     public class WeaponCollisionSystem : IInitSystem, IRunSystem
     {
-        [Inject] private IEcsEventManager m_EcsEventManager;
-        [Inject] private IWorldManager m_WorldManager;
+        private readonly IEcsEventManager m_EcsEventManager;
+        private readonly IWorldManager m_WorldManager;
 
         private EcsFilter m_WeaponCollisionEventFilter;
         private EcsEventPool<WeaponCollisionEvent> m_WeaponCollisionEventPool;
@@ -30,6 +19,12 @@ namespace App.Game.Player.External
         private EcsPool<HealthComponent> m_HealthPool;
 
         private EntityMeleeWeaponAnimation m_EntityMeleeWeaponAnimation;
+
+        public WeaponCollisionSystem(IEcsEventManager ecsEventManager, IWorldManager worldManager)
+        {
+            m_EcsEventManager = ecsEventManager;
+            m_WorldManager = worldManager;
+        }
 
         public void Init()
         {

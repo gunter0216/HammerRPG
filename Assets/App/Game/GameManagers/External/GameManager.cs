@@ -1,42 +1,29 @@
-﻿using System.Collections.Generic;
-using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
+﻿using App.Common.AssetSystem.Runtime;
 using App.Common.Configs.Runtime;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
-using App.Game.Contexts;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.GameManagers.External.Config.Converter;
 using App.Game.GameManagers.External.Config.Loader;
 using App.Game.GameManagers.External.Config.Service;
 using App.Game.GameManagers.External.Fabric;
 using App.Game.GameManagers.External.Fabric.Room;
 using App.Game.GameManagers.External.Fabric.Tile.View;
-using App.Game.GameManagers.External.View;
 using App.Game.GameTiles.External;
-using App.Game.GameTiles.Runtime;
 using App.Game.Player.Runtime.Components;
-using App.Game.States.Runtime.Game;
 using App.Game.Worlds.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
-using App.Generation.DungeonGenerator.Runtime.Rooms;
 using UnityEngine;
 using Logger = App.Common.Logger.Runtime.Logger;
-using Vector2 = App.Common.Algorithms.Runtime.Vector2;
-using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameManagers.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 10)]
     public class GameManager : IInitSystem
     {
-        [Inject] private readonly IConfigLoader m_ConfigLoader;
-        [Inject] private readonly TilesController m_TilesController;
-        [Inject] private readonly IAssetManager m_AssetManager;
-        [Inject] private readonly IWorldManager m_WorldManager;
+        private readonly IConfigLoader m_ConfigLoader;
+        private readonly TilesController m_TilesController;
+        private readonly IAssetManager m_AssetManager;
+        private readonly IWorldManager m_WorldManager;
 
         private DungeonGenerator m_Generator;
         private GenerationConfigService m_ConfigService;
@@ -44,6 +31,18 @@ namespace App.Game.GameManagers.External
         private TileViewCreator m_TileViewCreator;
 
         private CreateRoomsResult m_CreateRoomsResult;
+
+        public GameManager(
+            IConfigLoader configLoader,
+            TilesController tilesController,
+            IAssetManager assetManager,
+            IWorldManager worldManager)
+        {
+            m_ConfigLoader = configLoader;
+            m_TilesController = tilesController;
+            m_AssetManager = assetManager;
+            m_WorldManager = worldManager;
+        }
 
         public void Init()
         {

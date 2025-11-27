@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
+using App.Common.SpriteLoaders.Runtime;
+using App.Common.Utilities.Pool.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Inventory.External.Services;
 using App.Game.Inventory.External.View;
 using App.Game.Inventory.Runtime.Config;
-using App.Game.SpriteLoaders.Runtime;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
 using UniRx;
 using UnityEngine;
@@ -52,12 +53,11 @@ namespace App.Game.Inventory.External.ViewModel
             var maxItems = m_ConfigController.GetRows() * m_ConfigController.GetCols();
             var capacity = maxItems / 2;
 
-            m_ItemsPool = new Common.Utilities.Pool.Runtime.ListPool<InventoryItemViewModel>(
+            m_ItemsPool = new ListPool<InventoryItemViewModel>(
                 createFunc: Create, 
                 capacity: capacity,
-                maxItems: maxItems,
-                actionOnGet: item => item.SetActive(true),
-                actionOnRelease: item => item.SetActive(false));
+                getCallback: item => item.SetActive(true),
+                releaseCallback: item => item.SetActive(false));
             m_ActiveItems = new List<InventoryItemViewModel>(capacity);
 
             m_Camera = Camera.main;

@@ -1,31 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsEvent.Runtime;
 using App.Game.EcsWorlds.Runtime;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.ExtendedSystems;
 
 namespace App.Game.EcsEvent.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), -10_000)]
-    [RunSystem(100_000)]
     public class EcsEventManager : IInitSystem, IRunSystem, IEcsEventManager
     {
-        [Inject] private IWorldManager m_WorldManager;
+        private readonly IWorldManager m_WorldManager;
         
         private EcsWorld m_World;
         private Dictionary<Type, IEcsEventPool> m_EventPools;
         private List<IEcsRunSystem> m_DelSystems;
         private EcsSystems m_Systems;
+
+        public EcsEventManager(IWorldManager worldManager)
+        {
+            m_WorldManager = worldManager;
+        }
 
         public void Init()
         {

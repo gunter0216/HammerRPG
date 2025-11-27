@@ -1,46 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Configs.Runtime;
 using App.Common.Data.Runtime;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.SpriteLoaders.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
-using App.Game.Contexts;
 using App.Game.Inventory.External.AddItemStrategy;
 using App.Game.Inventory.External.Group;
 using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
-using App.Game.SpriteLoaders.Runtime;
-using App.Game.States.Runtime.Game;
 
 namespace App.Game.Inventory.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 1000)]
     public class InventoryController : IInitSystem, IInventoryController, IDisposable
     {
-        [Inject] private readonly IDataManager m_DataManager;
-        [Inject] private readonly IConfigLoader m_ConfigLoader;
-        [Inject] private readonly IWindowManager m_WindowManager;
-        [Inject] private readonly IAssetManager m_AssetManager;
-        [Inject] private readonly PopupCanvas m_PopupCanvas;
-        [Inject] private readonly ISpriteLoader m_SpriteLoader;
-        [Inject] private readonly IModuleItemsManager m_ModuleItemsManager;
-        
+        private readonly IDataManager m_DataManager;
+        private readonly IConfigLoader m_ConfigLoader;
+        private readonly IWindowManager m_WindowManager;
+        private readonly IAssetManager m_AssetManager;
+        private readonly PopupCanvas m_PopupCanvas;
+        private readonly ISpriteLoader m_SpriteLoader;
+        private readonly IModuleItemsManager m_ModuleItemsManager;
+
         private InventoryDataController m_DataController;
         private InventoryConfigController m_ConfigController;
         private InventoryWindowModel m_InventoryWindowModel;
         private InventoryItemsController m_ItemsController;
         private InventoryGroupController m_GroupController;
         private InventoryAddItemStrategy m_AddItemStrategy;
-        
+
+        public InventoryController(
+            IDataManager dataManager, 
+            IConfigLoader configLoader,
+            IWindowManager windowManager,
+            IAssetManager assetManager,
+            PopupCanvas popupCanvas,
+            ISpriteLoader spriteLoader,
+            IModuleItemsManager moduleItemsManager)
+        {
+            m_DataManager = dataManager;
+            m_ConfigLoader = configLoader;
+            m_WindowManager = windowManager;
+            m_AssetManager = assetManager;
+            m_PopupCanvas = popupCanvas;
+            m_SpriteLoader = spriteLoader;
+            m_ModuleItemsManager = moduleItemsManager;
+        }
+
         public void Init()
         {
             InitData();
@@ -85,7 +97,7 @@ namespace App.Game.Inventory.External
             if (!m_GroupController.Initialize())
             {
                 HLogger.LogError("Failed to initialize InventoryGroupController");
-                return false; 
+                return false;
             }
 
             return true;
@@ -101,7 +113,7 @@ namespace App.Game.Inventory.External
             if (!m_ItemsController.Initialize())
             {
                 HLogger.LogError("Failed to initialize InventoryItemsController");
-                return false; 
+                return false;
             }
 
             return true;

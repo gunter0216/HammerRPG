@@ -1,11 +1,10 @@
 ﻿using System;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Pool.Runtime;
 using App.Game.Cheats.External.View;
 using App.Game.GameTiles.External.Config.Model;
-using App.Game.Inventory.External.View;
-using App.Game.SpriteLoaders.Runtime;
 
 namespace App.Game.Cheats.External.ViewModel
 {

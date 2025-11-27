@@ -1,9 +1,8 @@
 ﻿using System;
 using App.Common.Logger.Runtime;
+using App.Common.SpriteLoaders.Runtime;
 using App.Game.Cheats.External.View;
-using App.Game.Inventory.External.View;
 using App.Game.Inventory.Runtime.Config;
-using App.Game.SpriteLoaders.Runtime;
 
 namespace App.Game.Cheats.External.ViewModel
 {

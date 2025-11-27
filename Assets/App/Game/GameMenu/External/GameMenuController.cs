@@ -1,38 +1,29 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
 using App.Common.Data.Runtime;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.SceneControllers.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
-using App.Game.Contexts;
 using App.Game.GameMenu.Runtime;
 using App.Game.GameMenu.Runtime.View;
 using App.Game.Pause.Runtime;
 using App.Game.Settings.Runtime;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Utility.Runtime.MenuSM;
 using UnityEngine;
 
 namespace App.Game.GameMenu.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(0)]
     public class GameMenuController : IInitSystem, IRunSystem, IDisposable
     {
         private const string m_GameMenuAssetKey = "GameMenuView";
         private readonly StringKeyEvaluator m_GameMenuAssetKeyEvaluator = new(m_GameMenuAssetKey);
         
-        [Inject] private MainCanvas m_MainCanvas;
-        [Inject] private IAssetManager m_AssetManager;
-        [Inject] private IDataManager m_DataManager;
-        [Inject] private ISceneManager m_SceneManager;
-        [Inject] private IPauseController m_PauseController;
+        private readonly MainCanvas m_MainCanvas;
+        private readonly IAssetManager m_AssetManager;
+        private readonly IDataManager m_DataManager;
+        private readonly ISceneManager m_SceneManager;
+        private readonly IPauseController m_PauseController;
         
         private GameMenuState m_GameMenuState;
         private SettingsMenuState m_SettingsMenuState;
@@ -40,6 +31,20 @@ namespace App.Game.GameMenu.External
         private MenuMachine m_MenuMachine;
         
         private GameMenuView m_View;
+
+        public GameMenuController(
+            MainCanvas mainCanvas, 
+            IAssetManager assetManager,
+            IDataManager dataManager,
+            ISceneManager sceneManager,
+            IPauseController pauseController)
+        {
+            m_MainCanvas = mainCanvas;
+            m_AssetManager = assetManager;
+            m_DataManager = dataManager;
+            m_SceneManager = sceneManager;
+            m_PauseController = pauseController;
+        }
 
         public void Init()
         {

@@ -1,30 +1,22 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
-using App.Game.EcsEvent.Runtime;
+﻿using App.Common.Utilities.Utility.Runtime;
 using App.Game.Player.Runtime.Components;
-using App.Game.Player.Runtime.Events;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
-using UnityEngine;
 
 namespace App.Game.Player.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(100)]
     public class HealthSystem : IInitSystem, IRunSystem
     {
-        [Inject] private IWorldManager m_WorldManager;
+        private readonly IWorldManager m_WorldManager;
         
         private EcsFilter m_HealthFilter;
         private EcsPool<HealthComponent> m_HealthPool;
         private EcsPool<EntityComponent> m_EntityPool;
+
+        public HealthSystem(IWorldManager worldManager)
+        {
+            m_WorldManager = worldManager;
+        }
 
         public void Init()
         {
