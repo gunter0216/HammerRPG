@@ -1,4 +1,6 @@
 ﻿using App.Common.Data.Runtime;
+using App.Common.DataContainer.Runtime;
+using App.Common.DataContainer.Runtime.Data;
 using App.Common.FSM.External;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Update.External;
@@ -51,6 +53,10 @@ namespace App.Core.Startups.External
         protected void RegisterData<T>() where T : class, IData
         {
             DataRegistrar.Register<T>();
+            if (typeof(IContainerData).IsAssignableFrom(typeof(T)))
+            {
+                DataContainerRegistrar.Register<T>();
+            }
         }
     }
 }

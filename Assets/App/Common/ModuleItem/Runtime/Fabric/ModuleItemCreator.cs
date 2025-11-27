@@ -36,8 +36,6 @@ namespace App.Common.ModuleItem.Runtime.Fabric
                 return Optional<IModuleItem>.Fail();
             }
             
-            HLogger.LogError($"Module item CREATED {dataReference.Value}");
-            
             var moduleItemResult = Create(data, dataReference.Value);
             if (!moduleItemResult.HasValue)
             {

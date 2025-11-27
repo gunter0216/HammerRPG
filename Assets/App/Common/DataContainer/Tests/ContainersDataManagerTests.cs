@@ -33,7 +33,7 @@ namespace App.Common.DataContainer.Tests
             };
             dataLoader.Load().Returns(Optional<IReadOnlyList<IContainerData>>.Success(containers));
             m_DataManager = new ContainersDataManager(dataLoader, new StubLogger());
-            m_DataManager.Initialize();
+            m_DataManager.Init();
         }
         
         [Test]

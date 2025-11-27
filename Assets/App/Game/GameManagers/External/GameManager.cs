@@ -46,8 +46,6 @@ namespace App.Game.GameManagers.External
 
         public void Init()
         {
-            return;
-            
             if (!InitConfig())
             {
                 HLogger.LogError("Cant inti config service.");

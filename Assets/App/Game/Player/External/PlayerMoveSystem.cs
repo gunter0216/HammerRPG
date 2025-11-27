@@ -42,7 +42,6 @@ namespace App.Game.Player.External
             {
                 ref var player = ref m_EntitiesPool.Get(i);
 
-                Debug.LogError($"Horizontal {axis.Horizontal} Vertical {axis.Vertical}");
                 var direction = new Vector2(axis.Horizontal, axis.Vertical).normalized;
                 var velocity = direction * player.MoveSpeed;
                 

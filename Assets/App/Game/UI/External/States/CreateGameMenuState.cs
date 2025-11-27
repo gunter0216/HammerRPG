@@ -26,6 +26,7 @@ namespace App.Menu.UI.Runtime.States
         public void Enter()
         {
             m_Panel.SetActive(true);
+            m_Panel.SetName("qwe");
         }
 
         public void Exit()

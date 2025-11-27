@@ -20,6 +20,11 @@ namespace App.Menu.UI.Runtime.View.Panels
         {
             return m_NameInputField.text;
         }
+
+        public void SetName(string text)
+        {
+            m_NameInputField.text = text;
+        }
         
         public void SetBackButtonAction(UnityAction action)
         {
