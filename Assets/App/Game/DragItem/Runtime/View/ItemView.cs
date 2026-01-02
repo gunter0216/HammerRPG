@@ -4,11 +4,10 @@ using UnityEngine.UI;
 
 namespace App.Game.Inventory.External.View
 {
-    public class InventoryItemView : MonoBehaviour
+    public class ItemView : MonoBehaviour
     {
         [SerializeField] private RectTransform m_RectTransform;
         [SerializeField] private Image m_Image;
-        [SerializeField] private Button m_Button;
 
         public void SetActive(bool isActive)
         {
@@ -33,17 +32,6 @@ namespace App.Game.Inventory.External.View
         public void SetAsLastSibling()
         {
             transform.SetAsLastSibling();
-        }
-
-        public void SetButtonClickCallback(UnityAction callback)
-        {
-            m_Button.onClick.RemoveAllListeners();
-            m_Button.onClick.AddListener(callback);
-        }
-        
-        public void SetButtonActive(bool status)
-        {
-            m_Button.gameObject.SetActive(status);
         }
 
         public void SetScale(float scale)

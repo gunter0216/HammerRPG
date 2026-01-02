@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using App.Common.Data.Runtime;
+using App.Common.DataContainer.Runtime;
 using App.Common.Logger.Runtime;
 using App.Game.Inventory.External.Data;
 
@@ -28,26 +30,57 @@ namespace App.Game.Inventory.Runtime.Data
             
             m_Data = data.Value;
             
-            m_Data.Items ??= new List<InventoryItemData>();
+            m_Data.Groups ??= new List<InventoryGroupData>();
             
             return true;
         }
 
-
-        public IReadOnlyList<InventoryItemData> GetItems()
+        public IReadOnlyList<InventoryGroupData> GetGroups()
         {
-            return m_Data.Items;
+            return m_Data.Groups;
         }
 
-        public bool RemoveItem(InventoryItemData itemData)
+        public bool AddGroup(InventoryGroupData groupData)
         {
-            return m_Data.Items.Remove(itemData);
-        }
-
-        public bool AddItem(InventoryItemData itemData)
-        {
-            m_Data.Items.Add(itemData);
+            m_Data.Groups.Add(groupData);
             return true;
+        }
+
+        public bool RemoveItem(string group, int index)
+        {
+            var groupData = m_Data.Groups.FirstOrDefault(x => x.Key == group);
+            if (groupData == default)
+            {
+                HLogger.LogError("group not found");
+                return false;
+            }
+
+            groupData.Items[index] = null;
+            
+            return true;
+        }
+
+        // public bool AddItem(InventoryItemData itemData)
+        // {
+        //     // 2 3
+        //     // б х 
+        //     //
+        //     //
+        //     // 
+        //     // m_Data.Groups.Add(itemData);
+        //     return true;
+        // }
+
+        public void SetItem(string group, InventoryItemData data)
+        {
+            var groupData = m_Data.Groups.FirstOrDefault(x => x.Key == group);
+            if (groupData == default)
+            {
+                HLogger.LogError("group not found");
+                return;
+            }
+
+            groupData.Items[data.Index] = data;
         }
     }
 }

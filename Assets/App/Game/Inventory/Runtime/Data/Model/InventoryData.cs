@@ -9,12 +9,12 @@ namespace App.Game.Inventory.Runtime.Data
     [JsonObject(MemberSerialization.Fields)]
     public class InventoryData : IData
     {
-        [JsonProperty("items")] private List<InventoryItemData> m_Items;
+        [JsonProperty("groups")] private List<InventoryGroupData> m_Groups;
 
-        public List<InventoryItemData> Items
+        public List<InventoryGroupData> Groups
         {
-            get => m_Items;
-            set => m_Items = value;
+            get => m_Groups;
+            set => m_Groups = value;
         }
 
         public string Name()

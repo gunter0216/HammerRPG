@@ -8,17 +8,21 @@ namespace App.Game.Inventory.External
     {
         private readonly InventoryItemData m_Data;
         private readonly IModuleItem m_ModuleItem;
-        private readonly IInventoryGroupConfig m_Group;
 
         public InventoryItemData Data => m_Data;
         public IModuleItem Item => m_ModuleItem;
-        public IInventoryGroupConfig Group => m_Group;
 
-        public InventoryItem(InventoryItemData data, IModuleItem moduleItem, IInventoryGroupConfig group)
+        // public InventoryItem(InventoryItemData data, IModuleItem moduleItem, IInventoryGroupConfig group)
+        // {
+        //     // m_Data = data;
+        //     m_ModuleItem = moduleItem;
+        //     // m_Group = group;
+        // }
+        
+        public InventoryItem(IModuleItem moduleItem, InventoryItemData data)
         {
-            m_Data = data;
             m_ModuleItem = moduleItem;
-            m_Group = group;
+            m_Data = data;
         }
     }
 }

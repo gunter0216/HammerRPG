@@ -32,7 +32,7 @@ namespace App.Game.Inventory.External.ViewModel
         
         private List<InventoryGroupViewModel> m_GroupHeaderViewModels;
         
-        private InventorySlotsViewModel m_SlotsViewModel;
+        private InventorySlotsModel m_SlotsModel;
         private InventoryGroupsViewModel m_GroupsViewModel;
 
         public InventoryWindowModel(
@@ -80,7 +80,7 @@ namespace App.Game.Inventory.External.ViewModel
         public void Close()
         {
             m_Window.SetActive(false);
-            m_SlotsViewModel.OnWindowClosed();
+            m_SlotsModel.OnWindowClosed();
         }
         
         public bool IsOpen()
@@ -129,14 +129,13 @@ namespace App.Game.Inventory.External.ViewModel
 
         private void InitSlots()
         {
-            m_SlotsViewModel = new InventorySlotsViewModel(
+            m_SlotsModel = new InventorySlotsModel(
                 m_ConfigController, 
                 new InventorySlotViewCreator(m_Window),
                 m_ItemsController,
-                new InventoryItemViewCreator(m_Window),
                 m_SpriteLoader,
                 m_Window);
-            m_SlotsViewModel.Initialize();
+            m_SlotsModel.Initialize();
             m_Window.ItemsContent.transform.SetAsLastSibling();
         }
 
@@ -148,7 +147,7 @@ namespace App.Game.Inventory.External.ViewModel
         private void ShowSelectedGroup()
         {
             var selectedGroup = m_GroupsViewModel.GetSelectedGroup();
-            m_SlotsViewModel.ShowGroup(selectedGroup.Group);
+            m_SlotsModel.ShowGroup(selectedGroup.Group);
         }
 
         public void AddItem(InventoryItem item)
@@ -158,18 +157,25 @@ namespace App.Game.Inventory.External.ViewModel
                 return;
             }
 
+            var group = m_GroupController.GetItemGroup(item.Item);
+            if (!group.HasValue)
+            {
+                HLogger.LogError("group not found.");
+                return;
+            }
+
             var selectedGroup = m_GroupsViewModel.GetSelectedGroup();
-            if (selectedGroup.Group != item.Group)
+            if (selectedGroup.Group != group.Value)
             {
                 return;
             }
             
-            m_SlotsViewModel.ShowItem(item);
+            m_SlotsModel.UpdateSlot(item);
         }
 
         public void Dispose()
         {
-            m_SlotsViewModel?.Dispose();
+            m_SlotsModel?.Dispose();
         }
     }
 }

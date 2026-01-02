@@ -1,5 +1,5 @@
-﻿using System;
-using App.Common.Logger.Runtime;
+﻿using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Game.GameTiles.External.Config.Model;
 using App.Game.Inventory.External.View;
@@ -7,36 +7,33 @@ using UnityEngine;
 
 namespace App.Game.Inventory.External.ViewModel
 {
-    public class InventoryItemViewModel
+    public class ItemViewModel
     {
-        private readonly InventoryItemView m_View;
+        private readonly ItemView m_View;
         private readonly ISpriteLoader m_SpriteLoader;
         
-        private event Action<InventoryItemViewModel> m_ClickCallback;
-        
-        private InventoryItem m_Item;
+        private IModuleItem m_Item;
 
-        public InventoryItem Item => m_Item;
-
-        public InventoryItemViewModel(
-            InventoryItemView view, 
-            ISpriteLoader spriteLoader, 
-            Action<InventoryItemViewModel> clickCallback)
+        public ItemViewModel(
+            ItemView view, 
+            ISpriteLoader spriteLoader)
         {
             m_View = view;
             m_SpriteLoader = spriteLoader;
-            m_ClickCallback = clickCallback;
         }
 
         public void SetActive(bool isActive)
         {
             m_View.SetActive(isActive);
+            if (isActive)
+            {
+                m_View.SetAsLastSibling();
+            }
         }
 
-        public void SetItem(InventoryItem item)
+        public void SetItem(IModuleItem item)
         {
-            m_Item = item;
-            var spriteModule = Item.Item.GetConfigModule<SpriteModuleConfig>();
+            var spriteModule = item.GetConfigModule<SpriteModuleConfig>();
             if (!spriteModule.HasValue)
             {
                 HLogger.LogError("SpriteModuleConfig is not available for the item.");
@@ -49,24 +46,13 @@ namespace App.Game.Inventory.External.ViewModel
                 HLogger.LogError($"Failed to load sprite for item");
                 return;
             }
-            
-            m_View.SetIcon(sprite.Value);
-            m_View.SetButtonClickCallback(OnButtonClick);
-        }
 
-        private void OnButtonClick()
-        {
-            m_ClickCallback?.Invoke(this);
+            m_View.SetIcon(sprite.Value);
         }
 
         public void SetAsLastSibling()
         {
             m_View.SetAsLastSibling();
-        }
-        
-        public void SetButtonActive(bool status)
-        {
-            m_View.SetButtonActive(status);
         }
         
         public void SetScale(float scale)

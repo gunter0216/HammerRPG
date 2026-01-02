@@ -8,31 +8,32 @@ namespace App.Game.Inventory.Runtime.Data
     [JsonObject(MemberSerialization.Fields)]
     public class InventoryItemData
     {
-        [JsonProperty("positionX")]
-        private int m_PositionX;
-        
-        [JsonProperty("positionY")]
-        private int m_PositionY;
+        [JsonProperty("index")]
+        private int m_Index;
         
         [JsonProperty("dataReference")]
         private DataReference m_DataReference;
-        
-        public int PositionX
-        {
-            get => m_PositionX;
-            set => m_PositionX = value;
-        }
-        
-        public int PositionY
-        {
-            get => m_PositionY;
-            set => m_PositionY = value;
-        }
-        
+
         public DataReference DataReference
         {
             get => m_DataReference;
             set => m_DataReference = value;
+        }
+
+        public int Index
+        {
+            get => m_Index;
+            set => m_Index = value;
+        }
+
+        public InventoryItemData()
+        {
+        }
+
+        public InventoryItemData(int index, DataReference dataReference)
+        {
+            m_Index = index;
+            m_DataReference = dataReference;
         }
     }
 }

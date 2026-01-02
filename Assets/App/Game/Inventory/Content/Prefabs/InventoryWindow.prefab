@@ -284,7 +284,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9a6801a9b2e5b0c4691c83cf4a6eefb9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6937823fa95de60488eeba01b91041ca, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -376,7 +376,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1493166073830410768
 RectTransform:
   m_ObjectHideFlags: 0
@@ -714,13 +714,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InventoryGroupHeaderViewPrefab: {fileID: 8013376204541153678, guid: 48b7f0de4d0d50d409f2722bf6063b8e, type: 3}
   m_HeaderGroupContent: {fileID: 2332539014494453079}
-  m_InventorySlotViewPrefab: {fileID: 8132913411623379505, guid: 430335ac749ae9b45a50baac2f3b08b1, type: 3}
+  m_ItemSlotViewPrefab: {fileID: 8132913411623379505, guid: 430335ac749ae9b45a50baac2f3b08b1, type: 3}
   m_SlotsContent: {fileID: 1681079126417657723}
   m_ItemsContent: {fileID: 5418813948853512695}
-  m_InventoryItemViewPrefab: {fileID: 8476898006432883155, guid: 118b1a764fa8e14478b23cce2f550d45, type: 3}
   m_CloseButton: {fileID: 7155340308273002990}
   m_BlockButton: {fileID: 3777405303582162256}
-  m_SelectedItemContent: {fileID: 4009239934875996105}
 --- !u!1 &8337394141761789910
 GameObject:
   m_ObjectHideFlags: 0

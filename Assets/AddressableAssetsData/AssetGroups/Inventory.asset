@@ -17,13 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 6272e820d4e4f104f9058e56645722b4
   m_SerializeEntries:
-  - m_GUID: b70b897d615dbf3498ec3be8576c8818
-    m_Address: WeaponInventoryGroupIcon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b05fa9481440536429ae2c143fa618b0
-    m_Address: PotionInventoryGroupIcon
+  - m_GUID: 118b1a764fa8e14478b23cce2f550d45
+    m_Address: DragItemView
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -32,13 +27,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e7ac99e5e46cd7a41a8b0a67a8457c2c
-    m_Address: KeyInventoryGroupIcon
+  - m_GUID: 78ad774ddf4c42248a748b2a46183331
+    m_Address: ArmorInventoryGroupIcon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 78ad774ddf4c42248a748b2a46183331
-    m_Address: ArmorInventoryGroupIcon
+  - m_GUID: 88d01dfee82f49d888f26d9077853a35
+    m_Address: InventoryConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b05fa9481440536429ae2c143fa618b0
+    m_Address: PotionInventoryGroupIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b70b897d615dbf3498ec3be8576c8818
+    m_Address: WeaponInventoryGroupIcon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -47,8 +52,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 88d01dfee82f49d888f26d9077853a35
-    m_Address: InventoryConfig
+  - m_GUID: e7ac99e5e46cd7a41a8b0a67a8457c2c
+    m_Address: KeyInventoryGroupIcon
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

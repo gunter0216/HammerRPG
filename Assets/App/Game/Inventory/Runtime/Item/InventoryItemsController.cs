@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using App.Common.DataContainer.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Inventory.External.Group;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
-using App.Generation.DungeonGenerator.Runtime.Matrix;
 
 namespace App.Game.Inventory.External
 {
@@ -16,8 +18,7 @@ namespace App.Game.Inventory.External
         private readonly IModuleItemsManager m_ModuleItemsManager;
         private readonly InventoryGroupController m_GroupController;
         
-        private List<InventoryItem> m_Items;
-        private Dictionary<string, Matrix<InventoryItem>> m_ItemsByGroup;
+        private Dictionary<string, InventoryItem[]> m_ItemsByGroup;
         
         public InventoryItemsController(
             IInventoryConfigController configController, 
@@ -33,50 +34,106 @@ namespace App.Game.Inventory.External
 
         public bool Initialize()
         {
-            var groups = m_ConfigController.GetGroups();
-            m_ItemsByGroup = new Dictionary<string, Matrix<InventoryItem>>(groups.Count);
-            foreach (var group in groups)
-            {
-                var matrix = new Matrix<InventoryItem>(
-                    m_ConfigController.GetCols(),
-                    m_ConfigController.GetRows());
-                m_ItemsByGroup[group.Id] = matrix;
-            }
-            
-            var items = m_DataController.GetItems();
-            m_Items = new List<InventoryItem>(items.Count);
-            foreach (var inventoryItemData in items)
-            {
-                var moduleItem = m_ModuleItemsManager.Create(inventoryItemData.DataReference);
-                if (!moduleItem.HasValue)
-                {
-                    HLogger.LogError("Failed to create module item for inventory item: ");
-                    continue;
-                }
-
-                AddItem(inventoryItemData, moduleItem.Value);
-            }
+            CreateMissingDataGroups();
+            CorrectGroupsSize();
+            CreateGroups();
             
             return true;
         }
 
-        public IReadOnlyList<InventoryItem> GetItems()
+        private void CreateGroups()
         {
-            return m_Items;
+            var groups = m_DataController.GetGroups();
+            m_ItemsByGroup = new Dictionary<string, InventoryItem[]>(groups.Count);
+            foreach (var group in groups)
+            {
+                var array = new InventoryItem[group.Items.Length];
+                m_ItemsByGroup[group.Key] = array;
+
+                for (int i = 0; i < group.Items.Length; ++i)
+                {
+                    var itemData = group.Items[i];
+                    if (itemData == null)
+                    {
+                        continue;
+                    } 
+                    
+                    var moduleItem = m_ModuleItemsManager.Create(itemData.DataReference);
+                    if (!moduleItem.HasValue)
+                    {
+                        HLogger.LogError("Failed to create module item for inventory item: ");
+                        continue;
+                    }
+                    
+                    var groupConfig = m_GroupController.GetItemGroup(moduleItem.Value);
+                    if (!groupConfig.HasValue)
+                    {
+                        HLogger.LogError($"Failed to get group for module item: {moduleItem}");
+                        continue;
+                    }
+
+                    array[i] = new InventoryItem(moduleItem.Value, itemData);
+                }
+            }
         }
 
-        public IReadOnlyList<InventoryItem> GetItemsByGroup(IInventoryGroupConfig group)
+        private void CorrectGroupsSize()
         {
-            var itemsInGroup = new List<InventoryItem>();
-            foreach (var item in m_Items)
+            var cols = m_ConfigController.GetCols();
+            var rows = m_ConfigController.GetRows();
+            var minArraySize = cols * rows;
+
+            foreach (var groupData in m_DataController.GetGroups())
             {
-                if (item.Group.Id == group.Id)
+                if (groupData.Items.Length < minArraySize)
                 {
-                    itemsInGroup.Add(item);
+                    var newArray = new InventoryItemData[minArraySize];
+                    Array.Copy(groupData.Items, newArray, groupData.Items.Length);
+                    groupData.Items = newArray;
+                }
+            }
+        }
+
+        private void CreateMissingDataGroups()
+        {
+            var cols = m_ConfigController.GetCols();
+            var rows = m_ConfigController.GetRows();
+            var minArraySize = cols * rows;
+            
+            var groups = m_ConfigController.GetGroups();
+            var dataGroups = m_DataController.GetGroups();
+            var missingGroups = new List<string>();
+            foreach (var groupConfig in groups)
+            {
+                if (dataGroups.All(x => x.Key != groupConfig.Id))
+                {
+                    missingGroups.Add(groupConfig.Id);
                 }
             }
 
-            return itemsInGroup;
+            if (missingGroups.Count > 0)
+            {
+                foreach (var missingGroup in missingGroups)
+                {
+                    var group = new InventoryGroupData
+                    {
+                        Key = missingGroup,
+                        Items = new InventoryItemData[minArraySize]
+                    };
+
+                    m_DataController.AddGroup(group);
+                }
+            }
+        }
+
+        public Optional<IReadOnlyList<InventoryItem>> GetItemsByGroup(IInventoryGroupConfig group)
+        {
+            if (!m_ItemsByGroup.TryGetValue(group.Id, out var items))
+            {
+                return Optional<IReadOnlyList<InventoryItem>>.Fail();
+            }
+            
+            return Optional<IReadOnlyList<InventoryItem>>.Success(items);
         }
 
         public Optional<InventoryItem> AddItem(IModuleItem moduleItem)
@@ -88,46 +145,34 @@ namespace App.Game.Inventory.External
                 return Optional<InventoryItem>.Fail();
             }
             
-            if (!m_ItemsByGroup.TryGetValue(group.Value.Id, out var itemsMatrix))
+            if (!m_ItemsByGroup.TryGetValue(group.Value.Id, out var items))
             {
                 HLogger.LogError($"Failed to get items matrix for group: {group.Value.Id}");
                 return Optional<InventoryItem>.Fail();
             }
 
-            var firstEmptyCell = itemsMatrix.GetFirstDefaultCell();
-            if (firstEmptyCell == Matrix.InvalidPosition)
+            for (int i = 0; i < items.Length; ++i)
             {
-                HLogger.LogError("No empty cell found in inventory matrix");
-                return Optional<InventoryItem>.Fail();
+                if (items[i] != null)
+                {
+                    continue;
+                }
+
+                var data = new InventoryItemData(i, moduleItem.ReferenceSelf);
+                var item = new InventoryItem(moduleItem, data);
+                items[i] = item;
+                
+                m_DataController.SetItem(group.Value.Id, data);
+                
+                return Optional<InventoryItem>.Success(item);
             }
-            
-            var inventoryItemData = new InventoryItemData()
-            {
-                PositionX = firstEmptyCell.Col,
-                PositionY = firstEmptyCell.Row,
-                DataReference = moduleItem.ReferenceSelf
-            };
-            
-            var item = CreateItem(inventoryItemData, moduleItem, group.Value);
-            AddItem(item, itemsMatrix);
-            AddItemInData(item);
 
-            return Optional<InventoryItem>.Success(item);
+            HLogger.LogError("not found empty slot");
+
+            return Optional<InventoryItem>.Fail();
         }
-
-        // public Optional<InventoryItem> AddItem(IModuleItem moduleItem, int positionX, int positionY)
-        // {
-        //     var inventoryItemData = new InventoryItemData()
-        //     {
-        //         PositionX = positionX,
-        //         PositionY = positionY,
-        //         DataReference = moduleItem.ReferenceSelf
-        //     };
-        //     
-        //     return AddItem(inventoryItemData, moduleItem);
-        // }
-        //
-        private Optional<InventoryItem> AddItem(InventoryItemData inventoryItemData, IModuleItem moduleItem)
+        
+        public Optional<InventoryItem> AddItem(IModuleItem moduleItem, int index)
         {
             var group = m_GroupController.GetItemGroup(moduleItem);
             if (!group.HasValue)
@@ -136,39 +181,37 @@ namespace App.Game.Inventory.External
                 return Optional<InventoryItem>.Fail();
             }
             
-            if (!m_ItemsByGroup.TryGetValue(group.Value.Id, out var itemsMatrix))
+            if (!m_ItemsByGroup.TryGetValue(group.Value.Id, out var items))
             {
                 HLogger.LogError($"Failed to get items matrix for group: {group.Value.Id}");
                 return Optional<InventoryItem>.Fail();
             }
-            
-            var item = new InventoryItem(inventoryItemData, moduleItem, group.Value);
-            AddItem(item, itemsMatrix);
-            
+
+            var data = new InventoryItemData(index, moduleItem.ReferenceSelf);
+            var item = new InventoryItem(moduleItem, data);
+            items[index] = item;
+            m_DataController.SetItem(group.Value.Id, data);
+
             return Optional<InventoryItem>.Success(item);
         }
-
-        private void AddItem(InventoryItem inventoryItem, Matrix<InventoryItem> itemsMatrix)
+        
+        public void RemoveItem(IModuleItem item, int index)
         {
-            m_Items.Add(inventoryItem);
+            var group = m_GroupController.GetItemGroup(item);
+            if (!group.HasValue)
+            {
+                HLogger.LogError($"Failed to get group for module item: {item}");
+                return;
+            }
             
-            itemsMatrix.SetCell(
-                inventoryItem.Data.PositionY, 
-                inventoryItem.Data.PositionX, 
-                inventoryItem);
-        }
+            if (!m_ItemsByGroup.TryGetValue(group.Value.Id, out var items))
+            {
+                HLogger.LogError($"Failed to get items matrix for group: {group.Value.Id}");
+                return;
+            }
 
-        private void AddItemInData(InventoryItem inventoryItem)
-        {
-            m_DataController.AddItem(inventoryItem.Data);
-        }
-
-        private InventoryItem CreateItem(
-            InventoryItemData inventoryItemData, 
-            IModuleItem moduleItem, 
-            IInventoryGroupConfig group)
-        {
-            return new InventoryItem(inventoryItemData, moduleItem, group);
+            items[index] = null;
+            m_DataController.RemoveItem(group.Value.Id, index);
         }
     }
 }

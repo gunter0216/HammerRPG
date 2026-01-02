@@ -13,17 +13,17 @@ namespace App.Game.Inventory.External.Services
             m_Window = window;
         }
 
-        public Optional<InventorySlotView> Create()
+        public Optional<ItemSlotView> Create()
         {
             var view = Object.Instantiate(
-                m_Window.InventorySlotViewPrefab,
+                m_Window.ItemSlotViewPrefab,
                 m_Window.SlotsContent);
             if (view == null)
             {
-                return Optional<InventorySlotView>.Fail();
+                return Optional<ItemSlotView>.Fail();
             }
             
-            return Optional<InventorySlotView>.Success(view);
+            return Optional<ItemSlotView>.Success(view);
         }
     }
 }
