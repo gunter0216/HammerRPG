@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.GameTiles.External.Config.Dto;
 
 namespace App.Game.GameTiles.External.Config.Model
 {
@@ -21,11 +20,6 @@ namespace App.Game.GameTiles.External.Config.Model
         public string GetModuleKey()
         {
             return m_ModuleKey;
-        }
-
-        public Type GetModuleDtoType()
-        {
-            return typeof(SpriteModuleDto);
         }
     }
 }

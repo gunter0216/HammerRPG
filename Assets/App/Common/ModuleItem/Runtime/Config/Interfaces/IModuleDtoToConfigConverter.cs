@@ -8,6 +8,5 @@ namespace App.Common.ModuleItem.Runtime.Config.Interfaces
     {
         Optional<IModuleConfig> Convert(Dictionary<string, string> module);
         string GetModuleKey();
-        Type GetModuleDtoType();
     }
 }

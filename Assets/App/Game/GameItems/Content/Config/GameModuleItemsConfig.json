@@ -10,6 +10,10 @@
         {
           "module": "game_item_type",
           "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Armor"
         }
       ]
     },
@@ -23,6 +27,10 @@
         {
           "module": "game_item_type",
           "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Boots"
         }
       ]
     },
@@ -36,6 +44,10 @@
         {
           "module": "game_item_type",
           "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Helmet"
         }
       ]
     },
@@ -49,6 +61,10 @@
         {
           "module": "game_item_type",
           "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Gloves"
         }
       ]
     },
@@ -62,6 +78,10 @@
         {
           "module": "game_item_type",
           "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
         }
       ]
     },
@@ -75,6 +95,10 @@
         {
           "module": "game_item_type",
           "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
         }
       ]
     },
@@ -88,6 +112,10 @@
         {
           "module": "game_item_type",
           "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
         }
       ]
     },
@@ -101,6 +129,10 @@
         {
           "module": "game_item_type",
           "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "Two-handed"
         }
       ]
     },
@@ -114,6 +146,10 @@
         {
           "module": "game_item_type",
           "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
         }
       ]
     },
@@ -127,6 +163,10 @@
         {
           "module": "game_item_type",
           "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "Two-handed"
         }
       ]
     },

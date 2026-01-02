@@ -59,14 +59,6 @@ namespace App.Common.ModuleItem.Runtime.Config
                 var content = moduleDto;
                 if (m_ModuleConverters.TryGetValue(moduleKey, out var converter))
                 {
-                    var moduleDtoType = converter.GetModuleDtoType();
-                    // var dto = m_JsonDeserializer.Deserialize(content, moduleDtoType);
-                    // if (!dto.HasValue)
-                    // {
-                    //     m_Logger.LogError("[ModuleItemsDtoToConfigConverter] Failed to deserialize module DTO with key: " + key);
-                    //     continue;
-                    // }
-                    
                     var module = converter.Convert(content);
                     if (!module.HasValue)
                     {

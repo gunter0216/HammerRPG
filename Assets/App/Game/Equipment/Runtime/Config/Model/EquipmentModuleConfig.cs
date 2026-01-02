@@ -2,13 +2,13 @@
 
 namespace App.Game.ModuleItemType.Runtime.Config.Model
 {
-    public class GameItemTypeModuleConfig : IModuleConfig
+    public class EquipmentModuleConfig : IModuleConfig
     {
         private readonly string m_Type;
 
         public string Type => m_Type;
 
-        public GameItemTypeModuleConfig(string type)
+        public EquipmentModuleConfig(string type)
         {
             m_Type = type;
         }
