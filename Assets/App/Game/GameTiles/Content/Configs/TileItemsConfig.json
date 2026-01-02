@@ -4,8 +4,8 @@
       "id": "wall",
       "modules": [
         {
-          "key": "icon",
-          "content": "{\"key\": \"BricksWall1\"}"
+          "module": "icon",
+          "icon_key": "BricksWall1"
         }
       ]
     },
@@ -13,8 +13,8 @@
       "id": "closed_door",
       "modules": [
         {
-          "key": "icon",
-          "content": "{\"key\": \"ClosedDoor\"}"
+          "module": "icon",
+          "icon_key": "ClosedDoor"
         }
       ]
     },
@@ -22,8 +22,8 @@
       "id": "opened_door",
       "modules": [
         {
-          "key": "icon",
-          "content": "{\"key\": \"OpenedDoor\"}"
+          "module": "icon",
+          "icon_key": "OpenedDoor"
         }
       ]
     },
@@ -31,8 +31,8 @@
       "id": "floor",
       "modules": [
         {
-          "key": "icon",
-          "content": "{\"key\": \"Floor1\"}"
+          "module": "icon",
+          "icon_key": "Floor1"
         }
       ]
     }

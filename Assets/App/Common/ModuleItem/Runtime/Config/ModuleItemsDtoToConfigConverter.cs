@@ -9,6 +9,7 @@ namespace App.Common.ModuleItem.Runtime.Config
 {
     public class ModuleItemsDtoToConfigConverter : IModuleItemsDtoToConfigConverter
     {
+        private const string ModuleKey = "module";
         private readonly ILogger m_Logger;
         private readonly Dictionary<string, IModuleDtoToConfigConverter> m_ModuleConverters;
         private readonly IJsonDeserializer m_JsonDeserializer;
@@ -54,22 +55,22 @@ namespace App.Common.ModuleItem.Runtime.Config
 
             foreach (var moduleDto in itemDto.Modules)
             {
-                var key = moduleDto.Key;
-                var content = moduleDto.Content;
-                if (m_ModuleConverters.TryGetValue(key, out var converter))
+                var moduleKey = moduleDto[ModuleKey];
+                var content = moduleDto;
+                if (m_ModuleConverters.TryGetValue(moduleKey, out var converter))
                 {
                     var moduleDtoType = converter.GetModuleDtoType();
-                    var dto = m_JsonDeserializer.Deserialize(content, moduleDtoType);
-                    if (!dto.HasValue)
-                    {
-                        m_Logger.LogError("[ModuleItemsDtoToConfigConverter] Failed to deserialize module DTO with key: " + key);
-                        continue;
-                    }
+                    // var dto = m_JsonDeserializer.Deserialize(content, moduleDtoType);
+                    // if (!dto.HasValue)
+                    // {
+                    //     m_Logger.LogError("[ModuleItemsDtoToConfigConverter] Failed to deserialize module DTO with key: " + key);
+                    //     continue;
+                    // }
                     
-                    var module = converter.Convert(dto.Value);
+                    var module = converter.Convert(content);
                     if (!module.HasValue)
                     {
-                        m_Logger.LogError("[ModuleItemsDtoToConfigConverter] Failed to convert module DTO with key: " + key);
+                        m_Logger.LogError("[ModuleItemsDtoToConfigConverter] Failed to convert module DTO with key: " + content);
                         continue;
                     }
                         

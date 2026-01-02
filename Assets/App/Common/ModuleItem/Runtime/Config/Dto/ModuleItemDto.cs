@@ -10,10 +10,10 @@ namespace App.Common.ModuleItem.Runtime.Config.Dto
     {
         [JsonProperty("id")] private string m_Id;
         [JsonProperty("tags")] private long m_Tags;
-        [JsonProperty("modules")] private ModuleItemModuleDto[] m_Modules;
+        [JsonProperty("modules")] private Dictionary<string, string>[] m_Modules;
 
         public string Id => m_Id;
         public long Tags => m_Tags;
-        public IReadOnlyList<ModuleItemModuleDto> Modules => m_Modules;
+        public Dictionary<string, string>[] Modules => m_Modules;
     }
 }

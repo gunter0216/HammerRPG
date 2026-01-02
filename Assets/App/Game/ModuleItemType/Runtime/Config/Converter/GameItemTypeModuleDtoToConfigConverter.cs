@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.ModuleItemType.Runtime.Config.Dto;
@@ -10,14 +11,10 @@ namespace App.Game.ModuleItemType.Runtime.Config.Converter
     {
         private const string m_ModuleKey = "game_item_type";
         
-        public Optional<IModuleConfig> Convert(object module)
+        public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
         {
-            if (module is not GameItemTypeModuleDto dto)
-            {
-                return Optional<IModuleConfig>.Fail();
-            }
-            
-            var config = new GameItemTypeModuleConfig(dto);
+            var type = module["type"];
+            var config = new GameItemTypeModuleConfig(type);
             
             return Optional<IModuleConfig>.Success(config);
         }

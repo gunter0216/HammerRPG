@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.GameTiles.External.Config.Dto;
@@ -9,14 +10,10 @@ namespace App.Game.GameTiles.External.Config.Model
     {
         private const string m_ModuleKey = "icon";
         
-        public Optional<IModuleConfig> Convert(object module)
+        public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
         {
-            if (module is not SpriteModuleDto dto)
-            {
-                return Optional<IModuleConfig>.Fail();
-            }
-            
-            var config = new SpriteModuleConfig(dto);
+            var iconKey = module["icon_key"];
+            var config = new SpriteModuleConfig(iconKey);
             
             return Optional<IModuleConfig>.Success(config);
         }
