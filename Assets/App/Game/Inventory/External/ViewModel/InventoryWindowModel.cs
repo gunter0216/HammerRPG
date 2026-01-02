@@ -7,11 +7,14 @@ using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.External;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
-using App.Game.Inventory.External.Group;
-using App.Game.Inventory.External.Services;
 using App.Game.Inventory.External.View;
+using App.Game.Inventory.External.ViewModel.Fabric;
+using App.Game.Inventory.External.ViewModel.Group;
+using App.Game.Inventory.External.ViewModel.Slots;
 using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Data;
+using App.Game.Inventory.Runtime.Group;
+using App.Game.Inventory.Runtime.Item;
 using UnityEngine;
 
 namespace App.Game.Inventory.External.ViewModel

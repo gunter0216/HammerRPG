@@ -3,6 +3,7 @@ using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
 using App.Game.Inventory.Runtime.Data;
+using App.Game.Inventory.Runtime.Data.Model;
 using App.Game.Update.External;
 
 namespace App.Game.Inventory.External

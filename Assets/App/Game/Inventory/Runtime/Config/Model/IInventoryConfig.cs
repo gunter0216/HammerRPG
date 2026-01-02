@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace App.Game.Inventory.Runtime.Config
+namespace App.Game.Inventory.Runtime.Config.Model
 {
     public interface IInventoryConfig
     {

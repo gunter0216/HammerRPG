@@ -4,12 +4,14 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.DragItem.External.Events;
+using App.Game.DragItem.Runtime.Events;
+using App.Game.DragItem.Runtime.Model;
 using App.Game.Equipment.External.View;
 using App.Game.GameTiles.External.Config.Model;
 using App.Game.Inventory.External;
 using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Item;
 using UnityEngine;
 
 namespace App.Game.Equipment.External.ViewModel

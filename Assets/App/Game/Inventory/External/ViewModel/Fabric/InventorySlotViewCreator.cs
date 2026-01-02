@@ -1,8 +1,9 @@
 ﻿using App.Common.Utilities.Utility.Runtime;
+using App.Game.DragItem.Runtime.View;
 using App.Game.Inventory.External.View;
 using UnityEngine;
 
-namespace App.Game.Inventory.External.Services
+namespace App.Game.Inventory.External.ViewModel.Fabric
 {
     public class InventorySlotViewCreator
     {

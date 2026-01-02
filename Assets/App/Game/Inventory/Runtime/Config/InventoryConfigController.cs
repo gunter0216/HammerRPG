@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using App.Common.Configs.Runtime;
 using App.Common.Logger.Runtime;
-using App.Game.Inventory.External.Config;
+using App.Game.Inventory.Runtime.Config.Converter;
+using App.Game.Inventory.Runtime.Config.Loader;
+using App.Game.Inventory.Runtime.Config.Model;
 
 namespace App.Game.Inventory.Runtime.Config
 {

@@ -1,9 +1,9 @@
 ﻿using App.Common.AssetSystem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
-using App.Game.Inventory.External.View;
+using App.Game.DragItem.Runtime.View;
 
-namespace App.Game.Inventory.External.Services
+namespace App.Game.DragItem.Runtime
 {
     public class DragItemViewCreator
     {

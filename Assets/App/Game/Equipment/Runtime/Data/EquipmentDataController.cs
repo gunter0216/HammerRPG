@@ -3,7 +3,8 @@ using System.Linq;
 using App.Common.Data.Runtime;
 using App.Common.DataContainer.Runtime;
 using App.Common.Logger.Runtime;
-using App.Game.Equipment.External.Data;
+using App.Game.Equipment.Runtime.Data.Loader;
+using App.Game.Equipment.Runtime.Data.Model;
 
 namespace App.Game.Equipment.Runtime.Data
 {

@@ -5,14 +5,12 @@ using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
-using App.Game.DragItem.External.Events;
-using App.Game.DragItem.External.Model;
-using App.Game.Inventory.External.Services;
-using App.Game.Inventory.External.ViewModel;
+using App.Game.DragItem.Runtime.Events;
+using App.Game.DragItem.Runtime.Model;
 using UniRx;
 using UnityEngine;
 
-namespace App.Game.DragItem.External
+namespace App.Game.DragItem.Runtime
 {
     public class DragItemController : IInitSystem, IDisposable
     {

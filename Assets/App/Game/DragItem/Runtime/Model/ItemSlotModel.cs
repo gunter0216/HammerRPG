@@ -1,11 +1,10 @@
 ﻿using System;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.DragItem.External.Model;
-using App.Game.Inventory.External.View;
+using App.Game.DragItem.Runtime.View;
 using UnityEngine;
 
-namespace App.Game.Inventory.External.ViewModel
+namespace App.Game.DragItem.Runtime.Model
 {
     public class ItemSlotModel : IItemSlotModel
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace App.Game.Inventory.External.View
+namespace App.Game.DragItem.Runtime.View
 {
     public interface IItemSlotView
     {

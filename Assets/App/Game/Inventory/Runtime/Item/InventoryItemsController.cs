@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using App.Common.DataContainer.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Inventory.External.Group;
 using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Config.Model;
 using App.Game.Inventory.Runtime.Data;
+using App.Game.Inventory.Runtime.Data.Model;
+using App.Game.Inventory.Runtime.Group;
 
-namespace App.Game.Inventory.External
+namespace App.Game.Inventory.Runtime.Item
 {
     public class InventoryItemsController
     {

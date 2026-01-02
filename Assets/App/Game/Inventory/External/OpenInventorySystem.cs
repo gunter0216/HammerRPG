@@ -1,5 +1,6 @@
 ﻿using App.Common.Utilities.Utility.Runtime;
 using App.Game.Equipment.Runtime;
+using App.Game.Inventory.Runtime;
 using UnityEngine;
 
 namespace App.Game.Inventory.External

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using App.Common.Data.Runtime;
 using Newtonsoft.Json;
 
-namespace App.Game.Inventory.Runtime.Data
+namespace App.Game.Inventory.Runtime.Data.Model
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

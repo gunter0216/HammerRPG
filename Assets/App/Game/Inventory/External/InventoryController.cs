@@ -11,10 +11,13 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
 using App.Game.Inventory.External.AddItemStrategy;
-using App.Game.Inventory.External.Group;
 using App.Game.Inventory.External.ViewModel;
+using App.Game.Inventory.Runtime;
 using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Config.Model;
 using App.Game.Inventory.Runtime.Data;
+using App.Game.Inventory.Runtime.Group;
+using App.Game.Inventory.Runtime.Item;
 
 namespace App.Game.Inventory.External
 {

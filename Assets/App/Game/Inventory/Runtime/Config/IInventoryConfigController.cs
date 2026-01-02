@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using App.Game.Inventory.Runtime.Config.Model;
 
 namespace App.Game.Inventory.Runtime.Config
 {

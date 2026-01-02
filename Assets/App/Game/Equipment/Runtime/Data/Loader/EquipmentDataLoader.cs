@@ -1,9 +1,9 @@
 ﻿using App.Common.Data.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Equipment.Runtime.Data;
+using App.Game.Equipment.Runtime.Data.Model;
 
-namespace App.Game.Equipment.External.Data
+namespace App.Game.Equipment.Runtime.Data.Loader
 {
     public class EquipmentDataLoader
     {

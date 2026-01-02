@@ -1,6 +1,6 @@
 ﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Game.ModuleItemType.Runtime.Config.Model
+namespace App.Game.Equipment.Runtime.Config.Model
 {
     public class EquipmentModuleConfig : IModuleConfig
     {

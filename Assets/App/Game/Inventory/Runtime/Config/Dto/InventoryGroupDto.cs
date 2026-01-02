@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace App.Game.Inventory.External.Dto
+namespace App.Game.Inventory.Runtime.Config.Dto
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

@@ -2,7 +2,7 @@
 using App.Game.Equipment.Runtime.Config;
 using App.Game.Equipment.Runtime.Data;
 
-namespace App.Game.Equipment.External
+namespace App.Game.Equipment.Runtime.Items
 {
     public class EquipmentItemsController
     {

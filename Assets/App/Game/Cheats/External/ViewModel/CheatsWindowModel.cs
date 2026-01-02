@@ -10,7 +10,9 @@ using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
 using App.Game.GameItems.Runtime;
 using App.Game.Inventory.External;
+using App.Game.Inventory.Runtime;
 using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Config.Model;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.ViewModel

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using App.Game.Inventory.External.Dto;
+﻿using System.Collections.Generic;
+using App.Game.Inventory.Runtime.Config.Dto;
 
-namespace App.Game.Inventory.Runtime.Config
+namespace App.Game.Inventory.Runtime.Config.Model
 {
     public class InventoryConfig : IInventoryConfig
     {

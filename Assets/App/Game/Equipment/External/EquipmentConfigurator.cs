@@ -2,7 +2,10 @@ using App.Common.FSM.External;
 using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
+using App.Game.Equipment.Runtime;
+using App.Game.Equipment.Runtime.Config.Converter;
 using App.Game.Equipment.Runtime.Data;
+using App.Game.Equipment.Runtime.Data.Model;
 using App.Game.ModuleItemType.Runtime.Config.Converter;
 using App.Game.Update.External;
 

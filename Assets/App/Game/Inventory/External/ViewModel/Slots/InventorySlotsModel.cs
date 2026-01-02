@@ -5,14 +5,17 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.DragItem.External.Events;
+using App.Game.DragItem.Runtime.Events;
+using App.Game.DragItem.Runtime.Model;
 using App.Game.GameTiles.External.Config.Model;
-using App.Game.Inventory.External.Services;
 using App.Game.Inventory.External.View;
+using App.Game.Inventory.External.ViewModel.Fabric;
 using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Config.Model;
+using App.Game.Inventory.Runtime.Item;
 using UnityEngine;
 
-namespace App.Game.Inventory.External.ViewModel
+namespace App.Game.Inventory.External.ViewModel.Slots
 {
     public class InventorySlotsModel : IDisposable
     {

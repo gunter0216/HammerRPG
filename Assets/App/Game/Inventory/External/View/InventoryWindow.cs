@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using App.Game.DragItem.Runtime.View;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace App.Game.Inventory.External.View

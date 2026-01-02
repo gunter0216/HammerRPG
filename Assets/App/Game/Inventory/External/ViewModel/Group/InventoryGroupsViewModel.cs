@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.Runtime;
-using App.Game.Inventory.External.Services;
+using App.Game.Inventory.External.ViewModel.Fabric;
 using App.Game.Inventory.Runtime.Config;
 
-namespace App.Game.Inventory.External.ViewModel
+namespace App.Game.Inventory.External.ViewModel.Group
 {
     public class InventoryGroupsViewModel
     {

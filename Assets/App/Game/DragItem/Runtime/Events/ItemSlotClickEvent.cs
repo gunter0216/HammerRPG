@@ -1,6 +1,6 @@
-using App.Game.DragItem.External.Model;
+using App.Game.DragItem.Runtime.Model;
 
-namespace App.Game.DragItem.External.Events
+namespace App.Game.DragItem.Runtime.Events
 {
     public readonly struct ItemSlotClickEvent
     {

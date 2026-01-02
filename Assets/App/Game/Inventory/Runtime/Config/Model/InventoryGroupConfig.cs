@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace App.Game.Inventory.Runtime.Config
+﻿namespace App.Game.Inventory.Runtime.Config.Model
 {
     public class InventoryGroupConfig : IInventoryGroupConfig
     {

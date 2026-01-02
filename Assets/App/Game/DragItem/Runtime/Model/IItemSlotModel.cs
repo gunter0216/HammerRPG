@@ -1,7 +1,7 @@
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Game.DragItem.External.Model
+namespace App.Game.DragItem.Runtime.Model
 {
     public interface IItemSlotModel
     {

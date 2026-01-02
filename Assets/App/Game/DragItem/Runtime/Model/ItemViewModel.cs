@@ -1,11 +1,11 @@
 ﻿using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
+using App.Game.DragItem.Runtime.View;
 using App.Game.GameTiles.External.Config.Model;
-using App.Game.Inventory.External.View;
 using UnityEngine;
 
-namespace App.Game.Inventory.External.ViewModel
+namespace App.Game.DragItem.Runtime.Model
 {
     public class ItemViewModel
     {

@@ -2,7 +2,7 @@
 using App.Game.Inventory.External.View;
 using UnityEngine;
 
-namespace App.Game.Inventory.External.Services
+namespace App.Game.Inventory.External.ViewModel.Fabric
 {
     public class InventoryGroupViewCreator
     {

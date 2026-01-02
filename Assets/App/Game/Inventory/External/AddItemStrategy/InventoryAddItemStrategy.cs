@@ -2,6 +2,7 @@
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Game.Inventory.External.ViewModel;
+using App.Game.Inventory.Runtime.Item;
 
 namespace App.Game.Inventory.External.AddItemStrategy
 {

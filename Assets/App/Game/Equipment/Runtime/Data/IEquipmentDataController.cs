@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
+using App.Game.Equipment.Runtime.Data.Model;
 
 namespace App.Game.Equipment.Runtime.Data
 {

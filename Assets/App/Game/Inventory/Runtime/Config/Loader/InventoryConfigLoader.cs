@@ -1,8 +1,8 @@
 ﻿using App.Common.Configs.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Inventory.External.Dto;
+using App.Game.Inventory.Runtime.Config.Dto;
 
-namespace App.Game.Inventory.External.Config
+namespace App.Game.Inventory.Runtime.Config.Loader
 {
     public class InventoryConfigLoader
     {

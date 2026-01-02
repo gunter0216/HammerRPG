@@ -1,8 +1,7 @@
 ﻿using App.Common.ModuleItem.Runtime;
-using App.Game.Inventory.Runtime.Config;
-using App.Game.Inventory.Runtime.Data;
+using App.Game.Inventory.Runtime.Data.Model;
 
-namespace App.Game.Inventory.External
+namespace App.Game.Inventory.Runtime.Item
 {
     public class InventoryItem
     {

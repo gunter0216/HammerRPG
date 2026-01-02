@@ -4,9 +4,10 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Config.Model;
 using App.Game.ModuleItemType.Runtime.Config.Model;
 
-namespace App.Game.Inventory.External.Group
+namespace App.Game.Inventory.Runtime.Group
 {
     public class InventoryGroupController
     {

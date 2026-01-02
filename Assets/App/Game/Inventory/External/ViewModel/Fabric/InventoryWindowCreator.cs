@@ -3,7 +3,7 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Inventory.External.View;
 
-namespace App.Game.Inventory.External.Services
+namespace App.Game.Inventory.External.ViewModel.Fabric
 {
     public class InventoryWindowCreator
     {

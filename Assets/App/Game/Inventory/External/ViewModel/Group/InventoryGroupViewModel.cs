@@ -2,9 +2,9 @@
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Game.Inventory.External.View;
-using App.Game.Inventory.Runtime.Config;
+using App.Game.Inventory.Runtime.Config.Model;
 
-namespace App.Game.Inventory.External.ViewModel
+namespace App.Game.Inventory.External.ViewModel.Group
 {
     public class InventoryGroupViewModel
     {
