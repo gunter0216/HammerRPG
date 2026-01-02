@@ -6,6 +6,9 @@ namespace App.Game.Equipment.External.View
     public class EquipmentWindow : MonoBehaviour
     {
         [SerializeField] private Button m_CloseButton;
+        [SerializeField] private EquipmentSlotsView m_SlotsView;
+
+        public EquipmentSlotsView SlotsView => m_SlotsView;
         
         public void SetCloseButtonClickCallback(UnityEngine.Events.UnityAction callback)
         {
