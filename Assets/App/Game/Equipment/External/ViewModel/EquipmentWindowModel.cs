@@ -1,17 +1,37 @@
 ﻿using App.Common.Logger.Runtime;
+using App.Common.SpriteLoaders.Runtime;
 using App.Game.Equipment.External.View;
 using App.Game.Equipment.External.ViewModel.Fabric;
+using App.Game.Equipment.Runtime.Items;
 
 namespace App.Game.Equipment.External.ViewModel
 {
     public class EquipmentWindowModel
     {
-        private EquipmentWindow m_Window;
         private readonly EquipmentWindowCreator m_WindowCreator;
+        private readonly EquipmentSlotsController m_SlotsController;
+        private readonly ISpriteLoader m_SpriteLoader;
+        
+        private EquipmentWindow m_Window;
+        private EquipmentSlotsModel m_SlotsModel;
 
-        public EquipmentWindowModel(EquipmentWindowCreator windowCreator)
+        public EquipmentWindowModel(
+            EquipmentWindowCreator windowCreator, 
+            EquipmentSlotsController slotsController, 
+            ISpriteLoader spriteLoader)
         {
             m_WindowCreator = windowCreator;
+            m_SlotsController = slotsController;
+            m_SpriteLoader = spriteLoader;
+        }
+
+        private void InitWindow()
+        {
+            m_SlotsModel = new EquipmentSlotsModel(
+                m_Window.SlotsView, 
+                m_SpriteLoader,
+                m_SlotsController);
+            m_SlotsModel.Initialize();
         }
 
         public void Open()
@@ -53,11 +73,6 @@ namespace App.Game.Equipment.External.ViewModel
 
             m_Window = windowOptional.Value;
             return true;
-        }
-
-        private void InitWindow()
-        {
-            // Инициализация окна, если потребуется
         }
     }
 }

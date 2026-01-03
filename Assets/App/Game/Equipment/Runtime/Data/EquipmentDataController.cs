@@ -32,7 +32,19 @@ namespace App.Game.Equipment.Runtime.Data
             m_Data = data.Value;
             
             m_Data.Slots ??= new List<EquipmentSlotData>();
+            AddSlot(EquipmentSlotConstants.Helmet);
+            AddSlot(EquipmentSlotConstants.Armor);
+            AddSlot(EquipmentSlotConstants.Shoulder);
+            AddSlot(EquipmentSlotConstants.Gloves);
             AddSlot(EquipmentSlotConstants.Amulet);
+            AddSlot(EquipmentSlotConstants.Bracer);
+            AddSlot(EquipmentSlotConstants.Ring1);
+            AddSlot(EquipmentSlotConstants.Ring2);
+            AddSlot(EquipmentSlotConstants.Belt);
+            AddSlot(EquipmentSlotConstants.Pants);
+            AddSlot(EquipmentSlotConstants.Boots);
+            AddSlot(EquipmentSlotConstants.LeftHand);
+            AddSlot(EquipmentSlotConstants.RightHand);
             
             return true;
         }

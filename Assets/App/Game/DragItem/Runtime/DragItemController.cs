@@ -19,7 +19,7 @@ namespace App.Game.DragItem.Runtime
         private readonly ISpriteLoader m_SpriteLoader;
         
         private ItemViewModel m_DragView;
-        private IItemSlotModel m_ActiveSlot;
+        private IItemSlotModel m_SourceSlot;
         
         private IDisposable m_Disposable;
         private Camera m_Camera;
@@ -57,30 +57,35 @@ namespace App.Game.DragItem.Runtime
 
         private void OnSlotClick(ItemSlotClickEvent data)
         {
-            var slot = data.Model;
-            var item = slot.GetItem();
-            if (m_ActiveSlot != null)
+            var targetSlot = data.Model;
+            var targetItem = targetSlot.GetItem();
+            if (m_SourceSlot != null)
             {
-                if (item == null)
+                var sourceSlotItem = m_SourceSlot.GetItem();
+                if (sourceSlotItem == null)
                 {
-                    var modelItem = m_ActiveSlot.GetItem();
-                    if (modelItem == null)
-                    {
-                        HLogger.LogError("Cant remove item.");
-                        return;
-                    }
-
-                    slot.PlaceItem(modelItem);
-                    m_ActiveSlot.DownItem();
-                    m_ActiveSlot.RemoveItem();
-                    m_DragView.SetActive(false);
-                    m_ActiveSlot = null;
+                    HLogger.LogError("Source item is null.");
+                    return;
                 }
-                else if (m_ActiveSlot == slot)
+                
+                if (!targetSlot.CanPlaceItem(sourceSlotItem))
                 {
-                    m_ActiveSlot.DownItem();
+                    return;
+                }
+                
+                if (targetItem == null)
+                {
+                    targetSlot.PlaceItem(sourceSlotItem);
+                    m_SourceSlot.DownItem();
+                    m_SourceSlot.RemoveItem();
                     m_DragView.SetActive(false);
-                    m_ActiveSlot = null;
+                    m_SourceSlot = null;
+                }
+                else if (m_SourceSlot == targetSlot)
+                {
+                    m_SourceSlot.DownItem();
+                    m_DragView.SetActive(false);
+                    m_SourceSlot = null;
                 }
                 else
                 {
@@ -89,15 +94,15 @@ namespace App.Game.DragItem.Runtime
             }
             else
             {
-                if (item == null)
+                if (targetItem == null)
                 {
                     return;
                 }
                 else
                 {
-                    m_ActiveSlot = slot;
-                    m_ActiveSlot.UpItem();
-                    m_DragView.SetItem(item);
+                    m_SourceSlot = targetSlot;
+                    m_SourceSlot.UpItem();
+                    m_DragView.SetItem(targetItem);
                     m_DragView.SetActive(true);
                 }
             }

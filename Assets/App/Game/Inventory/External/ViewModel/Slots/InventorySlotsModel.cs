@@ -112,7 +112,7 @@ namespace App.Game.Inventory.External.ViewModel.Slots
 
         private bool CanPlace(ItemSlotModel model, IModuleItem item)
         {
-            return !model.HasItem();
+            return true;
         }
         
         private void OnSlotClick(ItemSlotModel model)

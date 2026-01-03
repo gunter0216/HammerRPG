@@ -1061,6 +1061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CloseButton: {fileID: 5373250559618186738}
+  m_SlotsView: {fileID: 5475599890988285159}
 --- !u!114 &5475599890988285159
 MonoBehaviour:
   m_ObjectHideFlags: 0
