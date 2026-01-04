@@ -73,44 +73,47 @@ namespace App.Game.DragItem.Runtime
                     return;
                 }
                 
-                if (targetItem == null)
+                if (m_SourceSlot == targetSlot)
                 {
+                    // опустили на тот же слот
+                    m_SourceSlot.DownItem();
+                }
+                else if (targetItem == null)
+                {
+                    // положили в пустой слот
                     targetSlot.PlaceItem(sourceSlotItem);
                     m_SourceSlot.DownItem();
                     m_SourceSlot.RemoveItem();
-                    m_DragView.SetActive(false);
-                    m_SourceSlot = null;
-                }
-                else if (m_SourceSlot == targetSlot)
-                {
-                    m_SourceSlot.DownItem();
-                    m_DragView.SetActive(false);
-                    m_SourceSlot = null;
                 }
                 else
                 {
-                    SwapItems();
+                    // поменяли предметы местами 
+                    targetSlot.RemoveItem();
+                    targetSlot.PlaceItem(sourceSlotItem);
+                    m_SourceSlot.RemoveItem();
+                    m_SourceSlot.PlaceItem(targetItem);
+                    m_SourceSlot.DownItem();
                 }
+                
+                m_DragView.SetActive(false);
+                m_SourceSlot = null;
             }
             else
             {
                 if (targetItem == null)
                 {
+                    // нечего поднимать
                     return;
                 }
                 else
                 {
+                    // поднимаем предмет
                     m_SourceSlot = targetSlot;
                     m_SourceSlot.UpItem();
                     m_DragView.SetItem(targetItem);
                     m_DragView.SetActive(true);
                 }
             }
-        }
-
-        private void SwapItems()
-        {
-            // todo
         }
 
         public void Dispose()
