@@ -2,7 +2,7 @@
 {
     public class EquipmentConfigConverter
     {
-        public Model.EquipmentConfig Convert(Dto.EquipmentConfigDto dto)
+        public Model.EquipmentConfig Convert(Dto.EquipmentDto dto)
         {
             return new Model.EquipmentConfig(dto);
         }

@@ -1,2 +1,17 @@
 ﻿{
+  "slots": [
+    { "slot": "Helmet", "types": [ "Helmet" ] },
+    { "slot": "Armor", "types": [ "Armor" ] },
+    { "slot": "Shoulder", "types": [ "Shoulder" ] },
+    { "slot": "Gloves", "types": [ "Gloves" ] },
+    { "slot": "Amulet", "types": [ "Amulet" ] },
+    { "slot": "Bracer", "types": [ "Bracer" ] },
+    { "slot": "Ring1", "types": [ "Ring" ] },
+    { "slot": "Ring2", "types": [ "Ring" ] },
+    { "slot": "Belt", "types": [ "Belt" ] },
+    { "slot": "Pants", "types": [ "Pants" ] },
+    { "slot": "Boots", "types": [ "Boots" ] },
+    { "slot": "LeftHand", "types": [ "One-handed", "Two-handed" ] },
+    { "slot": "RightHand", "types": [ "One-handed", "Two-handed" ] }
+  ]
 }

@@ -5,8 +5,11 @@ namespace App.Game.Equipment.Runtime.Config.Dto
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
-    public class EquipmentConfigDto
+    public class EquipmentDto
     {
-        // DTO для EquipmentConfig
+        [JsonProperty("slots")]
+        private EquipmentSlotDto[] m_Slots;
+
+        public EquipmentSlotDto[] Slots => m_Slots;
     }
 }

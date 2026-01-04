@@ -2,6 +2,7 @@
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Equipment.Runtime.Config;
+using App.Game.Equipment.Runtime.Config.Model;
 using App.Game.Equipment.Runtime.Data;
 using App.Game.Equipment.Runtime.Item;
 
@@ -57,6 +58,23 @@ namespace App.Game.Equipment.Runtime.Items
             }
             
             return true;
+        }
+
+        public bool CanPlace(EquipmentSlot slot, IModuleItem item)
+        {
+            var slotKey = slot.Data.SlotKey;
+            if (!item.TryGetConfigModule<EquipmentModuleConfig>(out var config))
+            {
+                HLogger.LogError("Config not found");
+                return false;
+            }
+
+            return CanPlace(slotKey, config.Type);
+        }
+
+        public bool CanPlace(string slotKey, string itemType)
+        {
+            return m_ConfigController.CanPlace(slotKey, itemType);
         }
 
         public void RemoveItem(EquipmentSlot slot)

@@ -112,8 +112,7 @@ namespace App.Game.Equipment.External.ViewModel
 
         private bool CanPlace(EquipmentItemSlotModel model, IModuleItem item)
         {
-            // todo
-            return true;
+            return m_SlotsController.CanPlace(model.Slot, item);
         }
 
         private void OnSlotClick(EquipmentItemSlotModel model)

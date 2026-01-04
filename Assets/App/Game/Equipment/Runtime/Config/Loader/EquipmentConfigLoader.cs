@@ -14,9 +14,9 @@ namespace App.Game.Equipment.Runtime.Config.Loader
             m_ConfigLoader = configLoader;
         }
 
-        public Optional<EquipmentConfigDto> Load()
+        public Optional<EquipmentDto> Load()
         {
-            return m_ConfigLoader.LoadConfig<EquipmentConfigDto>(m_LocalConfigKey);
+            return m_ConfigLoader.LoadConfig<EquipmentDto>(m_LocalConfigKey);
         }
     }
 }
