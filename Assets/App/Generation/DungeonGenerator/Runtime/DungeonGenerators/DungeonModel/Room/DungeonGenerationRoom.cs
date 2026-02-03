@@ -16,10 +16,10 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private Vector2Int m_Size;
         private readonly List<DungeonKeyData> m_ContainsDoorKeys;
         private readonly List<RoomConnection> m_Connections;
-        private List<GeneraitonTile> m_Tiles;
+        // private List<GeneraitonTile> m_Tiles;
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
-        private Matrix<GeneraitonTile> m_Matrix;
+        private Matrix<GeneraitonTile> m_Matrix; 
 
         public int Col => m_Position.X;
         public int Row => m_Position.Y;
@@ -63,11 +63,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             set => m_IsMainPath = value;
         }
 
-        public List<GeneraitonTile> Tiles
-        {
-            get => m_Tiles;
-            set => m_Tiles = value;
-        }
+        // public List<GeneraitonTile> Tiles
+        // {
+        //     get => m_Tiles;
+        //     set => m_Tiles = value;
+        // }
 
         public Matrix<GeneraitonTile> Matrix
         {
@@ -82,7 +82,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             m_Position = position;
             m_ContainsDoorKeys = new List<DungeonKeyData>();
             m_Connections = new List<RoomConnection>();
-            Tiles = new List<GeneraitonTile>();
+            // Tiles = new List<GeneraitonTile>();
         }
 
         public bool AddDoorKey(DungeonKeyData dungeonKeyData)

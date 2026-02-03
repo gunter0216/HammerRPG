@@ -9,7 +9,7 @@ namespace App.Game.DragItem.Runtime.Model
     public class ItemSlotModel : IItemSlotModel
     {
         private readonly ItemSlotView m_View;
-        private readonly int m_Index;
+        private int m_Index;
 
         private readonly Func<ItemSlotModel, IModuleItem, bool> m_CanPlaceFunc;
         private readonly Func<ItemSlotModel, IModuleItem, bool> m_PlaceFunc;
@@ -39,6 +39,11 @@ namespace App.Game.DragItem.Runtime.Model
         public void Initialize()
         {
             m_View.SetButtonClickCallback(OnButtonClick);
+        }
+
+        public void SetIndex(int index)
+        {
+            m_Index = index;
         }
 
         public void Clear()
@@ -92,6 +97,11 @@ namespace App.Game.DragItem.Runtime.Model
         public void DownItem()
         {
             m_View.SetPickupState(false);
+        }
+
+        public void SetActive(bool status)
+        {
+            m_View.gameObject.SetActive(status);
         }
     }
 }

@@ -35,6 +35,7 @@
         // end player systems
         TimeManager = 100,
         WindowManager = 100,
-        DragItem = 0
+        DragItem = 0,
+        Container = 0
     }
 }

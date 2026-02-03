@@ -76,11 +76,11 @@ namespace App.Generation.DungeonGenerator.Editor
         
         private void Draw()
         {
-            var tiles = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms[0].Tiles;
-            if (tiles != null && tiles.Count > 0)
-            {
-                // DrawTiles(); 
-            }
+            // var tiles = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms[0].Tiles;
+            // if (tiles != null && tiles.Count > 0)
+            // {
+            //     // DrawTiles(); 
+            // }
             
             var matrix = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms[0].Matrix;
             if (matrix != null)
