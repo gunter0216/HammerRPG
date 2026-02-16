@@ -11,9 +11,18 @@ namespace App.Common.SpriteLoaders.External
         public override void Configuration()
         {
             Container.BindInterfacesAndSelfTo<SpriteLoader>().AsSingle();
-            Container.BindInterfacesAndSelfTo<ItemSpriteLoader>().AsSingle();
+            Container.Bind<IItemSpriteLoader>().To<ItemSpriteLoader>().AsSingle();
             
             FsmRegistrar.Register<SpriteLoader>(FSMStage.StartInitStage, 0);
+        }
+    }
+    
+    [Configurator(DIContext.CoreContext)]    
+    public class CoreSpriteLoaderConfigurator : Configurator
+    {
+        public override void Configuration()
+        {
+            Container.Bind<IItemSpriteLoader>().To<ItemSpriteLoader>().AsSingle();
         }
     }
 }

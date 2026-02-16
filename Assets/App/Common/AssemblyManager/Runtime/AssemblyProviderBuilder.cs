@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using App.Common.Logger.Runtime;
 
 namespace App.Common.AssemblyManager.Runtime
 {
     public class AssemblyProviderBuilder : IAssemblyProviderBuilder
     {
+        private readonly IReadOnlyList<string> _assemblyNames;
         private readonly Dictionary<Type, List<AttributeNode>> m_AttributeToTypes;
         private readonly List<Type> m_Attributes;
         private bool m_Inherit = false;
 
-        public AssemblyProviderBuilder()
+        public AssemblyProviderBuilder(IReadOnlyList<string> assemblyNames)
         {
+            _assemblyNames = assemblyNames;
             m_AttributeToTypes = new Dictionary<Type, List<AttributeNode>>();
             m_Attributes = new List<Type>();
         }
@@ -26,22 +30,30 @@ namespace App.Common.AssemblyManager.Runtime
         
         public IAssemblyProvider Build()
         {
-            var assembly = Assembly.GetCallingAssembly();
-            var allTypes = assembly.GetTypes();
-            for (int i = 0; i < allTypes.Length; ++i)
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            var targetAssemblies = loadedAssemblies
+                .Where(a => _assemblyNames.Contains(a.GetName().Name))
+                .ToArray();
+            
+            foreach (var assembly in targetAssemblies)
             {
-                var type = allTypes[i];
-                for (int j = 0; j < m_Attributes.Count; ++j)
+                var allTypes = assembly.GetTypes();
+                for (int i = 0; i < allTypes.Length; ++i)
                 {
-                    var attributeType = m_Attributes[j];
-                    if (HasAttribute(type, attributeType))
+                    var type = allTypes[i];
+                    for (int j = 0; j < m_Attributes.Count; ++j)
                     {
-                        var attribute = type.GetCustomAttribute(attributeType, m_Inherit);
-                        m_AttributeToTypes[attributeType].Add(new AttributeNode(type, attribute));
+                        var attributeType = m_Attributes[j];
+                        if (HasAttribute(type, attributeType))
+                        {
+                            var attribute = type.GetCustomAttribute(attributeType, m_Inherit);
+                            m_AttributeToTypes[attributeType].Add(new AttributeNode(type, attribute));
+                        }
                     }
                 }
             }
-            
+
             return new AssemblyProvider(m_AttributeToTypes);
         }
 
