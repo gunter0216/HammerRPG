@@ -1,0 +1,10 @@
+{
+  "name": "Autumn.SpriteLoader",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.Utility",
+    "Autumn.Tiles",
+    "Autumn.AssetSystem",
+    "Unity.Addressables"
+  ]
+}

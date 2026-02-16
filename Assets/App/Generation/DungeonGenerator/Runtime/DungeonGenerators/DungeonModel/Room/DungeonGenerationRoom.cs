@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using App.Common.Algorithms.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
@@ -16,7 +17,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private Vector2Int m_Size;
         private readonly List<DungeonKeyData> m_ContainsDoorKeys;
         private readonly List<RoomConnection> m_Connections;
-        // private List<GeneraitonTile> m_Tiles;
+        private readonly List<GenerationDoor> m_Doors;
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
         private Matrix<GeneraitonTile> m_Matrix; 
@@ -63,17 +64,13 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             set => m_IsMainPath = value;
         }
 
-        // public List<GeneraitonTile> Tiles
-        // {
-        //     get => m_Tiles;
-        //     set => m_Tiles = value;
-        // }
-
         public Matrix<GeneraitonTile> Matrix
         {
             get => m_Matrix;
             set => m_Matrix = value;
         }
+
+        public List<GenerationDoor> Doors => m_Doors;
 
         public DungeonGenerationRoom(int uid, Vector2Int position, Vector2Int size)
         {
@@ -82,9 +79,15 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             m_Position = position;
             m_ContainsDoorKeys = new List<DungeonKeyData>();
             m_Connections = new List<RoomConnection>();
-            // Tiles = new List<GeneraitonTile>();
+            m_Doors = new List<GenerationDoor>();
         }
 
+        public bool AddDoor(GenerationDoor door)
+        {
+            Doors.Add(door);
+            return true;
+        }
+        
         public bool AddDoorKey(DungeonKeyData dungeonKeyData)
         {
             if (!m_ContainsDoorKeys.Contains(dungeonKeyData))

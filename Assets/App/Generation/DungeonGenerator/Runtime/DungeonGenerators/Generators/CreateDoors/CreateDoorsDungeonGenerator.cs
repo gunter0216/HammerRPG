@@ -1,6 +1,7 @@
 ﻿using System;
 using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateDoors.Cash;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
@@ -80,9 +81,10 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
 
             var worldPosition = position; 
             var localPosition = generationRoom.WorldToLocal(worldPosition);
-            generationRoom.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Door;
+            generationRoom.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Empty;
             localPosition = otherRoom.WorldToLocal(worldPosition);
-            otherRoom.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Door;
+            otherRoom.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Empty;
+            otherRoom.AddDoor(new GenerationDoor(localPosition, otherRoom.RequiredKey));
         }
 
         public string GetName()

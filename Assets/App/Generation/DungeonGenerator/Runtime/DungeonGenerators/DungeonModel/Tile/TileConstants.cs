@@ -4,6 +4,5 @@
     {
         public const string Empty = "Empty";
         public const string Wall = "Wall";
-        public const string Door = "Door";
     }
 }

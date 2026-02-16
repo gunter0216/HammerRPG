@@ -1,0 +1,23 @@
+{
+  "name": "Autumn.Core",
+  "references": [
+    "Autumn.Algorithms",
+    "Autumn.AssemblyManager",
+    "Autumn.AssetSystem",
+    "Autumn.ConfigLoader",
+    "Autumn.DataManager",
+    "Autumn.DataContainers",
+    "Autumn.FSM",
+    "Autumn.Json",
+    "Autumn.Logger",
+    "Autumn.ModuleItems",
+    "Autumn.Scenes",
+    "Autumn.Time",
+    "Autumn.Utility",
+    "Autumn.Pool",
+    "Unity.Addressables",
+    "Autumn.SpriteLoader",
+    "UniRx",
+    "Zenject"
+  ]
+}

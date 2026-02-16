@@ -152,7 +152,7 @@ namespace App.Generation.DungeonGenerator.Editor
                         }
 
                         var color = Color.black;
-                        color = tile.Id == TileConstants.Door ? Color.red : color;
+                        // color = tile.Id == TileConstants.Door ? Color.red : color;
                         
                         var tileObj = new GameObject();
                         tileObj.transform.parent = m_TilesContent;
@@ -186,7 +186,7 @@ namespace App.Generation.DungeonGenerator.Editor
                 }
                 
                 var color = Color.black;
-                color = tileId == TileConstants.Door ? Color.red : color;
+                // color = tileId == TileConstants.Door ? Color.red : color;
                 monoTile.Value.SpriteRenderer.color = color;
             }
         }

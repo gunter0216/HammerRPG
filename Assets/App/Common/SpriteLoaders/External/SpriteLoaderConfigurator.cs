@@ -11,6 +11,7 @@ namespace App.Common.SpriteLoaders.External
         public override void Configuration()
         {
             Container.BindInterfacesAndSelfTo<SpriteLoader>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ItemSpriteLoader>().AsSingle();
             
             FsmRegistrar.Register<SpriteLoader>(FSMStage.StartInitStage, 0);
         }
