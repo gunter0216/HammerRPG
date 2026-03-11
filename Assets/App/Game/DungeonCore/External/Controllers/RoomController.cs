@@ -16,6 +16,7 @@ namespace App.Game.DungeonCore.External.Controllers
         
         private GameObject _root;
         private List<DoorController> _doors;
+        private List<ChestController> _chest;
 
         public RoomController(RoomService service, IItemSpriteLoader spriteLoader)
         {
@@ -29,6 +30,26 @@ namespace App.Game.DungeonCore.External.Controllers
             CreateFloor();
             CreateWalls();
             CreateDoors();
+            CreateChest();
+        }
+
+        private void CreateChest()
+        {
+            _chest = new List<ChestController>();
+            var chestRoot = new GameObject("Chests").transform;
+            chestRoot.parent = _root.transform;
+            
+            var room = _service.Room;
+            var chests = room.Chests;
+            foreach (var chest in chests)
+            {
+                var chestController = new ChestController(
+                    _spriteLoader,
+                    chestRoot, 
+                    chest);
+                chestController.Initialize();
+                _chest.Add(chestController);
+            }
         }
 
         private void CreateFloor()
@@ -88,7 +109,6 @@ namespace App.Game.DungeonCore.External.Controllers
 
         private void CreateDoors()
         {
-            var room = _service.Room;
             var doors = _service.Room.Doors;
             var doorsRoot = new GameObject("Doors").transform;
             doorsRoot.parent = _root.transform;

@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 2c59a38cf4fb6e248bf75b6ba820857c
   m_SerializeEntries:
+  - m_GUID: 01afc6dddc8f9334bb423c0f9529d3ce
+    m_Address: IronKeyIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0f24cbd0ffd24cceb73730a4a2bced6d
     m_Address: GameModuleItemsConfig
     m_ReadOnly: 0

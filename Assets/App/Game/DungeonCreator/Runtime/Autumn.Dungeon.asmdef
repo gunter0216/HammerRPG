@@ -10,6 +10,7 @@
     "Autumn.Algorithms",
     "Autumn.DataContainers",
     "Autumn.ModuleItems",
-    "Autumn.SpriteLoader"
+    "Autumn.SpriteLoader",
+    "Autumn.DataManager"
   ]
 }

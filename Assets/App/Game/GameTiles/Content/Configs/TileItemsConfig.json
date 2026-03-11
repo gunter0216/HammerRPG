@@ -1,6 +1,17 @@
 {
   "items": [
     {
+      "id": "chest",
+      "modules": [
+        {
+          "module": "chest",
+          "close_icon_key": "CloseChest",
+          "open_icon_key": "OpenChest",
+          "empty_icon_key": "EmptyChest"
+        }
+      ]
+    },
+    {
       "id": "wall",
       "modules": [
         {

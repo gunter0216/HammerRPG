@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.DungeonCreator.Runtime.Tiles;
 using App.Game.GameManagers.External.Config.Service;
@@ -17,13 +18,15 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 {
     public class RoomsCreator
     {
+        private readonly IModuleItemsManager _moduleItemsManager;
         private readonly ITilesController _tilesController;
         private readonly RoomCreator _roomCreator;
 
-        public RoomsCreator(ITilesController tilesController)
+        public RoomsCreator(ITilesController tilesController, IModuleItemsManager moduleItemsManager)
         {
             _tilesController = tilesController;
-            _roomCreator = new RoomCreator(_tilesController);
+            _moduleItemsManager = moduleItemsManager;
+            _roomCreator = new RoomCreator(_tilesController, _moduleItemsManager);
         }
 
         public void CreateRooms(DungeonGeneration generation, Dungeon dungeon)

@@ -1,6 +1,19 @@
 ﻿{
   "items": [
     {
+      "id": "IronKey",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "IronKeyIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Other"
+        }
+      ]
+    },
+    {
       "id": "LeatherArmor",
       "modules": [
         {

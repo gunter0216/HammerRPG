@@ -1,5 +1,6 @@
 using App.Common.Configs.Runtime;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.DungeonCreator.Runtime.Rooms;
@@ -13,15 +14,18 @@ namespace App.Generation.DungeonCreator.Runtime
     {
         private readonly IConfigLoader _configLoader;
         private readonly ITilesController _tilesController;
+        private readonly IModuleItemsManager _moduleItemsManager;
 
         private GenerationConfigController _configController;
 
         public DungeonCreator(
             IConfigLoader configLoader,
-            ITilesController tilesController)
+            ITilesController tilesController, 
+            IModuleItemsManager moduleItemsManager)
         {
             _configLoader = configLoader;
             _tilesController = tilesController;
+            _moduleItemsManager = moduleItemsManager;
         }
 
         public void Init()
@@ -61,7 +65,7 @@ namespace App.Generation.DungeonCreator.Runtime
             var data = new DungeonData();
             var dungeon = new Dungeon(data, generationConfig.Value);
 
-            var roomsCreator = new RoomsCreator(_tilesController);
+            var roomsCreator = new RoomsCreator(_tilesController, _moduleItemsManager);
             roomsCreator.CreateRooms(dungeonGeneration.Value, dungeon);
 
             return Optional<Dungeon>.Success(dungeon);

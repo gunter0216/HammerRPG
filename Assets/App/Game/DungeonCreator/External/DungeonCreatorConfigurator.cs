@@ -3,6 +3,7 @@ using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
 using App.Game.DungeonCreator.Runtime.Door;
+using App.Generation.DungeonCreator.Runtime.Chest;
 
 namespace App.Game.GameManagers.External
 {
@@ -22,7 +23,10 @@ namespace App.Game.GameManagers.External
     {
         public override void Configuration()
         {
+            BindSingle<ChestModuleDtoToConfigConverter>();
             BindSingle<DoorModuleDtoToConfigConverter>();
+            
+            RegisterData<KeyContainerData>();
         }
     }
 }

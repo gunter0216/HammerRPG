@@ -32,6 +32,11 @@ namespace App.Game.GameTiles.Runtime
         {
             return m_ModuleItem.GetDataModule<T>();
         }
+        
+        public bool TryGetDataModule<T>(out T data) where T : class, IModuleData
+        {
+            return m_ModuleItem.TryGetDataModule<T>(out data);
+        }
 
         public bool HasDataModule<T>() where T : class, IModuleData
         {

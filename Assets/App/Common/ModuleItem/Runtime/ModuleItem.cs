@@ -50,7 +50,12 @@ namespace App.Common.ModuleItem.Runtime
         {
             return m_ModulesHolder.GetModule<T>();
         }
-        
+
+        public bool TryGetDataModule<T>(out T data) where T : class, IModuleData
+        {
+            return m_ModulesHolder.TryGetModule<T>(out data);
+        }
+
         public bool HasDataModule<T>() where T : class, IModuleData
         {
             return m_ModulesHolder.HasModule<T>();

@@ -132,6 +132,11 @@ namespace App.Game.GameTiles.External
             {
                 return "door";
             }
+            
+            if (generationId == "Chest")
+            {
+                return "chest";
+            }
 
             return null;
         }
