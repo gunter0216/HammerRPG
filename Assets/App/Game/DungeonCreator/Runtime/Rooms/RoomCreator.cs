@@ -80,7 +80,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 
                 data.Reference = tileModuleItem.Value.ReferenceSelf;
 
-                var door = new Door(data, tileModuleItem.Value);
+                var door = new Door(data, tileModuleItem.Value, room);
                 
                 doors.Add(door);
             }

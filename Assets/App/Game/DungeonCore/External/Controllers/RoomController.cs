@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Game.DungeonCore.External.Services;
@@ -14,6 +15,7 @@ namespace App.Game.DungeonCore.External.Controllers
         private readonly IItemSpriteLoader _spriteLoader;
         
         private GameObject _root;
+        private List<DoorController> _doors;
 
         public RoomController(RoomService service, IItemSpriteLoader spriteLoader)
         {
@@ -90,40 +92,15 @@ namespace App.Game.DungeonCore.External.Controllers
             var doors = _service.Room.Doors;
             var doorsRoot = new GameObject("Doors").transform;
             doorsRoot.parent = _root.transform;
+            _doors = new List<DoorController>(doors.Count);
             foreach (var door in doors)
             {
-                var moduleItem = door.ModuleItem;
-                var configModule = moduleItem.GetConfigModule<DoorModuleConfig>();
-                if (!configModule.HasValue)
-                {
-                    HLogger.LogError($"Config not found.");
-                    continue;
-                }
-                
-                var isClosed = door.Data.IsClosed;
-                var iconKey = isClosed ? configModule.Value.CloseIconKey : configModule.Value.OpenIconKey;
-                var sprite = _spriteLoader.Load(iconKey);
-                if (!sprite.HasValue)
-                {
-                    HLogger.LogError("Cant get tile sprite");
-                    continue;
-                }
-                
-                var localPosition = door.Data.Position;
-                var position = room.LocalToWorld(localPosition);
-                
-                var tileView = new GameObject($"Door {localPosition.X} {localPosition.Y}");
-                tileView.transform.position = new Vector3(position.X + 0.5f, position.Y + 0.5f, 1);
-                tileView.transform.parent = doorsRoot;
-                
-                var spriteRenderer = tileView.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = sprite.Value;
-                spriteRenderer.drawMode = SpriteDrawMode.Simple;
-                spriteRenderer.size = new UnityEngine.Vector2(1, 1);
-                spriteRenderer.sortingOrder = 3;
-
-                var collider = tileView.AddComponent<BoxCollider2D>();
-                collider.enabled = isClosed;
+                var controller = new DoorController(
+                    _spriteLoader,
+                    doorsRoot, 
+                    door);
+                controller.Initialize();
+                _doors.Add(controller);
             }
         }
     }
