@@ -10,15 +10,15 @@ namespace App.Generation.DungeonCreator.Runtime.Tiles
     public class TileData
     {
         [JsonProperty("reference")] 
-        private DataReference m_Reference;
+        private DataReference _reference;
 
         [JsonProperty("position")] 
         private Vector2Int _position;
 
         public DataReference Reference
         {
-            get => m_Reference;
-            set => m_Reference = value;
+            get => _reference;
+            set => _reference = value;
         }
 
         public Vector2Int Position

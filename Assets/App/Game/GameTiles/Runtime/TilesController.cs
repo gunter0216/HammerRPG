@@ -130,12 +130,7 @@ namespace App.Game.GameTiles.External
             
             if (generationId == "Door")
             {
-                return "closed_door";
-            }
-            
-            if (generationId == "OpenedDoor")
-            {
-                return "opened_door";
+                return "door";
             }
 
             return null;

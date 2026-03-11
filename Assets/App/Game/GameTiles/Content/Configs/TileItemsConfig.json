@@ -10,20 +10,12 @@
       ]
     },
     {
-      "id": "closed_door",
+      "id": "door",
       "modules": [
         {
-          "module": "icon",
-          "icon_key": "ClosedDoor"
-        }
-      ]
-    },
-    {
-      "id": "opened_door",
-      "modules": [
-        {
-          "module": "icon",
-          "icon_key": "OpenedDoor"
+          "module": "door",
+          "close_icon_key": "ClosedDoor",
+          "open_icon_key": "OpenedDoor"
         }
       ]
     },

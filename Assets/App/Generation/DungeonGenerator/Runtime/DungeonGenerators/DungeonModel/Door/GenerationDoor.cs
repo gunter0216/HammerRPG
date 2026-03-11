@@ -11,6 +11,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel
         public Vector2Int LocalPosition => m_LocalPosition;
 
         public DungeonKeyData RequiredKey => m_RequiredKey;
+        public bool IsRequiredKey => m_RequiredKey?.UID != null;
 
         public GenerationDoor(Vector2Int localPosition, DungeonKeyData requiredKey)
         {

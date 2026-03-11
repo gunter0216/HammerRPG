@@ -7,27 +7,34 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 {
     public class Room
     {
-        private readonly RoomData m_Data;
-        private List<Tile> m_Tiles;
+        private readonly RoomData _data;
+        private List<Tile> _tiles;
+        private List<Door> _doors;
 
         public Room(RoomData data)
         {
-            m_Data = data;
+            _data = data;
         }
 
-        public RoomData Data => m_Data;
+        public RoomData Data => _data;
 
         public List<Tile> Tiles
         {
-            get => m_Tiles;
-            set => m_Tiles = value;
+            get => _tiles;
+            set => _tiles = value;
         }
         
-        public int Width => m_Data.Width;
-        public int Height => m_Data.Height;
-        public Vector2Int Position => m_Data.Position;
-        public Vector2Int Size => m_Data.Size;
-        
+        public int Width => _data.Width;
+        public int Height => _data.Height;
+        public Vector2Int Position => _data.Position;
+        public Vector2Int Size => _data.Size;
+
+        public List<Door> Doors
+        {
+            get => _doors;
+            set => _doors = value;
+        }
+
         public Vector2Int LocalToWorld(int x, int y) 
         {
             return new Vector2Int(Position.X + x, Position.Y + Height - 1 - y);
@@ -50,7 +57,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
         
         public Vector2 GetCenter()
         {
-            return new Vector2(m_Data.Position.X + m_Data.Width * 0.5f, m_Data.Position.Y + m_Data.Height * 0.5f);
+            return new Vector2(_data.Position.X + _data.Width * 0.5f, _data.Position.Y + _data.Height * 0.5f);
         }
     }
 }

@@ -2,8 +2,8 @@ using App.Common.Configs.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Common.Utilities.Utility.Runtime;
+using App.Game.DungeonCreator.Runtime.Rooms;
 using App.Game.GameManagers.External.Config.Service;
-using App.Game.GameManagers.External.Fabric.Room;
 using App.Game.GameTiles.Runtime;
 using Logger = App.Common.Logger.Runtime.Logger;
 
