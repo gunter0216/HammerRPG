@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using App.Common.Algorithms.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Common.Utilities.Utility.Runtime;
@@ -97,6 +98,17 @@ namespace App.Game.DungeonCore.External
             var roomService = new RoomService(room);
             
             return Optional<RoomService>.Success(roomService);
+        }
+
+        public Optional<Vector2> GetSpawnPoint()
+        {
+            if (_service == null)
+            {
+                HLogger.LogError($"Dungeon service is not initialized.");
+                return Optional<Vector2>.Fail();
+            }
+
+            return Optional<Vector2>.Success(_service.GetSpawnPoint());
         }
     }
 }

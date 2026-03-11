@@ -1,5 +1,6 @@
 ﻿using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
+using App.Game.DungeonCore.External;
 using App.Game.Player.Runtime.Components;
 using App.Game.Worlds.Runtime;
 using App.Generation.DungeonCreator.Runtime;
@@ -10,45 +11,26 @@ namespace App.Game.GameManagers.External
     public class GameManager : IInitSystem
     {
         private readonly IWorldManager m_WorldManager;
-        private readonly IDungeonCreator m_DungeonCreator;
+        private readonly IDungeonController _dungeonController;
 
-        private Dungeon m_Dungeon;
-
-        public GameManager(IWorldManager worldManager, IDungeonCreator dungeonCreator)
+        public GameManager(IWorldManager worldManager, IDungeonController dungeonController)
         {
             m_WorldManager = worldManager;
-            m_DungeonCreator = dungeonCreator;
+            _dungeonController = dungeonController;
         }
 
         public void Init()
         {
-            if (!CreateDungeon())
-            {
-                HLogger.LogError("Cant generate dungeon");
-                return;
-            }
-
             PlacePlayerOnStartRoom();
-        }
-
-        private bool CreateDungeon()
-        {
-            var dungeon = m_DungeonCreator.Create();
-            if (!dungeon.HasValue)
-            {
-                HLogger.LogError("Cant create dungeon.");
-                return false;
-            }
-
-            m_Dungeon = dungeon.Value;
-            
-            return true;
         }
 
         private void PlacePlayerOnStartRoom()
         {
-            var startRoom = m_Dungeon.StartRoom;
-            var position = startRoom.GetCenter();
+            var position = _dungeonController.GetSpawnPoint();
+            if (!position.HasValue)
+            {
+                return;
+            }
             
             var world = m_WorldManager.GetWorld();
             var entityPool = world.GetPool<EntityComponent>();
@@ -56,7 +38,7 @@ namespace App.Game.GameManagers.External
             foreach (var i in world.Filter<PlayerComponent>().End())
             {
                 var entity = entityPool.Get(i);
-                entity.View.transform.position = new Vector3(position.X, position.Y);
+                entity.View.transform.position = new Vector3(position.Value.X, position.Value.Y);
             }
         }
     }

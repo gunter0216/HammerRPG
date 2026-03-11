@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using App.Common.Algorithms.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonCreator.Runtime;
 
 namespace App.Game.DungeonCore.External.Services
@@ -24,6 +26,11 @@ namespace App.Game.DungeonCore.External.Services
             {
                 room.Initialize();
             }
+        }
+
+        public Vector2 GetSpawnPoint()
+        {
+            return _dungeon.StartRoom.GetCenter();
         }
     }
 }

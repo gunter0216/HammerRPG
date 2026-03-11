@@ -68,7 +68,10 @@ namespace App.Game.GameManagers.External.Fabric.Room
 
         private Optional<DungeonCreator.Runtime.Rooms.Room> CreateRoom(DungeonGenerationRoom generationRoom)
         {
-            var data = new RoomData();
+            var data = new RoomData(generationRoom)
+            {
+                Tiles = new List<TileData>()
+            };
             var room = new DungeonCreator.Runtime.Rooms.Room(data);
 
             CreateTiles(room, generationRoom);
@@ -84,14 +87,17 @@ namespace App.Game.GameManagers.External.Fabric.Room
             {
                 for (int j = 0; j < matrix.Width; ++j)
                 {
-                    var generaitonTile = matrix[i, j];
-                    var tile = CreateTile(generaitonTile, new Vector2Int(j, i));
+                    var generationTile = matrix[i, j];
+                    var position = new Vector2Int(j, i);
+                    var tile = CreateTile(generationTile, new Vector2Int(j, i));
                     if (!tile.HasValue)
                     {
                         continue;
                     }
-                    
+
+                    tile.Value.Data.Position = position;
                     room.Tiles.Add(tile.Value);
+                    room.Data.Tiles.Add(tile.Value.Data);
                 }
             }
         }

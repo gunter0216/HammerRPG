@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using App.Common.Algorithms.Runtime;
+using App.Generation.DungeonCreator.Runtime.Tiles;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
+using App.Generation.DungeonGenerator.Runtime.Rooms;
 using Newtonsoft.Json;
 
 namespace App.Game.GameManagers.External.Room
@@ -21,7 +23,7 @@ namespace App.Game.GameManagers.External.Room
         private readonly List<RoomConnection> m_Connections;
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
-        private Matrix<GeneraitonTile> m_Matrix;
+        private List<TileData> _tiles;
 
         public Vector2Int Position => m_Position;
 
@@ -30,5 +32,27 @@ namespace App.Game.GameManagers.External.Room
         public int Height => m_Size.Y;
 
         public int UID => m_UID;
+
+        public List<TileData> Tiles
+        {
+            get => _tiles;
+            set => _tiles = value;
+        }
+
+        public RoomData()
+        {
+            
+        }
+        
+        public RoomData(DungeonGenerationRoom generationRoom)
+        {
+            m_UID = generationRoom.UID;
+            m_Position = generationRoom.Position;
+            m_Size = generationRoom.Size;
+            m_ContainsDoorKeys = new List<DungeonKeyData>(generationRoom.ContainsDoorKeys);
+            m_Connections = new List<RoomConnection>(generationRoom.Connections);
+            m_RequiredKey = generationRoom.RequiredKey;
+            m_IsMainPath = generationRoom.IsMainPath;
+        }
     }
 }

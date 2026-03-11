@@ -25,6 +25,28 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
         
         public int Width => m_Data.Width;
         public int Height => m_Data.Height;
+        public Vector2Int Position => m_Data.Position;
+        public Vector2Int Size => m_Data.Size;
+        
+        public Vector2Int LocalToWorld(int x, int y) 
+        {
+            return new Vector2Int(Position.X + x, Position.Y + Height - 1 - y);
+        }
+        
+        public Vector2Int LocalToWorld(Vector2Int localPosition)
+        {
+            return LocalToWorld(localPosition.X, localPosition.Y);
+        }
+        
+        public Vector2Int WorldToLocal(int x, int y) 
+        {
+            return new Vector2Int(x - Position.X, Position.Y - y + Height - 1);
+        }
+
+        public Vector2Int WorldToLocal(Vector2Int worldPosition)
+        {
+            return WorldToLocal(worldPosition.X, worldPosition.Y);
+        }
         
         public Vector2 GetCenter()
         {
