@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace App.Generation.DungeonGenerator.External.Dto.Generation
 {
@@ -7,7 +8,7 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
     [JsonObject(MemberSerialization.Fields)]
     public class SeparateRoomsGenerationConfigDto
     {
-        [JsonProperty("speed")]
+        [JsonProperty("speed")] [SerializeField]
         private int m_Speed = 1;
 
         public int Speed => m_Speed;

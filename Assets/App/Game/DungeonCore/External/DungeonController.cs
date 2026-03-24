@@ -73,31 +73,11 @@ namespace App.Game.DungeonCore.External
                 return false;
             }
             
-            var rooms = new List<RoomService>(16);
-            _service = new DungeonService(dungeon.Value, rooms);
-
-            foreach (var room in dungeon.Value.Rooms)
-            {
-                var roomService = CreateRoom(room);
-                if (!roomService.HasValue)
-                {
-                    HLogger.LogError("Cant create room");
-                    return false;
-                }
-                
-                rooms.Add(roomService.Value);
-            }
-
+            
+            _service = new DungeonService(dungeon.Value);
             _service.Initialize();
 
             return true;
-        }
-
-        private Optional<RoomService> CreateRoom(Room room)
-        {
-            var roomService = new RoomService(room);
-            
-            return Optional<RoomService>.Success(roomService);
         }
 
         public Optional<Vector2> GetSpawnPoint()

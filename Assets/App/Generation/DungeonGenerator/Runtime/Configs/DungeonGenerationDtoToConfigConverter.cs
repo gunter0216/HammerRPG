@@ -7,6 +7,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Borde
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator.Config;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator.Config;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding.Config;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
 
 namespace App.Generation.DungeonGenerator.External
 {
@@ -19,11 +20,27 @@ namespace App.Generation.DungeonGenerator.External
             generationConfigs.Add(CreateRoomsGenerationConfig(generationDto.RoomsGeneration));
             generationConfigs.Add(CreateSeparateRoomsGenerationConfig(generationDto.SeparationConfig));
             generationConfigs.Add(CreateSelectSmallRoomsGenerationConfig(generationDto.SmallRooms));
+            generationConfigs.Add(CreateSquare(generationDto.SquareGeneration));
             
             var generationConfig = new DungeonGenerationConfig(generationDto.Key, generationConfigs);
             return generationConfig;
         }
 
+        private SquarePartitionGenerationConfig CreateSquare(
+            SquareGenerationConfigDto dto)
+        {
+            return new SquarePartitionGenerationConfig(
+                size: dto.Size,
+                minPartition: dto.MinPartition,
+                maxPartition: dto.MaxPartition,
+                minAreaSize: dto.MinAreaSize,
+                minRoomSize: dto.MinRoomSize,
+                maxRoomSize: dto.MaxRoomSize,
+                depth: dto.Depth,
+                offset: dto.Offset,
+                areaPadding: dto.AreaPadding);
+        }
+        
         private SelectBorderingRoomsGenerationConfig CreateSelectBorderingRoomsGenerationConfig(
             SelectBorderingRoomsGenerationConfigDto dto)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using App.Generation.DungeonGenerator.External.Dto.Common;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace App.Generation.DungeonGenerator.External.Dto.Generation
 {
@@ -8,16 +9,16 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
     [JsonObject(MemberSerialization.Fields)]
     public class CreateRoomsGenerationConfigDto
     {
-        [JsonProperty("roomsAmount")]
+        [JsonProperty("roomsAmount")] [SerializeField]
         private int m_CountRooms = 20;
 
-        [JsonProperty("minRoomSize")]
+        [JsonProperty("minRoomSize")] [SerializeField]
         private SizeIntDto m_MinRoomSize;
 
-        [JsonProperty("maxRoomSize")]
+        [JsonProperty("maxRoomSize")] [SerializeField]
         private SizeIntDto m_MaxRoomSize;
 
-        [JsonProperty("shape")]
+        [JsonProperty("shape")] [SerializeField]
         private int m_Radius = 1;
 
         public int CountRooms => m_CountRooms;

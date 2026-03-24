@@ -6,6 +6,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
 
 namespace App.Generation.DungeonGenerator.Runtime.Rooms
@@ -21,6 +22,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
         private Matrix<GeneraitonTile> m_Matrix; 
+        private SquareArea _corridor; 
 
         public int Col => m_Position.X;
         public int Row => m_Position.Y;
@@ -71,6 +73,12 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         }
 
         public List<GenerationDoor> Doors => m_Doors;
+
+        public SquareArea Corridor
+        {
+            get => _corridor;
+            set => _corridor = value;
+        }
 
         public DungeonGenerationRoom(int uid, Vector2Int position, Vector2Int size)
         {

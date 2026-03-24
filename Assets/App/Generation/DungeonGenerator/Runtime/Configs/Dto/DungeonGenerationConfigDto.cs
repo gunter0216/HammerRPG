@@ -1,6 +1,7 @@
 ﻿using System;
 using App.Generation.DungeonGenerator.External.Dto.Generation;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace App.Generation.DungeonGenerator.External.Dto
 {
@@ -8,20 +9,23 @@ namespace App.Generation.DungeonGenerator.External.Dto
     [JsonObject(MemberSerialization.Fields)]
     public class DungeonGenerationConfigDto
     {
-        [JsonProperty("key")]
+        [JsonProperty("key")] [SerializeField]
         private string m_Key;
         
-        [JsonProperty("rooms")]
+        [JsonProperty("rooms")] [SerializeField]
         private CreateRoomsGenerationConfigDto m_RoomsGeneration;
 
-        [JsonProperty("separation")]
+        [JsonProperty("separation")] [SerializeField]
         private SeparateRoomsGenerationConfigDto m_SeparationConfig;
 
-        [JsonProperty("smallRooms")]
+        [JsonProperty("smallRooms")] [SerializeField]
         private SelectSmallRoomsGenerationConfigDto m_SmallRooms;
 
-        [JsonProperty("borderingRooms")]
+        [JsonProperty("borderingRooms")] [SerializeField]
         private SelectBorderingRoomsGenerationConfigDto m_BorderingRooms;
+        
+        [JsonProperty("squareGeneration")] [SerializeField]
+        private SquareGenerationConfigDto _squareGeneration;
 
         public CreateRoomsGenerationConfigDto RoomsGeneration => m_RoomsGeneration;
 
@@ -32,5 +36,7 @@ namespace App.Generation.DungeonGenerator.External.Dto
         public SelectBorderingRoomsGenerationConfigDto BorderingRooms => m_BorderingRooms;
 
         public string Key => m_Key;
+
+        public SquareGenerationConfigDto SquareGeneration => _squareGeneration;
     }
 }

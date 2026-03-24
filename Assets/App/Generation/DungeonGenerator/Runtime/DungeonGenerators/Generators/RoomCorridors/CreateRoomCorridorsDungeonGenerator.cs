@@ -7,12 +7,12 @@ using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors
 {
-    public class CreateCorridorsDungeonGenerator : IDungeonGenerator
+    public class CreateRoomCorridorsDungeonGenerator : IDungeonGenerator
     {
         private const int m_MinRoomSize = 7;
         private readonly RoomCreator m_RoomCreator;
 
-        public CreateCorridorsDungeonGenerator(RoomCreator roomCreator)
+        public CreateRoomCorridorsDungeonGenerator(RoomCreator roomCreator)
         {
             m_RoomCreator = roomCreator;
         }

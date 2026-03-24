@@ -7,6 +7,8 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Gen
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Connections;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridor;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateDoors;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateWalls;
@@ -15,6 +17,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Rooms
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndPath;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndRooms;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation;
@@ -37,20 +40,23 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             
             var roomCreator = new RoomCreator();
 
-            generators.Add(new CreateRoomsDungeonGenerator(roomCreator));
-            generators.Add(new SeparateRoomsDungeonGenerator());
-            generators.Add(new SelectSmallRoomsDungeonGenerator());
-            generators.Add(new DiscardSmallRoomsDungeonGenerator());
-            generators.Add(new SelectBorderingRoomsDungeonGenerator());
-            generators.Add(new DiscardBorderingRoomsDungeonGenerator());
+            generators.Add(new SquarePartitionDungeonGenerator(roomCreator));
+            // generators.Add(new CreateRoomsDungeonGenerator(roomCreator));
+            // generators.Add(new SeparateRoomsDungeonGenerator());
+            // generators.Add(new SelectSmallRoomsDungeonGenerator());
+            // generators.Add(new DiscardSmallRoomsDungeonGenerator());
+            // generators.Add(new SelectBorderingRoomsDungeonGenerator());
+            // generators.Add(new DiscardBorderingRoomsDungeonGenerator());
             generators.Add(new TriangulationDungeonGenerator());
             generators.Add(new SpanningTreeDungeonGenerator(m_Logger));
-            generators.Add(new CreateCorridorsDungeonGenerator(roomCreator));
+            generators.Add(new RoomConnectionsDungeonGenerator());
+            // generators.Add(new CreateRoomCorridorsDungeonGenerator(roomCreator));
             generators.Add(new StartEndRoomsDungeonGenerator());
             generators.Add(new StartEndPathDungeonGenerator());
-            generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
-            generators.Add(new CreateWallsDungeonGenerator());
-            generators.Add(new CreateDoorsDungeonGenerator());
+            generators.Add(new CreateCorridorsDungeonGenerator());
+            // generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
+            // generators.Add(new CreateWallsDungeonGenerator());
+            // generators.Add(new CreateDoorsDungeonGenerator());
             
             m_Generators = generators;
         }
@@ -59,15 +65,15 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
         {
             for (int i = 0; i < 10; ++i)
             {
-                try
-                {
+                // try
+                // {
                     var generate = TryGenerate(generationConfig);
                     return generate;
-                }
-                catch (Exception e)
-                {
-                    HLogger.LogError(e);
-                }
+                // }
+                // catch (Exception e)
+                // {
+                //     HLogger.LogError(e);
+                // }
             }
             
             return Optional<DungeonGeneration>.Fail();
@@ -113,7 +119,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             }
 
             var generator = m_Generators[m_CurrentGeneratorIndex];
-            
+
             m_Logger.Log($"Next iteration generation: {generator.GetName()}"); 
             
             var generation = generator.Process(m_Generation);

@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace App.Generation.DungeonGenerator.External.Dto.Common
 {
@@ -7,10 +8,10 @@ namespace App.Generation.DungeonGenerator.External.Dto.Common
     [JsonObject(MemberSerialization.Fields)]
     public class SizeIntDto
     {
-        [JsonProperty("width")]
+        [JsonProperty("width")] [SerializeField]
         private int m_Width;
         
-        [JsonProperty("height")]
+        [JsonProperty("height")] [SerializeField]
         private int m_Height;
 
         public int Width => m_Width;

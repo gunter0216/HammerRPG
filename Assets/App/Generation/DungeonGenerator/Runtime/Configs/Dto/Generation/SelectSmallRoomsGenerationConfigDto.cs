@@ -1,6 +1,7 @@
 ﻿using System;
 using App.Generation.DungeonGenerator.External.Dto.Common;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace App.Generation.DungeonGenerator.External.Dto.Generation
 {
@@ -8,7 +9,7 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
     [JsonObject(MemberSerialization.Fields)]
     public class SelectSmallRoomsGenerationConfigDto
     {
-        [JsonProperty("roomThreshold")]
+        [JsonProperty("roomThreshold")] [SerializeField]
         private SizeIntDto m_RoomThreshold;
 
         public SizeIntDto RoomThreshold => m_RoomThreshold;

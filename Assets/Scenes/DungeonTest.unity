@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Config:
+    m_Key: Default
     m_RoomsGeneration:
       m_CountRooms: 100
       m_MinRoomSize:
@@ -184,7 +185,19 @@ MonoBehaviour:
         m_Height: 6
     m_BorderingRooms:
       m_MinCorridorSize: 6
-  ShowLabel: 0
+    _squareGeneration:
+      _size:
+        m_Width: 60
+        m_Height: 60
+      _offset: 0.06
+      _minPartition: 0
+      _maxPartition: 0
+      _minAreaSize: 6
+      _minRoomSize: 11
+      _maxRoomSize: 30
+      _areaPadding: 1
+      _depth: 4
+  ShowLabel: 1
   ShowRoomBorders: 1
 --- !u!1 &887375796
 GameObject:
