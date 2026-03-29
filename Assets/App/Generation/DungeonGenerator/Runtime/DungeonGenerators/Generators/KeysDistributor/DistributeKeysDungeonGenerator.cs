@@ -18,39 +18,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
 
         public Optional<DungeonGeneration> Process(DungeonGeneration generation)
         {
-            if (!generation.TryGetCash<StartEndPathGenerationCash>(out var cash))
-            {
-                return Optional<DungeonGeneration>.Fail();
-            }
-            
             var roomsData = generation.DungeonGenerationResult.GenerationData.GenerationRooms;
-            var rooms = roomsData.Rooms;
             var startRoom = roomsData.StartGenerationRoom;
             var endRoom = roomsData.EndGenerationRoom;
             var visitedRooms = new HashSet<DungeonGenerationRoom>();
             
-            var path = cash.Path;
-            var roomsInPath = new HashSet<DungeonGenerationRoom>(path);
-            foreach (var room in rooms)
-            {
-                if (roomsInPath.Contains(room))
-                {
-                    continue;
-                }
-
-                if (room.Connections
-                        .Select(x => x.GenerationRoom)
-                        .Count(x => roomsInPath.Contains(x)) >= 2)
-                {
-                    roomsInPath.Add(room);
-                }
-            }
-
-            foreach (var roomData in roomsInPath)
-            {
-                roomData.IsMainPath = true;
-            }
-
             var doorKeys = new Stack<DungeonKeyData>();
             var stack = new List<DungeonGenerationRoom>();
             stack.Add(startRoom);
@@ -110,16 +82,16 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
                         .Where(x => !visitedRooms.Contains(x))
                         .ToArray();
                     
-                    var pathRoom = notVisitedRooms
-                        .FirstOrDefault(x => roomsInPath.Contains(x));
+                    var mainRoom = notVisitedRooms
+                        .First(x => x.IsMainPath);
                     
-                    var notPathRooms = notVisitedRooms
-                        .Where(x => !roomsInPath.Contains(x))
+                    var notMainRooms = notVisitedRooms
+                        .Where(x => !x.IsMainPath)
                         .ToArray();
 
-                    if (notPathRooms.Length <= 0)
+                    if (notMainRooms.Length <= 0)
                     {
-                        AddRoomInStack(pathRoom);
+                        AddRoomInStack(mainRoom);
                         doorKeys.Pop();
                     }
                     else
@@ -132,15 +104,15 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
                         {
                             doorKey = m_KeyCreator.Create();
                             doorKeys.Push(doorKey);
-                            if (notPathRooms.Length >= 2)
+                            if (notMainRooms.Length >= 2)
                             {
-                                notPathRooms[0].RequiredKey = doorKey;
-                                AddRoomInStack(notPathRooms[1]);
+                                notMainRooms[0].RequiredKey = doorKey;
+                                AddRoomInStack(notMainRooms[1]);
                             }
                             else
                             {
-                                pathRoom.RequiredKey = doorKey;
-                                AddRoomInStack(notPathRooms[0]);
+                                mainRoom.RequiredKey = doorKey;
+                                AddRoomInStack(notMainRooms[0]);
                             }
                         }
                         else

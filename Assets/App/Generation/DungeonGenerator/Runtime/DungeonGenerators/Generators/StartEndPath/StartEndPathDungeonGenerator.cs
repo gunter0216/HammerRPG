@@ -43,7 +43,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
             var path = new List<DungeonGenerationRoom>(pathResult.Count);
             foreach (var index in pathResult)
             {
-                path.Add(indexToRoom[index]);
+                var room = indexToRoom[index];
+                path.Add(room);
+                room.IsMainPath = true;
             }
 
             generation.AddCash(new StartEndPathGenerationCash(path));

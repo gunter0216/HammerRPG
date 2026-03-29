@@ -11,7 +11,6 @@ using App.Generation.DungeonCreator.Runtime.Tiles;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
-using TileConstants = App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.TileConstants;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.DungeonCreator.Runtime.Rooms

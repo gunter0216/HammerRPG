@@ -7,6 +7,7 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.GameTiles.External.Config.Data;
 using App.Game.GameTiles.External.Config.Loader;
 using App.Game.GameTiles.Runtime;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Game.GameTiles.External
@@ -85,7 +86,7 @@ namespace App.Game.GameTiles.External
             return true;
         }
 
-        public Optional<ITileModuleItem> CreateTileByGenerationID(string generationID, Vector2Int position)
+        public Optional<ITileModuleItem> CreateTileByGenerationID(DungeonTile generationID, Vector2Int position)
         {
             var tileID = GenerationIdToTileConvert(generationID);
             var tile = Create(tileID);
@@ -121,22 +122,24 @@ namespace App.Game.GameTiles.External
         //     return GetTileSprite(tileModuleItem.Id);
         // }
 
-        private string GenerationIdToTileConvert(string generationId)
+        private string GenerationIdToTileConvert(DungeonTile generationId)
         {
-            if (generationId == "Wall")
+            if (generationId == DungeonTile.Wall)
             {
                 return "wall";
             }
             
-            if (generationId == "Door")
+            if (generationId == DungeonTile.Door)
             {
                 return "door";
             }
             
-            if (generationId == "Chest")
+            if (generationId == DungeonTile.Chest)
             {
                 return "chest";
             }
+            
+            HLogger.LogError("Cant convert");
 
             return null;
         }

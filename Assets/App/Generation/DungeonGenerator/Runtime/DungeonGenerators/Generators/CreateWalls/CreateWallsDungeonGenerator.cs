@@ -1,24 +1,29 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
+using UnityEngine;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateWalls
 {
     public class CreateWallsDungeonGenerator : IDungeonGenerator
     {
+        private DungeonGenerationRoom _startRoom;
+        private DungeonGenerationRoom _nextRoom;
         private const int m_WallSize = 1;
         
         public Optional<DungeonGeneration> Process(DungeonGeneration generation)
         {
             var roomsData = generation.DungeonGenerationResult.GenerationData.GenerationRooms;
-            var startRoom = roomsData.StartGenerationRoom;
             var rooms = roomsData.Rooms;
-            ExpandRooms(null, startRoom, 0);
 
+            _startRoom = roomsData.StartGenerationRoom;
+            _nextRoom = _startRoom.Connections.First().GenerationRoom;
+            
             CreateWalls(rooms);
             
             return Optional<DungeonGeneration>.Success(generation);
@@ -30,95 +35,89 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             {
                 CreateWalls(room);
             }
+            
+            foreach (var room in rooms)
+            {
+                CreateCorridor(room);
+            }
         }
 
-        private void CreateWalls(DungeonGenerationRoom generationRoom)
+        private void CreateWalls(DungeonGenerationRoom room)
         {
-            var matrix = new Matrix<GeneraitonTile>(generationRoom.Width, generationRoom.Height);
-            generationRoom.Matrix = matrix;
-            for (int i = 0; i < matrix.Height; ++i)
+            for (int i = 0; i < room.Width; ++i)
             {
-                for (int j = 0; j < matrix.Width; ++j)
-                {
-                    matrix.SetCell(i, j, new GeneraitonTile(TileConstants.Empty));
-                }
-            }
-            
-            for (int i = 0; i < generationRoom.Width; ++i)
-            {
-                matrix[0, i] = new GeneraitonTile(TileConstants.Wall);
-                matrix[matrix.Height - 1, i] = new GeneraitonTile(TileConstants.Wall);
+                room.SetTile(i, 0, DungeonTile.Wall);
+                room.SetTile(i, room.Height - 1, DungeonTile.Wall);
             }
                  
-            for (int i = 1; i < generationRoom.Height - 1; ++i)
+            for (int i = 1; i < room.Height - 1; ++i)
             {
-                matrix[i, 0] = new GeneraitonTile(TileConstants.Wall);  
-                matrix[i, matrix.Width - 1] = new GeneraitonTile(TileConstants.Wall); 
+                room.SetTile(0, i, DungeonTile.Wall);
+                room.SetTile(room.Width - 1, i, DungeonTile.Wall);
             }
-            
-            // var tilesAmount = room.Width * 2 + room.Height * 2 - 4;
-            // var tiles = new List<TileData>(tilesAmount);
-            // room.Tiles = tiles;
-            // for (int i = room.Left; i < room.Right; ++i)
-            // {
-            //     tiles.Add(new TileData(TileConstants.Wall)
-            //     {
-            //         Position = new Vector2Int(i, room.Top - 1)
-            //     });
-            //     tiles.Add(new TileData(TileConstants.Wall)
-            //     {
-            //         Position = new Vector2Int(i, room.Bottom)
-            //     });
-            // }
-            //     
-            // for (int i = room.Bottom + 1; i < room.Top - 1; ++i)
-            // {
-            //     tiles.Add(new TileData(TileConstants.Wall)
-            //     {
-            //         Position = new Vector2Int(room.Left, i)
-            //     });
-            //     tiles.Add(new TileData(TileConstants.Wall)
-            //     {
-            //         Position = new Vector2Int(room.Right - 1, i)
-            //     });
-            // }
         }
 
-        private void ExpandRooms(DungeonGenerationRoom prevGenerationRoom, DungeonGenerationRoom curGenerationRoom, int stupidCounter)
+        private void CreateCorridor(DungeonGenerationRoom room)
         {
-            stupidCounter += 1;
-            if (stupidCounter > 1000)
+            var corridor = room.Corridor;
+            if (corridor != null)
             {
-                return;
-            }
-            
-            var connections = curGenerationRoom.GetConnectionsExclude(prevGenerationRoom);
+                var area = corridor.Area;
+                var size = area.Size;
+                var position = area.Position;
+                var connectRoom = room.Connections.First(x => corridor.Side == x.Side).GenerationRoom;
+                Vector2Int position1;
+                Vector2Int position2;
+                if (corridor.IsHorizontal)
+                {
+                    var width = size.X;
+                    for (int i = 0; i < width - 2; ++i)
+                    {
+                        room.SetTile(position.X + i + 1, position.Y + 0, DungeonTile.Wall);
+                        room.SetTile(position.X + i + 1, position.Y + size.Y - 1, DungeonTile.Wall);
+                    }
 
-            foreach (var connection in connections)
-            {
-                if (connection.Side == RoomConnectSide.Top)
-                {
-                    curGenerationRoom.IncreaseHeight(m_WallSize);
-                } 
-                else if (connection.Side == RoomConnectSide.Bottom)
-                {
-                    curGenerationRoom.IncreaseHeight(m_WallSize);
-                    curGenerationRoom.Move(Vector2Int.Bottom * m_WallSize);
-                } 
-                else if (connection.Side == RoomConnectSide.Right)
-                {
-                    curGenerationRoom.IncreaseWidth(m_WallSize);
+                    position1 = new Vector2Int(position.X, position.Y + size.Y / 2);
+                    position2 = new Vector2Int(position.X + size.X - 1, position.Y + size.Y / 2);
                 }
-                else if (connection.Side == RoomConnectSide.Left)
+                else
                 {
-                    curGenerationRoom.IncreaseWidth(m_WallSize);
-                    curGenerationRoom.Move(Vector2Int.Left * m_WallSize);
+                    var height = size.Y;
+                    for (int i = 0; i < height - 2; ++i)
+                    {
+                        room.SetTile(position.X + 0, position.Y + i + 1, DungeonTile.Wall);
+                        room.SetTile(position.X + size.X - 1, position.Y + i + 1, DungeonTile.Wall);
+                    }
+                    
+                    position1 = new Vector2Int(position.X + size.X / 2, position.Y);
+                    position2 = new Vector2Int(position.X + size.X / 2, position.Y + size.Y - 1);
                 }
-            }
-
-            foreach (var connection in connections)
-            {
-                ExpandRooms(curGenerationRoom, connection.GenerationRoom, stupidCounter);
+                
+                room.RemoveTile(position1);
+                room.RemoveTile(position2);
+                var otherRoomPosition1 = connectRoom.WorldToLocal(room.LocalToWorld(position1));
+                var otherRoomPosition2 = connectRoom.WorldToLocal(room.LocalToWorld(position2));
+                connectRoom.RemoveTile(otherRoomPosition1);
+                connectRoom.RemoveTile(otherRoomPosition2);
+                Vector2Int doorPosition = new Vector2Int();
+                if (corridor.Side == RoomConnectSide.Right)
+                {
+                    doorPosition = position2;
+                } 
+                else if (corridor.Side == RoomConnectSide.Left)
+                {
+                    doorPosition = position1;
+                }
+                else if (corridor.Side == RoomConnectSide.Top)
+                {
+                    doorPosition = position2;
+                }
+                else if (corridor.Side == RoomConnectSide.Bottom)
+                {
+                    doorPosition = position1;
+                }
+                
+                room.SetTile(doorPosition, DungeonTile.Door);
             }
         }
 

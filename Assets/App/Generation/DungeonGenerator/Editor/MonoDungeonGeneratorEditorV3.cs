@@ -30,6 +30,16 @@ namespace App.Generation.DungeonGenerator.Editor
             public GeneraitonTile GeneraitonTile;
         }
 
+        private class DrawRectangle
+        {
+            public Color Color;
+            public Vector2 Position;
+            public Vector2 Size;
+            public bool IsFill;
+        }
+
+        private List<DrawRectangle> _rectangles; 
+
         private readonly Runtime.DungeonGenerators.DungeonGenerator m_Generator = new(new Logger());
         private readonly DungeonGenerationDtoToConfigConverter m_DungeonGenerationDtoToConfigConverter = new();
 
@@ -46,6 +56,8 @@ namespace App.Generation.DungeonGenerator.Editor
             SceneView.duringSceneGui += WhenUpdate;
         }
 
+        private bool _needUpdate;
+
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
@@ -57,6 +69,8 @@ namespace App.Generation.DungeonGenerator.Editor
             {
                 var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
                 m_Generation = m_Generator.Generate(config).Value;
+                Rebuild();
+                SceneView.RepaintAll();
             }
 
             if (GUILayout.Button("Start Generate"))
@@ -84,20 +98,53 @@ namespace App.Generation.DungeonGenerator.Editor
                 return;
             }
 
-            // m_Generation = m_Generator.GetGeneration().Value;
-
+            if (_rectangles == null)
+            {
+                return;
+            }
+            
             Draw();
         }
 
         private void Draw()
         {
-            DrawAreas();
-            DrawRooms();
-            DrawCorridors();
+            foreach (var rectangle in _rectangles)
+            {
+                Handles.color = rectangle.Color;
+
+                if (rectangle.IsFill)
+                {
+                    var tilePosition = rectangle.Position;
+                    var rect = new Rect
+                    {
+                        xMin = tilePosition.x - 0.5f,
+                        xMax = tilePosition.x + 0.5f,
+                        yMin = tilePosition.y - 0.5f,
+                        yMax = tilePosition.y + 0.5f
+                    };
+                    Handles.DrawSolidRectangleWithOutline(rect, rectangle.Color, rectangle.Color);
+                }
+                else
+                {
+                    Handles.DrawWireCube(rectangle.Position, rectangle.Size);
+                }
+            }
+            
             if (m_Generation.TryGetCash<SpanningTreeGenerationCash>(out var spanningTreeGenerationCash))
             {
                 DrawTree(spanningTreeGenerationCash);
             }
+        }
+
+        private void Rebuild()
+        {
+            _rectangles ??= new List<DrawRectangle>();
+            _rectangles.Clear();
+
+            RebuildMatrix();
+            RebuildAreas();
+            RebuildRooms();
+            RebuildCorridors();
         }
 
         private void DrawTree(SpanningTreeGenerationCash spanningTree)
@@ -116,10 +163,11 @@ namespace App.Generation.DungeonGenerator.Editor
             }
         }
 
-        private void DrawRooms()
+        private void RebuildRooms()
         {
             var data = m_Generation.DungeonGenerationResult.GenerationData;
             var rooms = data.GenerationRooms;
+
             for (int i = 0; i < rooms.Rooms.Count; ++i)
             {
                 var room = rooms.Rooms[i];
@@ -139,13 +187,11 @@ namespace App.Generation.DungeonGenerator.Editor
                     color = Color.magenta;
                 }
                 
-                Handles.color = color;
-
-                Handles.DrawWireCube(position, size);
+                AddRectangle(color, position, size, isFill: false);
             }
         }
 
-        private void DrawCorridors()
+        private void RebuildCorridors()
         {
             var rooms = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
             for (int i = 0; i < rooms.Rooms.Count; ++i)
@@ -156,20 +202,20 @@ namespace App.Generation.DungeonGenerator.Editor
                 {
                     continue;
                 }
+
+                var area = corridor.Area;
                 
-                var roomPosition = corridor.Position.ToVector();
-                var roomSize = corridor.Size.ToVector();
+                var roomPosition = room.LocalToWorld(area.Position).ToVector();
+                var roomSize = area.Size.ToVector();
                 var center = roomPosition + (roomSize / 2);
                 var position = new Vector3(center.X, center.Y);
-                var size = new Vector3(corridor.Size.X, corridor.Size.Y, 0.1f);
+                var size = new Vector3(area.Size.X, area.Size.Y, 0.1f);
 
-                Handles.color = Color.blue;
-
-                Handles.DrawWireCube(position, size);
+                AddRectangle(Color.blue, position, size, isFill: false);
             }
         }
 
-        private void DrawAreas()
+        private void RebuildAreas()
         {
             var squareGenerationCash = m_Generation.GetCash<SquareGenerationCash>();
             for (int i = 0; i < squareGenerationCash.Value.Areas.Count; ++i)
@@ -181,9 +227,51 @@ namespace App.Generation.DungeonGenerator.Editor
                 var position = new Vector3(center.X, center.Y);
                 var size = new Vector3(area.Size.X, area.Size.Y, 0.1f);
 
-                Handles.color = Color.red;
+                AddRectangle(Color.red, position, size, isFill: false);
+            }
+        }
 
-                Handles.DrawWireCube(position, size);
+        private void AddRectangle(Color color,
+            Vector2 center,
+            Vector2 position,
+            bool isFill)
+        {
+            _rectangles.Add(new DrawRectangle()
+            {
+                Color = color, 
+                Position = center, 
+                Size = position,
+                IsFill = isFill
+            });
+        }
+
+        private void RebuildMatrix()
+        {
+            var rooms = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms;
+            foreach (var room in rooms)
+            {
+                var matrix = room.Tiles;
+                foreach (var roomTile in room.Tiles)
+                {
+                    var position = roomTile.Key;
+                    var tile = roomTile.Value;
+                    
+                    position = room.LocalToWorld(position);
+
+                    if (tile.Id == DungeonTile.Empty)
+                    {
+                        continue;
+                    }
+
+                    var color = Color.black;
+                    if (tile.Id == DungeonTile.Door)
+                    {
+                        color = Color.green;
+                    }
+
+                    var center = new Vector2(position.X + 0.5f, position.Y + 0.5f);
+                    AddRectangle(color, center, new Vector2(1, 1), isFill: true);
+                }
             }
         }
 

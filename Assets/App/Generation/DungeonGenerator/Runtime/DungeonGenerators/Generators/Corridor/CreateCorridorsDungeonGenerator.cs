@@ -42,37 +42,44 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
                 }
 
                 var side = connection.Side;
-                SquareArea area = null;
+                Vector2Int size = new Vector2Int();
+                Vector2Int position = new Vector2Int();
                 if (side == RoomConnectSide.Right)
                 {
-                    var width = room2.Left - room1.Right;
+                    var width = room2.Left - room1.Right + 2;
                     var height = _corridorSize;
                     var positionY = (int)((room1.Center.Y + room2.Center.Y) / 2) - (height / 2);
-                    area = new SquareArea(new Vector2Int(room1.Right, positionY), new Vector2Int(width, height));
+                    position = new Vector2Int(room1.Right - 1, positionY);
+                    size = new Vector2Int(width, height);
                 }
                 else if (side == RoomConnectSide.Left)
                 {
-                    var width = room1.Left - room2.Right;
+                    var width = room1.Left - room2.Right + 2;
                     var height = _corridorSize;
                     var positionY = (int)((room1.Center.Y + room2.Center.Y) / 2) - (height / 2);
-                    area = new SquareArea(new Vector2Int(room2.Right, positionY), new Vector2Int(width, height));
+                    position = new Vector2Int(room2.Right - 1, positionY);
+                    size = new Vector2Int(width, height);
                 }
                 else if (side == RoomConnectSide.Top)
                 {
-                    var height = room2.Bottom - room1.Top;
+                    var height = room2.Bottom - room1.Top + 2;
                     var width = _corridorSize;
                     var positionX = (int)((room1.Center.X + room2.Center.X) / 2) - (width / 2);
-                    area = new SquareArea(new Vector2Int(positionX, room1.Top), new Vector2Int(width, height));
+                    position = new Vector2Int(positionX, room1.Top - 1);
+                    size = new Vector2Int(width, height);
                 }
                 else if (side == RoomConnectSide.Bottom)
                 {
-                    var height = room1.Bottom - room2.Top;
+                    var height = room1.Bottom - room2.Top + 2;
                     var width = _corridorSize;
                     var positionX = (int)((room1.Center.X + room2.Center.X) / 2) - (width / 2);
-                    area = new SquareArea(new Vector2Int(positionX, room2.Top), new Vector2Int(width, height));
+                    position = new Vector2Int(positionX, room2.Top - 1);
+                    size = new Vector2Int(width, height);
                 }
 
-                room2.Corridor = area;
+                position = room2.WorldToLocal(position);
+                var area = new SquareArea(position, size);
+                room2.Corridor = new DungeonCorridor(area, side.Revert());
 
                 CreateCorridor(room2, room1);
             }

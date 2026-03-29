@@ -8,6 +8,7 @@
     "Autumn.Algorithms",
     "Autumn.ConfigLoader",
     "Autumn.Logger",
-    "Autumn.DataManager"
+    "Autumn.DataManager",
+    "Autumn.DungeonGenerator"
   ]
 }

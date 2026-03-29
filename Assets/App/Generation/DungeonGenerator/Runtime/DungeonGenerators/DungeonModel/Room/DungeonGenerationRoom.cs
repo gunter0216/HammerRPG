@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using App.Common.Algorithms.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridor;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
+using UnityEngine;
+using Vector2 = App.Common.Algorithms.Runtime.Vector2;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Runtime.Rooms
 {
@@ -21,8 +24,8 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private readonly List<GenerationDoor> m_Doors;
         private DungeonKeyData m_RequiredKey;
         private bool m_IsMainPath;
-        private Matrix<GeneraitonTile> m_Matrix; 
-        private SquareArea _corridor; 
+        private Dictionary<Vector2Int, GeneraitonTile> _tiles; 
+        private DungeonCorridor _corridor; 
 
         public int Col => m_Position.X;
         public int Row => m_Position.Y;
@@ -38,6 +41,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         public int UID => m_UID;
 
         public Vector2 Center => GetCenter();
+        public Vector2 LocalCenter => GetLocalCenter();
 
         public Vector2Int Position
         {
@@ -66,15 +70,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             set => m_IsMainPath = value;
         }
 
-        public Matrix<GeneraitonTile> Matrix
-        {
-            get => m_Matrix;
-            set => m_Matrix = value;
-        }
+        public IReadOnlyDictionary<Vector2Int, GeneraitonTile> Tiles => _tiles;
 
         public List<GenerationDoor> Doors => m_Doors;
 
-        public SquareArea Corridor
+        public DungeonCorridor Corridor
         {
             get => _corridor;
             set => _corridor = value;
@@ -88,6 +88,42 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             m_ContainsDoorKeys = new List<DungeonKeyData>();
             m_Connections = new List<RoomConnection>();
             m_Doors = new List<GenerationDoor>();
+            _tiles = new Dictionary<Vector2Int, GeneraitonTile>();
+        }
+
+        public void SetTile(Vector2Int position, DungeonTile id)
+        {
+            _tiles[position] = new GeneraitonTile(id);
+        }
+        
+        public void SetTile(int x, int y, DungeonTile id)
+        {
+            _tiles[new Vector2Int(x, y)] = new GeneraitonTile(id);
+        }
+
+        public void RemoveTile(Vector2Int position)
+        {
+            _tiles.Remove(position);
+        }
+
+        public void RemoveTile(int x, int y)
+        {
+            RemoveTile(new Vector2Int(x, y));
+        }
+        
+        public void SetTile(int x, int y, GeneraitonTile tile)
+        {
+            _tiles[new Vector2Int(x, y)] = tile;
+        }
+        
+        public DungeonTile GetTile(int x, int y)
+        {
+            if (_tiles.TryGetValue(new Vector2Int(x, y), out var tile))
+            {
+                return tile.Id;
+            }
+            
+            return DungeonTile.Empty;
         }
 
         public bool AddDoor(GenerationDoor door)
@@ -121,6 +157,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         public Vector2 GetCenter()
         {
             return new Vector2(m_Position.X + Width * 0.5f, m_Position.Y + Height * 0.5f);
+        }
+        
+        public Vector2 GetLocalCenter()
+        {
+            return new Vector2(Width * 0.5f, Height * 0.5f);
         }
         
         public void SetCenter(Vector2 center)
@@ -179,7 +220,8 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
 
         public Vector2Int LocalToWorld(int x, int y) 
         {
-            return new Vector2Int(m_Position.X + x, m_Position.Y + Height - 1 - y);
+            return new Vector2Int(m_Position.X + x, m_Position.Y + y);
+            // return new Vector2Int(m_Position.X + x, m_Position.Y + Height - 1 - y);
         }
         
         public Vector2Int LocalToWorld(Vector2Int localPosition)
@@ -189,7 +231,8 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         
         public Vector2Int WorldToLocal(int x, int y) 
         {
-            return new Vector2Int(x - m_Position.X, m_Position.Y - y + Height - 1);
+            return new Vector2Int(x - m_Position.X, y - m_Position.Y);
+            // return new Vector2Int(x - m_Position.X, m_Position.Y - y + Height - 1);
         }
 
         public Vector2Int WorldToLocal(Vector2Int worldPosition)

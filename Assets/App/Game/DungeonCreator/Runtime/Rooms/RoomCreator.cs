@@ -12,7 +12,6 @@ using App.Generation.DungeonCreator.Runtime.Chest;
 using App.Generation.DungeonCreator.Runtime.Tiles;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
-using TileConstants = App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.TileConstants;
 
 namespace App.Game.DungeonCreator.Runtime.Rooms
 {
@@ -44,24 +43,22 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 
         private void CreateWalls(Room room, DungeonGenerationRoom generationRoom)
         {
-            var matrix = generationRoom.Matrix;
+            var matrix = generationRoom.Tiles;
             room.Tiles = new List<Tile>(64);
-            for (int i = 0; i < matrix.Height; ++i)
+            foreach (var roomTile in generationRoom.Tiles)
             {
-                for (int j = 0; j < matrix.Width; ++j)
+                var position = roomTile.Key;
+                var dungeonTile = roomTile.Value.Id;
+                
+                var tile = CreateTile(roomTile.Value, position);
+                if (!tile.HasValue)
                 {
-                    var generationTile = matrix[i, j];
-                    var position = new Vector2Int(j, i);
-                    var tile = CreateTile(generationTile, new Vector2Int(j, i));
-                    if (!tile.HasValue)
-                    {
-                        continue;
-                    }
-
-                    tile.Value.Data.Position = position;
-                    room.Tiles.Add(tile.Value);
-                    room.Data.Tiles.Add(tile.Value.Data);
+                    continue;
                 }
+
+                tile.Value.Data.Position = position;
+                room.Tiles.Add(tile.Value);
+                room.Data.Tiles.Add(tile.Value.Data);
             }
         }
 
@@ -77,7 +74,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
                     IsClosed = generationDoor.IsRequiredKey
                 };
 
-                var tileModuleItem = _tilesController.CreateTileByGenerationID("Door", generationDoor.LocalPosition);
+                var tileModuleItem = _tilesController.CreateTileByGenerationID(DungeonTile.Door, generationDoor.LocalPosition);
                 if (!tileModuleItem.HasValue)
                 {
                     HLogger.LogError($"Cant create tile");
@@ -114,7 +111,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
                 Items = itemReferences
             };
 
-            var tileModuleItem = _tilesController.CreateTileByGenerationID("Chest", localPosition);
+            var tileModuleItem = _tilesController.CreateTileByGenerationID(DungeonTile.Chest, localPosition);
             if (!tileModuleItem.HasValue)
             {
                 HLogger.LogError($"Cant create tile");
@@ -151,7 +148,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
             GeneraitonTile generationTile,
             Vector2Int localPosition)
         {
-            if (generationTile.Id == TileConstants.Empty)
+            if (generationTile.Id == DungeonTile.Empty)
             {
                 return Optional<Tile>.Fail();
             }

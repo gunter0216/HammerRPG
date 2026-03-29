@@ -81,9 +81,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
 
             var worldPosition = position; 
             var localPosition = generationRoom.WorldToLocal(worldPosition);
-            generationRoom.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Empty;
+            generationRoom.SetTile(localPosition, DungeonTile.Empty);
             localPosition = otherRoom.WorldToLocal(worldPosition);
-            otherRoom.Matrix[localPosition.Y, localPosition.X].Id = TileConstants.Empty;
+            otherRoom.SetTile(localPosition, DungeonTile.Empty);
             otherRoom.AddDoor(new GenerationDoor(localPosition, otherRoom.RequiredKey));
         }
 
