@@ -91,5 +91,10 @@ namespace App.Common.Algorithms.Runtime
             dot = Math.Clamp(dot, -1f, 1f);
             return MathF.Acos(dot) * (180f / MathF.PI);
         }
+
+        public Vector2Int ToInt()
+        {
+            return new Vector2Int((int)m_X, (int)m_Y);
+        }
     }
 }

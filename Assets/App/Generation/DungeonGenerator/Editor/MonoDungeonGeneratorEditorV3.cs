@@ -134,6 +134,8 @@ namespace App.Generation.DungeonGenerator.Editor
             {
                 DrawTree(spanningTreeGenerationCash);
             }
+
+            DrawRoomLabels();
         }
 
         private void Rebuild()
@@ -267,6 +269,10 @@ namespace App.Generation.DungeonGenerator.Editor
                     if (tile.Id == DungeonTile.Door)
                     {
                         color = Color.green;
+                    }
+                    else if (tile.Id == DungeonTile.Chest)
+                    {
+                        color = Color.red;
                     }
 
                     var center = new Vector2(position.X + 0.5f, position.Y + 0.5f);
