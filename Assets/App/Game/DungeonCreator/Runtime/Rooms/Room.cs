@@ -47,7 +47,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 
         public Vector2Int LocalToWorld(int x, int y) 
         {
-            return new Vector2Int(Position.X + x, Position.Y + Height - 1 - y);
+            return new Vector2Int(Position.X + x, Position.Y + y);
         }
         
         public Vector2Int LocalToWorld(Vector2Int localPosition)
@@ -57,7 +57,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
         
         public Vector2Int WorldToLocal(int x, int y) 
         {
-            return new Vector2Int(x - Position.X, Position.Y - y + Height - 1);
+            return new Vector2Int(x - Position.X, y - Position.Y);
         }
 
         public Vector2Int WorldToLocal(Vector2Int worldPosition)

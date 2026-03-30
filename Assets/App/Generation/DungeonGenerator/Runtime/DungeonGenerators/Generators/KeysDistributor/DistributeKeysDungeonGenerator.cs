@@ -87,7 +87,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
                                 break;
                             }
                         }
-                    }
+                    } 
 
                     continue;
                 }

@@ -31,8 +31,6 @@ namespace App.Generation.DungeonGenerator.External
         {
             return new SquarePartitionGenerationConfig(
                 size: dto.Size,
-                minPartition: dto.MinPartition,
-                maxPartition: dto.MaxPartition,
                 minAreaSize: dto.MinAreaSize,
                 minRoomSize: dto.MinRoomSize,
                 maxRoomSize: dto.MaxRoomSize,

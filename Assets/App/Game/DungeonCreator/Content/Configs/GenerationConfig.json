@@ -25,6 +25,18 @@
       },
       "borderingRooms": {
         "minCorridorSize": 6
+      },
+      "squareGeneration": {
+        "size": {
+          "width": 60,
+          "height": 60
+        },
+        "offset": 0.06,
+        "min_area_size": 6,
+        "min_room_size": 11,
+        "max_room_size": 30,
+        "area_padding": 1,
+        "depth": 4 
       }
     }
   ]

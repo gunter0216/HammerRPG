@@ -2,6 +2,7 @@
 using System.Linq;
 using App.Common.Utilities.Utility.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
 using App.Generation.DungeonGenerator.Runtime.Matrix;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
@@ -116,8 +117,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
                 {
                     doorPosition = position1;
                 }
-                
-                room.SetTile(doorPosition, DungeonTile.Door);
+
+                room.AddDoor(new GenerationDoor(doorPosition, room.RequiredKey));
             }
         }
 

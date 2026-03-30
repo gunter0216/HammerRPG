@@ -28,25 +28,27 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 
         public Optional<Room> CreateRoom(DungeonGenerationRoom generationRoom)
         {
-            var data = new RoomData(generationRoom)
-            {
-                Tiles = new List<TileData>()
-            };
+            var data = new RoomData(generationRoom);
             var room = new Room(data);
 
             CreateWalls(room, generationRoom);
             CreateDoors(room, generationRoom);
             CreateChests(room, generationRoom);
+            CreateFloors(room, generationRoom);
             
             return Optional<Room>.Success(room);
         }
 
         private void CreateWalls(Room room, DungeonGenerationRoom generationRoom)
         {
-            var matrix = generationRoom.Tiles;
             room.Tiles = new List<Tile>(64);
             foreach (var roomTile in generationRoom.Tiles)
             {
+                if (roomTile.Value.Id != DungeonTile.Wall)
+                {
+                    continue;
+                }
+                
                 var position = roomTile.Key;
                 var dungeonTile = roomTile.Value.Id;
                 
@@ -59,6 +61,14 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
                 tile.Value.Data.Position = position;
                 room.Tiles.Add(tile.Value);
                 room.Data.Tiles.Add(tile.Value.Data);
+            }
+        }
+
+        private void CreateFloors(Room room, DungeonGenerationRoom generationRoom)
+        {
+            foreach (var floor in generationRoom.Floors)
+            {
+                room.Data.Floors.Add(floor);    
             }
         }
 

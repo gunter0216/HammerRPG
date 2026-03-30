@@ -27,7 +27,7 @@ namespace App.Game.DungeonCore.External.Controllers
         public void Initialize()
         {
             _root = new GameObject($"Room {_service.Room.Data.UID.ToString()}"); 
-            CreateFloor();
+            CreateFloors();
             CreateWalls();
             CreateDoors();
             CreateChest();
@@ -52,7 +52,7 @@ namespace App.Game.DungeonCore.External.Controllers
             }
         }
 
-        private void CreateFloor()
+        private void CreateFloors()
         {
             var sprite = _spriteLoader.LoadItemSprite("floor");
             if (!sprite.HasValue)
@@ -62,16 +62,25 @@ namespace App.Game.DungeonCore.External.Controllers
             }
 
             var room = _service.Room;
-        
-            var position = room.GetCenter();
 
+            foreach (var floor in room.Data.Floors)
+            {
+                var worldPosition = room.LocalToWorld(floor.Position);
+                var positionX = worldPosition.X + floor.Width * 0.5f;
+                var positionY = worldPosition.Y + floor.Height * 0.5f;
+                CreateFloor(sprite.Value, positionX, positionY, floor.Width, floor.Height);
+            }
+        }
+
+        private void CreateFloor(Sprite sprite, float positionX, float positionY, float width, float height)
+        {
             var floor = new GameObject("Floor");
-            floor.transform.position = new Vector3(position.X, position.Y, 1);
+            floor.transform.position = new Vector3(positionX, positionY, 1);
             floor.transform.parent = _root.transform;
             var spriteRenderer = floor.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = sprite.Value;
+            spriteRenderer.sprite = sprite;
             spriteRenderer.drawMode = SpriteDrawMode.Tiled;
-            spriteRenderer.size = new UnityEngine.Vector2(room.Width, room.Height);
+            spriteRenderer.size = new UnityEngine.Vector2(width, height);
             spriteRenderer.sortingOrder = 0;
         }
 
@@ -86,8 +95,7 @@ namespace App.Game.DungeonCore.External.Controllers
                 var sprite = _spriteLoader.LoadItemSprite(tile.ModuleItem);
                 if (!sprite.HasValue)
                 {
-                    HLogger.LogError("Cant get tile sprite");
-                    return;
+                    continue;
                 }
                 
                 var localPosition = tile.Data.Position;

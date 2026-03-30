@@ -1,3 +1,4 @@
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.SpriteLoaders.Runtime;
@@ -34,6 +35,7 @@ namespace App.Common.SpriteLoaders.External
             var tileSprite = item.GetConfigModule<SpriteModuleConfig>();
             if (!tileSprite.HasValue)
             {
+                HLogger.LogError($"SpriteModuleConfig not found in item {item.Id}");
                 return Optional<Sprite>.Fail();
             }
             

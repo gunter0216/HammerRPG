@@ -5,6 +5,7 @@
     "Autumn.Utility",
     "Autumn.Tiles",
     "Autumn.AssetSystem",
-    "Unity.Addressables"
+    "Unity.Addressables",
+    "Autumn.Logger"
   ]
 }

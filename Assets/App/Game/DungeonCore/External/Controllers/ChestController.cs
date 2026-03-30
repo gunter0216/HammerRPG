@@ -63,8 +63,7 @@ namespace App.Game.DungeonCore.External.Controllers
             
             var spriteRenderer = tileView.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = sprite.Value;
-            spriteRenderer.drawMode = SpriteDrawMode.Sliced;
-            spriteRenderer.size = new UnityEngine.Vector2(1, 1);
+            spriteRenderer.drawMode = SpriteDrawMode.Simple;
             spriteRenderer.sortingOrder = 3;
 
             var collider = tileView.AddComponent<BoxCollider2D>();

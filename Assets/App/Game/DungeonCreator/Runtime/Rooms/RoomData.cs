@@ -15,29 +15,29 @@ namespace App.Game.GameManagers.External.Room
     [JsonObject(MemberSerialization.Fields)]
     public class RoomData
     {
-        [JsonProperty("m_UID")] 
-        private readonly int m_UID;
-        private Vector2Int m_Position;
-        private Vector2Int m_Size;
-        private readonly List<DungeonKeyData> m_ContainsDoorKeys;
-        private readonly List<RoomConnection> m_Connections;
-        private DungeonKeyData m_RequiredKey;
-        private bool m_IsMainPath;
-        private List<TileData> _tiles;
+        [JsonProperty("UID")] 
+        private readonly int _UID;
+        
+        [JsonProperty("position")]
+        private readonly Vector2Int _position;
+        
+        [JsonProperty("size")]
+        private readonly Vector2Int _size;
+        
+        [JsonProperty("tiles")]
+        private readonly List<TileData> _tiles;
+        
+        [JsonProperty("floors")]
+        private readonly List<RectInt> _floors;
 
-        public Vector2Int Position => m_Position;
+        public Vector2Int Position => _position;
 
-        public Vector2Int Size => m_Size;
-        public int Width => m_Size.X;
-        public int Height => m_Size.Y;
-
-        public int UID => m_UID;
-
-        public List<TileData> Tiles
-        {
-            get => _tiles;
-            set => _tiles = value;
-        }
+        public Vector2Int Size => _size;
+        public int Width => _size.X;
+        public int Height => _size.Y;
+        public int UID => _UID;
+        public List<TileData> Tiles => _tiles;
+        public List<RectInt> Floors => _floors;
 
         public RoomData()
         {
@@ -46,13 +46,11 @@ namespace App.Game.GameManagers.External.Room
         
         public RoomData(DungeonGenerationRoom generationRoom)
         {
-            m_UID = generationRoom.UID;
-            m_Position = generationRoom.Position;
-            m_Size = generationRoom.Size;
-            m_ContainsDoorKeys = new List<DungeonKeyData>(generationRoom.ContainsDoorKeys);
-            m_Connections = new List<RoomConnection>(generationRoom.Connections);
-            m_RequiredKey = generationRoom.RequiredKey;
-            m_IsMainPath = generationRoom.IsMainPath;
+            _UID = generationRoom.UID;
+            _position = generationRoom.Position;
+            _size = generationRoom.Size;
+            _tiles = new List<TileData>();
+            _floors = new List<RectInt>();
         }
     }
 }

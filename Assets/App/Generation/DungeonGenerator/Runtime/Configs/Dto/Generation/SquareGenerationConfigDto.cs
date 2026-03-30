@@ -15,12 +15,6 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
         [JsonProperty("offset")] [SerializeField] [Range(0, 1)]
         private float _offset;
         
-        [JsonProperty("min_partition")] [SerializeField] [Range(0, 1)]
-        private float _minPartition;
-        
-        [JsonProperty("max_partition")] [SerializeField] [Range(0, 1)]
-        private float _maxPartition;
-        
         [JsonProperty("min_area_size")] [SerializeField]
         private int _minAreaSize;
         
@@ -30,7 +24,7 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
         [JsonProperty("max_room_size")] [SerializeField]
         private int _maxRoomSize;
         
-        [JsonProperty("max_room_size")] [SerializeField]
+        [JsonProperty("area_padding")] [SerializeField]
         private int _areaPadding;
         
         [JsonProperty("depth")] [SerializeField]
@@ -42,9 +36,6 @@ namespace App.Generation.DungeonGenerator.External.Dto.Generation
 
         public int MinRoomSize => _minRoomSize;
 
-        public float MinPartition => _minPartition;
-
-        public float MaxPartition => _maxPartition;
         public int Depth => _depth;
         public float Offset => _offset;
         public int MaxRoomSize => _maxRoomSize;

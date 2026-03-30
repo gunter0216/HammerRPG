@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using App.Common.Algorithms.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridor;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
-using App.Generation.DungeonGenerator.Runtime.Matrix;
-using UnityEngine;
 using Vector2 = App.Common.Algorithms.Runtime.Vector2;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
@@ -16,63 +14,64 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
 {
     public class DungeonGenerationRoom
     {
-        private readonly int m_UID;
-        private Vector2Int m_Position;
-        private Vector2Int m_Size;
-        private readonly List<DungeonKeyData> m_ContainsDoorKeys;
-        private readonly List<RoomConnection> m_Connections;
-        private readonly List<GenerationDoor> m_Doors;
-        private DungeonKeyData m_RequiredKey;
-        private bool m_IsMainPath;
-        private Dictionary<Vector2Int, GeneraitonTile> _tiles; 
+        private readonly int _UID;
+        private Vector2Int _position;
+        private Vector2Int _size;
+        private readonly List<DungeonKeyData> _containsDoorKeys;
+        private readonly List<RoomConnection> _connections;
+        private readonly List<GenerationDoor> _doors;
+        private readonly Dictionary<Vector2Int, GeneraitonTile> _tiles;
+        private readonly List<RectInt> _floors;
+        private DungeonKeyData _requiredKey;
+        private bool _isMainPath;
         private DungeonCorridor _corridor; 
 
-        public int Col => m_Position.X;
-        public int Row => m_Position.Y;
+        public int Col => _position.X;
+        public int Row => _position.Y;
         
-        public int Width => m_Size.X;
-        public int Height => m_Size.Y;
+        public int Width => _size.X;
+        public int Height => _size.Y;
 
-        public int Right => m_Position.X + m_Size.X;
-        public int Left => m_Position.X;
-        public int Top => m_Position.Y + m_Size.Y;
-        public int Bottom => m_Position.Y;
+        public int Right => _position.X + _size.X;
+        public int Left => _position.X;
+        public int Top => _position.Y + _size.Y;
+        public int Bottom => _position.Y;
 
-        public int UID => m_UID;
+        public int UID => _UID;
 
         public Vector2 Center => GetCenter();
         public Vector2 LocalCenter => GetLocalCenter();
 
         public Vector2Int Position
         {
-            get => m_Position;
-            set => m_Position = value;
+            get => _position;
+            set => _position = value;
         }
 
         public Vector2Int Size
         {
-            get => m_Size;
-            set => m_Size = value;
+            get => _size;
+            set => _size = value;
         }
 
-        public IReadOnlyList<DungeonKeyData> ContainsDoorKeys => m_ContainsDoorKeys;
-        public IReadOnlyList<RoomConnection> Connections => m_Connections;
+        public IReadOnlyList<DungeonKeyData> ContainsDoorKeys => _containsDoorKeys;
+        public IReadOnlyList<RoomConnection> Connections => _connections;
 
         public DungeonKeyData RequiredKey
         {
-            get => m_RequiredKey;
-            set => m_RequiredKey = value;
+            get => _requiredKey;
+            set => _requiredKey = value;
         }
 
         public bool IsMainPath
         {
-            get => m_IsMainPath;
-            set => m_IsMainPath = value;
+            get => _isMainPath;
+            set => _isMainPath = value;
         }
 
         public IReadOnlyDictionary<Vector2Int, GeneraitonTile> Tiles => _tiles;
 
-        public List<GenerationDoor> Doors => m_Doors;
+        public List<GenerationDoor> Doors => _doors;
 
         public DungeonCorridor Corridor
         {
@@ -80,15 +79,23 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             set => _corridor = value;
         }
 
+        public List<RectInt> Floors => _floors;
+
         public DungeonGenerationRoom(int uid, Vector2Int position, Vector2Int size)
         {
-            m_Size = size;
-            m_UID = uid;
-            m_Position = position;
-            m_ContainsDoorKeys = new List<DungeonKeyData>();
-            m_Connections = new List<RoomConnection>();
-            m_Doors = new List<GenerationDoor>();
+            _size = size;
+            _UID = uid;
+            _position = position;
+            _containsDoorKeys = new List<DungeonKeyData>();
+            _connections = new List<RoomConnection>();
+            _doors = new List<GenerationDoor>();
             _tiles = new Dictionary<Vector2Int, GeneraitonTile>();
+            _floors = new List<RectInt>();
+        }
+
+        public void AddFloor(RectInt floor)
+        {
+            Floors.Add(floor);
         }
 
         public void SetTile(Vector2Int position, DungeonTile id)
@@ -134,9 +141,9 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         
         public bool AddDoorKey(DungeonKeyData dungeonKeyData)
         {
-            if (!m_ContainsDoorKeys.Contains(dungeonKeyData))
+            if (!_containsDoorKeys.Contains(dungeonKeyData))
             {
-                m_ContainsDoorKeys.Add(dungeonKeyData);
+                _containsDoorKeys.Add(dungeonKeyData);
                 return true;
             }
 
@@ -145,9 +152,9 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         
         public bool AddConnection(RoomConnection connection)
         {
-            if (!m_Connections.Contains(connection))
+            if (!_connections.Contains(connection))
             {
-                m_Connections.Add(connection);
+                _connections.Add(connection);
                 return true;
             }
 
@@ -156,7 +163,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         
         public Vector2 GetCenter()
         {
-            return new Vector2(m_Position.X + Width * 0.5f, m_Position.Y + Height * 0.5f);
+            return new Vector2(_position.X + Width * 0.5f, _position.Y + Height * 0.5f);
         }
         
         public Vector2 GetLocalCenter()
@@ -195,32 +202,32 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
 
         public void Move(Vector2Int value)
         {
-            m_Position += value;
+            _position += value;
         }
 
         public void DecreaseHeight(int value)
         {
-            m_Size.Y -= value;
+            _size.Y -= value;
         }
 
         public void DecreaseWidth(int value)
         {
-            m_Size.X -= value;
+            _size.X -= value;
         }
 
         public void IncreaseHeight(int value)
         {
-            m_Size.Y += value;
+            _size.Y += value;
         }
 
         public void IncreaseWidth(int value)
         {
-            m_Size.X += value;
+            _size.X += value;
         }
 
         public Vector2Int LocalToWorld(int x, int y) 
         {
-            return new Vector2Int(m_Position.X + x, m_Position.Y + y);
+            return new Vector2Int(_position.X + x, _position.Y + y);
             // return new Vector2Int(m_Position.X + x, m_Position.Y + Height - 1 - y);
         }
         
@@ -231,7 +238,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         
         public Vector2Int WorldToLocal(int x, int y) 
         {
-            return new Vector2Int(x - m_Position.X, y - m_Position.Y);
+            return new Vector2Int(x - _position.X, y - _position.Y);
             // return new Vector2Int(x - m_Position.X, m_Position.Y - y + Height - 1);
         }
 
@@ -244,20 +251,20 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         {
             if (generationRoom == null)
             {
-                return m_Connections;
+                return _connections;
             }
 
-            return m_Connections.Where(x => x.GenerationRoom != generationRoom).ToArray();
+            return _connections.Where(x => x.GenerationRoom != generationRoom).ToArray();
         }
 
         public override int GetHashCode()
         {
-            return m_UID;
+            return _UID;
         }
 
         public override string ToString()
         {
-            return $"Room [ UID: {m_UID}, Center: {GetCenter()}, Size: {m_Size}, Position {m_Position}]";
+            return $"Room [ UID: {_UID}, Center: {GetCenter()}, Size: {_size}, Position {_position}]";
         }
     }
 }

@@ -58,7 +58,7 @@ namespace App.Generation.DungeonCreator.Runtime
             var dungeonGeneration = generator.Generate(generationConfig.Value);
             if (!dungeonGeneration.HasValue)
             {
-                HLogger.LogError("Cant generate");
+                HLogger.LogError("Cant generate"); 
                 return Optional<Dungeon>.Fail();
             }
 

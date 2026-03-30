@@ -7,8 +7,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
     public class SquarePartitionGenerationConfig : IGenerationConfig
     {
         private readonly SizeIntDto _size;
-        private readonly float _minPartition;
-        private readonly float _maxPartition;
         private readonly float _offset;
         private readonly int _minAreaSize;
         private readonly int _minRoomSize;
@@ -21,10 +19,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
 
         public int MinRoomSize => _minRoomSize;
 
-        public float MinPartition => _minPartition;
-
-        public float MaxPartition => _maxPartition;
-
         public int Depth => _depth;
 
         public float Offset => _offset;
@@ -34,8 +28,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
         public int AreaPadding => _areaPadding;
 
         public SquarePartitionGenerationConfig(SizeIntDto size,
-            float minPartition,
-            float maxPartition,
             int minAreaSize,
             int minRoomSize, 
             int maxRoomSize,
@@ -44,8 +36,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
             int areaPadding)
         {
             _size = size;
-            _minPartition = minPartition;
-            _maxPartition = maxPartition;
             _minAreaSize = minAreaSize;
             _minRoomSize = minRoomSize;
             _depth = depth;
