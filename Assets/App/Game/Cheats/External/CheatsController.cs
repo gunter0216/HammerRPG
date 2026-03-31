@@ -39,7 +39,6 @@ namespace App.Game.Cheats.External
         public void Init()
         {
             var configs = m_ModuleItemsManager.GetConfigs(GameItemsConstants.ModuleItemType);
-            var groups = m_InventoryController.GetGroups();
 
             m_CheatsWindowModel = new CheatsWindowModel(
                 m_AssetManager,
@@ -47,8 +46,7 @@ namespace App.Game.Cheats.External
                 m_SpriteLoader,
                 m_GameItemsManager,
                 m_InventoryController,
-                configs.Value,
-                groups);
+                configs.Value);
         }
 
         public bool IsOpen()

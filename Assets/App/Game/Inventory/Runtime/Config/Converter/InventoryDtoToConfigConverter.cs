@@ -8,7 +8,7 @@ namespace App.Game.Inventory.Runtime.Config.Converter
     {
         public Optional<InventoryConfig> Convert(InventoryConfigDto dto)
         {
-            if (dto == null || dto.Groups == null)
+            if (dto == null)
                 return Optional<InventoryConfig>.Fail();
 
             var config = new InventoryConfig(dto);

@@ -33,15 +33,11 @@ namespace App.Game.Cheats.External.ViewModel
         private readonly ISpriteLoader m_SpriteLoader;
         private readonly IInventoryController m_InventoryController;
         private readonly IReadOnlyList<IModuleItemConfig> m_Configs;
-        private readonly IReadOnlyList<IInventoryGroupConfig> m_Groups;
 
         private CheatsWindow m_Window;
         
-        private List<CheatsGroupHeaderViewModel> m_GroupHeaderViewModels;
         private ListPool<CheatsSlotViewModel> m_Slots;
         private List<CheatsSlotViewModel> m_ActiveSlots;
-        
-        private CheatsGroupHeaderViewModel m_SelectedGroup;
 
         public CheatsWindowModel(
             IAssetManager assetManager, 
@@ -49,14 +45,12 @@ namespace App.Game.Cheats.External.ViewModel
             ISpriteLoader spriteLoader, 
             IGameItemsManager gameItemsManager,
             IInventoryController inventoryController,
-            IReadOnlyList<IModuleItemConfig> configs, 
-            IReadOnlyList<IInventoryGroupConfig> groups)
+            IReadOnlyList<IModuleItemConfig> configs)
         {
             m_AssetManager = assetManager;
             m_Canvas = canvas;
             m_SpriteLoader = spriteLoader;
             m_Configs = configs;
-            m_Groups = groups;
             m_InventoryController = inventoryController;
             m_GameItemsManager = gameItemsManager;
         }
@@ -102,16 +96,14 @@ namespace App.Game.Cheats.External.ViewModel
 
         private void InitWindow()
         {
-            CreateGroups();
-
             var dropdown = m_Window.CreateItemDropdown;
             dropdown.ClearOptions();
             dropdown.AddOptions(m_PlaceItemsDropdownOptions);
             
             m_Slots = new ListPool<CheatsSlotViewModel>(CreateSlot, 32);
             m_ActiveSlots = new List<CheatsSlotViewModel>();
-            
-            SelectGroup(m_GroupHeaderViewModels[0]);
+
+            ShowItems();
         }
 
         private Optional<CheatsSlotViewModel> CreateSlot()
@@ -137,58 +129,9 @@ namespace App.Game.Cheats.External.ViewModel
             }
         }
 
-        private void CreateGroups()
+        private void ShowItems()
         {
-            var groups = m_Groups;
-            m_GroupHeaderViewModels = new List<CheatsGroupHeaderViewModel>(groups.Count);
-            foreach (var group in groups)
-            {
-                var view = Object.Instantiate(
-                    m_Window.CheatsGroupHeaderViewPrefab,
-                    m_Window.HeaderGroupContent);
-                
-                var viewModel = new CheatsGroupHeaderViewModel(
-                    view, 
-                    group, 
-                    m_SpriteLoader,
-                    OnGroupClick);
-                viewModel.Initialize();
-                m_GroupHeaderViewModels.Add(viewModel);
-            }
-        }
-
-        private void OnGroupClick(CheatsGroupHeaderViewModel viewModel)
-        {
-            if (m_SelectedGroup == viewModel)
-            {
-                return;
-            }
-            
-            SelectGroup(viewModel);
-        }
-
-        private void SelectGroup(CheatsGroupHeaderViewModel viewModel)
-        {
-            m_SelectedGroup = viewModel;
-            foreach (var groupViewModel in m_GroupHeaderViewModels)
-            {
-                groupViewModel.SetActiveStatus(groupViewModel == viewModel);
-            }
-
-            for (int i = 0; i < m_ActiveSlots.Count; ++i)
-            {
-                m_Slots.Release(m_ActiveSlots[i]);
-            }
-            
-            m_ActiveSlots.Clear();
-            
-            var items = m_GameItemsManager.GetItemsByType(m_SelectedGroup.Group.GameType);
-            if (!items.HasValue)
-            {
-                return;
-            }
-
-            foreach (var itemConfig in items.Value)
+            foreach (var itemConfig in m_Configs)
             {
                 var slot = m_Slots.Get();
                 slot.Value.SetItem(itemConfig);

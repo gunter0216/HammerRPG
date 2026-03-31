@@ -7,20 +7,20 @@ using App.Game.Inventory.Runtime.Config.Model;
 
 namespace App.Game.Inventory.Runtime.Config
 {
-    public class InventoryConfigController : IInventoryConfigController
+    public class InventoryConfigService : IInventoryConfigService
     {
-        private readonly IConfigLoader m_ConfigLoader;
+        private readonly IConfigLoader _configLoader;
         
-        private InventoryConfig m_Config;
+        private InventoryConfig _config;
 
-        public InventoryConfigController(IConfigLoader configLoader)
+        public InventoryConfigService(IConfigLoader configLoader)
         {
-            m_ConfigLoader = configLoader;
+            _configLoader = configLoader;
         }
         
         public bool Initialize()
         {
-            var configLoader = new InventoryConfigLoader(m_ConfigLoader);
+            var configLoader = new InventoryConfigLoader(_configLoader);
             var dto = configLoader.Load();
             if (!dto.HasValue)
             {
@@ -36,34 +36,19 @@ namespace App.Game.Inventory.Runtime.Config
                 return false;
             }
 
-            m_Config = config.Value;
+            _config = config.Value;
 
             return true;
         }
 
-        public IReadOnlyList<IInventoryGroupConfig> GetGroups()
-        {
-            return m_Config.Groups;
-        }
-
         public int GetCols()
         {
-            return m_Config.Cols;
-        }
-
-        public int GetSlotWidth()
-        {
-            return m_Config.SlotWidth;
-        }
-
-        public int GetSlotHeight()
-        {
-            return m_Config.SlotHeight;
+            return _config.Cols;
         }
 
         public int GetRows()
         {
-            return m_Config.Rows;
+            return _config.Rows;
         }
     }
 }

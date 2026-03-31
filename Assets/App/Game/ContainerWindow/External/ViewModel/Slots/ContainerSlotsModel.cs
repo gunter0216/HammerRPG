@@ -19,8 +19,8 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
         private readonly ContainerSlotViewCreator m_SlotViewCreator;
         private readonly ISpriteLoader m_SpriteLoader;
 
-        private ListPool<ItemSlotModel> m_SlotsPool;
-        private List<ItemSlotModel> m_Slots;
+        private ListPool<ItemSlotController> m_SlotsPool;
+        private List<ItemSlotController> m_Slots;
         private Container.Runtime.Container m_Container;
 
         public ContainerSlotsModel(
@@ -33,7 +33,7 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
 
         public void Initialize()
         {
-            m_SlotsPool = new ListPool<ItemSlotModel>(
+            m_SlotsPool = new ListPool<ItemSlotController>(
                 createFunc: CreateSlot,
                 capacity: 27,
                 getCallback: x => x.SetActive(true),
@@ -73,16 +73,16 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
             }
         }
 
-        private Optional<ItemSlotModel> CreateSlot()
+        private Optional<ItemSlotController> CreateSlot()
         {
             var view = m_SlotViewCreator.Create();
             if (!view.HasValue)
             {
                 HLogger.LogError($"Failed to create slot view");
-                return Optional<ItemSlotModel>.Fail();
+                return Optional<ItemSlotController>.Fail();
             }
                     
-            var viewModel = new ItemSlotModel(
+            var viewModel = new ItemSlotController(
                 view.Value,
                 0,
                 clickCallback: OnSlotClick,
@@ -91,10 +91,10 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
                 removeFunc: Remove);
             viewModel.Initialize();
             
-            return Optional<ItemSlotModel>.Success(viewModel);
+            return Optional<ItemSlotController>.Success(viewModel);
         }
 
-        private Optional<IModuleItem> Remove(ItemSlotModel slot)
+        private Optional<IModuleItem> Remove(ItemSlotController slot)
         {
             var item = slot.GetItem();
             if (item == null)
@@ -109,7 +109,7 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
             return Optional<IModuleItem>.Success(item);
         }
 
-        private bool Place(ItemSlotModel slot, IModuleItem item)
+        private bool Place(ItemSlotController slot, IModuleItem item)
         {
             if (slot.HasItem())
             {
@@ -123,17 +123,17 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
             return true;
         }
 
-        private bool CanPlace(ItemSlotModel model, IModuleItem item)
+        private bool CanPlace(ItemSlotController controller, IModuleItem item)
         {
             return true;
         }
         
-        private void OnSlotClick(ItemSlotModel model)
+        private void OnSlotClick(ItemSlotController controller)
         {
-            EventManager.Trigger(new ItemSlotClickEvent(model));
+            EventManager.Trigger(new ItemSlotClickEvent(controller));
         }
 
-        private void UpdateSlot(ItemSlotModel slot, IModuleItem item)
+        private void UpdateSlot(ItemSlotController slot, IModuleItem item)
         {
             var sprite = GetSprite(item);
             slot.SetItem(item, sprite.Value);

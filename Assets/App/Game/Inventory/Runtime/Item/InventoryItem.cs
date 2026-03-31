@@ -5,23 +5,25 @@ namespace App.Game.Inventory.Runtime.Item
 {
     public class InventoryItem
     {
-        private readonly InventoryItemData m_Data;
-        private readonly IModuleItem m_ModuleItem;
+        private readonly InventoryItemData _data;
+        private IModuleItem _moduleItem;
 
-        public InventoryItemData Data => m_Data;
-        public IModuleItem Item => m_ModuleItem;
+        public InventoryItemData Data => _data;
+        public IModuleItem Item
+        {
+            get => _moduleItem;
+            set => _moduleItem = value;
+        }
 
-        // public InventoryItem(InventoryItemData data, IModuleItem moduleItem, IInventoryGroupConfig group)
-        // {
-        //     // m_Data = data;
-        //     m_ModuleItem = moduleItem;
-        //     // m_Group = group;
-        // }
+        public InventoryItem(InventoryItemData data)
+        {
+            _data = data;
+        }
         
         public InventoryItem(IModuleItem moduleItem, InventoryItemData data)
         {
-            m_ModuleItem = moduleItem;
-            m_Data = data;
+            _moduleItem = moduleItem;
+            _data = data;
         }
     }
 }

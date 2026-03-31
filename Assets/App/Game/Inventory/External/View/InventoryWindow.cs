@@ -6,21 +6,15 @@ namespace App.Game.Inventory.External.View
 {
     public class InventoryWindow : MonoBehaviour
     {
-        [SerializeField] private InventoryGroupHeaderView m_InventoryGroupHeaderViewPrefab;
-        [SerializeField] private Transform m_HeaderGroupContent;
+        [SerializeField] private ItemSlotView _itemSlotViewPrefab;
+        [SerializeField] private Transform _slotsContent;
         [Space]
-        [SerializeField] private ItemSlotView m_ItemSlotViewPrefab;
-        [SerializeField] private Transform m_SlotsContent;
-        [Space]
-        [SerializeField] private Transform m_ItemsContent;
-        [SerializeField] private Button m_CloseButton;
-        [SerializeField] private Button m_BlockButton;
+        [SerializeField] private Transform _itemsContent;
+        [SerializeField] private Button _closeButton;
         
-        public InventoryGroupHeaderView InventoryGroupHeaderViewPrefab => m_InventoryGroupHeaderViewPrefab;
-        public Transform HeaderGroupContent => m_HeaderGroupContent;
-        public ItemSlotView ItemSlotViewPrefab => m_ItemSlotViewPrefab;
-        public Transform SlotsContent => m_SlotsContent;
-        public Transform ItemsContent => m_ItemsContent;
+        public ItemSlotView ItemSlotViewPrefab => _itemSlotViewPrefab;
+        public Transform SlotsContent => _slotsContent;
+        public Transform ItemsContent => _itemsContent;
         
         public void SetActive(bool isActive)
         {
@@ -32,21 +26,10 @@ namespace App.Game.Inventory.External.View
             return gameObject.activeSelf;
         }
         
-        public void SetBlockButtonActive(bool isActive)
-        {
-            m_BlockButton.gameObject.SetActive(isActive);
-        }
-        
         public void SetCloseButtonClickCallback(UnityEngine.Events.UnityAction callback)
         {
-            m_CloseButton.onClick.RemoveAllListeners();
-            m_CloseButton.onClick.AddListener(callback);
-        }
-        
-        public void SetBlockButtonClickCallback(UnityEngine.Events.UnityAction callback)
-        {
-            m_BlockButton.onClick.RemoveAllListeners();
-            m_BlockButton.onClick.AddListener(callback);
+            _closeButton.onClick.RemoveAllListeners();
+            _closeButton.onClick.AddListener(callback);
         }
     }
 }

@@ -6,27 +6,27 @@ using UnityEngine;
 
 namespace App.Game.DragItem.Runtime.Model
 {
-    public class ItemSlotModel : IItemSlotModel
+    public class ItemSlotController : IItemSlotModel
     {
         private readonly ItemSlotView m_View;
         private int m_Index;
 
-        private readonly Func<ItemSlotModel, IModuleItem, bool> m_CanPlaceFunc;
-        private readonly Func<ItemSlotModel, IModuleItem, bool> m_PlaceFunc;
-        private readonly Func<ItemSlotModel, Optional<IModuleItem>> m_RemoveFunc;
-        private event Action<ItemSlotModel> m_ClickCallback;
+        private readonly Func<ItemSlotController, IModuleItem, bool> m_CanPlaceFunc;
+        private readonly Func<ItemSlotController, IModuleItem, bool> m_PlaceFunc;
+        private readonly Func<ItemSlotController, Optional<IModuleItem>> m_RemoveFunc;
+        private event Action<ItemSlotController> m_ClickCallback;
 
         private IModuleItem m_Item;
 
         public int Index => m_Index;
 
-        public ItemSlotModel(
+        public ItemSlotController(
             ItemSlotView view, 
             int index,
-            Action<ItemSlotModel> clickCallback, 
-            Func<ItemSlotModel, IModuleItem, bool> canPlaceFunc, 
-            Func<ItemSlotModel, IModuleItem, bool> placeFunc, 
-            Func<ItemSlotModel, Optional<IModuleItem>> removeFunc)
+            Action<ItemSlotController> clickCallback, 
+            Func<ItemSlotController, IModuleItem, bool> canPlaceFunc, 
+            Func<ItemSlotController, IModuleItem, bool> placeFunc, 
+            Func<ItemSlotController, Optional<IModuleItem>> removeFunc)
         {
             m_View = view;
             m_CanPlaceFunc = canPlaceFunc;
@@ -56,7 +56,7 @@ namespace App.Game.DragItem.Runtime.Model
         {
             m_Item = item;
             m_View.SetSprite(sprite);
-            m_View.SetItemActive(true);
+            m_View.SetItemActive(sprite != null);
         }
         
         private void OnButtonClick()

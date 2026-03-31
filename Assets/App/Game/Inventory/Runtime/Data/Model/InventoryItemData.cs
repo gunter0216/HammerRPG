@@ -9,31 +9,32 @@ namespace App.Game.Inventory.Runtime.Data.Model
     public class InventoryItemData
     {
         [JsonProperty("index")]
-        private int m_Index;
+        private readonly int _index;
         
         [JsonProperty("dataReference")]
-        private DataReference m_DataReference;
+        private DataReference _dataReference;
 
         public DataReference DataReference
         {
-            get => m_DataReference;
-            set => m_DataReference = value;
+            get => _dataReference;
+            set => _dataReference = value;
         }
 
-        public int Index
-        {
-            get => m_Index;
-            set => m_Index = value;
-        }
+        public int Index => _index;
 
         public InventoryItemData()
         {
         }
+        
+        public InventoryItemData(int index)
+        {
+            _index = index;
+        }
 
         public InventoryItemData(int index, DataReference dataReference)
         {
-            m_Index = index;
-            m_DataReference = dataReference;
+            _index = index;
+            _dataReference = dataReference;
         }
     }
 }

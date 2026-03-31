@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace App.Game.Inventory.Runtime.Config.Dto
@@ -8,21 +7,12 @@ namespace App.Game.Inventory.Runtime.Config.Dto
     [JsonObject(MemberSerialization.Fields)]
     public class InventoryConfigDto
     {
-        [JsonProperty("groups")]
-        private List<InventoryGroupDto> m_Groups;
         [JsonProperty("cols")]
-        private int m_Cols;
-        [JsonProperty("slotWidth")]
-        private int m_SlotWidth;
-        [JsonProperty("slotHeight")]
-        private int m_SlotHeight;
+        private int _cols;
         [JsonProperty("rows")]
-        private int m_Rows;
+        private int _rows;
 
-        public List<InventoryGroupDto> Groups => m_Groups;
-        public int Cols => m_Cols;
-        public int SlotWidth => m_SlotWidth;
-        public int SlotHeight => m_SlotHeight;
-        public int Rows => m_Rows;
+        public int Cols => _cols;
+        public int Rows => _rows;
     }
 }
