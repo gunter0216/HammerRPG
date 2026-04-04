@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Chest.Runtime.Config;
-using App.Game.Chest.Runtime.Data;
+using App.Game.Modules.Chest.Runtime.Config;
+using App.Game.Modules.Chest.Runtime.Data;
 
-namespace App.Game.Chest.Runtime
+namespace App.Game.Modules.Chest.Runtime
 {
     public class ChestModuleSystem : IModuleSystem
     {

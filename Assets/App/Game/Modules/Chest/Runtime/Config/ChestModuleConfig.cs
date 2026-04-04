@@ -1,6 +1,6 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Game.Chest.Runtime.Config
+namespace App.Game.Modules.Chest.Runtime.Config
 {
     public class ChestModuleConfig : IModuleConfig
     {

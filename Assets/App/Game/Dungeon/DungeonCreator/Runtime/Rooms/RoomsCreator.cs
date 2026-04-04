@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
-using App.Game.Chest.Runtime;
 using App.Game.GameTiles.Runtime;
+using App.Game.Modules.Chest.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 

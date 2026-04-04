@@ -2,7 +2,7 @@ using System;
 using App.Common.ModuleItem.Runtime.Data;
 using Newtonsoft.Json;
 
-namespace App.Game.Chest.Runtime.Data
+namespace App.Game.Modules.Chest.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

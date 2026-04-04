@@ -2,10 +2,10 @@ using App.Common.Configs.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Chest.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Config.Controller;
 using App.Game.Dungeon.DungeonCreator.Runtime.Rooms;
 using App.Game.GameTiles.Runtime;
+using App.Game.Modules.Chest.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
 using Logger = App.Common.Logger.Runtime.Logger;
 

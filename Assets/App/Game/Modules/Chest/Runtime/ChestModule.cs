@@ -1,9 +1,9 @@
 using System;
 using App.Common.ModuleItem.Runtime;
-using App.Game.Chest.Runtime.Config;
-using App.Game.Chest.Runtime.Data;
+using App.Game.Modules.Chest.Runtime.Config;
+using App.Game.Modules.Chest.Runtime.Data;
 
-namespace App.Game.Chest.Runtime
+namespace App.Game.Modules.Chest.Runtime
 {
     public class ChestModule
     {
