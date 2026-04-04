@@ -94,6 +94,7 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
         {
             if (dungeonKey == null)
             {
+                HLogger.LogError("Key is empty");
                 return null;
             }
 

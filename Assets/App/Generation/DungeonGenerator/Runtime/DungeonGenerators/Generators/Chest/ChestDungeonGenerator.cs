@@ -15,6 +15,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
 
             CreateChests(rooms);
             
+            // todo test
+            var startRoom = roomsData.StartGenerationRoom;
+            startRoom.AddDoorKey(new DungeonKeyData(-1));
+            startRoom.Chests.Add(new DungeonGenerationChest(startRoom.LocalCenter.ToInt(), startRoom.ContainsDoorKeys[0]));
+
             return Optional<DungeonGeneration>.Success(generation);
         }
 
@@ -30,7 +35,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
         {
             if (room.ContainsDoorKeys != null && room.ContainsDoorKeys.Count > 0)
             {
-                room.Chests.Add(new DungeonGenerationChest(room.LocalCenter.ToInt(), room.RequiredKey));
+                room.Chests.Add(new DungeonGenerationChest(room.LocalCenter.ToInt(), room.ContainsDoorKeys[0]));
             }
         }
 
