@@ -56,6 +56,7 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
                 }
                 
                 slot.Value.Clear();
+                slot.Value.SetAsLastSibling();
 
                 var item = container.Items[i];
                 if (item != null)

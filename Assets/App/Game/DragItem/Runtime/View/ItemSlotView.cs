@@ -9,6 +9,11 @@ namespace App.Game.DragItem.Runtime.View
         [SerializeField] private Image m_Item;
         [SerializeField] private Button m_Button;
 
+        public void SetAsLastSibling()
+        {
+            transform.SetAsLastSibling();
+        }
+        
         public void SetItemActive(bool status)
         {
             m_Item.gameObject.SetActive(status);

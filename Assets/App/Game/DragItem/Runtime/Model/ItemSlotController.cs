@@ -103,5 +103,10 @@ namespace App.Game.DragItem.Runtime.Model
         {
             m_View.gameObject.SetActive(status);
         }
+        
+        public void SetAsLastSibling()
+        {
+            m_View.SetAsLastSibling();
+        }
     }
 }

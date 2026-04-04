@@ -24,7 +24,7 @@ namespace App.Game.DungeonCore.External.View
 
         public void AddClickListener(Action onClick)
         {
-            _onClick += onClick;
+            _onClick = onClick;
         }
     }
 }
