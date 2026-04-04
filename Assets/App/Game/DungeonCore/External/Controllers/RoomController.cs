@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
+using App.Game.ContainerWindow.Runtime;
 using App.Game.DungeonCore.External.Services;
 using App.Game.DungeonCreator.Runtime.Door;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace App.Game.DungeonCore.External.Controllers
 {
     public class RoomController
     {
+        private readonly IContainerWindowController _containerWindow;
         private readonly RoomService _service;
         private readonly IItemSpriteLoader _spriteLoader;
         
@@ -18,10 +20,11 @@ namespace App.Game.DungeonCore.External.Controllers
         private List<DoorController> _doors;
         private List<ChestController> _chest;
 
-        public RoomController(RoomService service, IItemSpriteLoader spriteLoader)
+        public RoomController(RoomService service, IItemSpriteLoader spriteLoader, IContainerWindowController containerWindow)
         {
             _service = service;
             _spriteLoader = spriteLoader;
+            _containerWindow = containerWindow;
         }
 
         public void Initialize()
@@ -46,7 +49,8 @@ namespace App.Game.DungeonCore.External.Controllers
                 var chestController = new ChestController(
                     _spriteLoader,
                     chestRoot, 
-                    chest);
+                    chest,
+                    _containerWindow);
                 chestController.Initialize();
                 _chest.Add(chestController);
             }

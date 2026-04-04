@@ -3,6 +3,7 @@ using App.Common.Algorithms.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Common.Utilities.Utility.Runtime;
+using App.Game.ContainerWindow.Runtime;
 using App.Game.DungeonCore.External.Controllers;
 using App.Game.DungeonCore.External.Services;
 using App.Game.DungeonCreator.Runtime.Rooms;
@@ -12,16 +13,18 @@ namespace App.Game.DungeonCore.External
 {
     public class DungeonController : IDungeonController, IInitSystem
     {
+        private readonly IContainerWindowController _containerWindow;
         private readonly IDungeonCreator _dungeonCreator;
         private readonly IItemSpriteLoader _spriteLoader;
 
         private List<RoomController> _rooms;
         private DungeonService _service;
         
-        public DungeonController(IDungeonCreator dungeonCreator, IItemSpriteLoader spriteLoader)
+        public DungeonController(IDungeonCreator dungeonCreator, IItemSpriteLoader spriteLoader, IContainerWindowController containerWindow)
         {
             _dungeonCreator = dungeonCreator;
             _spriteLoader = spriteLoader;
+            _containerWindow = containerWindow;
         }
 
         public void Init()
@@ -52,7 +55,7 @@ namespace App.Game.DungeonCore.External
             _rooms = new List<RoomController>(_service.Rooms.Count);
             foreach (var room in _service.Rooms)
             {
-                var controller = new RoomController(room, _spriteLoader);
+                var controller = new RoomController(room, _spriteLoader, _containerWindow);
                 _rooms.Add(controller);
             }
 

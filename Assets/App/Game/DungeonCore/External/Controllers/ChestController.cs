@@ -1,10 +1,10 @@
 using System;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
-using App.Game.DungeonCreator.Runtime.Door;
-using App.Game.DungeonCreator.Runtime.Rooms;
-using App.Generation.DungeonCreator.Runtime.Chest;
+using App.Game.ContainerWindow.Runtime;
+using App.Game.DungeonCore.External.View;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace App.Game.DungeonCore.External.Controllers
 {
@@ -13,13 +13,18 @@ namespace App.Game.DungeonCore.External.Controllers
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly Transform _root;
         private readonly Generation.DungeonCreator.Runtime.Chest.Chest _chest;
+        private readonly IContainerWindowController _containerWindow;
 
-
-        public ChestController(IItemSpriteLoader spriteLoader, Transform root, Generation.DungeonCreator.Runtime.Chest.Chest chest)
+        public ChestController(
+            IItemSpriteLoader spriteLoader, 
+            Transform root, 
+            Generation.DungeonCreator.Runtime.Chest.Chest chest, 
+            IContainerWindowController containerWindow)
         {
             _spriteLoader = spriteLoader;
             _root = root;
             _chest = chest;
+            _containerWindow = containerWindow;
         }
 
         public void Initialize()
@@ -46,7 +51,15 @@ namespace App.Game.DungeonCore.External.Controllers
             spriteRenderer.drawMode = SpriteDrawMode.Simple;
             spriteRenderer.sortingOrder = 3;
             
+            var chestView = tileView.AddComponent<ChestView>();
+            chestView.AddClickListener(OnButtonClick);
+            
             var collider = tileView.AddComponent<BoxCollider2D>();
+        }
+
+        private void OnButtonClick()
+        {
+            _containerWindow.OpenWindow(_chest.ContainerModule.Container);
         }
     }
 }

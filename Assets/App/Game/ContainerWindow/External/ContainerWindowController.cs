@@ -1,3 +1,4 @@
+using System;
 using App.Common.AssetSystem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
@@ -15,6 +16,8 @@ namespace App.Game.ContainerWindow.External
 
         private ContainerWindowModel m_WindowModel;
 
+        public Action OnWindowOpened;
+
         public ContainerWindowController(IAssetManager assetManager, PopupCanvas canvas, ISpriteLoader spriteLoader)
         {
             m_AssetManager = assetManager;
@@ -30,6 +33,7 @@ namespace App.Game.ContainerWindow.External
         public void OpenWindow(Container.Runtime.Container container)
         {
             m_WindowModel.Open(container);
+            OnWindowOpened?.Invoke();
         }
 
         public void CloseWindow()

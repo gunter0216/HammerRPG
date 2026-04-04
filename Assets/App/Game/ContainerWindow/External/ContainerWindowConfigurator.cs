@@ -11,8 +11,10 @@ namespace App.Game.ContainerWindow.External
         public override void Configuration()
         {
             BindSingle<ContainerWindowController>();
+            BindSingle<ContainerToInventoryController>();
 
             RegisterFSM<ContainerWindowController>(FSMStage.CoreInitStage, StageOrders.Container);
+            RegisterFSM<ContainerToInventoryController>(FSMStage.CoreInitStage, StageOrders.Container);
         }
     }
 }

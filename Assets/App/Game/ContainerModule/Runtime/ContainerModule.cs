@@ -9,7 +9,8 @@ namespace App.Game.ContainerModule.Runtime
         private readonly ContainerModuleConfig _config;
         private readonly Container.Runtime.Container _container;
 
-        internal Container.Runtime.Container Container => _container;
+        // todo make internal
+        public Container.Runtime.Container Container => _container;
 
         public ContainerModule(
             IModuleItem item, 

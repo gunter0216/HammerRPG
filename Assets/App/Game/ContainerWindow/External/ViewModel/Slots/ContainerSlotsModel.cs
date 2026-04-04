@@ -33,6 +33,7 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
 
         public void Initialize()
         {
+            m_Slots = new List<ItemSlotController>(27);
             m_SlotsPool = new ListPool<ItemSlotController>(
                 createFunc: CreateSlot,
                 capacity: 27,
@@ -53,6 +54,8 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
                     HLogger.LogError("Cant create slot");
                     return;
                 }
+                
+                slot.Value.Clear();
 
                 var item = container.Items[i];
                 if (item != null)
@@ -143,7 +146,6 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
         {
             foreach (var slot in m_Slots)
             {
-                slot.Clear();
                 m_SlotsPool.Release(slot);
             }
             
