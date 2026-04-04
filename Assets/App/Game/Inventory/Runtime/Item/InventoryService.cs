@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using App.Common.DataContainer.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
@@ -73,6 +74,8 @@ namespace App.Game.Inventory.Runtime.Item
                 
             _items[index] = item;
             _dataService.AddItem(data);
+            
+            HLogger.LogError($"Add item {moduleItem.Id} {moduleItem.ReferenceSelf.Index} {moduleItem.ReferenceSelf.Key}");
 
             return Optional<InventoryItem>.Success(item);
         }
@@ -81,7 +84,12 @@ namespace App.Game.Inventory.Runtime.Item
         {
             return _items;
         }
-        
+
+        public void Remove(InventoryItem inventoryItem)
+        {
+            RemoveItem(inventoryItem.Data.Index);
+        }
+
         public void RemoveItem(int index)
         {
             _items[index].Item = null;
@@ -96,6 +104,27 @@ namespace App.Game.Inventory.Runtime.Item
         public int GetCols()
         {
             return _configService.GetCols();
+        }
+
+        public bool TryGetItem(DataReference dataReference, out InventoryItem item)
+        {
+            foreach (var inventoryItem in _items)
+            {
+                if (inventoryItem.Item == null)
+                {
+                    continue;
+                }
+
+                if (inventoryItem.Item.ReferenceSelf == dataReference)
+                {
+                    item = inventoryItem;
+                    return true;
+                }
+            }
+
+            item = null;
+            
+            return false;
         }
     }
 }

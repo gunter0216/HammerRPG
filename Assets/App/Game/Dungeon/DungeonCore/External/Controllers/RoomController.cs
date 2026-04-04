@@ -1,27 +1,38 @@
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Game.Containers.ContainerWindow.Runtime;
 using App.Game.Dungeon.DungeonCore.Runtime.Services;
+using App.Game.Inventory.External;
 using UnityEngine;
 
 namespace App.Game.Dungeon.DungeonCore.External.Controllers
 {
     public class RoomController
     {
+        private readonly IModuleItemsManager _moduleItemsManager;
         private readonly IContainerWindowController _containerWindow;
         private readonly RoomService _service;
         private readonly IItemSpriteLoader _spriteLoader;
+        private readonly InventoryController _inventoryController;
         
         private GameObject _root;
         private List<DoorController> _doors;
         private List<ChestController> _chest;
 
-        public RoomController(RoomService service, IItemSpriteLoader spriteLoader, IContainerWindowController containerWindow)
+        public RoomController(
+            RoomService service, 
+            IItemSpriteLoader spriteLoader, 
+            IContainerWindowController containerWindow, 
+            InventoryController inventoryController, 
+            IModuleItemsManager moduleItemsManager)
         {
             _service = service;
             _spriteLoader = spriteLoader;
             _containerWindow = containerWindow;
+            _inventoryController = inventoryController;
+            _moduleItemsManager = moduleItemsManager;
         }
 
         public void Initialize()
@@ -127,7 +138,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 var controller = new DoorController(
                     _spriteLoader,
                     doorsRoot, 
-                    door);
+                    door,
+                    _inventoryController,
+                    _moduleItemsManager);
                 controller.Initialize();
                 _doors.Add(controller);
             }

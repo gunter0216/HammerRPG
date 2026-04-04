@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using App.Common.Algorithms.Runtime;
+using App.Game.Dungeon.DungeonCreator.Runtime.Doors;
 using App.Game.Dungeon.DungeonCreator.Runtime.Tiles;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
@@ -8,7 +9,7 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
     {
         private readonly RoomData _data;
         private List<Tile> _tiles;
-        private List<Door.Door> _doors;
+        private List<Door> _doors;
         private List<Chest.Chest> _chests;
 
         public Room(RoomData data)
@@ -31,7 +32,7 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         public int Col => Position.X;
         public int Row => Position.Y;
 
-        public List<Door.Door> Doors
+        public List<Door> Doors
         {
             get => _doors;
             set => _doors = value;

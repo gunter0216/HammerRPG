@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace App.Game.Dungeon.DungeonCore.External.View
 {
-    public class ChestView : MonoBehaviour
+    public class DoorView : MonoBehaviour
     {
         private Action _onClick;
 

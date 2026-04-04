@@ -18,15 +18,18 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly ChestModuleSystem _chestModuleSystem;
         private readonly ContainerModuleSystem _containerModuleSystem;
+        private readonly KeyCreator _keyCreator;
 
         public ChestRoomCreator(
             IModuleItemsManager moduleItemsManager,
             ChestModuleSystem chestModuleSystem,
-            ContainerModuleSystem containerModuleSystem)
+            ContainerModuleSystem containerModuleSystem, 
+            KeyCreator keyCreator)
         {
             _moduleItemsManager = moduleItemsManager;
             _chestModuleSystem = chestModuleSystem;
             _containerModuleSystem = containerModuleSystem;
+            _keyCreator = keyCreator;
         }
 
         public void CreateChests(Room room, DungeonGenerationRoom generationRoom)
@@ -82,38 +85,13 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
                 chestModule,
                 containerModule);
 
-            var key = CreateKey(generationChest.Key);
+            var key = _keyCreator.Create(generationChest.Key);
             if (key != null)
             {
                 containerModule.AddItem(key);
             }
 
             return chest;
-        }
-
-        private IModuleItem CreateKey(DungeonKeyData dungeonKey)
-        {
-            if (dungeonKey == null)
-            {
-                HLogger.LogError("Key is empty");
-                return null;
-            }
-
-            var moduleItem = _moduleItemsManager.Create("IronKey");
-            if (!moduleItem.HasValue)
-            {
-                HLogger.LogError($"Cant create moduleItem");
-                return null;
-            }
-
-            var keyModuleData = new KeyModuleData(dungeonKey);
-            if (!moduleItem.Value.AddDataModule(keyModuleData))
-            {
-                HLogger.LogError("Cant add key data");
-                return null;
-            }
-
-            return moduleItem.Value;
         }
     }
 }

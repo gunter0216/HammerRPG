@@ -3,11 +3,11 @@ using App.Common.Algorithms.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Dungeon.DungeonCreator.Runtime.Door;
 using App.Game.Dungeon.DungeonCreator.Runtime.Tiles;
 using App.Game.GameTiles.Runtime;
 using App.Game.Modules.Chest.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Modules.Door.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 
@@ -19,17 +19,23 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         private readonly ContainerModuleSystem _containerModuleSystem;
         private readonly ITilesController _tilesController;
         private readonly IModuleItemsManager _moduleItemsManager;
+        private readonly DoorModuleSystem _doorModuleSystem;
+        private readonly KeyCreator _keyCreator;
 
         public RoomCreator(
             ITilesController tilesController,
             IModuleItemsManager moduleItemsManager,
             ChestModuleSystem chestModuleSystem, 
-            ContainerModuleSystem containerModuleSystem)
+            ContainerModuleSystem containerModuleSystem, 
+            DoorModuleSystem doorModuleSystem, 
+            KeyCreator keyCreator)
         {
             _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
             _chestModuleSystem = chestModuleSystem;
             _containerModuleSystem = containerModuleSystem;
+            _doorModuleSystem = doorModuleSystem;
+            _keyCreator = keyCreator;
         }
 
         public Optional<Room> CreateRoom(DungeonGenerationRoom generationRoom)
@@ -38,12 +44,17 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
             var room = new Room(data);
 
             CreateWalls(room, generationRoom);
-            CreateDoors(room, generationRoom);
             var chestRoomCreator = new ChestRoomCreator(
                 _moduleItemsManager, 
                 _chestModuleSystem,
-                _containerModuleSystem);
+                _containerModuleSystem,
+                _keyCreator);
             chestRoomCreator.CreateChests(room, generationRoom);
+            var doorRoomCreator = new DoorRoomCreator(
+                _moduleItemsManager,
+                _doorModuleSystem,
+                _keyCreator);
+            doorRoomCreator.CreateDoors(room, generationRoom);
             CreateFloors(room, generationRoom);
             
             return Optional<Room>.Success(room);
@@ -80,35 +91,6 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
             {
                 room.Data.Floors.Add(floor);    
             }
-        }
-
-        private void CreateDoors(Room room, DungeonGenerationRoom generationRoom)
-        {
-            var doors = new List<Door.Door>(generationRoom.Doors.Count);
-            foreach (var generationDoor in generationRoom.Doors)
-            {
-                var data = new DoorData()
-                {
-                    Position = generationDoor.LocalPosition,
-                    RequiredKey = generationDoor.RequiredKey,
-                    IsClosed = generationDoor.IsRequiredKey
-                };
-
-                var tileModuleItem = _tilesController.CreateTileByGenerationID(DungeonTile.Door, generationDoor.LocalPosition);
-                if (!tileModuleItem.HasValue)
-                {
-                    HLogger.LogError($"Cant create tile");
-                    continue;
-                }
-
-                data.Reference = tileModuleItem.Value.ReferenceSelf;
-
-                var door = new Door.Door(data, tileModuleItem.Value, room);
-                
-                doors.Add(door);
-            }
-
-            room.Doors = doors;
         }
 
         private Optional<Tile> CreateTile(

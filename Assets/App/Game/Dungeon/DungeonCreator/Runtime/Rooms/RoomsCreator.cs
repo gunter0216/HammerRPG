@@ -4,6 +4,7 @@ using App.Common.ModuleItem.Runtime;
 using App.Game.GameTiles.Runtime;
 using App.Game.Modules.Chest.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Modules.Door.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
@@ -15,21 +16,27 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly ITilesController _tilesController;
         private readonly RoomCreator _roomCreator;
+        private readonly DoorModuleSystem _doorModuleSystem;
+        private readonly KeyCreator _keyCreator;
 
         public RoomsCreator(ITilesController tilesController,
             IModuleItemsManager moduleItemsManager,
             ChestModuleSystem chestModuleSystem, 
-            ContainerModuleSystem containerModuleSystem)
+            ContainerModuleSystem containerModuleSystem, DoorModuleSystem doorModuleSystem)
         {
             _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
             _chestModuleSystem = chestModuleSystem;
             _containerModuleSystem = containerModuleSystem;
+            _doorModuleSystem = doorModuleSystem;
+            _keyCreator = new KeyCreator(_moduleItemsManager);
             _roomCreator = new RoomCreator(
                 _tilesController,
                 _moduleItemsManager,
                 _chestModuleSystem, 
-                _containerModuleSystem);
+                _containerModuleSystem,
+                _doorModuleSystem,
+                _keyCreator);
         }
 
         public void CreateRooms(DungeonGeneration generation, Dungeon dungeon)
@@ -40,6 +47,17 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
             var generationRooms = dataGenerationRooms.Rooms;
 
             var rooms = new List<Room>(generationRooms.Count);
+
+            foreach (var generationRoom in generationRooms)
+            {
+                if (generationRoom.RequiredKey == null)
+                {
+                    continue;
+                }
+                
+                _keyCreator.Create(generationRoom.RequiredKey);
+            }
+
             foreach (var generationRoom in generationRooms)
             {
                 var room = _roomCreator.CreateRoom(generationRoom);

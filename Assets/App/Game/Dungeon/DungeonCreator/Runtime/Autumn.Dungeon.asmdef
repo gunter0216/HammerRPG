@@ -14,6 +14,7 @@
     "Autumn.DataManager",
     "Autumn.Chest",
     "Autumn.ContainerModule",
-    "Autumn.TilePositionModule"
+    "Autumn.TilePositionModule",
+    "Autumn.Door"
   ]
 }

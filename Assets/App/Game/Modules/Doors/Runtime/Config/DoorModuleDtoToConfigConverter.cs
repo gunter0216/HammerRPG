@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
+using UnityEngine;
 
-namespace App.Game.Dungeon.DungeonCreator.Runtime.Door
+namespace App.Game.Modules.Door.Runtime.Config
 {
     public class DoorModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {

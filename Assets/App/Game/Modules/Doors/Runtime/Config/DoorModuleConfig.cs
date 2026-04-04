@@ -1,6 +1,6 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Game.Dungeon.DungeonCreator.Runtime.Door
+namespace App.Game.Modules.Door.Runtime.Config
 {
     public class DoorModuleConfig : IModuleConfig
     {
@@ -8,7 +8,6 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Door
         private readonly string _openIconKey;
 
         public string CloseIconKey => _closeIconKey;
-
         public string OpenIconKey => _openIconKey;
 
         public DoorModuleConfig(string closeIconKey, string openIconKey)

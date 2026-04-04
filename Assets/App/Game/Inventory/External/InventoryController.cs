@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Configs.Runtime;
 using App.Common.Data.Runtime;
+using App.Common.DataContainer.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
@@ -132,6 +133,16 @@ namespace App.Game.Inventory.External
         public bool AddItem(IModuleItem moduleItem)
         {
             return _addItemStrategy.AddItem(moduleItem);
+        }
+
+        public void Remove(InventoryItem inventoryItem)
+        {
+            _service.Remove(inventoryItem);
+        }
+
+        public bool TryGetItem(DataReference dataReference, out InventoryItem item)
+        {
+            return _service.TryGetItem(dataReference, out item);
         }
 
         public void Dispose()

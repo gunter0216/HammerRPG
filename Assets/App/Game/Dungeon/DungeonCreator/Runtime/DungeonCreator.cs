@@ -7,6 +7,7 @@ using App.Game.Dungeon.DungeonCreator.Runtime.Rooms;
 using App.Game.GameTiles.Runtime;
 using App.Game.Modules.Chest.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Modules.Door.Runtime;
 using Logger = App.Common.Logger.Runtime.Logger;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime
@@ -18,6 +19,7 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime
         private readonly IConfigLoader _configLoader;
         private readonly ITilesController _tilesController;
         private readonly IModuleItemsManager _moduleItemsManager;
+        private readonly DoorModuleSystem _doorModuleSystem;
 
         private GenerationConfigController _configController;
 
@@ -26,13 +28,15 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime
             ITilesController tilesController, 
             IModuleItemsManager moduleItemsManager, 
             ChestModuleSystem chestModuleSystem, 
-            ContainerModuleSystem containerModuleSystem)
+            ContainerModuleSystem containerModuleSystem, 
+            DoorModuleSystem doorModuleSystem)
         {
             _configLoader = configLoader;
             _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
             _chestModuleSystem = chestModuleSystem;
             _containerModuleSystem = containerModuleSystem;
+            _doorModuleSystem = doorModuleSystem;
         }
 
         public void Init()
@@ -76,7 +80,8 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime
                 _tilesController, 
                 _moduleItemsManager, 
                 _chestModuleSystem, 
-                _containerModuleSystem);
+                _containerModuleSystem,
+                _doorModuleSystem);
             roomsCreator.CreateRooms(dungeonGeneration.Value, dungeon);
 
             return Optional<Dungeon>.Success(dungeon);

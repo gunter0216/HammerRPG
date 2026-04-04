@@ -40,6 +40,7 @@
     "Autumn.Chest",
     "Autumn.ContainerModule",
     "Autumn.TilePositionModule",
-    "Autumn.SpriteModule"
+    "Autumn.SpriteModule",
+    "Autumn.Door"
   ]
 }
