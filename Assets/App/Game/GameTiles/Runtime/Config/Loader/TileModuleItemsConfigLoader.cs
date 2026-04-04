@@ -3,7 +3,7 @@ using App.Common.ModuleItem.Runtime.Config.Dto;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Game.GameTiles.External.Config.Loader
+namespace App.Game.GameTiles.Runtime.Config.Loader
 {
     public class TileModuleItemsConfigLoader : IModuleItemsConfigLoader
     {

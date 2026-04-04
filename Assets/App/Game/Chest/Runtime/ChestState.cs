@@ -1,4 +1,4 @@
-namespace App.Generation.DungeonCreator.Runtime.Chest
+namespace App.Game.Chest.Runtime
 {
     public enum ChestState
     {

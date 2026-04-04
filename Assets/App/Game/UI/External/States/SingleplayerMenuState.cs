@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using App.Common.Timer.Runtime;
 using App.Common.Utilities.Pool.External;
+using App.Game.UI.External.View.Panels.Singleplayer;
+using App.Game.UI.Runtime;
+using App.Game.UI.Runtime.Data;
 using App.Game.Utility.Runtime.MenuSM;
-using App.Menu.UI.Runtime.Data;
-using App.Menu.UI.Runtime.View.Panels.Singleplayer;
 
-namespace App.Menu.UI.Runtime.States
+namespace App.Game.UI.External.States
 {
     public class SingleplayerMenuState : IMenuState, IDisposable
     {

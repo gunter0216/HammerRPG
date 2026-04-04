@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using App.Common.Data.Runtime;
-using App.Menu.UI.Runtime.Data;
+using App.Game.UI.Runtime.Data;
 using Newtonsoft.Json;
 
-namespace App.Menu.UI.External.Data
+namespace App.Game.UI.External.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

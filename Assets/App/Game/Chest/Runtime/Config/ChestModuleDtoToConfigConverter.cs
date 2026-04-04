@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Generation.DungeonCreator.Runtime.Chest
+namespace App.Game.Chest.Runtime.Config
 {
     public class ChestModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {

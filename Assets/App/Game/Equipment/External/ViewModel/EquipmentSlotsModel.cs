@@ -8,8 +8,9 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.DragItem.Runtime.Events;
 using App.Game.Equipment.External.View;
 using App.Game.Equipment.Runtime;
+using App.Game.Equipment.Runtime.Constants;
 using App.Game.Equipment.Runtime.Items;
-using App.Game.GameTiles.External.Config.Model;
+using App.Game.Modules.Sprite.Runtime;
 using UnityEngine;
 
 namespace App.Game.Equipment.External.ViewModel

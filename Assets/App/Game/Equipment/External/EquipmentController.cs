@@ -7,11 +7,12 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Equipment.External.ViewModel;
 using App.Game.Equipment.External.ViewModel.Fabric;
+using App.Game.Equipment.Runtime;
 using App.Game.Equipment.Runtime.Config;
 using App.Game.Equipment.Runtime.Data;
 using App.Game.Equipment.Runtime.Items;
 
-namespace App.Game.Equipment.Runtime
+namespace App.Game.Equipment.External
 {
     public class EquipmentController : IInitSystem, IEquipmentController
     {

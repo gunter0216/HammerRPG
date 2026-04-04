@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace App.Menu.UI.Runtime.Data
+namespace App.Game.UI.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

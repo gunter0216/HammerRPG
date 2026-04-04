@@ -1,7 +1,9 @@
 using System;
 using App.Common.ModuleItem.Runtime;
+using App.Game.Chest.Runtime.Config;
+using App.Game.Chest.Runtime.Data;
 
-namespace App.Generation.DungeonCreator.Runtime.Chest
+namespace App.Game.Chest.Runtime
 {
     public class ChestModule
     {

@@ -7,14 +7,14 @@ using App.Common.SceneControllers.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Settings.Runtime;
+using App.Game.UI.External.Data;
+using App.Game.UI.External.States;
+using App.Game.UI.External.View;
+using App.Game.UI.Runtime;
+using App.Game.UI.Runtime.Data;
 using App.Game.Utility.Runtime.MenuSM;
-using App.Menu.UI.External.Data;
-using App.Menu.UI.Runtime;
-using App.Menu.UI.Runtime.Data;
-using App.Menu.UI.Runtime.States;
-using App.Menu.UI.Runtime.View;
 
-namespace App.Menu.UI.External
+namespace App.Game.UI.External
 {
     public class MenuSceneMenuController : IInitSystem, IDisposable
     {

@@ -7,7 +7,6 @@ using App.Common.SpriteLoaders.External;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.DragItem.Runtime.Events;
 using App.Game.DragItem.Runtime.Model;
-using App.Game.GameTiles.External.Config.Model;
 using App.Game.Inventory.External.View;
 using App.Game.Inventory.External.ViewModel.Fabric;
 using App.Game.Inventory.Runtime.Item;

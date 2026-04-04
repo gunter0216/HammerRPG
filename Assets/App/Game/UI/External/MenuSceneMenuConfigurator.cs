@@ -2,10 +2,9 @@ using App.Common.FSM.External;
 using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
-using App.Game.Update.External;
-using App.Menu.UI.External.Data;
+using App.Game.UI.External.Data;
 
-namespace App.Menu.UI.External
+namespace App.Game.UI.External
 {
     [Configurator(DIContext.MenuContext)]
     public class MenuSceneMenuConfigurator : Configurator

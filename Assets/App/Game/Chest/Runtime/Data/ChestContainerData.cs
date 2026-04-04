@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using App.Common.DataContainer.Runtime.Data;
 using Newtonsoft.Json;
 
-namespace App.Generation.DungeonCreator.Runtime.Chest
+namespace App.Game.Chest.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

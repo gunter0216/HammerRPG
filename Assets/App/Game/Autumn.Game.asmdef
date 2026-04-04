@@ -38,6 +38,8 @@
     "Leopotam.EcsLite.UnityEditor.Runtime",
     "Autumn.Container",
     "Autumn.Chest",
-    "Autumn.ContainerModule"
+    "Autumn.ContainerModule",
+    "Autumn.TilePositionModule",
+    "Autumn.SpriteModule"
   ]
 }

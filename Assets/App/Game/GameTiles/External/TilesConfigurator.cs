@@ -2,8 +2,7 @@ using App.Common.FSM.External;
 using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
-using App.Game.GameTiles.External.Config.Data;
-using App.Game.GameTiles.External.Config.Model;
+using App.Game.GameTiles.Runtime;
 
 namespace App.Game.GameTiles.External
 {
@@ -23,9 +22,6 @@ namespace App.Game.GameTiles.External
     {
         public override void Configuration()
         {
-            BindSingle<SpriteModuleDtoToConfigConverter>();
-            
-            RegisterData<PositionContainerData>();
         }
     }
 }

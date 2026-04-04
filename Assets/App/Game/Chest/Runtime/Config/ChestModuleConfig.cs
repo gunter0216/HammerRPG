@@ -1,6 +1,6 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Generation.DungeonCreator.Runtime.Chest
+namespace App.Game.Chest.Runtime.Config
 {
     public class ChestModuleConfig : IModuleConfig
     {

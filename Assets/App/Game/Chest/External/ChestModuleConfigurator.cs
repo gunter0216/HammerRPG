@@ -1,7 +1,9 @@
 using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
-using App.Generation.DungeonCreator.Runtime.Chest;
+using App.Game.Chest.Runtime;
+using App.Game.Chest.Runtime.Config;
+using App.Game.Chest.Runtime.Data;
 
 namespace App.Game.Chest.External
 {

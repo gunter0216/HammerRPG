@@ -3,7 +3,7 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.DragItem.Runtime.Model;
 using App.Game.Equipment.External.View;
-using App.Game.Equipment.Runtime.Item;
+using App.Game.Equipment.Runtime.Items;
 using UnityEngine;
 
 namespace App.Game.Equipment.External.ViewModel

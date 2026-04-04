@@ -1,16 +1,14 @@
 ﻿using App.Common.Configs.Runtime;
 using App.Common.DataContainer.Runtime;
 using App.Common.Logger.Runtime;
-using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.GameTiles.External.Config.Data;
-using App.Game.GameTiles.External.Config.Loader;
-using App.Game.GameTiles.Runtime;
+using App.Game.GameTiles.Runtime.Config.Loader;
+using App.Game.Modules.TilePosition.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
-namespace App.Game.GameTiles.External
+namespace App.Game.GameTiles.Runtime
 {
     public class TilesController : IInitSystem, ITilesController
     {

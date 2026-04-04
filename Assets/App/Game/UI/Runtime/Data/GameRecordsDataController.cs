@@ -3,7 +3,7 @@ using System.Linq;
 using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 
-namespace App.Menu.UI.Runtime.Data
+namespace App.Game.UI.Runtime.Data
 {
     public class GameRecordsDataController
     {

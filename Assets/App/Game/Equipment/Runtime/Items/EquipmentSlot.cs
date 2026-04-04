@@ -1,7 +1,7 @@
 ﻿using App.Common.ModuleItem.Runtime;
 using App.Game.Equipment.Runtime.Data.Model;
 
-namespace App.Game.Equipment.Runtime.Item
+namespace App.Game.Equipment.Runtime.Items
 {
     public class EquipmentSlot
     {

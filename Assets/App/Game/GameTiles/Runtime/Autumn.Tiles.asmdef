@@ -9,6 +9,7 @@
     "Autumn.ConfigLoader",
     "Autumn.Logger",
     "Autumn.DataManager",
-    "Autumn.DungeonGenerator"
+    "Autumn.DungeonGenerator",
+    "Autumn.TilePositionModule"
   ]
 }

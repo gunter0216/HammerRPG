@@ -1,4 +1,4 @@
-﻿namespace App.Menu.UI.Runtime
+﻿namespace App.Game.UI.Runtime
 {
     public enum GameRecordCreateStatus
     {

@@ -6,7 +6,6 @@ using App.Game.Equipment.Runtime;
 using App.Game.Equipment.Runtime.Config.Converter;
 using App.Game.Equipment.Runtime.Data;
 using App.Game.Equipment.Runtime.Data.Model;
-using App.Game.ModuleItemType.Runtime.Config.Converter;
 using App.Game.Update.External;
 
 namespace App.Game.Equipment.External

@@ -2,7 +2,7 @@
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.ModuleItemType.Runtime.Config.Model;
+using App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 
 namespace App.Game.GameItems.Runtime.Config
 {

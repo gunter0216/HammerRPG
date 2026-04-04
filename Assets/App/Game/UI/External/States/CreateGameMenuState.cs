@@ -1,9 +1,10 @@
 ﻿using System;
 using App.Common.Logger.Runtime;
+using App.Game.UI.External.View.Panels;
+using App.Game.UI.Runtime;
 using App.Game.Utility.Runtime.MenuSM;
-using App.Menu.UI.Runtime.View.Panels;
 
-namespace App.Menu.UI.Runtime.States
+namespace App.Game.UI.External.States
 {
     public class CreateGameMenuState : IMenuState, IDisposable
     {

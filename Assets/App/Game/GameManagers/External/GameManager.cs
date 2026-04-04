@@ -1,9 +1,8 @@
 ﻿using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.DungeonCore.External;
+using App.Game.Dungeon.DungeonCore.Runtime;
 using App.Game.Player.Runtime.Components;
 using App.Game.Worlds.Runtime;
-using App.Generation.DungeonCreator.Runtime;
 using UnityEngine;
 
 namespace App.Game.GameManagers.External

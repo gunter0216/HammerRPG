@@ -1,4 +1,4 @@
-namespace App.Game.Equipment.Runtime
+namespace App.Game.Equipment.Runtime.Constants
 {
     public class EquipmentSlotConstants
     {

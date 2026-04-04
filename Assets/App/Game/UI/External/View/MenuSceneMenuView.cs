@@ -1,9 +1,9 @@
 ﻿using App.Game.Settings.Runtime;
-using App.Menu.UI.Runtime.View.Panels;
-using App.Menu.UI.Runtime.View.Panels.Singleplayer;
+using App.Game.UI.External.View.Panels;
+using App.Game.UI.External.View.Panels.Singleplayer;
 using UnityEngine;
 
-namespace App.Menu.UI.Runtime.View
+namespace App.Game.UI.External.View
 {
     public class MenuSceneMenuView : MonoBehaviour
     {

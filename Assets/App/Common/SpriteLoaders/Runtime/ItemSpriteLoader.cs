@@ -3,7 +3,7 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.GameTiles.External.Config.Model;
+using App.Game.Modules.Sprite.Runtime;
 using UnityEngine;
 
 namespace App.Common.SpriteLoaders.External

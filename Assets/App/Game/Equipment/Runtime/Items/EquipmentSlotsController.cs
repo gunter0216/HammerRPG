@@ -4,7 +4,6 @@ using App.Common.ModuleItem.Runtime;
 using App.Game.Equipment.Runtime.Config;
 using App.Game.Equipment.Runtime.Config.Model;
 using App.Game.Equipment.Runtime.Data;
-using App.Game.Equipment.Runtime.Item;
 
 namespace App.Game.Equipment.Runtime.Items
 {

@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
+using App.Game.Chest.Runtime.Config;
+using App.Game.Chest.Runtime.Data;
 
-namespace App.Generation.DungeonCreator.Runtime.Chest
+namespace App.Game.Chest.Runtime
 {
     public class ChestModuleSystem : IModuleSystem
     {
