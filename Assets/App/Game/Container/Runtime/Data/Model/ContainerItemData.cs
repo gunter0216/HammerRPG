@@ -29,6 +29,11 @@ namespace App.Game.Container.Runtime.Data.Model
         public ContainerItemData()
         {
         }
+        
+        public ContainerItemData(int index)
+        {
+            m_Index = index;
+        }
 
         public ContainerItemData(int index, DataReference dataReference)
         {

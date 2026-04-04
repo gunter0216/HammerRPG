@@ -58,5 +58,7 @@ namespace App.Core.Startups.External
                 DataContainerRegistrar.Register<T>();
             }
         }
+
+        public virtual void OnResolved() { }
     }
 }

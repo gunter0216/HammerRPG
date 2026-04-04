@@ -1,4 +1,5 @@
 ﻿using App.Game.DragItem.Runtime.View;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ namespace App.Game.ContainerWindow.External.View
     {
         [SerializeField] private ItemSlotView m_ItemSlotViewPrefab;
         [SerializeField] private Transform m_SlotsContent;
+        [SerializeField] private TMP_Text _nameText;
         [Space]
         [SerializeField] private Button m_CloseButton;
         
@@ -22,6 +24,11 @@ namespace App.Game.ContainerWindow.External.View
         public bool IsActive()
         {
             return gameObject.activeSelf;
+        }
+
+        public void SetName(string text)
+        {
+            _nameText.text = text;
         }
         
         public void SetCloseButtonClickCallback(UnityEngine.Events.UnityAction callback)

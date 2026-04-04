@@ -60,9 +60,14 @@ namespace App.Game.Container.Runtime.Data
         {
             var container = new ContainerData
             {
-                Items = new List<ContainerItemData>(),
+                Items = new List<ContainerItemData>(length),
                 Length = length
             };
+
+            for (int i = 0; i < length; ++i)
+            {
+                container.Items.Add(new ContainerItemData(i));
+            }
             
             for (int i = 0; i < m_Data.Containers.Count; ++i)
             {

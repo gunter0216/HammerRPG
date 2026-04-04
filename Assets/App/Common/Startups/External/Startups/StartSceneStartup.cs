@@ -1,4 +1,5 @@
-﻿using App.Common.FSM.External;
+﻿using System;
+using App.Common.FSM.External;
 using App.Common.FSM.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Core.Startups.External.Constants;
@@ -15,13 +16,22 @@ namespace App.Core.Startups.External
         
         public override void InstallBindings()
         {
+            var sceneContext = GetComponent<SceneContext>();
+            sceneContext.PostResolve += OnPostResolve;
+            
             Container.BindInstance(m_MainCanvas);
             Container.BindInstance(m_PopupCanvas);
-
-            var configuratorsManager = Container.Resolve<ConfiguratorsManager>();
-            var fsmRegistrator = Container.Resolve<FSMRegistrar>();
-            configuratorsManager.RunConfigurator(DIContext.StartContext, Container);
             
+            var configuratorsManager = Container.Resolve<ConfiguratorsManager>();
+            configuratorsManager.RunConfigurator(DIContext.StartContext, Container);
+        }
+
+        private void OnPostResolve()
+        {
+            var configuratorsManager = Container.Resolve<ConfiguratorsManager>();
+            configuratorsManager.OnResolved(DIContext.StartContext);
+            
+            var fsmRegistrator = Container.Resolve<FSMRegistrar>();
             var stateMachine = new StateMachine(
                 Container.ResolveAll<IInitSystem>(),
                 Container.ResolveAll<IPostInitSystem>(),

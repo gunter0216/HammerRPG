@@ -47,6 +47,12 @@ namespace App.Game.Container.Runtime
             var items = new List<IModuleItem>(data.Items.Count);
             foreach (var item in data.Items)
             {
+                if (item == null || item.DataReference == null)
+                {
+                    items.Add(null);
+                    continue;
+                }
+                
                 var moduleItem = m_ModuleItemsManager.Create(item.DataReference);
                 if (!moduleItem.HasValue)
                 {
@@ -57,12 +63,18 @@ namespace App.Game.Container.Runtime
                 items.Add(moduleItem.Value);
             }
             
-            var container = CreateContainer(data, items);
+            var container = CreateContainerInternal(data, items);
             
             return Optional<Container>.Success(container.Value);
         }
+        
+        private Optional<Container> CreateContainerInternal(ContainerData data, List<IModuleItem> items)
+        {
+            var container = new Container(data, items);
+            return Optional<Container>.Success(container);
+        }
 
-        public Optional<Container> CreateContainer(IReadOnlyList<IModuleItem> items, int length)
+        public Optional<Container> CreateContainer(int length)
         {
             var dataContainer = m_DataController.CreateContainer(length);
             if (!dataContainer.HasValue)
@@ -71,21 +83,15 @@ namespace App.Game.Container.Runtime
                 return Optional<Container>.Fail();
             }
 
-            for (int i = 0; i < items.Count; ++i)
+            var moduleItems = new List<IModuleItem>(length);
+            for (int i = 0; i < length; ++i)
             {
-                var item = new ContainerItemData(i, items[i].ReferenceSelf);
-                dataContainer.Value.Items.Add(item);
+                moduleItems.Add(null);
             }
 
-            var container = CreateContainer(dataContainer.Value, new List<IModuleItem>(items));
+            var container = CreateContainerInternal(dataContainer.Value, moduleItems);
             
             return Optional<Container>.Success(container.Value);
-        }
-
-        private Optional<Container> CreateContainer(ContainerData data, List<IModuleItem> items)
-        {
-            var container = new Container(data, items);
-            return Optional<Container>.Success(container);
         }
 
         public Optional<Container> GetContainer(int guid)
@@ -107,14 +113,22 @@ namespace App.Game.Container.Runtime
                 HLogger.LogError("Container not found.");
                 return;
             }
-            
-            m_DataController.DestroyContainer(guid);
-            m_Containers.Remove(guid);
+
+            DestroyContainer(container.Value);
         }
 
         public void DestroyContainer(Container container)
         {
-            DestroyContainer(container.Guid);
+            foreach (var item in container.Items)
+            {
+                if (item != null)
+                {
+                    m_ModuleItemsManager.Destroy(item);
+                }
+            }
+            
+            m_DataController.DestroyContainer(container.Guid);
+            m_Containers.Remove(container.Guid);
         }
     }
 }

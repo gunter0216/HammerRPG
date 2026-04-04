@@ -35,6 +35,9 @@
     "Leopotam.EcsLite.ExtendedSystems",
     "Leopotam.EcsLite.Di",
     "Leopotam.EcsLite.UnityEditor",
-    "Leopotam.EcsLite.UnityEditor.Runtime"
+    "Leopotam.EcsLite.UnityEditor.Runtime",
+    "Autumn.Container",
+    "Autumn.Chest",
+    "Autumn.ContainerModule"
   ]
 }

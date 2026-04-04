@@ -104,7 +104,7 @@ namespace App.Game.ContainerWindow.External.ViewModel.Slots
             }
 
             slot.Clear();
-            m_Container.Remove(item, slot.Index);
+            m_Container.Remove(slot.Index);
             
             return Optional<IModuleItem>.Success(item);
         }

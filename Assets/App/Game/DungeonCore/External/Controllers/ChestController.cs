@@ -12,10 +12,10 @@ namespace App.Game.DungeonCore.External.Controllers
     {
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly Transform _root;
-        private readonly Chest _chest;
+        private readonly Generation.DungeonCreator.Runtime.Chest.Chest _chest;
 
 
-        public ChestController(IItemSpriteLoader spriteLoader, Transform root, Chest chest)
+        public ChestController(IItemSpriteLoader spriteLoader, Transform root, Generation.DungeonCreator.Runtime.Chest.Chest chest)
         {
             _spriteLoader = spriteLoader;
             _root = root;
@@ -24,29 +24,9 @@ namespace App.Game.DungeonCore.External.Controllers
 
         public void Initialize()
         {
-            var moduleItem = _chest.ModuleItem;
-            var configModule = moduleItem.GetConfigModule<ChestModuleConfig>();
-            if (!configModule.HasValue)
-            {
-                HLogger.LogError($"Config not found.");
-                return;
-            }
+            var chestModule = _chest.ChestModule;
                 
-            string iconKey = String.Empty;
-            var isClosed = _chest.Data.State == ChestStateConstants.Closed;
-            if (isClosed)
-            {
-                iconKey = configModule.Value.CloseIconKey;
-            }
-            else if (_chest.Data.State == ChestStateConstants.Open)
-            {
-                iconKey = configModule.Value.OpenIconKey;
-            }
-            else if (_chest.Data.State == ChestStateConstants.Empty)
-            {
-                iconKey = configModule.Value.EmptyIconKey;
-            }
-            
+            var iconKey = chestModule.IconKey;
             var sprite = _spriteLoader.Load(iconKey);
             if (!sprite.HasValue)
             {
@@ -54,7 +34,7 @@ namespace App.Game.DungeonCore.External.Controllers
                 return;
             }
                 
-            var localPosition = _chest.Data.Position;
+            var localPosition = _chest.LocalPosition;
             var position = _chest.Room.LocalToWorld(localPosition);
             
             var tileView = new GameObject($"Chest {localPosition.X} {localPosition.Y}");
@@ -65,7 +45,7 @@ namespace App.Game.DungeonCore.External.Controllers
             spriteRenderer.sprite = sprite.Value;
             spriteRenderer.drawMode = SpriteDrawMode.Simple;
             spriteRenderer.sortingOrder = 3;
-
+            
             var collider = tileView.AddComponent<BoxCollider2D>();
         }
     }

@@ -6,12 +6,15 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.DungeonCreator.Runtime.Rooms;
 using App.Game.GameManagers.External.Config.Service;
 using App.Game.GameTiles.Runtime;
+using App.Generation.DungeonCreator.Runtime.Chest;
 using Logger = App.Common.Logger.Runtime.Logger;
 
 namespace App.Generation.DungeonCreator.Runtime
 {
     public class DungeonCreator : IDungeonCreator, IInitSystem
     {
+        private readonly ChestModuleSystem _chestModuleSystem;
+        private readonly ContainerModuleSystem _containerModuleSystem;
         private readonly IConfigLoader _configLoader;
         private readonly ITilesController _tilesController;
         private readonly IModuleItemsManager _moduleItemsManager;
@@ -21,11 +24,15 @@ namespace App.Generation.DungeonCreator.Runtime
         public DungeonCreator(
             IConfigLoader configLoader,
             ITilesController tilesController, 
-            IModuleItemsManager moduleItemsManager)
+            IModuleItemsManager moduleItemsManager, 
+            ChestModuleSystem chestModuleSystem, 
+            ContainerModuleSystem containerModuleSystem)
         {
             _configLoader = configLoader;
             _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
+            _chestModuleSystem = chestModuleSystem;
+            _containerModuleSystem = containerModuleSystem;
         }
 
         public void Init()
@@ -65,7 +72,11 @@ namespace App.Generation.DungeonCreator.Runtime
             var data = new DungeonData();
             var dungeon = new Dungeon(data, generationConfig.Value);
 
-            var roomsCreator = new RoomsCreator(_tilesController, _moduleItemsManager);
+            var roomsCreator = new RoomsCreator(
+                _tilesController, 
+                _moduleItemsManager, 
+                _chestModuleSystem, 
+                _containerModuleSystem);
             roomsCreator.CreateRooms(dungeonGeneration.Value, dungeon);
 
             return Optional<Dungeon>.Success(dungeon);

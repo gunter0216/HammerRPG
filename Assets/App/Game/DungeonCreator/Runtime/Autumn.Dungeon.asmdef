@@ -11,6 +11,8 @@
     "Autumn.DataContainers",
     "Autumn.ModuleItems",
     "Autumn.SpriteLoader",
-    "Autumn.DataManager"
+    "Autumn.DataManager",
+    "Autumn.Chest",
+    "Autumn.ContainerModule"
   ]
 }

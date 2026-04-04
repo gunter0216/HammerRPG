@@ -11,8 +11,12 @@ namespace App.Core.Startups.External
 {
     public class GlobalStartup : MonoInstaller<StartSceneStartup>
     {
+        private ConfiguratorsManager _configuratorsManager;
+
         public override void InstallBindings()
         {
+            ProjectContext.PostResolve += OnPostResolve;
+            
             HLogger.SetInstance(new UnityLogger());
             
             var assemblyProvider = new AssemblyManager()
@@ -24,12 +28,17 @@ namespace App.Core.Startups.External
             var fsmRegistrar = new FSMRegistrar();
             var dataRegistrar = new DataRegistrar();
             
-            var configuratorsManager = new ConfiguratorsManager(configurators, fsmRegistrar, dataRegistrar);
-            configuratorsManager.RunConfigurator(DIContext.GlobalContext, Container);
+            _configuratorsManager = new ConfiguratorsManager(configurators, fsmRegistrar, dataRegistrar);
+            _configuratorsManager.RunConfigurator(DIContext.GlobalContext, Container);
             
-            Container.BindInstance(configuratorsManager);
+            Container.BindInstance(_configuratorsManager);
             Container.BindInstance(fsmRegistrar);
             Container.BindInstance(dataRegistrar);
+        }
+
+        private void OnPostResolve()
+        {
+            _configuratorsManager.OnResolved(DIContext.GlobalContext);
         }
     }
 }

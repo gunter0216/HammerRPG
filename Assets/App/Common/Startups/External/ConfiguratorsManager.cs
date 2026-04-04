@@ -70,6 +70,19 @@ namespace App.Core.Startups.External
         {
             RunConfigurator((int)context, container);
         }
+        
+        public void OnResolved(DIContext context)
+        {
+            if (!m_Configurators.TryGetValue((int)context, out var configurators))
+            {
+                return;
+            }
+
+            foreach (var configurator in configurators)
+            {
+                configurator.OnResolved();
+            }
+        }
 
         public void RunConfigurator(int context, DiContainer container)
         {

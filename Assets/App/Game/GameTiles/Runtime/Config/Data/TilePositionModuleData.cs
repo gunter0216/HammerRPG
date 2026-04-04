@@ -1,4 +1,5 @@
 ﻿using System;
+using App.Common.Algorithms.Runtime;
 using App.Common.ModuleItem.Runtime.Data;
 using Newtonsoft.Json;
 
@@ -27,6 +28,12 @@ namespace App.Game.GameTiles.External.Config.Data
         {
             m_PositionX = positionX;
             m_PositionY = positionY;
+        }
+        
+        public TilePositionModuleData(Vector2Int position)
+        {
+            m_PositionX = position.X;
+            m_PositionY = position.Y;
         }
 
         public string GetModuleKey()

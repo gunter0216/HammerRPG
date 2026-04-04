@@ -9,7 +9,7 @@ namespace App.Game.Inventory.Runtime.Data.Model
     [JsonObject(MemberSerialization.Fields)]
     public class InventoryData : IData
     {
-        [JsonProperty("groups")] private List<InventoryItemData> _items;
+        [JsonProperty("items")] private List<InventoryItemData> _items;
 
         public List<InventoryItemData> Items
         {

@@ -7,52 +7,67 @@ using App.Common.ModuleItem.Runtime.Config;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.ModuleItem.Runtime.Fabric;
 using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
+using App.Common.ModuleItem.Runtime.Services;
 using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.ModuleItem.External
 {
     public class ModuleItemsManager : IInitSystem, IModuleItemsManager
     {
-        private readonly IContainersDataManager m_ContainersDataManager;
-        private readonly List<IModuleDtoToConfigConverter> m_ModuleDtoToConfigConverters;
-        private readonly List<ICreateModuleItemHandler> m_Handlers;
-        private readonly IJsonDeserializer m_JsonDeserializer;
-        private readonly ILogger m_Logger;
-        
-        private ModuleItemsConfigController m_ConfigController;
-        private ModuleItemCreator m_ModuleItemCreator;
+        private readonly IContainersDataManager _containersDataManager;
+        private readonly IReadOnlyList<IModuleDtoToConfigConverter> _moduleDtoToConfigConverters;
+        private readonly List<ICreateModuleItemHandler> _createHandlers;
+        private readonly List<IDestroyModuleItemHandler> _destroyHandlers;
+        private readonly IJsonDeserializer _jsonDeserializer;
+        private readonly ILogger _logger;
+
+        private ModuleItemsConfigController _configController;
+        private ModuleItemCreator _moduleItemCreator;
+        private ModuleItemDestroyer _moduleItemDestroyer;
 
         public ModuleItemsManager(
             IContainersDataManager containersDataManager,
             List<IModuleDtoToConfigConverter> moduleDtoToConfigConverters,
-            List<ICreateModuleItemHandler> handlers, 
             IJsonDeserializer jsonDeserializer,
             ILogger logger)
         {
-            m_ContainersDataManager = containersDataManager;
-            m_ModuleDtoToConfigConverters = moduleDtoToConfigConverters;
-            m_Handlers = handlers;
-            m_JsonDeserializer = jsonDeserializer;
-            m_Logger = logger;
+            _containersDataManager = containersDataManager;
+            _moduleDtoToConfigConverters = moduleDtoToConfigConverters;
+            _createHandlers = new List<ICreateModuleItemHandler>();
+            _destroyHandlers = new List<IDestroyModuleItemHandler>();
+            _jsonDeserializer = jsonDeserializer;
+            _logger = logger;
         }
 
         public void Init()
         {
             InitConfigController();
             InitItemsFabric();
+            _moduleItemDestroyer = new ModuleItemDestroyer(
+                _destroyHandlers);
         }
 
         private void InitConfigController()
         {
-            m_ConfigController = new ModuleItemsConfigController();
+            _configController = new ModuleItemsConfigController();
         }
 
         private void InitItemsFabric()
         {
-            m_ModuleItemCreator = new ModuleItemCreator(
-                m_ConfigController, 
-                m_ContainersDataManager, 
-                m_Handlers);
+            _moduleItemCreator = new ModuleItemCreator(
+                _configController, 
+                _containersDataManager, 
+                _createHandlers);
+        }
+
+        public void AddHandler(IReadOnlyList<ICreateModuleItemHandler> handlers)
+        {
+            _createHandlers.AddRange(handlers);
+        }
+        
+        public void AddHandler(IReadOnlyList<IDestroyModuleItemHandler> handlers)
+        {
+            _destroyHandlers.AddRange(handlers);
         }
 
         public bool RegisterItems(IModuleItemsConfigLoader moduleItemsConfigLoader, string type)
@@ -65,9 +80,9 @@ namespace App.Common.ModuleItem.External
             }
 
             var dtoConverter = new ModuleItemsDtoToConfigConverter(
-                m_JsonDeserializer,
-                m_Logger,
-                m_ModuleDtoToConfigConverters);
+                _jsonDeserializer,
+                _logger,
+                _moduleDtoToConfigConverters);
             var config = dtoConverter.Convert(dto.Value, type);
             if (!config.HasValue)
             {
@@ -80,32 +95,32 @@ namespace App.Common.ModuleItem.External
 
         public bool RegisterItems(IReadOnlyList<IModuleItemConfig> configs, string type)
         {
-            return m_ConfigController.RegisterItems(configs, type);
+            return _configController.RegisterItems(configs, type);
         }
 
         public Optional<IModuleItem> Create(DataReference dataReference)
         {
-            return m_ModuleItemCreator.Create(dataReference);
+            return _moduleItemCreator.Create(dataReference);
         }
 
         public Optional<IModuleItem> Create(string id)
         {
-            return m_ModuleItemCreator.Create(id);
+            return _moduleItemCreator.Create(id);
         }
 
-        public bool Destroy(IModuleItem data)
+        public bool Destroy(IModuleItem item)
         {
-            return false;
+            return _moduleItemDestroyer.Destroy(item);
         }
 
         public Optional<IModuleItemConfig> GetConfig(string id)
         {
-            return m_ConfigController.GetConfig(id);
+            return _configController.GetConfig(id);
         }
 
         public Optional<IReadOnlyList<IModuleItemConfig>> GetConfigs(string type)
         {
-            return m_ConfigController.GetConfigs(type);
+            return _configController.GetConfigs(type);
         }
     }
 }

@@ -7,6 +7,7 @@ using App.Game.GameManagers.External.Config.Service;
 using App.Game.GameManagers.External.Room;
 using App.Game.GameTiles.Runtime;
 using App.Generation.DungeonCreator.Runtime;
+using App.Generation.DungeonCreator.Runtime.Chest;
 using App.Generation.DungeonCreator.Runtime.Tiles;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
@@ -17,15 +18,26 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 {
     public class RoomsCreator
     {
+        private readonly ChestModuleSystem _chestModuleSystem;
+        private readonly ContainerModuleSystem _containerModuleSystem;
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly ITilesController _tilesController;
         private readonly RoomCreator _roomCreator;
 
-        public RoomsCreator(ITilesController tilesController, IModuleItemsManager moduleItemsManager)
+        public RoomsCreator(ITilesController tilesController,
+            IModuleItemsManager moduleItemsManager,
+            ChestModuleSystem chestModuleSystem, 
+            ContainerModuleSystem containerModuleSystem)
         {
             _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
-            _roomCreator = new RoomCreator(_tilesController, _moduleItemsManager);
+            _chestModuleSystem = chestModuleSystem;
+            _containerModuleSystem = containerModuleSystem;
+            _roomCreator = new RoomCreator(
+                _tilesController,
+                _moduleItemsManager,
+                _chestModuleSystem, 
+                _containerModuleSystem);
         }
 
         public void CreateRooms(DungeonGeneration generation, Dungeon dungeon)

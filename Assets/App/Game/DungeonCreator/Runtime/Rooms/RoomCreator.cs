@@ -17,13 +17,21 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 {
     public class RoomCreator
     {
+        private readonly ChestModuleSystem _chestModuleSystem;
+        private readonly ContainerModuleSystem _containerModuleSystem;
         private readonly ITilesController _tilesController;
         private readonly IModuleItemsManager _moduleItemsManager;
 
-        public RoomCreator(ITilesController tilesController, IModuleItemsManager moduleItemsManager)
+        public RoomCreator(
+            ITilesController tilesController,
+            IModuleItemsManager moduleItemsManager,
+            ChestModuleSystem chestModuleSystem, 
+            ContainerModuleSystem containerModuleSystem)
         {
             _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
+            _chestModuleSystem = chestModuleSystem;
+            _containerModuleSystem = containerModuleSystem;
         }
 
         public Optional<Room> CreateRoom(DungeonGenerationRoom generationRoom)
@@ -33,7 +41,11 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
 
             CreateWalls(room, generationRoom);
             CreateDoors(room, generationRoom);
-            CreateChests(room, generationRoom);
+            var chestRoomCreator = new ChestRoomCreator(
+                _moduleItemsManager, 
+                _chestModuleSystem,
+                _containerModuleSystem);
+            chestRoomCreator.CreateChests(room, generationRoom);
             CreateFloors(room, generationRoom);
             
             return Optional<Room>.Success(room);
@@ -99,59 +111,6 @@ namespace App.Game.DungeonCreator.Runtime.Rooms
             }
 
             room.Doors = doors;
-        }
-
-        private void CreateChests(Room room, DungeonGenerationRoom generationRoom)
-        {
-            var chests = new List<Chest>();
-            room.Chests = chests;
-
-            if (generationRoom.ContainsDoorKeys.Count <= 0)
-            {
-                return;
-            }
-            
-            var localPosition = room.GetLocalCenter();
-            var itemReferences = new List<DataReference>();
-            var items = new List<IModuleItem>();
-            var data = new ChestData()
-            {
-                Position = localPosition,
-                State = ChestStateConstants.Closed,
-                Items = itemReferences
-            };
-
-            var tileModuleItem = _tilesController.CreateTileByGenerationID(DungeonTile.Chest, localPosition);
-            if (!tileModuleItem.HasValue)
-            {
-                HLogger.LogError($"Cant create tile");
-                return;
-            }
-
-            data.Reference = tileModuleItem.Value.ReferenceSelf;
-
-            var chest = new Chest(data, tileModuleItem.Value, room, items);
-
-            chests.Add(chest);
-            foreach (var keyData in generationRoom.ContainsDoorKeys)
-            {
-                var moduleItem = _moduleItemsManager.Create("IronKey");
-                if (!moduleItem.HasValue)
-                {
-                    HLogger.LogError($"Cant create moduleItem");
-                    return;
-                }
-
-                var keyModuleData = new KeyModuleData(keyData);
-                if (!moduleItem.Value.AddDataModule(keyModuleData))
-                {
-                    HLogger.LogError("Cant add key data");
-                    continue;
-                }
-                
-                itemReferences.Add(moduleItem.Value.ReferenceSelf);
-                items.Add(moduleItem.Value);
-            }
         }
 
         private Optional<Tile> CreateTile(

@@ -4,6 +4,7 @@ using System.Linq;
 using App.Common.Algorithms.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Chest;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridor;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
@@ -20,6 +21,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private readonly List<DungeonKeyData> _containsDoorKeys;
         private readonly List<RoomConnection> _connections;
         private readonly List<GenerationDoor> _doors;
+        private readonly List<DungeonGenerationChest> _chests;
         private readonly Dictionary<Vector2Int, GeneraitonTile> _tiles;
         private readonly List<RectInt> _floors;
         private DungeonKeyData _requiredKey;
@@ -81,6 +83,8 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
 
         public List<RectInt> Floors => _floors;
 
+        public List<DungeonGenerationChest> Chests => _chests;
+
         public DungeonGenerationRoom(int uid, Vector2Int position, Vector2Int size)
         {
             _size = size;
@@ -91,6 +95,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
             _doors = new List<GenerationDoor>();
             _tiles = new Dictionary<Vector2Int, GeneraitonTile>();
             _floors = new List<RectInt>();
+            _chests = new List<DungeonGenerationChest>();
         }
 
         public void AddFloor(RectInt floor)

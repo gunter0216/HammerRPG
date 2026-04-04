@@ -30,7 +30,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
         {
             if (room.ContainsDoorKeys != null && room.ContainsDoorKeys.Count > 0)
             {
-                room.SetTile(room.LocalCenter.ToInt(), DungeonTile.Chest);
+                room.Chests.Add(new DungeonGenerationChest(room.LocalCenter.ToInt(), room.RequiredKey));
             }
         }
 

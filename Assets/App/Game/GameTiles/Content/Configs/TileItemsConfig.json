@@ -8,6 +8,11 @@
           "close_icon_key": "CloseChest",
           "open_icon_key": "OpenChest",
           "empty_icon_key": "EmptyChest"
+        },
+        {
+          "module": "container",
+          "rows": 5,
+          "cols": 7
         }
       ]
     },

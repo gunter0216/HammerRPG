@@ -29,13 +29,6 @@ namespace App.Common.ModuleItem.Runtime
             m_ReferenceSelf = referenceSelf;
         }
 
-        public bool Initialize()
-        {
-            return false;
-            // m_ModuleDatas = new List<IModuleData>(m_Data.ModuleRefs.Count);
-            // return m_ModulesHolder.InjectModules(m_Data.ModuleRefs, m_ModuleDatas);
-        }
-
         public bool AddDataModule(IModuleData data)
         {
             return m_ModulesHolder.AddModule(data);
@@ -79,6 +72,11 @@ namespace App.Common.ModuleItem.Runtime
         public bool HasConfigModule<T>() where T : class, IModuleConfig
         {
             return m_Config.HasModule<T>();
+        }
+
+        internal bool Destroy()
+        {
+            return m_ModulesHolder.Destroy();
         }
     }
 }

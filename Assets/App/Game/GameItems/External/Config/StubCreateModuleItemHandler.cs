@@ -6,7 +6,7 @@ namespace App.Game.GameItems.External.Config
 {
     public class StubCreateModuleItemHandler : ICreateModuleItemHandler
     {
-        public Optional<IModuleItem> Handle(IModuleItem moduleItem)
+        public Optional<IModuleItem> OnItemCreated(IModuleItem moduleItem)
         {
             return Optional<IModuleItem>.Success(moduleItem);
         }

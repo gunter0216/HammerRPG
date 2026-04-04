@@ -19,23 +19,16 @@ namespace App.Game.Container.Runtime
             m_Data = data;
         }
 
-        public void Remove(IModuleItem item, int slotIndex)
+        public void Remove(int slotIndex)
         {
-            m_Items.Remove(item);
-            
-            for (int i = 0; i < m_Data.Items.Count; ++i)
-            {
-                if (m_Data.Items[i].Index == slotIndex)
-                {
-                    m_Data.Items.RemoveAt(i);
-                    return;
-                }
-            }
+            m_Items[slotIndex] = null;
+            m_Data.Items[slotIndex].DataReference = null;
         }
 
         public void AddItem(IModuleItem item, int slotIndex)
         {
-            
+            m_Items[slotIndex] = item;
+            m_Data.Items[slotIndex].DataReference = item.ReferenceSelf;
         }
     }
 }

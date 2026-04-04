@@ -1,27 +1,37 @@
 using System.Collections.Generic;
+using App.Common.Algorithms.Runtime;
 using App.Common.ModuleItem.Runtime;
+using App.Game.ContainerModule.Runtime;
 using App.Game.DungeonCreator.Runtime.Rooms;
+using App.Game.GameTiles.External.Config.Data;
 
 namespace App.Generation.DungeonCreator.Runtime.Chest
 {
     public class Chest
     {
-        private readonly ChestData _doorData;
         private readonly IModuleItem _moduleItem;
-        private readonly List<IModuleItem> _items;
         private readonly Room _room;
+        private readonly TilePositionModuleData _tilePosition;
+        private readonly ChestModule _chestModule;
+        private readonly ContainerModule _containerModule;
 
-        public Chest(ChestData tileData, IModuleItem tileModuleItem, Room room, List<IModuleItem> items)
+        public Chest(IModuleItem tileModuleItem,
+            Room room,
+            TilePositionModuleData tilePosition,
+            ChestModule chestModule,
+            ContainerModule containerModule)
         {
-            _doorData = tileData;
             _moduleItem = tileModuleItem;
             _room = room;
-            _items = items;
+            _tilePosition = tilePosition;
+            _chestModule = chestModule;
+            _containerModule = containerModule;
         }
-
-        public ChestData Data => _doorData;
+        
         public IModuleItem ModuleItem => _moduleItem;
         public Room Room => _room;
-        public List<IModuleItem> Items => _items;
+        public ChestModule ChestModule => _chestModule;
+        public ContainerModule ContainerModule => _containerModule;
+        public Vector2Int LocalPosition => new Vector2Int(_tilePosition.PositionX, _tilePosition.PositionY);
     }
 }

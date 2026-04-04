@@ -11,18 +11,18 @@ namespace App.Common.ModuleItem.Runtime.Fabric
 {
     public class ModuleItemCreator : IModuleItemCreator
     {
-        private readonly IModuleItemConfigController m_ConfigController;
-        private readonly IContainersDataManager m_ContainerController;
-        private readonly IReadOnlyList<ICreateModuleItemHandler> m_Handlers;
+        private readonly IModuleItemConfigController _configController;
+        private readonly IContainersDataManager _containerController;
+        private readonly IReadOnlyList<ICreateModuleItemHandler> _handlers;
 
         public ModuleItemCreator(
-            IModuleItemConfigController configController, 
-            IContainersDataManager containerController, 
+            IModuleItemConfigController configController,
+            IContainersDataManager containerController,
             IReadOnlyList<ICreateModuleItemHandler> handlers)
         {
-            m_ConfigController = configController;
-            m_ContainerController = containerController;
-            m_Handlers = handlers;
+            _configController = configController;
+            _containerController = containerController;
+            _handlers = handlers;
         }
 
         public Optional<IModuleItem> Create(string id)
@@ -30,7 +30,7 @@ namespace App.Common.ModuleItem.Runtime.Fabric
             var dataReferences = new List<DataReference>();
             var data = new ModuleItemData(id, dataReferences);
             
-            var dataReference = m_ContainerController.AddData(ModuleItemData.ContainerKey, data);
+            var dataReference = _containerController.AddData(ModuleItemData.ContainerKey, data);
             if (!dataReference.HasValue)
             {
                 return Optional<IModuleItem>.Fail();
@@ -39,7 +39,7 @@ namespace App.Common.ModuleItem.Runtime.Fabric
             var moduleItemResult = Create(data, dataReference.Value);
             if (!moduleItemResult.HasValue)
             {
-                m_ContainerController.RemoveData(ModuleItemData.ContainerKey, data);
+                _containerController.RemoveData(ModuleItemData.ContainerKey, data);
                 HLogger.LogError("Failed to create module item for id: " + id);
                 return Optional<IModuleItem>.Fail();
             }
@@ -49,7 +49,7 @@ namespace App.Common.ModuleItem.Runtime.Fabric
 
         public Optional<IModuleItem> Create(DataReference dataReference)
         {
-            var data = m_ContainerController.GetData<ModuleItemData>(dataReference);
+            var data = _containerController.GetData<ModuleItemData>(dataReference);
             if (!data.HasValue)
             {
                 HLogger.LogError("Data not found for reference: " + dataReference);
@@ -68,19 +68,19 @@ namespace App.Common.ModuleItem.Runtime.Fabric
 
         private Optional<IModuleItem> Create(IModuleItemData data, DataReference referenceSelf)
         {
-            var config = m_ConfigController.GetConfig(data.Id);
+            var config = _configController.GetConfig(data.Id);
             if (!config.HasValue)
             {
                 HLogger.LogError("Config not found for id: " + data.Id);
                 return Optional<IModuleItem>.Fail();
             }
 
-            var modulesHolder = new ModulesHolder(m_ContainerController, data.ModuleRefs);
+            var modulesHolder = new ModulesHolder(_containerController, data.ModuleRefs);
             modulesHolder.Initialize();
             IModuleItem moduleItem = new ModuleItem(modulesHolder, config.Value, data, referenceSelf);
-            foreach (var handler in m_Handlers)
+            foreach (var handler in _handlers)
             {
-                var handledGameItem = handler.Handle(moduleItem);
+                var handledGameItem = handler.OnItemCreated(moduleItem);
                 if (!handledGameItem.HasValue)
                 {
                     HLogger.LogError($"Handler {handler.GetType().Name} failed to handle item with id: {data.Id}");

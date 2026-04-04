@@ -23,7 +23,6 @@ namespace App.Game.GameManagers.External
     {
         public override void Configuration()
         {
-            BindSingle<ChestModuleDtoToConfigConverter>();
             BindSingle<DoorModuleDtoToConfigConverter>();
             
             RegisterData<KeyContainerData>();
