@@ -7,7 +7,7 @@ namespace App.Game.Update.External
         CameraFollow = 100,
         Cheats = 0,
         EcsEventManager = Int32.MaxValue, 
-        GameMenu = 0,
+        GameMenu = -1000,
         Input = -100_000,
         Inventory = 0,
         World = 0,
@@ -19,6 +19,7 @@ namespace App.Game.Update.External
         PlayerMoveSystem = 100,
         WeaponCollisionSystem = 300,
         
-        TimeManager = 1000
+        TimeManager = 1000,
+        PopWindow = -100
     }
 }

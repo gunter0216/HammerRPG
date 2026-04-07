@@ -76,6 +76,7 @@ namespace App.Game.Inventory.External
                 _popupCanvas,
                 _spriteLoader,
                 _service);
+            _inventoryWindowController.CreateWindow();
         }
 
         private bool InitConfig()

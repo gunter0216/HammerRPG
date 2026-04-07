@@ -41,6 +41,7 @@
     "Autumn.ContainerModule",
     "Autumn.TilePositionModule",
     "Autumn.SpriteModule",
-    "Autumn.Door"
+    "Autumn.Door",
+    "Autumn.Windows"
   ]
 }

@@ -1,4 +1,6 @@
 using App.Common.Utilities.Utility.Runtime;
+using App.Common.Windows.External;
+using App.Common.Windows.Runtime;
 using App.Game.Inventory.External;
 
 namespace App.Game.Containers.ContainerWindow.External
@@ -6,12 +8,14 @@ namespace App.Game.Containers.ContainerWindow.External
     public class ContainerToInventoryController : IInitSystem
     {
         private readonly ContainerWindowController _containerWindow;
-        private readonly InventoryController _inventoryController;
+        private readonly IWindowManager _windowManager;
 
-        public ContainerToInventoryController(ContainerWindowController containerWindow, InventoryController inventoryController)
+        public ContainerToInventoryController(
+            ContainerWindowController containerWindow, 
+            IWindowManager windowManager)
         {
             _containerWindow = containerWindow;
-            _inventoryController = inventoryController;
+            _windowManager = windowManager;
         }
 
         public void Init()
@@ -21,7 +25,7 @@ namespace App.Game.Containers.ContainerWindow.External
 
         private void OnWindowOpened()
         {
-            _inventoryController.OpenWindow();
+            _windowManager.Open(WindowNames.Inventory);
         }
     }
 }

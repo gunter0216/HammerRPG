@@ -17,6 +17,7 @@
     "Autumn.Pool",
     "Unity.Addressables",
     "Autumn.SpriteLoader",
+    "Autumn.Windows",
     "UniRx",
     "Zenject"
   ]

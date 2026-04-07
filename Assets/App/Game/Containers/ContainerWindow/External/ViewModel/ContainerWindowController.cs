@@ -1,63 +1,60 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
-using App.Common.SpriteLoaders.External;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Windows.External;
 using App.Common.Windows.Runtime;
 using App.Game.Canvases.External;
-using App.Game.Inventory.External.View;
-using App.Game.Inventory.External.ViewModel.Fabric;
-using App.Game.Inventory.External.ViewModel.Slots;
-using App.Game.Inventory.Runtime.Item;
+using App.Game.Containers.ContainerWindow.External.ViewModel.Fabric;
+using App.Game.Containers.ContainerWindow.External.ViewModel.Slots;
 
-namespace App.Game.Inventory.External.ViewModel
+namespace App.Game.Containers.ContainerWindow.External.ViewModel
 {
-    public class InventoryWindowController : IWindowController, IDisposable
+    public class ContainerWindowController : IWindowController, IDisposable
     {
-        private readonly IWindowManager _windowManager;
         private readonly IAssetManager _assetManager;
         private readonly ICanvas _canvas;
-        private readonly IItemSpriteLoader _spriteLoader;
-        private readonly InventoryService _service;
+        private readonly ISpriteLoader _spriteLoader;
+        private readonly IWindowManager _windowManager;
 
-        private InventoryWindow _window;
-        
-        private InventorySlotsController _slotsController;
+        private View.ContainerWindow _window;
+        private ContainerSlotsModel _slotsModel;
 
-        public InventoryWindowController(
-            IWindowManager windowManager,
+        public ContainerWindowController(
             IAssetManager assetManager,
             ICanvas canvas,
-            IItemSpriteLoader spriteLoader,
-            InventoryService service)
+            ISpriteLoader spriteLoader, 
+            IWindowManager windowManager)
         {
-            _windowManager = windowManager;
             _assetManager = assetManager;
             _canvas = canvas;
             _spriteLoader = spriteLoader;
-            _service = service;
+            _windowManager = windowManager;
         }
 
-        public void Open()
+        public void Open(Container.Runtime.Container container)
         {
             if (_window == null)
             {
                 if (!CreateWindow())
                 {
-                    HLogger.LogError("Failed to create inventory window.");
+                    HLogger.LogError("Failed to create Container window.");
                     return;
                 }
             }
 
             _windowManager.Open(GetName());
-            _slotsController.OnWindowOpened();
+            ShowContainer(container);
+        }
+
+        private void ShowContainer(Container.Runtime.Container container)
+        {
+            _slotsModel.ShowContainer(container);
         }
 
         public void Close()
         {
             _windowManager.Close(GetName());
-            _slotsController.OnWindowClosed();
         }
         
         public bool IsOpen()
@@ -65,9 +62,9 @@ namespace App.Game.Inventory.External.ViewModel
             return _window != null && _window.IsActive();
         }
         
-        public bool CreateWindow()
+        private bool CreateWindow()
         {
-            var windowCreator = new InventoryWindowCreator(_assetManager, _canvas);
+            var windowCreator = new ContainerWindowCreator(_assetManager, _canvas);
             var window = windowCreator.Create();
             if (!window.HasValue)
             {
@@ -75,7 +72,6 @@ namespace App.Game.Inventory.External.ViewModel
             }
 
             _window = window.Value;
-            SetActive(false);
             InitWindow();
             
             return true;
@@ -96,22 +92,15 @@ namespace App.Game.Inventory.External.ViewModel
 
         private void InitSlots()
         {
-            _slotsController = new InventorySlotsController(new InventorySlotViewCreator(_window),
-                _service,
-                _spriteLoader,
-                _window);
-            _slotsController.Initialize();
-            _window.ItemsContent.transform.SetAsLastSibling();
+            _slotsModel = new ContainerSlotsModel(
+                new ContainerSlotViewCreator(_window),
+                _spriteLoader);
+            _slotsModel.Initialize();
         }
 
-        public void AddItem(InventoryItem item)
+        public void Dispose()
         {
-            if (!IsOpen())
-            {
-                return;
-            }
-
-            _slotsController.UpdateSlot(item);
+            _slotsModel?.Dispose();
         }
 
         public void SetActive(bool status)
@@ -121,12 +110,7 @@ namespace App.Game.Inventory.External.ViewModel
 
         public WindowNames GetName()
         {
-            return WindowNames.Inventory;
-        }
-
-        public void Dispose()
-        {
-            _slotsController?.Dispose();
+            return WindowNames.Container;
         }
     }
 }

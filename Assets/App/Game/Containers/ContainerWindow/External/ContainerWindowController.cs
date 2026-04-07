@@ -2,6 +2,7 @@ using System;
 using App.Common.AssetSystem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
+using App.Common.Windows.External;
 using App.Game.Canvases.External;
 using App.Game.Containers.ContainerWindow.External.ViewModel;
 using App.Game.Containers.ContainerWindow.Runtime;
@@ -10,35 +11,41 @@ namespace App.Game.Containers.ContainerWindow.External
 {
     public class ContainerWindowController : IInitSystem, IContainerWindowController
     {
-        private readonly IAssetManager m_AssetManager;
-        private readonly PopupCanvas m_Canvas;
-        private readonly ISpriteLoader m_SpriteLoader;
+        private readonly IWindowManager _windowManager;
+        private readonly IAssetManager _assetManager;
+        private readonly PopupCanvas _canvas;
+        private readonly ISpriteLoader _spriteLoader;
 
-        private ContainerWindowModel m_WindowModel;
+        private ViewModel.ContainerWindowController _windowController;
 
         public Action OnWindowOpened;
 
-        public ContainerWindowController(IAssetManager assetManager, PopupCanvas canvas, ISpriteLoader spriteLoader)
+        public ContainerWindowController(IAssetManager assetManager, PopupCanvas canvas, ISpriteLoader spriteLoader, IWindowManager windowManager)
         {
-            m_AssetManager = assetManager;
-            m_Canvas = canvas;
-            m_SpriteLoader = spriteLoader;
+            _assetManager = assetManager;
+            _canvas = canvas;
+            _spriteLoader = spriteLoader;
+            _windowManager = windowManager;
         }
 
         public void Init()
         {
-            m_WindowModel = new ContainerWindowModel(m_AssetManager, m_Canvas, m_SpriteLoader);
+            _windowController = new ViewModel.ContainerWindowController(
+                _assetManager, 
+                _canvas, 
+                _spriteLoader,
+                _windowManager);
         }
 
         public void OpenWindow(Container.Runtime.Container container)
         {
-            m_WindowModel.Open(container);
+            _windowController.Open(container);
             OnWindowOpened?.Invoke();
         }
 
         public void CloseWindow()
         {
-            m_WindowModel.Close();
+            _windowController.Close();
         }
     }
 }
