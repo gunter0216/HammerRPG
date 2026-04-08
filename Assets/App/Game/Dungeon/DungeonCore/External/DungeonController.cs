@@ -91,8 +91,7 @@ namespace App.Game.Dungeon.DungeonCore.External
                 HLogger.LogError("Cant create dungeon");
                 return false;
             }
-            
-            
+
             _service = new DungeonService(dungeon.Value);
             _service.Initialize();
 

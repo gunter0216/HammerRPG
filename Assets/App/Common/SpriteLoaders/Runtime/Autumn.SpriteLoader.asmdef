@@ -7,6 +7,6 @@
     "Autumn.AssetSystem",
     "Unity.Addressables",
     "Autumn.Logger",
-    "Autumn.SpriteModule"
+    "Autumn.Modules.Sprite"
   ]
 }

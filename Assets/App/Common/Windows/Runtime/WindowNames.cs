@@ -5,6 +5,7 @@ namespace App.Common.Windows.Runtime
         Inventory,
         Container,
         MainMenu,
-        Stats
+        Stats,
+        Character
     }
 }

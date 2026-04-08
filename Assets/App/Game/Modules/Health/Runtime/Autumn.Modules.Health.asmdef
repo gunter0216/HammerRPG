@@ -1,0 +1,9 @@
+{
+  "name": "Autumn.Modules.Health",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.DataContainers",
+    "Autumn.Utility",
+    "Autumn.DataManager"
+  ]
+}

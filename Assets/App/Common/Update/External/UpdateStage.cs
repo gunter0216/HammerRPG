@@ -20,6 +20,7 @@ namespace App.Game.Update.External
         WeaponCollisionSystem = 300,
         
         TimeManager = 1000,
-        PopWindow = -100
+        PopWindow = -100,
+        CharacterOpenSystem = 0
     }
 }

@@ -9,7 +9,6 @@
     "Autumn.Utility",
     "Autumn.ModuleItems",
     "Autumn.Tiles",
-    "Autumn.ModuleItemType",
     "Autumn.Pause",
     "Autumn.Time",
     "Unity.Addressables",
@@ -37,11 +36,19 @@
     "Leopotam.EcsLite.UnityEditor",
     "Leopotam.EcsLite.UnityEditor.Runtime",
     "Autumn.Container",
-    "Autumn.Chest",
-    "Autumn.ContainerModule",
-    "Autumn.TilePositionModule",
-    "Autumn.SpriteModule",
-    "Autumn.Door",
-    "Autumn.Windows"
+    "Autumn.Windows",
+    "Autumn.Modules.Chest",
+    "Autumn.Modules.Container",
+    "Autumn.Modules.Door",
+    "Autumn.Modules.Experience",
+    "Autumn.Modules.Health",
+    "Autumn.Modules.Level",
+    "Autumn.Modules.ItemType",
+    "Autumn.Modules.Move",
+    "Autumn.Modules.Name",
+    "Autumn.Modules.Race",
+    "Autumn.Modules.Sprite",
+    "Autumn.Modules.Stats",
+    "Autumn.Modules.TilePosition"
   ]
 }

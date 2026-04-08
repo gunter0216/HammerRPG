@@ -14,7 +14,7 @@ namespace App.Common.Windows.External
 
         public void Run()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {
                 if (_windowManager.IsAnyOpen())
                 {

@@ -1,0 +1,9 @@
+{
+  "name": "Autumn.Modules.Move",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.DataContainers",
+    "Autumn.Utility",
+    "Autumn.DataManager"
+  ]
+}

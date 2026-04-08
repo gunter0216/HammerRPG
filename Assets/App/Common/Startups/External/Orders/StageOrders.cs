@@ -38,6 +38,7 @@
         DragItem = 0,
         Container = 0,
         DungeonCreator = 0,
-        DungeonController = 100
+        DungeonController = 100,
+        PlayerController = 200
     }
 }

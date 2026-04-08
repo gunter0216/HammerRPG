@@ -7,6 +7,6 @@
     "Autumn.ConfigLoader",
     "Autumn.DataContainers",
     "Autumn.Logger",
-    "Autumn.ModuleItemType"
+    "Autumn.Modules.ItemType"
   ]
 }

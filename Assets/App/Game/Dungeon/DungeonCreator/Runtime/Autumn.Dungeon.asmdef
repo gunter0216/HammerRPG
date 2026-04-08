@@ -12,9 +12,9 @@
     "Autumn.ModuleItems",
     "Autumn.SpriteLoader",
     "Autumn.DataManager",
-    "Autumn.Chest",
-    "Autumn.ContainerModule",
-    "Autumn.TilePositionModule",
-    "Autumn.Door"
+    "Autumn.Modules.Chest",
+    "Autumn.Modules.Container",
+    "Autumn.Modules.TilePosition",
+    "Autumn.Modules.Door"
   ]
 }

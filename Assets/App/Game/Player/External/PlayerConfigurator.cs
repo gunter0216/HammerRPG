@@ -19,6 +19,7 @@ namespace App.Game.Player.External
             BindSingle<PlayerInitSystem>();
             BindSingle<PlayerMoveSystem>();
             BindSingle<WeaponCollisionSystem>();
+            BindSingle<PlayerController>();
 
             RegisterFSM<AttackSystem>(FSMStage.CoreInitStage, StageOrders.AttackSystem);
             RegisterFSM<EnemyInitSystem>(FSMStage.CoreInitStage, StageOrders.EnemyInitSystem);
@@ -28,6 +29,7 @@ namespace App.Game.Player.External
             RegisterFSM<PlayerInitSystem>(FSMStage.CoreInitStage, StageOrders.PlayerInitSystem);
             RegisterFSM<PlayerMoveSystem>(FSMStage.CoreInitStage, StageOrders.PlayerMoveSystem);
             RegisterFSM<WeaponCollisionSystem>(FSMStage.CoreInitStage, StageOrders.WeaponCollisionSystem);
+            RegisterFSM<PlayerController>(FSMStage.CoreInitStage, StageOrders.PlayerController);
 
             RegisterUpdate<AttackSystem>(UpdateStage.AttackSystem);
             RegisterUpdate<HealthSystem>(UpdateStage.HealthSystem);
