@@ -21,6 +21,7 @@ namespace App.Game.Update.External
         
         TimeManager = 1000,
         PopWindow = -100,
-        CharacterOpenSystem = 0
+        CharacterOpenSystem = 0,
+        PlayerController = 0
     }
 }

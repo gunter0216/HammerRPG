@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace App.Game.Inventory.External
 {
-    public class OpenInventorySystem : IRunSystem
+    public class OpenInventorySystem : IUpdateSystem
     {
         private readonly IInventoryController m_InventoryController;
         private readonly IEquipmentController m_EquipmentController;
@@ -16,7 +16,7 @@ namespace App.Game.Inventory.External
             m_EquipmentController = equipmentController;
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             if (Input.GetKeyDown(KeyCode.I))
             {

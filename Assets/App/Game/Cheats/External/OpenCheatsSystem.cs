@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace App.Game.Cheats.External
 {
-    public class OpenCheatsSystem : IRunSystem
+    public class OpenCheatsSystem : IUpdateSystem
     {
         private readonly CheatsController m_CheatsController;
 
@@ -12,7 +12,7 @@ namespace App.Game.Cheats.External
             m_CheatsController = cheatsController;
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             if (Input.GetKeyDown(KeyCode.P))
             {

@@ -2,8 +2,7 @@ using App.Common.Algorithms.Runtime;
 using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Rooms;
-using App.Game.Modules.Door.Runtime;
-using App.Game.Modules.Door.Runtime.Data;
+using App.Game.Modules.Doors.Runtime;
 using App.Game.Modules.TilePosition.Runtime;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime.Doors

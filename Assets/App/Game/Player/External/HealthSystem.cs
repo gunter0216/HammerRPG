@@ -5,7 +5,7 @@ using Leopotam.EcsLite;
 
 namespace App.Game.Player.External
 {
-    public class HealthSystem : IInitSystem, IRunSystem
+    public class HealthSystem : IInitSystem, IUpdateSystem
     {
         private readonly IWorldManager m_WorldManager;
         
@@ -25,7 +25,7 @@ namespace App.Game.Player.External
             m_HealthFilter = m_WorldManager.GetFilter<HealthComponent>();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             foreach (var i in m_HealthFilter)
             {

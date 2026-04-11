@@ -4,13 +4,19 @@ namespace App.Game.Modules.Stats.Runtime.Config
 {
     public class StatsModuleConfig : IModuleConfig
     {
-        private readonly string _startStats;
+        private readonly string _strength;
+        private readonly string _agility;
+        private readonly string _intelligence;
 
-        public string StartStats => _startStats;
+        public string Strength => _strength;
+        public string Agility => _agility;
+        public string Intelligence => _intelligence;
 
-        public StatsModuleConfig(string startStats)
+        public StatsModuleConfig(string strength, string agility, string intelligence)
         {
-            _startStats = startStats;
+            _strength = strength;
+            _agility = agility;
+            _intelligence = intelligence;
         }
     }
 }

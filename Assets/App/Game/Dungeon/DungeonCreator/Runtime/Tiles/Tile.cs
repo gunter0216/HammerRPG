@@ -1,20 +1,19 @@
-using App.Game.GameTiles.Runtime;
+using App.Common.ModuleItem.Runtime;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime.Tiles
 {
     public class Tile
     {
-        private readonly TileData m_TileData;
-        private readonly ITileModuleItem m_TileModuleItem;
+        private readonly TileData _tileData;
+        private readonly IModuleItem _moduleItem;
 
-        public Tile(TileData tileData, ITileModuleItem tileModuleItem)
+        public Tile(TileData tileData, IModuleItem tileModuleItem)
         {
-            m_TileData = tileData;
-            m_TileModuleItem = tileModuleItem;
+            _tileData = tileData;
+            _moduleItem = tileModuleItem;
         }
 
-        public TileData Data => m_TileData;
-
-        public ITileModuleItem ModuleItem => m_TileModuleItem;
+        public TileData Data => _tileData;
+        public IModuleItem ModuleItem => _moduleItem;
     }
 }

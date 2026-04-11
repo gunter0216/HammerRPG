@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace App.Game.CharacterWindow.External
 {
-    public class OpenCharacterWindowSystem : IRunSystem
+    public class OpenCharacterWindowSystem : IUpdateSystem
     {
         private readonly CharacterWindowController _characterWindowController;
 
@@ -12,7 +12,7 @@ namespace App.Game.CharacterWindow.External
             _characterWindowController = characterWindowController;
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             if (Input.GetKeyDown(KeyCode.C))
             {

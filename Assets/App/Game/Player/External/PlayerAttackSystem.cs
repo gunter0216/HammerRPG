@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace App.Game.Player.External
 {
-    public class PlayerAttackSystem : IInitSystem, IRunSystem
+    public class PlayerAttackSystem : IInitSystem, IUpdateSystem
     {
         private readonly IEcsEventManager m_EcsEventManager;
         private readonly IWorldManager m_WorldManager;
@@ -31,7 +31,7 @@ namespace App.Game.Player.External
             m_Camera = Camera.main;
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             if (Input.GetMouseButtonDown(0))
             {

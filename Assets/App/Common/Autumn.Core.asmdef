@@ -1,6 +1,7 @@
 {
   "name": "Autumn.Core",
   "references": [
+    "Unity.InputSystem",
     "Autumn.Algorithms",
     "Autumn.AssemblyManager",
     "Autumn.AssetSystem",

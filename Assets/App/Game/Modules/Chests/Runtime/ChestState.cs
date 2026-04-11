@@ -1,4 +1,4 @@
-namespace App.Game.Modules.Chest.Runtime
+namespace App.Game.Modules.Chests.Runtime
 {
     public enum ChestState
     {

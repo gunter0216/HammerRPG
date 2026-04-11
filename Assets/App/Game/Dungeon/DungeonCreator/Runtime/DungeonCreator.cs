@@ -4,10 +4,9 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Config.Controller;
 using App.Game.Dungeon.DungeonCreator.Runtime.Rooms;
-using App.Game.GameTiles.Runtime;
-using App.Game.Modules.Chest.Runtime;
+using App.Game.Modules.Chests.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
-using App.Game.Modules.Door.Runtime;
+using App.Game.Modules.Doors.Runtime;
 using Logger = App.Common.Logger.Runtime.Logger;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime
@@ -17,7 +16,6 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime
         private readonly ChestModuleSystem _chestModuleSystem;
         private readonly ContainerModuleSystem _containerModuleSystem;
         private readonly IConfigLoader _configLoader;
-        private readonly ITilesController _tilesController;
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly DoorModuleSystem _doorModuleSystem;
 
@@ -25,14 +23,12 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime
 
         public DungeonCreator(
             IConfigLoader configLoader,
-            ITilesController tilesController, 
             IModuleItemsManager moduleItemsManager, 
             ChestModuleSystem chestModuleSystem, 
             ContainerModuleSystem containerModuleSystem, 
             DoorModuleSystem doorModuleSystem)
         {
             _configLoader = configLoader;
-            _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
             _chestModuleSystem = chestModuleSystem;
             _containerModuleSystem = containerModuleSystem;
@@ -77,7 +73,6 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime
             var dungeon = new Dungeon(data, generationConfig.Value);
 
             var roomsCreator = new RoomsCreator(
-                _tilesController, 
                 _moduleItemsManager, 
                 _chestModuleSystem, 
                 _containerModuleSystem,

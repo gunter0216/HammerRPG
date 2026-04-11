@@ -10,8 +10,13 @@ namespace App.Game.Modules.Stats.Runtime.Config
         
         public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
         {
-            var stats = module["start_stats"];
-            var config = new StatsModuleConfig(stats);
+            var strength = module["strength"];
+            var agility = module["agility"];
+            var intelligence = module["intelligence"];
+            var config = new StatsModuleConfig(
+                strength,
+                agility,
+                intelligence);
             
             return Optional<IModuleConfig>.Success(config);
         }

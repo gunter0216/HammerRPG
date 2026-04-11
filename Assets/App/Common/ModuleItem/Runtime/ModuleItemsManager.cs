@@ -4,6 +4,7 @@ using App.Common.Json.Runtime.Deserializer;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config;
+using App.Common.ModuleItem.Runtime.Config.Dto;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.ModuleItem.Runtime.Fabric;
 using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
@@ -41,6 +42,9 @@ namespace App.Common.ModuleItem.External
 
         public void Init()
         {
+            _createHandlers.Sort((x, y) => x.SortIndex().CompareTo(y.SortIndex()));
+            _destroyHandlers.Sort((x, y) => x.SortIndex().CompareTo(y.SortIndex()));
+            
             InitConfigController();
             InitItemsFabric();
             _moduleItemDestroyer = new ModuleItemDestroyer(
@@ -79,11 +83,16 @@ namespace App.Common.ModuleItem.External
                 return false;
             }
 
+            return RegisterItems(dto.Value, type);
+        }
+        
+        public bool RegisterItems(ModuleItemsDto dto, string type)
+        {
             var dtoConverter = new ModuleItemsDtoToConfigConverter(
                 _jsonDeserializer,
                 _logger,
                 _moduleDtoToConfigConverters);
-            var config = dtoConverter.Convert(dto.Value, type);
+            var config = dtoConverter.Convert(dto, type);
             if (!config.HasValue)
             {
                 HLogger.LogError($"[BaseModuleItemsManager] In method Init, cant convert dto to configs.");

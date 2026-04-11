@@ -8,7 +8,7 @@ using Leopotam.EcsLite;
 
 namespace App.Game.Player.External
 {
-    public class PlayAttackAnimationSystem : IInitSystem, IRunSystem
+    public class PlayAttackAnimationSystem : IInitSystem, IUpdateSystem
     {
         private readonly IEcsEventManager m_EcsEventManager;
         private readonly IWorldManager m_WorldManager;
@@ -35,7 +35,7 @@ namespace App.Game.Player.External
             m_EntityMeleeWeaponAnimation = new EntityMeleeWeaponAnimation();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             foreach (var i in m_PlayAttackAnimationEventFilter)
             {

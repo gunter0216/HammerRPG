@@ -6,7 +6,7 @@ using Leopotam.EcsLite;
 
 namespace App.Game.Worlds.External
 {
-    public class WorldManager : IInitSystem, IPostInitSystem, IRunSystem, IWorldManager, IDisposable
+    public class WorldManager : IInitSystem, IPostInitSystem, IUpdateSystem, IWorldManager, IDisposable
     {
         private EcsWorld m_World;
         private EcsSystems m_Systems;
@@ -33,7 +33,7 @@ namespace App.Game.Worlds.External
             m_Systems.Init();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             m_Systems.Run();
         }

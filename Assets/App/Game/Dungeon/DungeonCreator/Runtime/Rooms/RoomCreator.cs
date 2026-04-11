@@ -4,10 +4,10 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Tiles;
-using App.Game.GameTiles.Runtime;
-using App.Game.Modules.Chest.Runtime;
+using App.Game.Modules.Chests.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
-using App.Game.Modules.Door.Runtime;
+using App.Game.Modules.Doors.Runtime;
+using App.Game.Modules.TilePosition.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 
@@ -17,20 +17,17 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
     {
         private readonly ChestModuleSystem _chestModuleSystem;
         private readonly ContainerModuleSystem _containerModuleSystem;
-        private readonly ITilesController _tilesController;
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly DoorModuleSystem _doorModuleSystem;
         private readonly KeyCreator _keyCreator;
 
         public RoomCreator(
-            ITilesController tilesController,
             IModuleItemsManager moduleItemsManager,
             ChestModuleSystem chestModuleSystem, 
             ContainerModuleSystem containerModuleSystem, 
             DoorModuleSystem doorModuleSystem, 
             KeyCreator keyCreator)
         {
-            _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
             _chestModuleSystem = chestModuleSystem;
             _containerModuleSystem = containerModuleSystem;
@@ -102,12 +99,14 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
                 return Optional<Tile>.Fail();
             }
             
-            var tileModuleItem = _tilesController.CreateTileByGenerationID(generationTile.Id, localPosition);
+            var tileModuleItem = _moduleItemsManager.Create("wall");
             if (!tileModuleItem.HasValue)
             {
                 HLogger.LogError($"Cant create tile");
                 return Optional<Tile>.Fail();
             }
+
+            tileModuleItem.Value.AddDataModule(new TilePositionModuleData(localPosition));
 
             var data = new TileData();
             data.Reference = tileModuleItem.Value.ReferenceSelf;

@@ -1,44 +1,33 @@
 ﻿using App.Common.Utilities.Utility.Runtime;
 using App.Common.Utilities.UtilityUnity.Runtime.Extensions;
+using App.Game.Player.External;
 using App.Game.Player.Runtime.Components;
-using App.Game.Worlds.Runtime;
-using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace App.Game.CameraFollow.External
 {
-    public class CameraFollowController : IInitSystem, IRunSystem
+    public class CameraFollowController : IInitSystem, IUpdateSystem
     {
-        private readonly IWorldManager m_WorldManager;
+        private readonly PlayerController _playerController;
         
-        private EcsFilter m_PlayersFilter;
-        private EcsPool<EntityComponent> m_EntitiesPool;
-        private Camera m_Camera;
+        private Camera _camera;
 
-        public CameraFollowController(IWorldManager worldManager)
+        public CameraFollowController(PlayerController playerController)
         {
-            m_WorldManager = worldManager;
+            _playerController = playerController;
         }
 
         public void Init()
         {
-            m_Camera = Camera.main;
-            
-            var world = m_WorldManager.GetWorld();
-            m_PlayersFilter = world.Filter<PlayerComponent>().End();
-            m_EntitiesPool = world.GetPool<EntityComponent>();
+            _camera = Camera.main;
         }
 
-        public void Run()
+        public void OnUpdate()
         {
-            foreach (var i in m_PlayersFilter)
-            {
-                ref var player = ref m_EntitiesPool.Get(i);
-                var playerPosition = player.View.Transform.position;
-                
-                m_Camera.transform.SetPositionX(playerPosition.x);
-                m_Camera.transform.SetPositionY(playerPosition.y);
-            }
+            var playerPosition = _playerController.PlayerView.Transform.position;
+
+            _camera.transform.SetPositionX(playerPosition.x);
+            _camera.transform.SetPositionY(playerPosition.y);
         }
     }
 }

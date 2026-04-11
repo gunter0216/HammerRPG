@@ -76,5 +76,10 @@ namespace App.Game.Modules.ContainerModule.Runtime
             _containerController.DestroyContainer(module.Container);
             _modules.Remove(moduleItem.ReferenceSelf);
         }
+
+        public ModuleIndex SortIndex()
+        {
+            return ModuleIndex.Container;
+        }
     }
 }

@@ -16,8 +16,8 @@ namespace App.Game.Player.External
             BindSingle<HealthSystem>();
             BindSingle<PlayAttackAnimationSystem>();
             BindSingle<PlayerAttackSystem>();
-            BindSingle<PlayerInitSystem>();
-            BindSingle<PlayerMoveSystem>();
+            // BindSingle<PlayerInitSystem>();
+            // BindSingle<PlayerMoveSystem>();
             BindSingle<WeaponCollisionSystem>();
             BindSingle<PlayerController>();
 
@@ -26,8 +26,8 @@ namespace App.Game.Player.External
             RegisterFSM<HealthSystem>(FSMStage.CoreInitStage, StageOrders.HealthSystem);
             RegisterFSM<PlayAttackAnimationSystem>(FSMStage.CoreInitStage, StageOrders.PlayAttackAnimationSystem);
             RegisterFSM<PlayerAttackSystem>(FSMStage.CoreInitStage, StageOrders.PlayerAttackSystem);
-            RegisterFSM<PlayerInitSystem>(FSMStage.CoreInitStage, StageOrders.PlayerInitSystem);
-            RegisterFSM<PlayerMoveSystem>(FSMStage.CoreInitStage, StageOrders.PlayerMoveSystem);
+            // RegisterFSM<PlayerInitSystem>(FSMStage.CoreInitStage, StageOrders.PlayerInitSystem);
+            // RegisterFSM<PlayerMoveSystem>(FSMStage.CoreInitStage, StageOrders.PlayerMoveSystem);
             RegisterFSM<WeaponCollisionSystem>(FSMStage.CoreInitStage, StageOrders.WeaponCollisionSystem);
             RegisterFSM<PlayerController>(FSMStage.CoreInitStage, StageOrders.PlayerController);
 
@@ -35,8 +35,9 @@ namespace App.Game.Player.External
             RegisterUpdate<HealthSystem>(UpdateStage.HealthSystem);
             RegisterUpdate<PlayAttackAnimationSystem>(UpdateStage.PlayAttackAnimationSystem);
             RegisterUpdate<PlayerAttackSystem>(UpdateStage.PlayerAttackSystem);
-            RegisterUpdate<PlayerMoveSystem>(UpdateStage.PlayerMoveSystem);
+            // RegisterUpdate<PlayerMoveSystem>(UpdateStage.PlayerMoveSystem);
             RegisterUpdate<WeaponCollisionSystem>(UpdateStage.WeaponCollisionSystem);
+            RegisterUpdate<PlayerController>(UpdateStage.PlayerController);
         }
     }
 }

@@ -4,13 +4,13 @@ namespace App.Game.Modules.Move.Runtime.Config
 {
     public class MoveModuleConfig : IModuleConfig
     {
-        private readonly string _startMove;
+        private readonly float _speed;
 
-        public string StartMove => _startMove;
+        public float Speed => _speed;
 
-        public MoveModuleConfig(string startMove)
+        public MoveModuleConfig(float speed)
         {
-            _startMove = startMove;
+            _speed = speed;
         }
     }
 }

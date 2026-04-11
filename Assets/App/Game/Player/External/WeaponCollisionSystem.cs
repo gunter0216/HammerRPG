@@ -8,7 +8,7 @@ using Leopotam.EcsLite;
 
 namespace App.Game.Player.External
 {
-    public class WeaponCollisionSystem : IInitSystem, IRunSystem
+    public class WeaponCollisionSystem : IInitSystem, IUpdateSystem
     {
         private readonly IEcsEventManager m_EcsEventManager;
         private readonly IWorldManager m_WorldManager;
@@ -35,7 +35,7 @@ namespace App.Game.Player.External
             m_WeaponCollisionEventFilter = m_EcsEventManager.GetFilter<WeaponCollisionEvent>();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             foreach (var i in m_WeaponCollisionEventFilter)
             {

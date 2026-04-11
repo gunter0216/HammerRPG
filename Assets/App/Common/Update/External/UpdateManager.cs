@@ -9,20 +9,20 @@ namespace App.Game.Update.External
 {
     public class UpdateManager : IInitSystem, IDisposable
     {
-        private readonly List<IRunSystem> m_RunSystems;
+        private readonly List<IUpdateSystem> m_RunSystems;
 
-        private List<IRunSystem> m_SortedRunSystems;
+        private List<IUpdateSystem> m_SortedRunSystems;
         
         private CompositeDisposable m_Disposables = new();
 
-        public UpdateManager(List<IRunSystem> runSystems)
+        public UpdateManager(List<IUpdateSystem> runSystems)
         {
             m_RunSystems = runSystems;
         }
 
         public void Init()
         {
-            var systems = new List<OrderedItem<IRunSystem>>(m_RunSystems.Count);
+            var systems = new List<OrderedItem<IUpdateSystem>>(m_RunSystems.Count);
             foreach (var runSystem in m_RunSystems)
             {
                 var type = runSystem.GetType();
@@ -33,7 +33,7 @@ namespace App.Game.Update.External
                     continue;
                 }
                 
-                systems.Add(new OrderedItem<IRunSystem>(runSystem, order.Value));
+                systems.Add(new OrderedItem<IUpdateSystem>(runSystem, order.Value));
             }
             
             systems.Sort((a, b) => a.Order.CompareTo(b.Order));
@@ -58,7 +58,7 @@ namespace App.Game.Update.External
             
             foreach (var runSystem in m_SortedRunSystems)
             {
-                runSystem.Run();
+                runSystem.OnUpdate();
             }
         }
 

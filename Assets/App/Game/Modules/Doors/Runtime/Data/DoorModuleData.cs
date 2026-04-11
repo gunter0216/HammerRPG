@@ -3,7 +3,7 @@ using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime.Data;
 using Newtonsoft.Json;
 
-namespace App.Game.Modules.Door.Runtime.Data
+namespace App.Game.Modules.Doors.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

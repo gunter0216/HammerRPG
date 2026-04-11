@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace App.Game.GameMenu.External
 {
-    public class GameMenuController : IInitSystem, IRunSystem, IDisposable, IWindowController
+    public class GameMenuController : IInitSystem, IUpdateSystem, IDisposable, IWindowController
     {
         private const string m_GameMenuAssetKey = "GameMenuView";
         private readonly StringKeyEvaluator m_GameMenuAssetKeyEvaluator = new(m_GameMenuAssetKey);
@@ -88,7 +88,7 @@ namespace App.Game.GameMenu.External
             }
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {

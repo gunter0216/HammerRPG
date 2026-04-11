@@ -10,7 +10,7 @@ namespace App.Game.Modules.Health.Runtime.Config
         
         public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
         {
-            var health = module["start_health"];
+            var health = module["health"];
             var config = new HealthModuleConfig(health);
             
             return Optional<IModuleConfig>.Success(config);

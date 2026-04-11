@@ -10,8 +10,8 @@ namespace App.Game.Modules.Move.Runtime.Config
         
         public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
         {
-            var move = module["start_move"];
-            var config = new MoveModuleConfig(move);
+            var speed = float.Parse(module["speed"]);
+            var config = new MoveModuleConfig(speed);
             
             return Optional<IModuleConfig>.Success(config);
         }

@@ -3,7 +3,6 @@ using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
 using App.Game.Dungeon.DungeonCreator.Runtime.Chest;
-using App.Game.Modules.Door.Runtime.Config;
 
 namespace App.Game.Dungeon.DungeonCreator.External
 {

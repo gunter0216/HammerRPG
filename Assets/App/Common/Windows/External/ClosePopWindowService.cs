@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace App.Common.Windows.External
 {
-    public class ClosePopWindowService : IRunSystem
+    public class ClosePopWindowService : IUpdateSystem
     {
         private readonly WindowManager _windowManager;
 
@@ -12,7 +12,7 @@ namespace App.Common.Windows.External
             _windowManager = windowManager;
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
             {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Doors;
-using App.Game.Modules.Door.Runtime;
+using App.Game.Modules.Doors.Runtime;
 using App.Game.Modules.TilePosition.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Door;
 using App.Generation.DungeonGenerator.Runtime.Rooms;

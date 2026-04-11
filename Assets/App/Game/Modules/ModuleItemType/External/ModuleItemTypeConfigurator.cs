@@ -1,7 +1,7 @@
 using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
-using App.Game.Modules.ModuleItemType.Runtime.Config.Converter;
+using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Converter;
 
 namespace App.Game.Modules.ModuleItemType.External
 {

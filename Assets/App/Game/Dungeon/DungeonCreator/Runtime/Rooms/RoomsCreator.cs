@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
-using App.Game.GameTiles.Runtime;
-using App.Game.Modules.Chest.Runtime;
+using App.Game.Modules.Chests.Runtime;
 using App.Game.Modules.ContainerModule.Runtime;
-using App.Game.Modules.Door.Runtime;
+using App.Game.Modules.Doors.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
@@ -14,24 +13,21 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         private readonly ChestModuleSystem _chestModuleSystem;
         private readonly ContainerModuleSystem _containerModuleSystem;
         private readonly IModuleItemsManager _moduleItemsManager;
-        private readonly ITilesController _tilesController;
         private readonly RoomCreator _roomCreator;
         private readonly DoorModuleSystem _doorModuleSystem;
         private readonly KeyCreator _keyCreator;
 
-        public RoomsCreator(ITilesController tilesController,
+        public RoomsCreator(
             IModuleItemsManager moduleItemsManager,
             ChestModuleSystem chestModuleSystem, 
             ContainerModuleSystem containerModuleSystem, DoorModuleSystem doorModuleSystem)
         {
-            _tilesController = tilesController;
             _moduleItemsManager = moduleItemsManager;
             _chestModuleSystem = chestModuleSystem;
             _containerModuleSystem = containerModuleSystem;
             _doorModuleSystem = doorModuleSystem;
             _keyCreator = new KeyCreator(_moduleItemsManager);
             _roomCreator = new RoomCreator(
-                _tilesController,
                 _moduleItemsManager,
                 _chestModuleSystem, 
                 _containerModuleSystem,

@@ -8,11 +8,7 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
-using App.Game.GameItems.Runtime;
-using App.Game.Inventory.External;
 using App.Game.Inventory.Runtime;
-using App.Game.Inventory.Runtime.Config;
-using App.Game.Inventory.Runtime.Config.Model;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.ViewModel
@@ -27,7 +23,6 @@ namespace App.Game.Cheats.External.ViewModel
             m_GroundOption,
         };
         
-        private readonly IGameItemsManager m_GameItemsManager;
         private readonly IAssetManager m_AssetManager;
         private readonly ICanvas m_Canvas;
         private readonly ISpriteLoader m_SpriteLoader;
@@ -43,7 +38,6 @@ namespace App.Game.Cheats.External.ViewModel
             IAssetManager assetManager, 
             ICanvas canvas, 
             ISpriteLoader spriteLoader, 
-            IGameItemsManager gameItemsManager,
             IInventoryController inventoryController,
             IReadOnlyList<IModuleItemConfig> configs)
         {
@@ -52,7 +46,6 @@ namespace App.Game.Cheats.External.ViewModel
             m_SpriteLoader = spriteLoader;
             m_Configs = configs;
             m_InventoryController = inventoryController;
-            m_GameItemsManager = gameItemsManager;
         }
 
         public void Open()

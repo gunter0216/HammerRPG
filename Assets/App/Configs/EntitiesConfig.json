@@ -5,6 +5,9 @@
       "id": "player",
       "modules": [
         {
+          "module": "transform"
+        },
+        {
           "module": "name",
           "name": "Simon"
         },

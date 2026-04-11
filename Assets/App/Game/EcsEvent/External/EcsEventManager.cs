@@ -9,7 +9,7 @@ using Leopotam.EcsLite.ExtendedSystems;
 
 namespace App.Game.EcsEvent.External
 {
-    public class EcsEventManager : IInitSystem, IRunSystem, IEcsEventManager
+    public class EcsEventManager : IInitSystem, IUpdateSystem, IEcsEventManager
     {
         private readonly IWorldManager m_WorldManager;
         
@@ -48,7 +48,7 @@ namespace App.Game.EcsEvent.External
             return m_World.Filter<T>().End();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             for (int i = 0; i < m_DelSystems.Count; ++i)
             {

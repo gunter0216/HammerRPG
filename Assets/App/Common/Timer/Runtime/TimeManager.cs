@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace App.Common.Timer.Runtime
 {
-    public class TimeManager : IInitSystem, IRunSystem, ITimeManager
+    public class TimeManager : IInitSystem, IUpdateSystem, ITimeManager
     {
         private ListPool<RealtimeTimer> m_RealtimeTimers;
 
@@ -23,7 +23,7 @@ namespace App.Common.Timer.Runtime
                 releaseCallback: ReleaseTimer);
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             for (int i = 0; i < m_ActiveTimers.Count; ++i)
             {

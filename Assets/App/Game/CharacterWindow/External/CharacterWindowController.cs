@@ -20,7 +20,7 @@ namespace App.Game.CharacterWindow.External
         public CharacterWindowController(
             IWindowManager windowManager,
             IAssetManager assetManager,
-            ICanvas canvas,
+            PopupCanvas canvas,
             IItemSpriteLoader spriteLoader) : base(windowManager, assetManager, canvas)
         {
             _spriteLoader = spriteLoader;

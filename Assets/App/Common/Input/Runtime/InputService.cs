@@ -1,160 +1,105 @@
+using System.Collections.Generic;
+using InputSystem;
+
 namespace App.Common.Input.Runtime
 {
-    public class InputService
+    public class InputService : IInputService
     {
-        // public InputActions input { get; private set; }
-        //
-        // private HashSet<object> _cursorRequiredObjects = new HashSet<object>();
-        // private HashSet<object> _cursorVisibilityRequiredObjects = new HashSet<object>();
-        //
-        // private HashSet<object> _movementBlockers = new HashSet<object>();
-        // private HashSet<object> _rotatiobBlockers = new HashSet<object>();
-        // private HashSet<object> _interactBlockers = new HashSet<object>();
-        // private HashSet<object> _combatBlockers = new HashSet<object>();
-        //
-        // public InputService()
-        // {
-        //     input = new InputActions();
-        //     input.Enable();
-        //
-        //     input.UI.Pause.performed += OnInputPause;
-        //
-        //     input.UIItemsContainer.Disable();
-        //
-        //     GameStateMachine.beforeStateExitEvent += OnBeforeStateExit; 
-        // }
-        //
-        // private void OnBeforeStateExit(IState state)
-        // {
-        //     _cursorRequiredObjects.Clear();
-        //     _cursorVisibilityRequiredObjects.Clear();
-        //
-        //     _movementBlockers.Clear();
-        //     _rotatiobBlockers.Clear();
-        //     _interactBlockers.Clear();
-        //     _combatBlockers.Clear();
-        //     RefreshCursor();
-        //     RefreshInputState();
-        //     RefreshCombatInputState();
-        // }
-        //
-        //
-        // internal void RefreshCursor()
-        // {
-        //     RefreshCursorLockStateReasons();
-        // }
-        //
-        // public void AddCharacterRotationBlocker(object obj)
-        // {
-        //     if (_rotatiobBlockers.Contains(obj))
-        //         return;
-        //     _rotatiobBlockers.Add(obj);
-        //     RefreshInputState();
-        // }
-        //
-        // public void RemoveCharacterRotationBlocker(object obj)
-        // {
-        //     if (!_rotatiobBlockers.Contains(obj))
-        //         return;
-        //     _rotatiobBlockers.Remove(obj);
-        //     RefreshInputState();
-        // }
-        //
-        // public void AddCharacterMovementBlocker(object obj)
-        // {
-        //     if (_movementBlockers.Contains(obj))
-        //         return;
-        //     _movementBlockers.Add(obj);
-        //     RefreshInputState();
-        // }
-        //
-        // public void RemoveCharacterMovementBlocker(object obj)
-        // {
-        //     if (!_movementBlockers.Contains(obj))
-        //         return;
-        //     _movementBlockers.Remove(obj);
-        //     RefreshInputState();
-        // }
-        //
-        // public void AddInteractBlocker(object obj)
-        // {
-        //     if (_interactBlockers.Contains(obj))
-        //         return;
-        //     _interactBlockers.Add(obj);
-        //     RefreshInputState();
-        // }
-        //
-        // public void RemoveInteractBlocker(object obj)
-        // {
-        //     if (!_interactBlockers.Contains(obj))
-        //         return;
-        //     _interactBlockers.Remove(obj);
-        //     RefreshInputState();
-        // }
-        //
-        // public void AddCombatBlocker(object obj)
-        // {
-        //     if (_combatBlockers.Contains(obj))
-        //         return;
-        //     _combatBlockers.Add(obj);
-        //     Debug.Log($"[InputService] AddCombatBlocker: {obj?.GetType().Name ?? "null"} (count: {_combatBlockers.Count})");
-        //     RefreshCombatInputState();
-        // }
-        //
-        // public void RemoveCombatBlocker(object obj)
-        // {
-        //     if (!_combatBlockers.Contains(obj))
-        //         return;
-        //     _combatBlockers.Remove(obj);
-        //     RefreshCombatInputState();
-        // }
-        //
-        // private void RefreshInputState()
-        // {
-        //     var isMovementActive = _movementBlockers.Count == 0;
-        //     if (isMovementActive)
-        //     {
-        //         input.PlayerMovement.Move.Enable();
-        //     }
-        //     else
-        //     {
-        //         input.PlayerMovement.Move.Disable();
-        //     }
-        //
-        //     var isRotationActive = _rotatiobBlockers.Count == 0;
-        //     if (isRotationActive)
-        //     {
-        //         input.PlayerMovement.Look.Enable();
-        //     } 
-        //     else
-        //     {
-        //         input.PlayerMovement.Look.Disable();
-        //     }
-        //
-        //     var isInteractActive = _interactBlockers.Count == 0;
-        //     if (isInteractActive)
-        //     {
-        //         input.PlayerInteraction.Enable();
-        //     }
-        //     else
-        //     {
-        //         input.PlayerInteraction.Disable();
-        //     }
-        // }
-        //
-        // private void RefreshCombatInputState()
-        // {
-        //     var isCombatActive = _combatBlockers.Count == 0;
-        //     if (isCombatActive)
-        //     {
-        //         input.PlayerCombat.Enable();
-        //     }
-        //     else
-        //     {
-        //         input.PlayerCombat.Disable();
-        //     }
-        // }
-        //
+        public InputActions Input { get; private set; }
+        
+        private readonly HashSet<object> _movementBlockers = new HashSet<object>();
+        private readonly HashSet<object> _combatBlockers = new HashSet<object>();
+        private readonly HashSet<object> _uiBlockers = new HashSet<object>();
+        
+        public InputService()
+        {
+            Input = new InputActions();
+            Input.Enable();
+        }
+        
+        public void AddMovementBlocker(object obj)
+        {
+            if (!_movementBlockers.Add(obj))
+                return;
+            RefreshInputState();
+        }
+        
+        public void RemoveMovementBlocker(object obj)
+        {
+            if (!_movementBlockers.Contains(obj))
+                return;
+            _movementBlockers.Remove(obj);
+            RefreshInputState();
+        }
+        
+        public void AddUIBlocker(object obj)
+        {
+            if (_uiBlockers.Contains(obj))
+                return;
+            _uiBlockers.Add(obj);
+            RefreshUIState();
+        }
+
+        public void RemoveUIBlocker(object obj)
+        {
+            if (!_uiBlockers.Contains(obj))
+                return;
+            _uiBlockers.Remove(obj);
+            RefreshUIState();
+        }
+
+        public void AddCombatBlocker(object obj)
+        {
+            if (_combatBlockers.Contains(obj))
+                return;
+            _combatBlockers.Add(obj);
+            RefreshCombatInputState();
+        }
+
+        public void RemoveCombatBlocker(object obj)
+        {
+            if (!_combatBlockers.Contains(obj))
+                return;
+            _combatBlockers.Remove(obj);
+            RefreshCombatInputState();
+        }
+
+        private void RefreshUIState()
+        {
+            if (_uiBlockers.Count <= 0)
+            {
+                Input.UI.Enable();
+            }
+            else
+            {
+                Input.UI.Disable();
+            }
+        }
+
+        private void RefreshInputState()
+        {
+            if (_movementBlockers.Count <= 0)
+            {
+                Input.Movement.Enable();
+            }
+            else
+            {
+                Input.Movement.Disable();
+            }
+        }
+        
+        private void RefreshCombatInputState()
+        {
+            if (_combatBlockers.Count <= 0)
+            {
+                Input.Combat.Enable();
+            }
+            else
+            {
+                Input.Combat.Disable();
+            }
+        }
+        
         // public void AddCursorFullRequirements(object obj, CancellationToken destroyToken = default)
         // {
         //     if (destroyToken != default)
@@ -216,13 +161,6 @@ namespace App.Common.Input.Runtime
         //         : CursorLockMode.Locked;
         //
         //     Cursor.visible = _cursorVisibilityRequiredObjects.Count > 0;
-        // }
-        //
-        // public event System.Action OnPausePressed;
-        //
-        // private void OnInputPause(InputAction.CallbackContext context)
-        // {
-        //     OnPausePressed?.Invoke();
         // }
     }
 }

@@ -1,10 +1,10 @@
 using System;
 using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime;
-using App.Game.Modules.Door.Runtime.Config;
-using App.Game.Modules.Door.Runtime.Data;
+using App.Game.Modules.Doors.Runtime.Config;
+using App.Game.Modules.Doors.Runtime.Data;
 
-namespace App.Game.Modules.Door.Runtime
+namespace App.Game.Modules.Doors.Runtime
 {
     public class DoorModule
     {

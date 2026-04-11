@@ -32,6 +32,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fc0828a63c74609b3ab768cd4e0a04f
+    m_Address: EntitiesConfig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9801062e508d4254aa9bbd365649d0bc
     m_Address: TileView
     m_ReadOnly: 0

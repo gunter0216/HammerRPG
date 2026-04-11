@@ -1,4 +1,5 @@
 using App.Common.FSM.External;
+using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Data;
 using App.Common.ModuleItem.Runtime.Fabric.Interfaces;
 using App.Core.Startups.External;
@@ -13,8 +14,10 @@ namespace App.Common.ModuleItem.External
         public override void Configuration()
         {
             BindSingle<ModuleItemsManager>();
+            BindSingle<ModuleItemsConfigLoader>();
 
             RegisterFSM<ModuleItemsManager>(FSMStage.CoreInitStage, StageOrders.ModuleItemsManager);
+            RegisterFSM<ModuleItemsConfigLoader>(FSMStage.CoreInitStage, StageOrders.ModuleItemsConfigLoader);
         }
 
         public override void OnResolved()

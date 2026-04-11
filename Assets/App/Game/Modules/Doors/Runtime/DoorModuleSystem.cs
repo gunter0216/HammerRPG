@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Modules.Door.Runtime.Config;
-using App.Game.Modules.Door.Runtime.Data;
+using App.Game.Modules.Doors.Runtime.Config;
+using App.Game.Modules.Doors.Runtime.Data;
 
-namespace App.Game.Modules.Door.Runtime
+namespace App.Game.Modules.Doors.Runtime
 {
     public class DoorModuleSystem : IModuleSystem
     {
@@ -51,6 +51,11 @@ namespace App.Game.Modules.Door.Runtime
         public void OnItemDestroyed(IModuleItem moduleItem)
         {
             _modules.Remove(moduleItem.ReferenceSelf);
+        }
+
+        public ModuleIndex SortIndex()
+        {
+            return ModuleIndex.Door;
         }
     }
 }

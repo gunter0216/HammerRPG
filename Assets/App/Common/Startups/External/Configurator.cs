@@ -35,7 +35,7 @@ namespace App.Core.Startups.External
 
         public abstract void Configuration();
 
-        protected void RegisterUpdate<T>(UpdateStage stage) where T : class, IRunSystem
+        protected void RegisterUpdate<T>(UpdateStage stage) where T : class, IUpdateSystem
         {
             UpdateRegistrar.Register<T>(stage);
         }

@@ -8,7 +8,7 @@ using Leopotam.EcsLite;
 
 namespace App.Game.Player.External
 {
-    public class AttackSystem : IInitSystem, IRunSystem
+    public class AttackSystem : IInitSystem, IUpdateSystem
     {
         private readonly IEcsEventManager m_EcsEventManager;
         private readonly IWorldManager m_WorldManager;
@@ -35,8 +35,9 @@ namespace App.Game.Player.External
             m_AttackEventFilter = m_EcsEventManager.GetFilter<AttackEvent>();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
+            return;
             foreach (var i in m_AttackEventFilter)
             {
                 ref var attackEvent = ref m_AttackEventPool.Get(i);

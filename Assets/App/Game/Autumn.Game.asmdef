@@ -1,6 +1,7 @@
 {
   "name": "Autumn.Game",
   "references": [
+    "Unity.InputSystem",
     "Autumn.Inventory",
     "Autumn.AssetSystem",
     "Autumn.Core",
@@ -49,6 +50,7 @@
     "Autumn.Modules.Race",
     "Autumn.Modules.Sprite",
     "Autumn.Modules.Stats",
-    "Autumn.Modules.TilePosition"
+    "Autumn.Modules.TilePosition",
+    "Autumn.Modules.Transform"
   ]
 }

@@ -27,7 +27,7 @@ namespace App.Common.ApplicationQuit.External
         {
             if (m_DataManager != null)
             {
-                m_DataManager.SaveProgress();
+                // m_DataManager.SaveProgress();
             }
         }
 
@@ -35,7 +35,7 @@ namespace App.Common.ApplicationQuit.External
         {
             if (!hasFocus)
             {
-                SaveProgress();
+                // SaveProgress();
             }
         }
 
@@ -43,7 +43,7 @@ namespace App.Common.ApplicationQuit.External
 
         private void OnApplicationQuit()
         {
-            SaveProgress();
+            // SaveProgress();
         }
 #endif
         public void Dispose()

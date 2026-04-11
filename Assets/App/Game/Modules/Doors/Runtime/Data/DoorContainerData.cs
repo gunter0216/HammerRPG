@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using App.Common.DataContainer.Runtime.Data;
 using Newtonsoft.Json;
 
-namespace App.Game.Modules.Door.Runtime.Data
+namespace App.Game.Modules.Doors.Runtime.Data
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]

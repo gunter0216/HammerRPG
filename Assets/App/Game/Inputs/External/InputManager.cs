@@ -6,7 +6,7 @@ using Input = UnityEngine.Input;
 
 namespace App.Game.Inputs.External
 {
-    public class InputManager : IRunSystem, IInitSystem, IInputManager
+    public class InputManager : IUpdateSystem, IInitSystem, IInputManager
     {
         private readonly IEcsEventManager m_EventManager;
         
@@ -24,7 +24,7 @@ namespace App.Game.Inputs.External
             m_MousePressedEventPool = m_EventManager.GetPool<MousePressedEvent>();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             m_AxisRawEventPool.Trigger(new AxisRawEvent(
                 Input.GetAxisRaw("Horizontal"), 

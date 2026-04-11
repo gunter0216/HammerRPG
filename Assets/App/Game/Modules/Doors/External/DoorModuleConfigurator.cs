@@ -1,11 +1,11 @@
 using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
-using App.Game.Modules.Door.Runtime;
-using App.Game.Modules.Door.Runtime.Config;
-using App.Game.Modules.Door.Runtime.Data;
+using App.Game.Modules.Doors.Runtime;
+using App.Game.Modules.Doors.Runtime.Config;
+using App.Game.Modules.Doors.Runtime.Data;
 
-namespace App.Game.Modules.Door.External
+namespace App.Game.Modules.Doors.External
 {
     [Configurator(DIContext.CoreContext)]
     public class DoorModuleConfigurator : Configurator

@@ -1,4 +1,4 @@
-namespace App.Game.Modules.Door.Runtime
+namespace App.Game.Modules.Doors.Runtime
 {
     public enum DoorState
     {

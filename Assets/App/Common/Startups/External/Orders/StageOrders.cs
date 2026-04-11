@@ -39,6 +39,7 @@
         Container = 0,
         DungeonCreator = 0,
         DungeonController = 100,
-        PlayerController = 200
+        PlayerController = 200,
+        ModuleItemsConfigLoader = -10_000
     }
 }

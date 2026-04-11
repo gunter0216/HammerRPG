@@ -2,7 +2,7 @@
 
 namespace App.Common.ModuleItem.Runtime.Fabric.Interfaces
 {
-    public interface ICreateModuleItemHandler
+    public interface ICreateModuleItemHandler : ISortIndex
     {
         Optional<IModuleItem> OnItemCreated(IModuleItem moduleItem);
     }
