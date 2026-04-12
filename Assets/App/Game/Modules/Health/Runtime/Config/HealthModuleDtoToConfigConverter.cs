@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
+using Newtonsoft.Json.Linq;
 
 namespace App.Game.Modules.Health.Runtime.Config
 {
@@ -8,9 +9,9 @@ namespace App.Game.Modules.Health.Runtime.Config
     {
         private const string _moduleKey = "health";
         
-        public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
+        public Optional<IModuleConfig> Convert(JObject module)
         {
-            var health = module["health"];
+            var health = module.Value<string>("health");
             var config = new HealthModuleConfig(health);
             
             return Optional<IModuleConfig>.Success(config);

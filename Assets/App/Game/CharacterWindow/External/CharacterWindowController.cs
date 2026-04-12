@@ -5,6 +5,7 @@ using App.Common.Windows.External;
 using App.Common.Windows.Runtime;
 using App.Game.Canvases.External;
 using App.Game.CharacterWindow.External.Controllers;
+using App.Game.Player.External;
 
 namespace App.Game.CharacterWindow.External
 {
@@ -13,6 +14,7 @@ namespace App.Game.CharacterWindow.External
         private const string _windowAssetKey = "CharacterWindow";
         
         private readonly IItemSpriteLoader _spriteLoader;
+        private readonly PlayerController _playerController;
 
         private MainInfoController _infoController;
         private StatsInfoController _statsInfoController;
@@ -21,9 +23,11 @@ namespace App.Game.CharacterWindow.External
             IWindowManager windowManager,
             IAssetManager assetManager,
             PopupCanvas canvas,
-            IItemSpriteLoader spriteLoader) : base(windowManager, assetManager, canvas)
+            IItemSpriteLoader spriteLoader, 
+            PlayerController playerController) : base(windowManager, assetManager, canvas)
         {
             _spriteLoader = spriteLoader;
+            _playerController = playerController;
         }
 
         protected override void OnInitWindow()
@@ -32,7 +36,7 @@ namespace App.Game.CharacterWindow.External
             
             _window.SetCloseButtonClickCallback(OnCloseButtonClick);
 
-            _infoController = new MainInfoController(_window);
+            _infoController = new MainInfoController(_window, _playerController);
             _statsInfoController = new StatsInfoController(_window);
             _infoController.Init();
             _statsInfoController.Init();

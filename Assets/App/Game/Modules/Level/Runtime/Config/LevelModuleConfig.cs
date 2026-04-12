@@ -4,11 +4,11 @@ namespace App.Game.Modules.Level.Runtime.Config
 {
     public class LevelModuleConfig : IModuleConfig
     {
-        private readonly string _startLevel;
+        private readonly int _startLevel;
 
-        public string StartLevel => _startLevel;
+        public int StartLevel => _startLevel;
 
-        public LevelModuleConfig(string startLevel)
+        public LevelModuleConfig(int startLevel)
         {
             _startLevel = startLevel;
         }

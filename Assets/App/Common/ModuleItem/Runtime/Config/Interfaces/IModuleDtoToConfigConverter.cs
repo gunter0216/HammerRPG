@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using App.Common.Utilities.Utility.Runtime;
+﻿using App.Common.Utilities.Utility.Runtime;
+using Newtonsoft.Json.Linq;
 
 namespace App.Common.ModuleItem.Runtime.Config.Interfaces
 {
     public interface IModuleDtoToConfigConverter
     {
-        Optional<IModuleConfig> Convert(Dictionary<string, string> module);
+        Optional<IModuleConfig> Convert(JObject module);
         string GetModuleKey();
     }
 }

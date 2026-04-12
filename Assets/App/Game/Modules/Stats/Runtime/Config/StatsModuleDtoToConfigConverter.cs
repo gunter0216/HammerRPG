@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
+using Newtonsoft.Json.Linq;
 
 namespace App.Game.Modules.Stats.Runtime.Config
 {
@@ -8,11 +9,11 @@ namespace App.Game.Modules.Stats.Runtime.Config
     {
         private const string _moduleKey = "stats";
         
-        public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
+        public Optional<IModuleConfig> Convert(JObject module)
         {
-            var strength = module["strength"];
-            var agility = module["agility"];
-            var intelligence = module["intelligence"];
+            var strength = module.Value<int>("strength");
+            var agility = module.Value<int>("agility");
+            var intelligence = module.Value<int>("intelligence");
             var config = new StatsModuleConfig(
                 strength,
                 agility,

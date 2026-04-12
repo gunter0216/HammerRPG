@@ -55,7 +55,7 @@ namespace App.Common.ModuleItem.Runtime.Config
 
             foreach (var moduleDto in itemDto.Modules)
             {
-                var moduleKey = moduleDto[ModuleKey];
+                var moduleKey = moduleDto.Value<string>(ModuleKey);
                 var content = moduleDto;
                 if (m_ModuleConverters.TryGetValue(moduleKey, out var converter))
                 {

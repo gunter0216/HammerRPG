@@ -5,6 +5,7 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Dungeon.DungeonCore.Runtime;
 using App.Game.Modules.Move.Runtime;
+using App.Game.Modules.Stats.Runtime.Data;
 using App.Game.Player.External.View;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,6 +27,7 @@ namespace App.Game.Player.External
         private PlayerMoveController _playerMoveController;
 
         public EntityView PlayerView => _view;
+        public IModuleItem Player => _player;
 
         public PlayerController(
             IDungeonController dungeonController, 
@@ -54,6 +56,7 @@ namespace App.Game.Player.External
             CreateView();
             PlacePlayerOnStartRoom();
             InitMove();
+            InitStats();
         }
 
         private void CreateView()
@@ -85,9 +88,18 @@ namespace App.Game.Player.External
             _playerMoveController = new PlayerMoveController(
                 _moveModuleSystem, 
                 _inputService, 
-                _player,
+                Player,
                 PlayerView);
             _playerMoveController.Init();
+        }
+
+        private void InitStats()
+        {
+            if (!_player.TryGetDataModule<StatsModuleData>(out var statsModuleData))
+            {
+                statsModuleData = new StatsModuleData();
+                _player.AddDataModule(statsModuleData);
+            }
         }
 
         public void OnUpdate()

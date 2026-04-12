@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
+using Newtonsoft.Json.Linq;
 
 namespace App.Game.Modules.Sprite.Runtime
 {
@@ -8,9 +9,9 @@ namespace App.Game.Modules.Sprite.Runtime
     {
         private const string m_ModuleKey = "icon";
         
-        public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
+        public Optional<IModuleConfig> Convert(JObject module)
         {
-            var iconKey = module["icon_key"];
+            var iconKey = module.Value<string>("icon_key");
             var config = new SpriteModuleConfig(iconKey);
             
             return Optional<IModuleConfig>.Success(config);

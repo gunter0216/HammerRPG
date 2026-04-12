@@ -17,8 +17,8 @@
         },
         {
           "module": "stats",
-          "strength": 1,
-          "agility": 1,
+          "strength": 3,
+          "agility": 2,
           "intelligence": 1
         },
         {

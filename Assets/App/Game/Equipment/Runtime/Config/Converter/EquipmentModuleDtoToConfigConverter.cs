@@ -2,6 +2,7 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Equipment.Runtime.Config.Model;
+using Newtonsoft.Json.Linq;
 
 namespace App.Game.Equipment.Runtime.Config.Converter
 {
@@ -9,9 +10,9 @@ namespace App.Game.Equipment.Runtime.Config.Converter
     {
         private const string m_ModuleKey = "equipment";
         
-        public Optional<IModuleConfig> Convert(Dictionary<string, string> module)
+        public Optional<IModuleConfig> Convert(JObject module)
         {
-            var type = module["type"];
+            var type = module.Value<string>("type");
             var config = new EquipmentModuleConfig(type);
             
             return Optional<IModuleConfig>.Success(config);
