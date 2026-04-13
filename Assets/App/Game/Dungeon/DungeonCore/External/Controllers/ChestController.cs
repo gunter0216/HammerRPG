@@ -49,10 +49,10 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             spriteRenderer.drawMode = SpriteDrawMode.Simple;
             spriteRenderer.sortingOrder = 3;
             
-            var chestView = tileView.AddComponent<ChestView>();
-            chestView.AddClickListener(OnButtonClick);
-            
             var collider = tileView.AddComponent<BoxCollider2D>();
+            
+            var chestView = tileView.AddComponent<SpriteInteractionHandler>();
+            chestView.AddClickListener(OnButtonClick);
         }
 
         private void OnButtonClick()

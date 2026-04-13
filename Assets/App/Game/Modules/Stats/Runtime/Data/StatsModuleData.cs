@@ -9,32 +9,32 @@ namespace App.Game.Modules.Stats.Runtime.Data
     public class StatsModuleData : IModuleData
     {
         [JsonProperty("strength")] 
-        private string _strength;
+        private int _strength;
         
         [JsonProperty("agility")] 
-        private string _agility;
+        private int _agility;
         
         [JsonProperty("intelligence")] 
-        private string _intelligence;
+        private int _intelligence;
 
         public StatsModuleData()
         {
             
         }
 
-        public string Strength
+        public int Strength
         {
             get => _strength;
             set => _strength = value;
         }
 
-        public string Agility
+        public int Agility
         {
             get => _agility;
             set => _agility = value;
         }
 
-        public string Intelligence
+        public int Intelligence
         {
             get => _intelligence;
             set => _intelligence = value;

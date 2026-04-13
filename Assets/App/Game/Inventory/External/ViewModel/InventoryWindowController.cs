@@ -13,16 +13,13 @@ using App.Game.Inventory.Runtime.Item;
 
 namespace App.Game.Inventory.External.ViewModel
 {
-    public class InventoryWindowController : IWindowController, IDisposable
+    public class InventoryWindowController : BaseWindowController<InventoryWindow>, IDisposable
     {
-        private readonly IWindowManager _windowManager;
-        private readonly IAssetManager _assetManager;
-        private readonly ICanvas _canvas;
+        public const string WindowKey = "InventoryWindow";
+        
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly InventoryService _service;
 
-        private InventoryWindow _window;
-        
         private InventorySlotsController _slotsController;
 
         public InventoryWindowController(
@@ -30,65 +27,28 @@ namespace App.Game.Inventory.External.ViewModel
             IAssetManager assetManager,
             ICanvas canvas,
             IItemSpriteLoader spriteLoader,
-            InventoryService service)
+            InventoryService service) : base(windowManager, assetManager, canvas)
         {
-            _windowManager = windowManager;
-            _assetManager = assetManager;
-            _canvas = canvas;
             _spriteLoader = spriteLoader;
             _service = service;
         }
 
-        public void Open()
+        protected override void OnInitWindow()
         {
-            if (_window == null)
-            {
-                if (!CreateWindow())
-                {
-                    HLogger.LogError("Failed to create inventory window.");
-                    return;
-                }
-            }
-
-            _windowManager.Open(GetName());
-            _slotsController.OnWindowOpened();
-        }
-
-        public void Close()
-        {
-            _windowManager.Close(GetName());
-            _slotsController.OnWindowClosed();
-        }
-        
-        public bool IsOpen()
-        {
-            return _window != null && _window.IsActive();
-        }
-        
-        public bool CreateWindow()
-        {
-            var windowCreator = new InventoryWindowCreator(_assetManager, _canvas);
-            var window = windowCreator.Create();
-            if (!window.HasValue)
-            {
-                return false;
-            }
-
-            _window = window.Value;
-            SetActive(false);
-            InitWindow();
+            base.OnInitWindow();
             
-            return true;
-        }
-
-        private void InitWindow()
-        {
-            _windowManager.Registry(this, new WindowConfig());
             InitSlots();
             
             _window.SetCloseButtonClickCallback(OnCloseButtonClick);
         }
-        
+
+        protected override void OnOpened()
+        {
+            base.OnOpened();
+            
+            _slotsController.OnWindowOpened();
+        }
+
         private void OnCloseButtonClick()
         {
             Close();
@@ -114,12 +74,12 @@ namespace App.Game.Inventory.External.ViewModel
             _slotsController.UpdateSlot(item);
         }
 
-        public void SetActive(bool status)
+        protected override string GetWindowAssetKey()
         {
-            _window.SetActive(status);
+            return WindowKey;
         }
 
-        public WindowNames GetName()
+        public override WindowNames GetName()
         {
             return WindowNames.Inventory;
         }

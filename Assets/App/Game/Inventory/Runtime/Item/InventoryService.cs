@@ -75,8 +75,6 @@ namespace App.Game.Inventory.Runtime.Item
             _items[index] = item;
             _dataService.AddItem(data);
             
-            HLogger.LogError($"Add item {moduleItem.Id} {moduleItem.ReferenceSelf.Index} {moduleItem.ReferenceSelf.Key}");
-
             return Optional<InventoryItem>.Success(item);
         }
 

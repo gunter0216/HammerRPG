@@ -9,14 +9,14 @@ namespace App.Game.Modules.Level.Runtime.Data
     public class LevelModuleData : IModuleData
     {
         [JsonProperty("level")] 
-        private string _level;
+        private int _level;
 
         public LevelModuleData()
         {
             
         }
 
-        public string Level
+        public int Level
         {
             get => _level;
             set => _level = value;

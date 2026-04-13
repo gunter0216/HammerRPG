@@ -16,7 +16,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly Transform _root;
         private readonly Door _door;
         
-        private ChestView _chestView;
+        private SpriteInteractionHandler _spriteInteractionHandler;
         private SpriteRenderer _spriteRenderer;
         private BoxCollider2D _collider;
 
@@ -62,8 +62,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _collider = tileView.AddComponent<BoxCollider2D>();
             _collider.enabled = doorModule.IsClosed;
             
-            _chestView = tileView.AddComponent<ChestView>();
-            _chestView.AddClickListener(OnButtonClick);
+            _spriteInteractionHandler = tileView.AddComponent<SpriteInteractionHandler>();
+            _spriteInteractionHandler.AddClickListener(OnButtonClick);
         }
 
         private void OnButtonClick()

@@ -12,6 +12,7 @@ namespace App.Game.CharacterWindow.External.View
         [Space]
         [SerializeField] private Image _experienceImage;
         [SerializeField] private TMP_Text _experienceText;
+        [SerializeField] private TMP_Text _levelText;
         [Space]
         [SerializeField] private MainStatView _strengthStat;
         [SerializeField] private MainStatView _agilityStat;
@@ -62,6 +63,11 @@ namespace App.Game.CharacterWindow.External.View
         public bool IsActive()
         {
             return gameObject.activeSelf;
+        }
+
+        public void SetLevel(int level)
+        {
+            _levelText.text = level.ToString();
         }
         
         public void SetCloseButtonClickCallback(UnityEngine.Events.UnityAction callback)

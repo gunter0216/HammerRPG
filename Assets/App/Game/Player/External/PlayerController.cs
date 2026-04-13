@@ -4,7 +4,16 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Dungeon.DungeonCore.Runtime;
+using App.Game.Modules.Experience.Runtime.Config;
+using App.Game.Modules.Experience.Runtime.Data;
+using App.Game.Modules.Level.Runtime.Config;
+using App.Game.Modules.Level.Runtime.Data;
 using App.Game.Modules.Move.Runtime;
+using App.Game.Modules.Name.Runtime.Config;
+using App.Game.Modules.Name.Runtime.Data;
+using App.Game.Modules.Race.Runtime.Config;
+using App.Game.Modules.Race.Runtime.Data;
+using App.Game.Modules.Stats.Runtime.Config;
 using App.Game.Modules.Stats.Runtime.Data;
 using App.Game.Player.External.View;
 using UnityEngine;
@@ -27,6 +36,7 @@ namespace App.Game.Player.External
         private PlayerMoveController _playerMoveController;
 
         public EntityView PlayerView => _view;
+
         public IModuleItem Player => _player;
 
         public PlayerController(
@@ -57,6 +67,10 @@ namespace App.Game.Player.External
             PlacePlayerOnStartRoom();
             InitMove();
             InitStats();
+            InitName();
+            InitLevel();
+            InitExperience();
+            InitRace();
         }
 
         private void CreateView()
@@ -97,8 +111,98 @@ namespace App.Game.Player.External
         {
             if (!_player.TryGetDataModule<StatsModuleData>(out var statsModuleData))
             {
-                statsModuleData = new StatsModuleData();
-                _player.AddDataModule(statsModuleData);
+                if (_player.TryGetConfigModule<StatsModuleConfig>(out var config))
+                {
+                    statsModuleData = new StatsModuleData()
+                    {
+                        Agility = config.Agility,
+                        Strength = config.Strength,
+                        Intelligence = config.Intelligence
+                    };
+                    
+                    _player.AddDataModule(statsModuleData);
+                }
+                else
+                {
+                    HLogger.LogError("StatsModuleConfig not found.");   
+                }
+            }
+        }
+
+        private void InitName()
+        {
+            if (!_player.TryGetDataModule<NameModuleData>(out var data))
+            {
+                if (_player.TryGetConfigModule<NameModuleConfig>(out var config))
+                {
+                    data = new NameModuleData()
+                    {
+                        Name = config.Name,
+                    };
+                    
+                    _player.AddDataModule(data);
+                }
+                else
+                {
+                    HLogger.LogError("StatsModuleConfig not found.");   
+                }
+            }
+        }
+
+        private void InitExperience()
+        {
+            if (!_player.TryGetDataModule<ExperienceModuleData>(out var data))
+            {
+                if (_player.TryGetConfigModule<ExperienceModuleConfig>(out var config))
+                {
+                    data = new ExperienceModuleData();
+                    
+                    _player.AddDataModule(data);
+                }
+                else
+                {
+                    HLogger.LogError("StatsModuleConfig not found.");   
+                }
+            }
+        }
+
+        private void InitLevel()
+        {
+            if (!_player.TryGetDataModule<LevelModuleData>(out var data))
+            {
+                if (_player.TryGetConfigModule<LevelModuleConfig>(out var config))
+                {
+                    data = new LevelModuleData()
+                    {
+                        Level = config.StartLevel,
+                    };
+                    
+                    _player.AddDataModule(data);
+                }
+                else
+                {
+                    HLogger.LogError("StatsModuleConfig not found.");   
+                }
+            }
+        }
+
+        private void InitRace()
+        {
+            if (!_player.TryGetDataModule<RaceModuleData>(out var data))
+            {
+                if (_player.TryGetConfigModule<RaceModuleConfig>(out var config))
+                {
+                    data = new RaceModuleData()
+                    {
+                        Race = config.Race,
+                    };
+                    
+                    _player.AddDataModule(data);
+                }
+                else
+                {
+                    HLogger.LogError("StatsModuleConfig not found.");   
+                }
             }
         }
 

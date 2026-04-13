@@ -127,6 +127,7 @@ namespace App.Game.Inventory.External.ViewModel.Slots
 
         private void UpdateSlot(ItemSlotController slot, IModuleItem item)
         {
+            slot.Clear();
             Sprite sprite = null;
             if (item != null)
             {
@@ -134,10 +135,6 @@ namespace App.Game.Inventory.External.ViewModel.Slots
             }
 
             slot.SetItem(item, sprite);
-        }
-
-        public void OnWindowClosed()
-        {
         }
 
         private void HideAllItems()
