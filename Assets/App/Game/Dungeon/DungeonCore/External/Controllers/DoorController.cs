@@ -63,7 +63,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _collider.enabled = doorModule.IsClosed;
             
             _spriteInteractionHandler = tileView.AddComponent<SpriteInteractionHandler>();
-            _spriteInteractionHandler.AddClickListener(OnButtonClick);
+            _spriteInteractionHandler.SetClickListener(OnButtonClick);
         }
 
         private void OnButtonClick()

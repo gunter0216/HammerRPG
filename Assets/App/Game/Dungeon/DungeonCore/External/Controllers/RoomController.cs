@@ -4,6 +4,7 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Game.Containers.ContainerWindow.Runtime;
 using App.Game.Dungeon.DungeonCore.Runtime.Services;
+using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly RoomService _service;
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly InventoryController _inventoryController;
+        private readonly IFollowIconController _followIconController;
         
         private GameObject _root;
         private List<DoorController> _doors;
@@ -26,13 +28,15 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             IItemSpriteLoader spriteLoader, 
             IContainerWindowController containerWindow, 
             InventoryController inventoryController, 
-            IModuleItemsManager moduleItemsManager)
+            IModuleItemsManager moduleItemsManager, 
+            IFollowIconController followIconController)
         {
             _service = service;
             _spriteLoader = spriteLoader;
             _containerWindow = containerWindow;
             _inventoryController = inventoryController;
             _moduleItemsManager = moduleItemsManager;
+            _followIconController = followIconController;
         }
 
         public void Initialize()
@@ -58,7 +62,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                     _spriteLoader,
                     chestRoot, 
                     chest,
-                    _containerWindow);
+                    _containerWindow,
+                    _followIconController);
                 chestController.Initialize();
                 _chest.Add(chestController);
             }

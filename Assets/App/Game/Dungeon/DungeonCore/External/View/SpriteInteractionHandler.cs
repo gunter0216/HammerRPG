@@ -9,11 +9,13 @@ namespace App.Game.Dungeon.DungeonCore.External.View
     public class SpriteInteractionHandler : MonoBehaviour,
         IPointerClickHandler,
         IPointerEnterHandler,
-        IPointerExitHandler
+        IPointerExitHandler,
+        IPointerMoveHandler
     {
         private event Action _clicked;
         private event Action _entered;
         private event Action _exited;
+        private event Action _move;
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -30,9 +32,24 @@ namespace App.Game.Dungeon.DungeonCore.External.View
             _exited?.Invoke();
         }
 
-        public void AddClickListener(Action onButtonClick)
+        public void OnPointerMove(PointerEventData eventData)
         {
-            _clicked = onButtonClick;
+            _move?.Invoke();
+        }
+
+        public void SetClickListener(Action action)
+        {
+            _clicked = action;
+        }
+
+        public void SetEnterListener(Action action)
+        {
+            _entered = action;
+        }
+
+        public void SetExitListener(Action action)
+        {
+            _exited = action;
         }
     }
 }

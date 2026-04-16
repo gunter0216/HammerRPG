@@ -35,7 +35,7 @@ namespace App.Game.Update.External
         {
             if (!m_Info.TryGetValue(type, out var order))
             {
-                HLogger.LogError($"Order not found for {type.Name}");
+                HLogger.LogError($"Update order not found for {type.Name}");
                 return Optional<int>.Fail();
             }
             

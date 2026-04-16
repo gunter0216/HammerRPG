@@ -4,6 +4,6 @@ namespace App.Game.Modules.Chests.Runtime
     {
         Open = 0,
         Closed = 1,
-        Empty = 2
+        Used = 2
     }
 }

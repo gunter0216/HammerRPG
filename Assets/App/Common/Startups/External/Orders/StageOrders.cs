@@ -40,6 +40,7 @@
         DungeonCreator = 0,
         DungeonController = 100,
         PlayerController = 200,
-        ModuleItemsConfigLoader = -10_000
+        ModuleItemsConfigLoader = -10_000,
+        FollowIcon = 0
     }
 }

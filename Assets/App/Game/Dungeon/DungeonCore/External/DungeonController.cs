@@ -9,6 +9,7 @@ using App.Game.Dungeon.DungeonCore.External.Controllers;
 using App.Game.Dungeon.DungeonCore.Runtime;
 using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.Dungeon.DungeonCreator.Runtime;
+using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
 
 namespace App.Game.Dungeon.DungeonCore.External
@@ -20,6 +21,7 @@ namespace App.Game.Dungeon.DungeonCore.External
         private readonly InventoryController _inventoryController;
         private readonly IDungeonCreator _dungeonCreator;
         private readonly IItemSpriteLoader _spriteLoader;
+        private readonly IFollowIconController _followIconController;
 
         private List<RoomController> _rooms;
         private DungeonService _service;
@@ -29,13 +31,15 @@ namespace App.Game.Dungeon.DungeonCore.External
             IItemSpriteLoader spriteLoader,
             IContainerWindowController containerWindow, 
             InventoryController inventoryController,
-            IModuleItemsManager moduleItemsManager)
+            IModuleItemsManager moduleItemsManager, 
+            IFollowIconController followIconController)
         {
             _dungeonCreator = dungeonCreator;
             _spriteLoader = spriteLoader;
             _containerWindow = containerWindow;
             _inventoryController = inventoryController;
             _moduleItemsManager = moduleItemsManager;
+            _followIconController = followIconController;
         }
 
         public void Init()
@@ -71,7 +75,8 @@ namespace App.Game.Dungeon.DungeonCore.External
                     _spriteLoader, 
                     _containerWindow, 
                     _inventoryController,
-                    _moduleItemsManager);
+                    _moduleItemsManager,
+                    _followIconController);
                 _rooms.Add(controller);
             }
 
