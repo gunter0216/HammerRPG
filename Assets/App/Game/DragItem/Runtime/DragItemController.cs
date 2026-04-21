@@ -1,5 +1,6 @@
 using System;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Events.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.Runtime;
@@ -15,7 +16,7 @@ namespace App.Game.DragItem.Runtime
     public class DragItemController : IInitSystem, IDisposable
     {
         private readonly IAssetManager m_AssetManager;
-        private readonly PopupCanvas m_PopupCanvas;
+        private readonly ICanvasController _canvasController;
         private readonly ISpriteLoader m_SpriteLoader;
         
         private ItemViewModel m_DragView;
@@ -24,10 +25,10 @@ namespace App.Game.DragItem.Runtime
         private IDisposable m_Disposable;
         private Camera m_Camera;
 
-        public DragItemController(IAssetManager assetManager, PopupCanvas popupCanvas, ISpriteLoader spriteLoader)
+        public DragItemController(IAssetManager assetManager, ICanvasController canvasController, ISpriteLoader spriteLoader)
         {
             m_AssetManager = assetManager;
-            m_PopupCanvas = popupCanvas;
+            _canvasController = canvasController;
             m_SpriteLoader = spriteLoader;
         }
 
@@ -40,16 +41,17 @@ namespace App.Game.DragItem.Runtime
             EventManager.Subscribe<ItemSlotClickEvent>(OnSlotClick);
             
             m_Disposable = Observable.EveryUpdate()
-                .Where(_ => m_DragView != null)
+                .Where(_ => m_DragView != null && m_DragView.IsActive())
                 .Subscribe(_ =>
                 {
-                    m_DragView.SetPosition(m_Camera.ScreenToWorldPoint(Input.mousePosition));
+                    // m_DragView.SetPosition(m_Camera.ScreenToWorldPoint(Input.mousePosition));
+                    m_DragView.SetPosition(Input.mousePosition);
                 });
         }
 
         private void CreateView()
         {
-            var creator = new DragItemViewCreator(m_AssetManager, m_PopupCanvas);
+            var creator = new DragItemViewCreator(m_AssetManager, _canvasController);
             var view = creator.Create();
             m_DragView = new ItemViewModel(view.Value, m_SpriteLoader);
             m_DragView.SetActive(false);

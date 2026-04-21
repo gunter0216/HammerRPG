@@ -9,17 +9,17 @@ namespace App.Game.Modules.Health.Runtime.Data
     public class HealthModuleData : IModuleData
     {
         [JsonProperty("health")] 
-        private int _health;
+        private float _health;
 
         public HealthModuleData()
         {
             
         }
 
-        public int Health
+        public float Health
         {
             get => _health;
-            set => _health = value;
+            internal set => _health = value;
         }
 
         public string GetModuleKey()

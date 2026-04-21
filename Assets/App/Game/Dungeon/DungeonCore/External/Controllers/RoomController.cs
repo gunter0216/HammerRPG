@@ -15,6 +15,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly IContainerWindowController _containerWindow;
         private readonly RoomService _service;
+        private readonly GameObject _dungeon;
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly InventoryController _inventoryController;
         private readonly IFollowIconController _followIconController;
@@ -24,14 +25,16 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private List<ChestController> _chest;
 
         public RoomController(
-            RoomService service, 
-            IItemSpriteLoader spriteLoader, 
-            IContainerWindowController containerWindow, 
-            InventoryController inventoryController, 
-            IModuleItemsManager moduleItemsManager, 
+            RoomService service,
+            GameObject dungeon,
+            IItemSpriteLoader spriteLoader,
+            IContainerWindowController containerWindow,
+            InventoryController inventoryController,
+            IModuleItemsManager moduleItemsManager,
             IFollowIconController followIconController)
         {
             _service = service;
+            _dungeon = dungeon;
             _spriteLoader = spriteLoader;
             _containerWindow = containerWindow;
             _inventoryController = inventoryController;
@@ -41,7 +44,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         public void Initialize()
         {
-            _root = new GameObject($"Room {_service.Room.Data.UID.ToString()}"); 
+            _root = new GameObject($"Room {_service.Room.Data.UID.ToString()}");
+            _root.transform.parent = _dungeon.transform;
             CreateFloors();
             CreateWalls();
             CreateDoors();

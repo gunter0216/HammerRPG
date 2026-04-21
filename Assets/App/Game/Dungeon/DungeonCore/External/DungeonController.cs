@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using App.Common.Algorithms.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.External;
@@ -11,6 +10,8 @@ using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.Dungeon.DungeonCreator.Runtime;
 using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
+using UnityEngine;
+using Vector2 = App.Common.Algorithms.Runtime.Vector2;
 
 namespace App.Game.Dungeon.DungeonCore.External
 {
@@ -67,11 +68,13 @@ namespace App.Game.Dungeon.DungeonCore.External
 
         private bool CreateControllers()
         {
+            var dungeon = new GameObject($"Dungeon"); 
             _rooms = new List<RoomController>(_service.Rooms.Count);
             foreach (var room in _service.Rooms)
             {
                 var controller = new RoomController(
                     room, 
+                    dungeon,
                     _spriteLoader, 
                     _containerWindow, 
                     _inventoryController,

@@ -1,4 +1,5 @@
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
@@ -13,16 +14,16 @@ namespace App.Common.Windows.Runtime
         
         protected readonly IWindowManager _windowManager;
         protected readonly IAssetManager _assetManager;
-        protected readonly ICanvas _canvas;
+        protected readonly ICanvasController _canvasController;
 
         protected BaseWindowController(
             IWindowManager windowManager,
             IAssetManager assetManager, 
-            ICanvas canvas)
+            ICanvasController canvasController)
         {
             _windowManager = windowManager;
             _assetManager = assetManager;
-            _canvas = canvas;
+            _canvasController = canvasController;
         }
 
         public void Open()
@@ -68,7 +69,7 @@ namespace App.Common.Windows.Runtime
         {
             var window = _assetManager.InstantiateSync<T>(
                 new StringKeyEvaluator(GetWindowAssetKey()),
-                _canvas.GetContent());
+                _canvasController.GetWindowCanvas().GetContent());
             return window;
         }
 

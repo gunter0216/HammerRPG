@@ -11,7 +11,7 @@ namespace App.Game.Modules.Health.Runtime.Config
         
         public Optional<IModuleConfig> Convert(JObject module)
         {
-            var health = module.Value<string>("health");
+            var health = module.Value<float>("health");
             var config = new HealthModuleConfig(health);
             
             return Optional<IModuleConfig>.Success(config);

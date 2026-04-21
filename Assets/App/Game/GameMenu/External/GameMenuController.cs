@@ -1,5 +1,6 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Data.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.SceneControllers.Runtime;
@@ -22,7 +23,7 @@ namespace App.Game.GameMenu.External
         private readonly StringKeyEvaluator m_GameMenuAssetKeyEvaluator = new(m_GameMenuAssetKey);
 
         private readonly IWindowManager _windowManager;
-        private readonly MainCanvas _mainCanvas;
+        private readonly ICanvasController _canvasController;
         private readonly IAssetManager _assetManager;
         private readonly IDataManager _dataManager;
         private readonly ISceneManager _sceneManager;
@@ -36,14 +37,14 @@ namespace App.Game.GameMenu.External
         private GameMenuView m_View;
 
         public GameMenuController(
-            MainCanvas mainCanvas, 
+            ICanvasController canvasController, 
             IAssetManager assetManager,
             IDataManager dataManager,
             ISceneManager sceneManager,
             IPauseController pauseController, 
             IWindowManager windowManager)
         {
-            _mainCanvas = mainCanvas;
+            _canvasController = canvasController;
             _assetManager = assetManager;
             _dataManager = dataManager;
             _sceneManager = sceneManager;
@@ -55,7 +56,7 @@ namespace App.Game.GameMenu.External
         {
             var view = _assetManager.InstantiateSync<GameMenuView>(
                 m_GameMenuAssetKeyEvaluator,
-                _mainCanvas.GetContent());
+                _canvasController.GetMenuCanvas().GetContent());
             if (!view.HasValue)
             {
                 HLogger.LogError("cant create GameSceneMenuView");

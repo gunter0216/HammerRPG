@@ -1,4 +1,5 @@
 ﻿using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.View;
@@ -9,20 +10,20 @@ namespace App.Game.Cheats.External.Services
     {
         public const string WindowKey = "CheatsWindow";
         
-        private readonly IAssetManager m_AssetManager;
-        private readonly ICanvas m_Canvas;
+        private readonly IAssetManager _assetManager;
+        private readonly ICanvasController _canvasController;
 
-        public CheatsWindowCreator(IAssetManager assetManager, ICanvas canvas)
+        public CheatsWindowCreator(IAssetManager assetManager, ICanvasController canvasController)
         {
-            m_AssetManager = assetManager;
-            m_Canvas = canvas;
+            _assetManager = assetManager;
+            _canvasController = canvasController;
         }
 
         public Optional<CheatsWindow> Create()
         {
-            var window = m_AssetManager.InstantiateSync<CheatsWindow>(
+            var window = _assetManager.InstantiateSync<CheatsWindow>(
                 new StringKeyEvaluator(WindowKey),
-                m_Canvas.GetContent());
+                _canvasController.GetMenuCanvas().GetContent());
             return window;
         }
     }

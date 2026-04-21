@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Configs.Runtime;
 using App.Common.Data.Runtime;
 using App.Common.DataContainer.Runtime;
@@ -28,7 +29,7 @@ namespace App.Game.Inventory.External
         private readonly IConfigLoader _configLoader;
         private readonly IWindowManager _windowManager;
         private readonly IAssetManager _assetManager;
-        private readonly PopupCanvas _popupCanvas;
+        private readonly ICanvasController _canvasController;
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly IModuleItemsManager _moduleItemsManager;
 
@@ -43,17 +44,17 @@ namespace App.Game.Inventory.External
             IConfigLoader configLoader,
             IWindowManager windowManager,
             IAssetManager assetManager,
-            PopupCanvas popupCanvas,
             IItemSpriteLoader spriteLoader,
-            IModuleItemsManager moduleItemsManager)
+            IModuleItemsManager moduleItemsManager,
+            ICanvasController canvasController)
         {
             _dataManager = dataManager;
             _configLoader = configLoader;
             _windowManager = windowManager;
             _assetManager = assetManager;
-            _popupCanvas = popupCanvas;
             _spriteLoader = spriteLoader;
             _moduleItemsManager = moduleItemsManager;
+            _canvasController = canvasController;
         }
 
         public void Init()
@@ -73,7 +74,7 @@ namespace App.Game.Inventory.External
             _inventoryWindowController = new InventoryWindowController(
                 _windowManager,
                 _assetManager,
-                _popupCanvas,
+                _canvasController,
                 _spriteLoader,
                 _service);
             _inventoryWindowController.CreateWindow();

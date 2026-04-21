@@ -1,4 +1,5 @@
 ﻿using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Configs.Runtime;
 using App.Common.Data.Runtime;
 using App.Common.ModuleItem.Runtime;
@@ -18,7 +19,7 @@ namespace App.Game.Equipment.External
     {
         private readonly IConfigLoader m_ConfigLoader;
         private readonly IDataManager m_DataManager;
-        private readonly PopupCanvas m_PopupCanvas;
+        private readonly ICanvasController _canvasController;
         private readonly IAssetManager m_AssetManager;
         private readonly ISpriteLoader m_SpriteLoader;
         private readonly IModuleItemsManager m_ModuleItemsManager;
@@ -30,14 +31,14 @@ namespace App.Game.Equipment.External
 
         public EquipmentController(
             IConfigLoader configLoader, 
-            PopupCanvas popupCanvas, 
+            ICanvasController canvasController, 
             IAssetManager assetManager, 
             IDataManager dataManager, 
             ISpriteLoader spriteLoader, 
             IModuleItemsManager moduleItemsManager)
         {
             m_ConfigLoader = configLoader;
-            m_PopupCanvas = popupCanvas;
+            _canvasController = canvasController;
             m_AssetManager = assetManager;
             m_DataManager = dataManager;
             m_SpriteLoader = spriteLoader;
@@ -75,7 +76,7 @@ namespace App.Game.Equipment.External
 
         private void InitWindow()
         {
-            var windowCreator = new EquipmentWindowCreator(m_AssetManager, m_PopupCanvas);
+            var windowCreator = new EquipmentWindowCreator(m_AssetManager, _canvasController);
             m_EquipmentWindowModel = new EquipmentWindowModel(windowCreator, m_SlotsController, m_SpriteLoader);
         }
 

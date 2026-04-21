@@ -74,5 +74,10 @@ namespace App.Game.DragItem.Runtime.Model
         {
             m_View.SetParent(parent);
         }
+
+        public bool IsActive()
+        {
+            return m_View.isActiveAndEnabled;
+        }
     }
 }

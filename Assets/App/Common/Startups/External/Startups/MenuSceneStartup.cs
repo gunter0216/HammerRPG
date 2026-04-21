@@ -10,16 +10,10 @@ namespace App.Core.Startups.External
 {
     public class MenuSceneStartup : MonoInstaller<MenuSceneStartup>
     {
-        [SerializeField] private MainCanvas m_MainCanvas;
-        [SerializeField] private PopupCanvas m_PopupCanvas;
-        
         public override void InstallBindings()
         {
             var sceneContext = GetComponent<SceneContext>();
             sceneContext.PostResolve += OnPostResolve;
-            
-            Container.BindInstance(m_MainCanvas);
-            Container.BindInstance(m_PopupCanvas);
 
             var configuratorsManager = Container.Resolve<ConfiguratorsManager>();
             configuratorsManager.RunConfigurator(DIContext.MenuContext, Container);

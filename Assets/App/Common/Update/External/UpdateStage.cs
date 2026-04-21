@@ -23,6 +23,7 @@ namespace App.Game.Update.External
         PopWindow = -100,
         CharacterOpenSystem = 0,
         PlayerController = 0,
-        FollowIcon = 0
+        FollowIcon = 0,
+        HUD = 0
     }
 }

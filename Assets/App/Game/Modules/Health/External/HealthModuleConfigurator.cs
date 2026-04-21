@@ -12,6 +12,7 @@ namespace App.Game.Modules.Health.External
     {
         public override void Configuration()
         {
+            BindSingle<HealthModuleSystem>();
         }
     }
     

@@ -1,5 +1,4 @@
 ﻿using App.Common.Utilities.Utility.Runtime;
-using App.Game.Equipment.Runtime;
 using App.Game.Inventory.Runtime;
 using UnityEngine;
 
@@ -7,28 +6,24 @@ namespace App.Game.Inventory.External
 {
     public class OpenInventorySystem : IUpdateSystem
     {
-        private readonly IInventoryController m_InventoryController;
-        private readonly IEquipmentController m_EquipmentController;
+        private readonly IInventoryController _inventoryController;
 
-        public OpenInventorySystem(IInventoryController inventoryController, IEquipmentController equipmentController)
+        public OpenInventorySystem(IInventoryController inventoryController)
         {
-            m_InventoryController = inventoryController;
-            m_EquipmentController = equipmentController;
+            _inventoryController = inventoryController;
         }
 
         public void OnUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.I))
+            if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
             {
-                if (m_InventoryController.IsOpen())
+                if (_inventoryController.IsOpen())
                 {
-                    m_InventoryController.CloseWindow();
-                    m_EquipmentController.CloseWindow();
+                    _inventoryController.CloseWindow();
                 }
                 else
                 {
-                    m_InventoryController.OpenWindow();   
-                    m_EquipmentController.OpenWindow();   
+                    _inventoryController.OpenWindow();   
                 }
             }
         }

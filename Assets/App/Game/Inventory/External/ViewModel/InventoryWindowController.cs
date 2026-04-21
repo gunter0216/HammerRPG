@@ -1,5 +1,6 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Common.SpriteLoaders.Runtime;
@@ -25,9 +26,9 @@ namespace App.Game.Inventory.External.ViewModel
         public InventoryWindowController(
             IWindowManager windowManager,
             IAssetManager assetManager,
-            ICanvas canvas,
+            ICanvasController canvasController,
             IItemSpriteLoader spriteLoader,
-            InventoryService service) : base(windowManager, assetManager, canvas)
+            InventoryService service) : base(windowManager, assetManager, canvasController)
         {
             _spriteLoader = spriteLoader;
             _service = service;

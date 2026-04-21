@@ -1,4 +1,5 @@
 ﻿using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
@@ -14,7 +15,7 @@ namespace App.Game.Cheats.External
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly InventoryController _inventoryController;
         private readonly ISpriteLoader _spriteLoader;
-        private readonly PopupCanvas _popupCanvas;
+        private readonly ICanvasController _canvasController;
         private readonly IAssetManager _assetManager;
 
         private CheatsWindowModel _cheatsWindowModel;
@@ -23,13 +24,13 @@ namespace App.Game.Cheats.External
             IModuleItemsManager moduleItemsManager, 
             InventoryController inventoryController,
             ISpriteLoader spriteLoader,
-            PopupCanvas popupCanvas,
+            ICanvasController canvasController,
             IAssetManager assetManager)
         {
             _moduleItemsManager = moduleItemsManager;
             _inventoryController = inventoryController;
             _spriteLoader = spriteLoader;
-            _popupCanvas = popupCanvas;
+            _canvasController = canvasController;
             _assetManager = assetManager;
         }
 
@@ -39,7 +40,7 @@ namespace App.Game.Cheats.External
 
             _cheatsWindowModel = new CheatsWindowModel(
                 _assetManager,
-                _popupCanvas,
+                _canvasController,
                 _spriteLoader,
                 _inventoryController,
                 configs.Value);

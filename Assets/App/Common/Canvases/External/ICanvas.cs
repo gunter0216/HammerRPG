@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace App.Game.Canvases.External
+namespace App.Common.Canvases.External
 {
     public interface ICanvas
     {

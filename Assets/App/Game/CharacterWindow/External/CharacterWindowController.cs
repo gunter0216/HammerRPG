@@ -1,5 +1,6 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.SpriteLoaders.External;
 using App.Common.Windows.External;
 using App.Common.Windows.Runtime;
@@ -22,9 +23,9 @@ namespace App.Game.CharacterWindow.External
         public CharacterWindowController(
             IWindowManager windowManager,
             IAssetManager assetManager,
-            PopupCanvas canvas,
+            ICanvasController canvasController,
             IItemSpriteLoader spriteLoader, 
-            PlayerController playerController) : base(windowManager, assetManager, canvas)
+            PlayerController playerController) : base(windowManager, assetManager, canvasController)
         {
             _spriteLoader = spriteLoader;
             _playerController = playerController;

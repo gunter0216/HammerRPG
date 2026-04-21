@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.SpriteLoaders.Runtime;
@@ -24,7 +25,7 @@ namespace App.Game.Cheats.External.ViewModel
         };
         
         private readonly IAssetManager m_AssetManager;
-        private readonly ICanvas m_Canvas;
+        private readonly ICanvasController _canvasController;
         private readonly ISpriteLoader m_SpriteLoader;
         private readonly IInventoryController m_InventoryController;
         private readonly IReadOnlyList<IModuleItemConfig> m_Configs;
@@ -36,13 +37,13 @@ namespace App.Game.Cheats.External.ViewModel
 
         public CheatsWindowModel(
             IAssetManager assetManager, 
-            ICanvas canvas, 
+            ICanvasController canvasController, 
             ISpriteLoader spriteLoader, 
             IInventoryController inventoryController,
             IReadOnlyList<IModuleItemConfig> configs)
         {
             m_AssetManager = assetManager;
-            m_Canvas = canvas;
+            _canvasController = canvasController;
             m_SpriteLoader = spriteLoader;
             m_Configs = configs;
             m_InventoryController = inventoryController;
@@ -74,7 +75,7 @@ namespace App.Game.Cheats.External.ViewModel
         
         private bool CreateWindow()
         {
-            var windowCreator = new CheatsWindowCreator(m_AssetManager, m_Canvas);
+            var windowCreator = new CheatsWindowCreator(m_AssetManager, _canvasController);
             var window = windowCreator.Create();
             if (!window.HasValue)
             {

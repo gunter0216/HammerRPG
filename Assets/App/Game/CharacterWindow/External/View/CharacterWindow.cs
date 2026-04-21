@@ -34,6 +34,8 @@ namespace App.Game.CharacterWindow.External.View
         public MainStatView AgilityStat => _agilityStat;
         public MainStatView IntelligenceStat => _intelligenceStat;
 
+        private float _experienceWidth = 0;
+        
         public void SetPersonIcon(Sprite icon)
         {
             _personIcon.sprite = icon;
@@ -51,8 +53,14 @@ namespace App.Game.CharacterWindow.External.View
         
         public void SetExperience(int currentValue, int maxValue)
         {
+            if (_experienceWidth == 0)
+            {
+                _experienceWidth = _experienceImage.rectTransform.rect.width;
+            }
+
+            var width = ((float)currentValue / maxValue) * _experienceWidth;
             _experienceText.text = $"{currentValue}/{maxValue}";
-            _experienceImage.fillAmount = (float)currentValue / maxValue;
+            _experienceImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
         
         public void SetActive(bool isActive)

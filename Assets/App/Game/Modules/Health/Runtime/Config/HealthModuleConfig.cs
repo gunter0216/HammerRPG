@@ -4,11 +4,11 @@ namespace App.Game.Modules.Health.Runtime.Config
 {
     public class HealthModuleConfig : IModuleConfig
     {
-        private readonly string _maxHealth;
+        private readonly float _maxHealth;
 
-        public string MaxHealth => _maxHealth;
+        public float MaxHealth => _maxHealth;
 
-        public HealthModuleConfig(string maxHealth)
+        public HealthModuleConfig(float maxHealth)
         {
             _maxHealth = maxHealth;
         }

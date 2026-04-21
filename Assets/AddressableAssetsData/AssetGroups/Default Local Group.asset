@@ -37,6 +37,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45d0d761049651747ae95efdabd36cf0
+    m_Address: BaseCanvas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9801062e508d4254aa9bbd365649d0bc
     m_Address: TileView
     m_ReadOnly: 0
@@ -54,6 +59,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4ff0cc7a24281f45ac8e4f4eaa37047
     m_Address: FollowIcon_Chest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc03c9976d5adb94698afae61eb91c88
+    m_Address: HUDView
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

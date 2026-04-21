@@ -7,6 +7,7 @@ namespace App.Common.ModuleItem.Runtime
         Container,
         Chest,
         Move,
-        Door
+        Door,
+        Health
     }
 }
