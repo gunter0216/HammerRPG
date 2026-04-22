@@ -51,6 +51,7 @@
     "Autumn.Modules.Sprite",
     "Autumn.Modules.Stats",
     "Autumn.Modules.TilePosition",
-    "Autumn.Modules.Transform"
+    "Autumn.Modules.Transform",
+    "Autumn.Modules.Fbx"
   ]
 }

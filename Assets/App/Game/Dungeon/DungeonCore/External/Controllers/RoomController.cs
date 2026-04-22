@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.External;
@@ -6,6 +7,7 @@ using App.Game.Containers.ContainerWindow.Runtime;
 using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
+using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
 
 namespace App.Game.Dungeon.DungeonCore.External.Controllers
@@ -19,6 +21,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly InventoryController _inventoryController;
         private readonly IFollowIconController _followIconController;
+        private readonly IAssetManager _assetManager;
         
         private GameObject _root;
         private List<DoorController> _doors;
@@ -31,7 +34,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             IContainerWindowController containerWindow,
             InventoryController inventoryController,
             IModuleItemsManager moduleItemsManager,
-            IFollowIconController followIconController)
+            IFollowIconController followIconController, 
+            IAssetManager assetManager)
         {
             _service = service;
             _dungeon = dungeon;
@@ -40,6 +44,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _inventoryController = inventoryController;
             _moduleItemsManager = moduleItemsManager;
             _followIconController = followIconController;
+            _assetManager = assetManager;
         }
 
         public void Initialize()
@@ -48,7 +53,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _root.transform.parent = _dungeon.transform;
             CreateFloors();
             CreateWalls();
-            CreateDoors();
+            // CreateDoors();
             CreateChest();
         }
 
@@ -63,11 +68,12 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             foreach (var chest in chests)
             {
                 var chestController = new ChestController(
-                    _spriteLoader,
+                    _assetManager,
                     chestRoot, 
                     chest,
                     _containerWindow,
-                    _followIconController);
+                    _followIconController,
+                    _moduleItemsManager);
                 chestController.Initialize();
                 _chest.Add(chestController);
             }
@@ -75,65 +81,80 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         private void CreateFloors()
         {
-            var sprite = _spriteLoader.LoadItemSprite("floor");
-            if (!sprite.HasValue)
+            var prefab = GetTilePrefab("floor");
+            if (prefab == null)
             {
-                HLogger.LogError("Cant get tile sprite");
                 return;
             }
-
+            
+            var root = new GameObject("Floors").transform;
+            root.parent = _root.transform;
+            
             var room = _service.Room;
-
             foreach (var floor in room.Data.Floors)
             {
+                var model = Object.Instantiate(prefab, root.transform);
+                
                 var worldPosition = room.LocalToWorld(floor.Position);
                 var positionX = worldPosition.X + floor.Width * 0.5f;
-                var positionY = worldPosition.Y + floor.Height * 0.5f;
-                CreateFloor(sprite.Value, positionX, positionY, floor.Width, floor.Height);
+                var positionZ = worldPosition.Y + floor.Height * 0.5f;
+                
+                model.transform.position = new Vector3(positionX, 0, positionZ);
+                model.transform.localScale = new Vector3(floor.Width, 1, floor.Height);
             }
-        }
-
-        private void CreateFloor(Sprite sprite, float positionX, float positionY, float width, float height)
-        {
-            var floor = new GameObject("Floor");
-            floor.transform.position = new Vector3(positionX, positionY, 1);
-            floor.transform.parent = _root.transform;
-            var spriteRenderer = floor.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = sprite;
-            spriteRenderer.drawMode = SpriteDrawMode.Tiled;
-            spriteRenderer.size = new UnityEngine.Vector2(width, height);
-            spriteRenderer.sortingOrder = 0;
         }
 
         private void CreateWalls()
         {
+            var prefab = GetTilePrefab("wall");
+            if (prefab == null)
+            {
+                return;
+            }
+            
             var room = _service.Room;
             var tiles = _service.Room.Tiles;
-            var wallsRoot = new GameObject("Walls").transform;
-            wallsRoot.parent = _root.transform;
+            
+            var root = new GameObject("Walls").transform;
+            root.parent = _root.transform;
+            
             foreach (var tile in tiles)
             {
-                var sprite = _spriteLoader.LoadItemSprite(tile.ModuleItem);
-                if (!sprite.HasValue)
-                {
-                    continue;
-                }
+                var model = Object.Instantiate(prefab, root.transform);
                 
                 var localPosition = tile.Data.Position;
-                var position = room.LocalToWorld(localPosition);
+                var worldPosition = room.LocalToWorld(localPosition);
+                var positionX = worldPosition.X + 0.5f;
+                var positionZ = worldPosition.Y + 0.5f;
                 
-                var tileView = new GameObject($"Tile {localPosition.X} {localPosition.Y}");
-                tileView.transform.position = new Vector3(position.X + 0.5f, position.Y + 0.5f, 1);
-                tileView.transform.parent = wallsRoot;
-                
-                var spriteRenderer = tileView.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = sprite.Value;
-                spriteRenderer.drawMode = SpriteDrawMode.Simple;
-                spriteRenderer.size = new UnityEngine.Vector2(1, 1);
-                spriteRenderer.sortingOrder = 1;
-
-                tileView.AddComponent<BoxCollider2D>();
+                model.transform.position = new Vector3(positionX, 1, positionZ);
+                model.transform.localScale = new Vector3(1, 1, 1);
             }
+        }
+
+        private GameObject GetTilePrefab(string item)
+        {
+            var config = _moduleItemsManager.GetConfig(item);
+            if (!config.HasValue)
+            {
+                HLogger.LogError($"{item} not found.");
+                return null;
+            }
+            
+            if (!config.Value.TryGetModule<FbxModuleConfig>(out var fbxModuleConfig))
+            {
+                HLogger.LogError($"FbxModuleConfig not found.");
+                return null;
+            }
+            
+            var prefab = _assetManager.LoadSync<GameObject>(fbxModuleConfig.AssetKey);
+            if (!prefab.HasValue)
+            {
+                HLogger.LogError($"Cant create view.");
+                return null;
+            }
+
+            return prefab.Value;
         }
 
         private void CreateDoors()

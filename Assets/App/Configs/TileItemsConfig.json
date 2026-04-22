@@ -4,15 +4,16 @@
       "id": "chest",
       "modules": [
         {
-          "module": "chest",
-          "close_icon_key": "CloseChest",
-          "open_icon_key": "OpenChest",
-          "empty_icon_key": "EmptyChest"
+          "module": "chest"
         },
         {
           "module": "container",
           "rows": 5,
           "cols": 7
+        },
+        {
+          "module": "fbx",
+          "asset_key": "ChestView"
         }
       ]
     },
@@ -20,8 +21,8 @@
       "id": "wall",
       "modules": [
         {
-          "module": "icon",
-          "icon_key": "BricksWall1"
+          "module": "fbx",
+          "asset_key": "WallView"
         }
       ]
     },
@@ -29,9 +30,11 @@
       "id": "door",
       "modules": [
         {
-          "module": "door",
-          "close_icon_key": "ClosedDoor",
-          "open_icon_key": "OpenedDoor"
+          "module": "door"
+        },
+        {
+          "module": "fbx",
+          "asset_key": "DoorView"
         }
       ]
     },
@@ -39,8 +42,8 @@
       "id": "floor",
       "modules": [
         {
-          "module": "icon",
-          "icon_key": "Floor1"
+          "module": "fbx",
+          "asset_key": "FloorView"
         }
       ]
     }

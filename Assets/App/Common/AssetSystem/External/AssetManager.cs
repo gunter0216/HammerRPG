@@ -19,7 +19,22 @@ namespace App.Common.AssetSystem.External
             var instanceAssetLoader = new InstanceAssetLoader(assetLoader, new SimpleDestroyStrategy());
             m_ContextInstanceAssetLoader = new ContextInstanceAssetLoader(instanceAssetLoader);
         }
-        
+
+        public Optional<T> InstantiateSync<T>(string key, Transform parent = null, Type context = null) where T : Object
+        {
+            return InstantiateSync<T>(new StringKeyEvaluator(key));
+        }
+
+        public Optional<T> LoadSync<T>(string key) where T : Object
+        {
+            return LoadSync<T>(new StringKeyEvaluator(key));
+        }
+
+        public void UnloadAsset(string key)
+        {
+            UnloadAsset(new StringKeyEvaluator(key));
+        }
+
         public Optional<T> InstantiateSync<T>(
             IKeyEvaluator key, 
             Transform parent = null,

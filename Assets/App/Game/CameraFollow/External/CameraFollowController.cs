@@ -8,18 +8,20 @@ namespace App.Game.CameraFollow.External
 {
     public class CameraFollowController : IInitSystem, IUpdateSystem
     {
+        private readonly CameraController _cameraController;
         private readonly PlayerController _playerController;
         
-        private Camera _camera;
+        private GameObject _camera;
 
-        public CameraFollowController(PlayerController playerController)
+        public CameraFollowController(PlayerController playerController, CameraController cameraController)
         {
             _playerController = playerController;
+            _cameraController = cameraController;
         }
 
         public void Init()
         {
-            _camera = Camera.main;
+            _camera = _cameraController.Camera;
         }
 
         public void OnUpdate()
@@ -27,7 +29,7 @@ namespace App.Game.CameraFollow.External
             var playerPosition = _playerController.PlayerView.Transform.position;
 
             _camera.transform.SetPositionX(playerPosition.x);
-            _camera.transform.SetPositionY(playerPosition.y);
+            _camera.transform.SetPositionZ(playerPosition.z);
         }
     }
 }

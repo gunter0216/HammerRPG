@@ -21,7 +21,6 @@ namespace App.Game.Modules.Chests.Runtime
             _config = config;
         }
 
-        public string IconKey => GetIconKey();
         public bool IsClosed => State == ChestState.Closed;
         public bool IsUsed => State == ChestState.Used;
         public bool IsOpen => State == ChestState.Open;
@@ -33,26 +32,6 @@ namespace App.Game.Modules.Chests.Runtime
         public void SetUsedState()
         {
             _data.State = ChestState.Used;
-        }
-
-        public string GetIconKey()
-        {
-            if (IsClosed)
-            {
-                return _config.CloseIconKey;
-            }
-
-            if (IsOpen)
-            {
-                return _config.OpenIconKey;
-            }
-
-            if (IsUsed)
-            {
-                return _config.EmptyIconKey;
-            }
-
-            return String.Empty;
         }
     }
 }

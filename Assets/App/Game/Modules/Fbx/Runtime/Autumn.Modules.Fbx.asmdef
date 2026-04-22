@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.Modules.Fbx",
+  "noEngineReferences": true,
+  "references":[ "Autumn.ModuleItems", "Autumn.Utility" ]
+}

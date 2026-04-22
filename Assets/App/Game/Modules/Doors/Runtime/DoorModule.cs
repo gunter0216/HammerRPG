@@ -22,7 +22,6 @@ namespace App.Game.Modules.Doors.Runtime
             _config = config;
         }
 
-        public string IconKey => GetIconKey();
         public bool IsClosed => State == DoorState.Closed;
         public bool IsOpen => State == DoorState.Open;
         public DoorState State => _data.State;
@@ -30,21 +29,6 @@ namespace App.Game.Modules.Doors.Runtime
         public IModuleItem Item => _moduleItem;
         public DoorModuleConfig Config => _config;
         public DataReference RequiredKey => _data.Key;
-
-        public string GetIconKey()
-        {
-            if (IsClosed)
-            {
-                return _config.CloseIconKey;
-            }
-
-            if (IsOpen)
-            {
-                return _config.OpenIconKey;
-            }
-
-            return String.Empty;
-        }
 
         public void SetKey(DataReference dataReference)
         {

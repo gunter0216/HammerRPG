@@ -4,16 +4,8 @@ namespace App.Game.Modules.Doors.Runtime.Config
 {
     public class DoorModuleConfig : IModuleConfig
     {
-        private readonly string _closeIconKey;
-        private readonly string _openIconKey;
-
-        public string CloseIconKey => _closeIconKey;
-        public string OpenIconKey => _openIconKey;
-
-        public DoorModuleConfig(string closeIconKey, string openIconKey)
+        public DoorModuleConfig()
         {
-            _closeIconKey = closeIconKey;
-            _openIconKey = openIconKey;
         }
     }
 }

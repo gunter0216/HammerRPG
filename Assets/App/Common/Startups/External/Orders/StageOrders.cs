@@ -3,7 +3,7 @@
     public enum StageOrders
     {
         // global
-        Data = 0,
+        Data = -100,
         DataContainers = 10,
         // start
         StartSceneManager = 100_000,
@@ -43,6 +43,7 @@
         ModuleItemsConfigLoader = -10_000,
         FollowIcon = 0,
         CanvasController = -10_000,
-        HUD = 500
+        HUD = 500,
+        Camera = 0
     }
 }

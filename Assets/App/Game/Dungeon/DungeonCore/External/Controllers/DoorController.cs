@@ -38,64 +38,64 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         public void Initialize()
         {
-            var doorModule = _door.DoorModule;
-            var sprite = _spriteLoader.Load(doorModule.IconKey);
-            if (!sprite.HasValue)
-            {
-                HLogger.LogError("Cant get tile sprite");
-                return;
-            }
-                
-            var localPosition = _door.LocalPosition;
-            var position = _door.Room.LocalToWorld(localPosition);
-                
-            var tileView = new GameObject($"Door {localPosition.X} {localPosition.Y}");
-            tileView.transform.position = new Vector3(position.X + 0.5f, position.Y + 0.5f, 1);
-            tileView.transform.parent = _root;
-            
-            _spriteRenderer = tileView.AddComponent<SpriteRenderer>();
-            _spriteRenderer.sprite = sprite.Value;
-            _spriteRenderer.drawMode = SpriteDrawMode.Simple;
-            _spriteRenderer.size = new UnityEngine.Vector2(1, 1);
-            _spriteRenderer.sortingOrder = 3;
-            
-            _collider = tileView.AddComponent<BoxCollider2D>();
-            _collider.enabled = doorModule.IsClosed;
-            
-            _spriteInteractionHandler = tileView.AddComponent<SpriteInteractionHandler>();
-            _spriteInteractionHandler.SetClickListener(OnButtonClick);
+            // var doorModule = _door.DoorModule;
+            // var sprite = _spriteLoader.Load(doorModule.IconKey);
+            // if (!sprite.HasValue)
+            // {
+            //     HLogger.LogError("Cant get tile sprite");
+            //     return;
+            // }
+            //     
+            // var localPosition = _door.LocalPosition;
+            // var position = _door.Room.LocalToWorld(localPosition);
+            //     
+            // var tileView = new GameObject($"Door {localPosition.X} {localPosition.Y}");
+            // tileView.transform.position = new Vector3(position.X + 0.5f, position.Y + 0.5f, 1);
+            // tileView.transform.parent = _root;
+            //
+            // _spriteRenderer = tileView.AddComponent<SpriteRenderer>();
+            // _spriteRenderer.sprite = sprite.Value;
+            // _spriteRenderer.drawMode = SpriteDrawMode.Simple;
+            // _spriteRenderer.size = new UnityEngine.Vector2(1, 1);
+            // _spriteRenderer.sortingOrder = 3;
+            //
+            // _collider = tileView.AddComponent<BoxCollider2D>();
+            // _collider.enabled = doorModule.IsClosed;
+            //
+            // _spriteInteractionHandler = tileView.AddComponent<SpriteInteractionHandler>();
+            // _spriteInteractionHandler.SetClickListener(OnButtonClick);
         }
 
         private void OnButtonClick()
         {
-            var doorModule = _door.DoorModule;
-            if (doorModule.IsOpen)
-            {
-                return;
-            }
-
-            if (_inventoryController.TryGetItem(_door.DoorModule.RequiredKey, out var inventoryItem))
-            {
-                Debug.LogError("Open");
-                
-                _door.DoorModule.Open();
-                _inventoryController.Remove(inventoryItem);
-                _moduleItemsManager.Destroy(inventoryItem.Item);
-                
-                var sprite = _spriteLoader.Load(doorModule.IconKey);
-                if (!sprite.HasValue)
-                {
-                    HLogger.LogError("Cant get tile sprite");
-                    return;
-                }
-
-                _spriteRenderer.sprite = sprite.Value;
-                _collider.enabled = false;
-            }
-            else
-            {
-                Debug.LogError("Cant open");
-            }
+            // var doorModule = _door.DoorModule;
+            // if (doorModule.IsOpen)
+            // {
+            //     return;
+            // }
+            //
+            // if (_inventoryController.TryGetItem(_door.DoorModule.RequiredKey, out var inventoryItem))
+            // {
+            //     Debug.LogError("Open");
+            //     
+            //     _door.DoorModule.Open();
+            //     _inventoryController.Remove(inventoryItem);
+            //     _moduleItemsManager.Destroy(inventoryItem.Item);
+            //     
+            //     var sprite = _spriteLoader.Load(doorModule.IconKey);
+            //     if (!sprite.HasValue)
+            //     {
+            //         HLogger.LogError("Cant get tile sprite");
+            //         return;
+            //     }
+            //
+            //     _spriteRenderer.sprite = sprite.Value;
+            //     _collider.enabled = false;
+            // }
+            // else
+            // {
+            //     Debug.LogError("Cant open");
+            // }
         }
     }
 }

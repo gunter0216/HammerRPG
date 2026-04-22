@@ -11,10 +11,7 @@ namespace App.Game.Modules.Chests.Runtime.Config
         
         public Optional<IModuleConfig> Convert(JObject module)
         {
-            var closeIconKey = module.Value<string>("close_icon_key");
-            var openIconKey = module.Value<string>("open_icon_key");
-            var emptyIconKey = module.Value<string>("empty_icon_key");
-            var config = new ChestModuleConfig(closeIconKey, openIconKey, emptyIconKey);
+            var config = new ChestModuleConfig();
             
             return Optional<IModuleConfig>.Success(config);
         }

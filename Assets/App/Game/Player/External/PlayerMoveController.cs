@@ -17,7 +17,8 @@ namespace App.Game.Player.External
 
         private MoveModule _moveModule;
         private InputAction _moveInput;
-        private Rigidbody2D _rigidbody;
+        private Rigidbody _rigidbody;
+        private Camera _camera;
 
         public PlayerMoveController(
             MoveModuleSystem moveModuleSystem,
@@ -43,7 +44,9 @@ namespace App.Game.Player.External
             
             _moveInput = _inputService.Input.Movement.Move;
 
-            _rigidbody = _view.GetComponent<Rigidbody2D>();
+            _camera = Camera.main;
+
+            _rigidbody = _view.GetComponent<Rigidbody>();
         }
 
         public void OnUpdate()
@@ -51,8 +54,21 @@ namespace App.Game.Player.External
             var direction = _moveInput.ReadValue<Vector2>().normalized;
             _moveModule.SetDirection(new Common.Algorithms.Runtime.Vector2(direction.x, direction.y));
 
-            var velocity = _moveModule.GetVelocity();
-            _rigidbody.velocity = new Vector2(velocity.X, velocity.Y);
+            var velocity2 = _moveModule.GetVelocity();
+            var velocity = new Vector3(velocity2.X, 0, velocity2.Y);
+            
+            Vector3 forward = _camera.transform.forward;
+            Vector3 right = _camera.transform.right;
+
+            forward.y = 0f;
+            right.y = 0f;
+
+            forward.Normalize();
+            right.Normalize();
+
+            velocity = forward * velocity.z + right * velocity.x;
+            
+            _rigidbody.velocity = velocity;
         }
     }
 }

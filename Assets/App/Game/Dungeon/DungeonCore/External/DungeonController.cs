@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.External;
@@ -23,6 +24,7 @@ namespace App.Game.Dungeon.DungeonCore.External
         private readonly IDungeonCreator _dungeonCreator;
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly IFollowIconController _followIconController;
+        private readonly IAssetManager _assetManager;
 
         private List<RoomController> _rooms;
         private DungeonService _service;
@@ -33,7 +35,8 @@ namespace App.Game.Dungeon.DungeonCore.External
             IContainerWindowController containerWindow, 
             InventoryController inventoryController,
             IModuleItemsManager moduleItemsManager, 
-            IFollowIconController followIconController)
+            IFollowIconController followIconController, 
+            IAssetManager assetManager)
         {
             _dungeonCreator = dungeonCreator;
             _spriteLoader = spriteLoader;
@@ -41,6 +44,7 @@ namespace App.Game.Dungeon.DungeonCore.External
             _inventoryController = inventoryController;
             _moduleItemsManager = moduleItemsManager;
             _followIconController = followIconController;
+            _assetManager = assetManager;
         }
 
         public void Init()
@@ -79,7 +83,8 @@ namespace App.Game.Dungeon.DungeonCore.External
                     _containerWindow, 
                     _inventoryController,
                     _moduleItemsManager,
-                    _followIconController);
+                    _followIconController,
+                    _assetManager);
                 _rooms.Add(controller);
             }
 

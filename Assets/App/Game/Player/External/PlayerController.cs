@@ -94,7 +94,7 @@ namespace App.Game.Player.External
                 return;
             }
             
-            PlayerView.transform.position = new Vector3(position.Value.X, position.Value.Y);
+            PlayerView.transform.position = new Vector3(position.Value.X, 1, position.Value.Y);
         }
 
         private void InitMove()

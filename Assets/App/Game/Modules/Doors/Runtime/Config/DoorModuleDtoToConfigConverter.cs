@@ -11,9 +11,7 @@ namespace App.Game.Modules.Doors.Runtime.Config
         
         public Optional<IModuleConfig> Convert(JObject module)
         {
-            var closeIconKey = module.Value<string>("close_icon_key");
-            var openIconKey = module.Value<string>("open_icon_key");
-            var config = new DoorModuleConfig(closeIconKey, openIconKey);
+            var config = new DoorModuleConfig();
             
             return Optional<IModuleConfig>.Success(config);
         }
