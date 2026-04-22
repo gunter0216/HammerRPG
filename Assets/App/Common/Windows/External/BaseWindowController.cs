@@ -82,11 +82,12 @@ namespace App.Common.Windows.Runtime
 
         protected virtual WindowConfig CreateWindowConfig()
         {
-            return new WindowConfig(onOpened: OnOpened);
+            return new WindowConfig(onOpened: OnOpened, onClosed: OnClosed);
         }
 
         protected virtual void OnInitWindow() {}
         protected virtual void OnOpened() {}
+        protected virtual void OnClosed() {}
         protected abstract string GetWindowAssetKey();
 
         public void SetActive(bool status)

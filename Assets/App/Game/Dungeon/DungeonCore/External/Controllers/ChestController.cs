@@ -6,6 +6,7 @@ using App.Game.Containers.ContainerWindow.Runtime;
 using App.Game.Dungeon.DungeonCore.External.View;
 using App.Game.Dungeon.DungeonCreator.Runtime.Chest;
 using App.Game.FollowIcon.External;
+using Assets.App.Game.Interactions.Runtime;
 using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 {
     public class ChestController
     {
+        private static readonly int _opened = Animator.StringToHash("Opened");
+        
         private const string _iconChest = "FollowIcon_Chest";
         private const string _iconEmptyChest = "FollowIcon_EmptyChest";
 
@@ -22,6 +25,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly IContainerWindowController _containerWindow;
         private readonly IFollowIconController _followIconController;
         private readonly IModuleItemsManager _moduleItemsManager;
+        
+        private Animator _animator;
+        
 
         public ChestController(
             IAssetManager assetManager,
@@ -54,10 +60,13 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
             var model = Object.Instantiate(prefab, _root.transform);
             model.transform.position = new Vector3(positionX, 1, positionZ);
+
+            _animator = model.GetComponent<Animator>();
             
-            // chestView.SetClickListener(OnButtonClick);
-            // chestView.SetEnterListener(OnButtonEnter);
-            // chestView.SetExitListener(OnButtonExit);
+            var interactableView = model.AddComponent<InteractableView>();
+            interactableView.OnClickCallback += OnButtonClick;
+            interactableView.OnHoverEnterCallback += OnButtonEnter;
+            interactableView.OnHoverExitCallback += OnButtonExit;
         }
         
         private GameObject GetTilePrefab(string item)
@@ -105,8 +114,15 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 return;
             }
             
-            _containerWindow.OpenWindow(_chest.ContainerModule.Container);
+            _containerWindow.OpenWindow(_chest.ContainerModule.Container, OnClosedCallback);
             _chest.ChestModule.SetUsedState();
+            
+            _animator.SetBool(_opened, true);
+        }
+
+        private void OnClosedCallback()
+        {
+            _animator.SetBool(_opened, false);
         }
     }
 }

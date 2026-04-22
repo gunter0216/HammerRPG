@@ -44,6 +44,7 @@
         FollowIcon = 0,
         CanvasController = -10_000,
         HUD = 500,
-        Camera = 0
+        Camera = 0,
+        Interactions = 0
     }
 }

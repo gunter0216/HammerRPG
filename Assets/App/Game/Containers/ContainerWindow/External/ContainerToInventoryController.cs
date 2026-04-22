@@ -1,7 +1,6 @@
 using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
 using App.Common.Windows.Runtime;
-using App.Game.Inventory.External;
 
 namespace App.Game.Containers.ContainerWindow.External
 {
@@ -20,7 +19,13 @@ namespace App.Game.Containers.ContainerWindow.External
 
         public void Init()
         {
-            _containerWindow.OnWindowOpened += OnWindowOpened;
+            _containerWindow.OnWindowPreOpened += OnWindowOpened;
+            _containerWindow.OnWindowClosed += OnWindowClosed;
+        }
+
+        private void OnWindowClosed()
+        {
+            _windowManager.Close(WindowNames.Inventory);
         }
 
         private void OnWindowOpened()

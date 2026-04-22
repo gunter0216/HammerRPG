@@ -24,6 +24,7 @@ namespace App.Game.Update.External
         CharacterOpenSystem = 0,
         PlayerController = 0,
         FollowIcon = 0,
-        HUD = 0
+        HUD = 0,
+        Interactions = 0
     }
 }

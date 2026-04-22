@@ -16,11 +16,32 @@ namespace App.Game.Containers.ContainerWindow.External
         public const string WindowKey = "ContainerWindow";
         
         private readonly ISpriteLoader _spriteLoader;
-
-        public Action OnWindowOpened;
         
         private ContainerSlotsModel _slotsModel;
         private Container.Runtime.Container _container;
+        private Action _onClosedTemp;
+
+        private Action _onWindowPreOpened;
+        private Action _onWindowOpened;
+        private Action _onWindowClosed;
+        
+        public Action OnWindowOpened
+        {
+            get => _onWindowOpened;
+            set => _onWindowOpened = value;
+        }
+
+        public Action OnWindowClosed
+        {
+            get => _onWindowClosed;
+            set => _onWindowClosed = value;
+        }
+
+        public Action OnWindowPreOpened
+        {
+            get => _onWindowPreOpened;
+            set => _onWindowPreOpened = value;
+        }
 
         public ContainerWindowController(
             IAssetManager assetManager,
@@ -45,8 +66,11 @@ namespace App.Game.Containers.ContainerWindow.External
             _slotsModel.Initialize();
         }
 
-        public void OpenWindow(Container.Runtime.Container container)
+        public void OpenWindow(Container.Runtime.Container container, Action onClosed = null)
         {
+            _onWindowPreOpened?.Invoke();
+            
+            _onClosedTemp = onClosed;
             _container = container;
             Open();
         }
@@ -62,7 +86,17 @@ namespace App.Game.Containers.ContainerWindow.External
 
             _slotsModel.ShowContainer(_container);
             
-            OnWindowOpened?.Invoke();
+            _onWindowOpened?.Invoke();
+        }
+
+        protected override void OnClosed()
+        {
+            base.OnClosed();
+            
+            _onClosedTemp?.Invoke();
+            _onClosedTemp = null;
+            
+            _onWindowClosed?.Invoke();
         }
 
         protected override string GetWindowAssetKey()

@@ -1,53 +1,63 @@
 ﻿using System.Collections.Generic;
+using App.Common.Canvases.External;
 using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace App.Game.FollowIcon.External
 {
     public class FollowIconController : IInitSystem, IUpdateSystem, IFollowIconController
     {
         private readonly ISpriteLoader _spriteLoader;
-        
-        private SpriteRenderer _spriteRenderer;
+        private readonly ICanvasController _canvasController;
+
+        private Image _image;
+        private RectTransform _rectTransform;
 
         private readonly List<object> _objects = new();
-        private Camera _camera;
 
-        public FollowIconController(ISpriteLoader spriteLoader)
+        public FollowIconController(ISpriteLoader spriteLoader, ICanvasController canvasController)
         {
             _spriteLoader = spriteLoader;
+            _canvasController = canvasController;
         }
 
         public void Init()
         {
+            var canvas = _canvasController.GetHudCanvas();
+
             var gameObject = new GameObject("FollowIcon");
-            gameObject.transform.position = Vector3.zero;
-            gameObject.transform.localScale = Vector3.one * 0.5f;
+            gameObject.transform.SetParent(canvas.GetContent(), false);
             gameObject.SetActive(false);
-            
-            _spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-            _spriteRenderer.drawMode = SpriteDrawMode.Simple;
-            _spriteRenderer.size = new UnityEngine.Vector2(1, 1);
-            _spriteRenderer.sortingOrder = 10;
 
-            _camera = Camera.main;
+            _rectTransform = gameObject.AddComponent<RectTransform>();
+            _rectTransform.sizeDelta = new Vector2(100, 100); // размер иконки
+
+            _image = gameObject.AddComponent<Image>();
+            _image.raycastTarget = false; // чтобы не блокировал клики
+
+            // важно: якорь по центру (или можно подстроить)
+            _rectTransform.anchorMin = new Vector2(0, 0);
+            _rectTransform.anchorMax = new Vector2(0, 0);
+            _rectTransform.pivot = new Vector2(0.5f, 0.5f);
         }
-
 
         public void Show(object obj, string spriteKey)
         {
             var sprite = _spriteLoader.Load(spriteKey);
             if (!sprite.HasValue)
             {
-                HLogger.LogError($"Cant load sprite.");
+                HLogger.LogError("Cant load sprite.");
                 return;
             }
 
-            _spriteRenderer.sprite = sprite.Value;
+            _image.sprite = sprite.Value;
             _objects.Add(obj);
-            _spriteRenderer.gameObject.SetActive(true);
+
+            _image.gameObject.SetActive(true);
+            OnUpdate();
         }
 
         public void Hide(object obj)
@@ -59,20 +69,16 @@ namespace App.Game.FollowIcon.External
 
             if (_objects.Count <= 0)
             {
-                _spriteRenderer.gameObject.SetActive(false);
+                _image.gameObject.SetActive(false);
             }
         }
 
         public void OnUpdate()
         {
             if (_objects.Count <= 0)
-            {
                 return;
-            }
 
-            var position =  _camera.ScreenToWorldPoint(Input.mousePosition);
-            position.z = 0;
-            _spriteRenderer.transform.position = position;
+            _rectTransform.position = Input.mousePosition;
         }
     }
 }
