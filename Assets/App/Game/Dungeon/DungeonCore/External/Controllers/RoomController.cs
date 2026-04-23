@@ -53,7 +53,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _root.transform.parent = _dungeon.transform;
             CreateFloors();
             CreateWalls();
-            // CreateDoors();
+            CreateDoors();
             CreateChest();
         }
 
@@ -166,11 +166,11 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             foreach (var door in doors)
             {
                 var controller = new DoorController(
-                    _spriteLoader,
+                    _assetManager,
                     doorsRoot, 
                     door,
-                    _inventoryController,
-                    _moduleItemsManager);
+                    _moduleItemsManager,
+                    _inventoryController);
                 controller.Initialize();
                 _doors.Add(controller);
             }

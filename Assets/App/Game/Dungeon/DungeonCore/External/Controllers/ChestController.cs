@@ -27,7 +27,6 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly IModuleItemsManager _moduleItemsManager;
         
         private Animator _animator;
-        
 
         public ChestController(
             IAssetManager assetManager,
