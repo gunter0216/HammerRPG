@@ -56,6 +56,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
             // generators.Add(new CreateRoomCorridorsDungeonGenerator(roomCreator));
             generators.Add(new StartEndRoomsDungeonGenerator());
             generators.Add(new StartEndPathDungeonGenerator());
+            generators.Add(new PullRoomsDungeonGenerator()); // todo
             generators.Add(new CreateCorridorsDungeonGenerator());
             generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
             // generators.Add(new ExpendRoomDungeonGenerator());
