@@ -1,0 +1,11 @@
+{
+  "name": "Autumn.Equipment",
+  "references": [
+    "Autumn.ConfigLoader",
+    "Autumn.DataContainers",
+    "Autumn.ModuleItems",
+    "Autumn.Logger",
+    "Autumn.Utility",
+    "Autumn.DataManager"
+  ]
+}

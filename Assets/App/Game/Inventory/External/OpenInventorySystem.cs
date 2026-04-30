@@ -1,29 +1,29 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.Logger.Runtime;
-using App.Game.Contexts;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
+﻿using App.Common.Utilities.Utility.Runtime;
+using App.Game.Inventory.Runtime;
 using UnityEngine;
 
 namespace App.Game.Inventory.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [RunSystem(-1000)]
-    public class OpenInventorySystem : IRunSystem
+    public class OpenInventorySystem : IUpdateSystem
     {
-        [Inject] private readonly IInventoryController m_InventoryController;
-        
-        public void Run()
+        private readonly IInventoryController _inventoryController;
+
+        public OpenInventorySystem(IInventoryController inventoryController)
         {
-            if (Input.GetKeyDown(KeyCode.I))
+            _inventoryController = inventoryController;
+        }
+
+        public void OnUpdate()
+        {
+            if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
             {
-                if (m_InventoryController.IsOpen())
+                if (_inventoryController.IsOpen())
                 {
-                    m_InventoryController.CloseWindow();
+                    _inventoryController.CloseWindow();
                 }
                 else
                 {
-                    m_InventoryController.OpenWindow();   
+                    _inventoryController.OpenWindow();   
                 }
             }
         }

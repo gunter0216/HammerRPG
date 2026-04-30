@@ -9,12 +9,16 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel
     [Serializable]
     public class DungeonGenerationConfig
     {
+        private readonly string m_Key;
         private readonly IReadOnlyList<IGenerationConfig> m_GenerationConfigs;
 
         public IReadOnlyList<IGenerationConfig> GenerationConfigs => m_GenerationConfigs;
 
-        public DungeonGenerationConfig(IReadOnlyList<IGenerationConfig> generationConfigs)
+        public string Key => m_Key;
+
+        public DungeonGenerationConfig(string key, IReadOnlyList<IGenerationConfig> generationConfigs)
         {
+            m_Key = key;
             m_GenerationConfigs = generationConfigs;
         }
         

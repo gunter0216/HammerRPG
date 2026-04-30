@@ -1,0 +1,165 @@
+﻿using System;
+using System.Collections.Generic;
+using App.Common.Logger.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel.Generation;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Chest;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Connections;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridor;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateDoors;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateWalls;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.ExpendRoom;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Floor;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.KeysDistributor;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsCreator;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndPath;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndRooms;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation;
+using App.Generation.DungeonGenerator.Runtime.Rooms;
+
+namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
+{
+    public class DungeonGenerator
+    {
+        private readonly ILogger m_Logger;
+        private readonly List<IDungeonGenerator> m_Generators;
+        
+        private int m_CurrentGeneratorIndex;
+        private DungeonGeneration m_Generation;
+
+        public DungeonGenerator(ILogger logger)
+        {
+            m_Logger = logger;
+            var generators = new List<IDungeonGenerator>();
+            
+            var roomCreator = new RoomCreator();
+
+            generators.Add(new SquarePartitionDungeonGenerator(roomCreator));
+            // generators.Add(new CreateRoomsDungeonGenerator(roomCreator));
+            // generators.Add(new SeparateRoomsDungeonGenerator());
+            // generators.Add(new SelectSmallRoomsDungeonGenerator());
+            // generators.Add(new DiscardSmallRoomsDungeonGenerator());
+            // generators.Add(new SelectBorderingRoomsDungeonGenerator());
+            // generators.Add(new DiscardBorderingRoomsDungeonGenerator());
+            generators.Add(new TriangulationDungeonGenerator());
+            generators.Add(new SpanningTreeDungeonGenerator(m_Logger));
+            generators.Add(new RoomConnectionsDungeonGenerator());
+            // generators.Add(new CreateRoomCorridorsDungeonGenerator(roomCreator));
+            generators.Add(new StartEndRoomsDungeonGenerator());
+            generators.Add(new StartEndPathDungeonGenerator());
+            generators.Add(new PullRoomsDungeonGenerator()); // todo
+            generators.Add(new CreateCorridorsDungeonGenerator());
+            generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
+            // generators.Add(new ExpendRoomDungeonGenerator());
+            generators.Add(new CreateWallsDungeonGenerator());
+            generators.Add(new ChestDungeonGenerator());
+            generators.Add(new FloorDungeonGenerator());
+            // generators.Add(new CreateDoorsDungeonGenerator());
+            
+            m_Generators = generators;
+        }
+
+        public Optional<DungeonGeneration> Generate(DungeonGenerationConfig generationConfig)
+        {
+            for (int i = 0; i < 10; ++i)
+            {
+                // try
+                // {
+                    var generate = TryGenerate(generationConfig);
+                    return generate;
+                // }
+                // catch (Exception e)
+                // {
+                //     HLogger.LogError(e);
+                // }
+            }
+            
+            return Optional<DungeonGeneration>.Fail();
+        }
+        
+        private Optional<DungeonGeneration> TryGenerate(DungeonGenerationConfig generationConfig)
+        {
+            StartGeneration(generationConfig);
+            for (int i = 0; i < 1000; ++i)
+            {
+                if (IsComplete())
+                {
+                    break;
+                }
+                
+                if (!NextIteration())
+                {
+                    return Optional<DungeonGeneration>.Fail();
+                }
+            }
+
+            return GetGeneration();
+        }
+
+        public void StartGeneration(DungeonGenerationConfig generationConfig)
+        {
+            var data = new DungeonGenerationData
+            {
+                GenerationRooms = new DungeonGenerationRooms()
+            };
+            var dungeon = new DungeonGenerationResult(data);
+            
+            m_Generation = new DungeonGeneration(dungeon, generationConfig);
+            m_CurrentGeneratorIndex = 0;
+        }
+
+        public bool NextIteration()
+        {
+            if (IsComplete())
+            {
+                m_Logger.LogError($"Generation complete!");
+                return false;
+            }
+
+            var generator = m_Generators[m_CurrentGeneratorIndex];
+
+            m_Logger.Log($"Next iteration generation: {generator.GetName()}"); 
+            
+            var generation = generator.Process(m_Generation);
+            if (!generation.HasValue)
+            {
+                m_Logger.LogError($"Ops. Something wrong. Cant generate next iteration.");
+                return false;
+            }
+
+            m_CurrentGeneratorIndex += 1;
+            m_Generation = generation.Value;
+            
+            return true;
+        }
+
+        public bool IsStart()
+        {
+            return m_Generation != null;
+        }
+
+        public bool IsComplete()
+        {
+            return m_CurrentGeneratorIndex >= m_Generators.Count;
+        }
+
+        public Optional<DungeonGeneration> GetGeneration()
+        {
+            if (m_Generation == null)
+            {
+                return Optional<DungeonGeneration>.Fail();
+            }
+            
+            return Optional<DungeonGeneration>.Success(m_Generation);
+        }
+    }
+}

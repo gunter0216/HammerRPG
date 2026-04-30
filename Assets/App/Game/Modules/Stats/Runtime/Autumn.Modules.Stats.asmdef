@@ -1,0 +1,9 @@
+{
+  "name": "Autumn.Modules.Stats",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.DataContainers",
+    "Autumn.Utility",
+    "Autumn.DataManager"
+  ]
+}

@@ -2,37 +2,39 @@
 using App.Common.DataContainer.Runtime;
 using Newtonsoft.Json;
 
-namespace App.Game.Inventory.Runtime.Data
+namespace App.Game.Inventory.Runtime.Data.Model
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
     public class InventoryItemData
     {
-        [JsonProperty("positionX")]
-        private int m_PositionX;
-        
-        [JsonProperty("positionY")]
-        private int m_PositionY;
+        [JsonProperty("index")]
+        private readonly int _index;
         
         [JsonProperty("dataReference")]
-        private DataReference m_DataReference;
-        
-        public int PositionX
-        {
-            get => m_PositionX;
-            set => m_PositionX = value;
-        }
-        
-        public int PositionY
-        {
-            get => m_PositionY;
-            set => m_PositionY = value;
-        }
-        
+        private DataReference _dataReference;
+
         public DataReference DataReference
         {
-            get => m_DataReference;
-            set => m_DataReference = value;
+            get => _dataReference;
+            set => _dataReference = value;
+        }
+
+        public int Index => _index;
+
+        public InventoryItemData()
+        {
+        }
+        
+        public InventoryItemData(int index)
+        {
+            _index = index;
+        }
+
+        public InventoryItemData(int index, DataReference dataReference)
+        {
+            _index = index;
+            _dataReference = dataReference;
         }
     }
 }

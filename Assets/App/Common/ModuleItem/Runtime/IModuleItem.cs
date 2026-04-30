@@ -13,6 +13,7 @@ namespace App.Common.ModuleItem.Runtime
         bool AddDataModule(IModuleData data);
         bool RemoveDataModule(IModuleData data);
         Optional<T> GetDataModule<T>() where T : class, IModuleData;
+        bool TryGetDataModule<T>(out T data) where T : class, IModuleData;
         bool HasDataModule<T>() where T : class, IModuleData;
         
         bool HasTag(long tag);

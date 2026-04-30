@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Tiles
+  m_EditorClassIdentifier: 
+  m_GroupName: Tiles
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 678a53461dac7c6409391dc1595013d6
+  m_SerializeEntries:
+  - m_GUID: 1ef9027c167f552488256d5e956004a5
+    m_Address: WallView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2afb9b9320225544390b5a48a59a60e8
+    m_Address: Floor1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44d09fc35f194ef4ebfe3b7016d2f7f1
+    m_Address: EmptyChest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47311f65160b9654abafb82757402088
+    m_Address: OpenedDoor
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57e7e77836daa684bb26034aaf0cbe34
+    m_Address: DoorView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98ed0776de987cf42b46c4f8cf00891a
+    m_Address: OpenChest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c92f2a19dde5779409ff448775900f9f
+    m_Address: ClosedDoor
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca48195bb7ead8c418c8034ca34aa2c1
+    m_Address: FloorView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d59102b937160c342af67bb2c1830d70
+    m_Address: BricksWall1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7d245be9d1d6834599cda0dd7d5872c
+    m_Address: CloseChest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d800f2b6a29e8244484eb6628bf127e7, type: 2}
+    - {fileID: 11400000, guid: ac70b8b65c09133469d2e4b953aa16aa, type: 2}

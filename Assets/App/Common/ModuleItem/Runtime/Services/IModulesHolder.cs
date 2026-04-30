@@ -1,4 +1,5 @@
-﻿using App.Common.ModuleItem.Runtime.Data;
+﻿using System.Collections.Generic;
+using App.Common.ModuleItem.Runtime.Data;
 using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.ModuleItem.Runtime.Services
@@ -10,5 +11,6 @@ namespace App.Common.ModuleItem.Runtime.Services
         Optional<T> GetModule<T>() where T : IModuleData;
         bool TryGetModule<T>(out T data) where T : IModuleData;
         bool HasModule<T>() where T : IModuleData;
+        bool Destroy();
     }
 }

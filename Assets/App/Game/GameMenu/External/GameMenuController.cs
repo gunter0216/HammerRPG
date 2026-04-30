@@ -1,51 +1,62 @@
 ﻿using System;
 using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
+using App.Common.Canvases.External;
 using App.Common.Data.Runtime;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
 using App.Common.Logger.Runtime;
 using App.Common.SceneControllers.Runtime;
+using App.Common.Utilities.Utility.Runtime;
+using App.Common.Windows.External;
+using App.Common.Windows.Runtime;
 using App.Game.Canvases.External;
-using App.Game.Contexts;
 using App.Game.GameMenu.Runtime;
 using App.Game.GameMenu.Runtime.View;
 using App.Game.Pause.Runtime;
 using App.Game.Settings.Runtime;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Utility.Runtime.MenuSM;
 using UnityEngine;
 
 namespace App.Game.GameMenu.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(0)]
-    public class GameMenuController : IInitSystem, IRunSystem, IDisposable
+    public class GameMenuController : IInitSystem, IUpdateSystem, IDisposable, IWindowController
     {
         private const string m_GameMenuAssetKey = "GameMenuView";
         private readonly StringKeyEvaluator m_GameMenuAssetKeyEvaluator = new(m_GameMenuAssetKey);
-        
-        [Inject] private MainCanvas m_MainCanvas;
-        [Inject] private IAssetManager m_AssetManager;
-        [Inject] private IDataManager m_DataManager;
-        [Inject] private ISceneManager m_SceneManager;
-        [Inject] private IPauseController m_PauseController;
+
+        private readonly IWindowManager _windowManager;
+        private readonly ICanvasController _canvasController;
+        private readonly IAssetManager _assetManager;
+        private readonly IDataManager _dataManager;
+        private readonly ISceneManager _sceneManager;
+        private readonly IPauseController _pauseController;
         
         private GameMenuState m_GameMenuState;
         private SettingsMenuState m_SettingsMenuState;
         
-        private MenuMachine m_MenuMachine;
+        private MenuMachine _menuMachine;
         
         private GameMenuView m_View;
 
+        public GameMenuController(
+            ICanvasController canvasController, 
+            IAssetManager assetManager,
+            IDataManager dataManager,
+            ISceneManager sceneManager,
+            IPauseController pauseController, 
+            IWindowManager windowManager)
+        {
+            _canvasController = canvasController;
+            _assetManager = assetManager;
+            _dataManager = dataManager;
+            _sceneManager = sceneManager;
+            _pauseController = pauseController;
+            _windowManager = windowManager;
+        }
+
         public void Init()
         {
-            var view = m_AssetManager.InstantiateSync<GameMenuView>(
+            var view = _assetManager.InstantiateSync<GameMenuView>(
                 m_GameMenuAssetKeyEvaluator,
-                m_MainCanvas.GetContent());
+                _canvasController.GetMenuCanvas().GetContent());
             if (!view.HasValue)
             {
                 HLogger.LogError("cant create GameSceneMenuView");
@@ -55,36 +66,68 @@ namespace App.Game.GameMenu.External
             m_View = view.Value;
             m_View.SetActive(false);
 
-            m_MenuMachine = new MenuMachine(popAction: OnPop);
+            _windowManager.Registry(this, new WindowConfig(
+                closeOnEscape: false,
+                onClosed: OnClosed,
+                onOpened: OnOpened));
             
-            m_SettingsMenuState = new SettingsMenuState(m_MenuMachine, m_View.SettingsPanel);
+            _menuMachine = new MenuMachine(popAction: OnPop);
+            
+            m_SettingsMenuState = new SettingsMenuState(_menuMachine, m_View.SettingsPanel);
             m_GameMenuState = new GameMenuState(
-                m_MenuMachine, 
+                _menuMachine, 
                 m_View.MainMenuPanel, 
                 m_SettingsMenuState,
-                new SaveAndExitStrategy(m_SceneManager, m_PauseController));
+                new SaveAndExitStrategy(_sceneManager, _pauseController));
         }
 
         private void OnPop(IMenuState _)
         {
-            if (m_MenuMachine.GetCountInStack() <= 0)
+            if (_menuMachine.GetCountInStack() <= 0)
             {
-                m_View.SetActive(false);
-                m_PauseController.Unpause();
+                _windowManager.Close(this);
             }
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (m_MenuMachine.GetCountInStack() <= 0)
+                if (_menuMachine.GetCountInStack() <= 0)
                 {
-                    m_View.SetActive(true);
-                    m_MenuMachine.PushState(m_GameMenuState);
-                    m_PauseController.Pause();
+                    if (_windowManager.IsAnyOpen())
+                    {
+                        return;
+                    }
+                    
+                    _windowManager.Open(this);
+                }
+                else
+                {
+                    _menuMachine.PopState();
                 }
             }
+        }
+
+        private void OnOpened()
+        {
+            _menuMachine.PushState(m_GameMenuState);
+            _pauseController.Pause();
+        }
+
+        private void OnClosed()
+        {
+            _pauseController.Unpause();
+        }
+
+        public void SetActive(bool status)
+        {
+            m_View.SetActive(status);
+        }
+
+        public WindowNames GetName()
+        {
+            return WindowNames.MainMenu;
         }
 
         public void Dispose()

@@ -1,5 +1,4 @@
 ﻿{
   "name": "Autumn.Time",
-  "references":[ "Autumn.Utility", "Autumn.Pool" ],
-  "noEngineReferences": true
+  "references":[ "Autumn.Utility", "Autumn.Pool" ]
 }

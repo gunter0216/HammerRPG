@@ -1,8 +1,9 @@
 ﻿using App.Common.Utilities.Utility.Runtime;
+using App.Game.DragItem.Runtime.View;
 using App.Game.Inventory.External.View;
 using UnityEngine;
 
-namespace App.Game.Inventory.External.Services
+namespace App.Game.Inventory.External.ViewModel.Fabric
 {
     public class InventorySlotViewCreator
     {
@@ -13,17 +14,17 @@ namespace App.Game.Inventory.External.Services
             m_Window = window;
         }
 
-        public Optional<InventorySlotView> Create()
+        public Optional<ItemSlotView> Create()
         {
             var view = Object.Instantiate(
-                m_Window.InventorySlotViewPrefab,
+                m_Window.ItemSlotViewPrefab,
                 m_Window.SlotsContent);
             if (view == null)
             {
-                return Optional<InventorySlotView>.Fail();
+                return Optional<ItemSlotView>.Fail();
             }
             
-            return Optional<InventorySlotView>.Success(view);
+            return Optional<ItemSlotView>.Success(view);
         }
     }
 }

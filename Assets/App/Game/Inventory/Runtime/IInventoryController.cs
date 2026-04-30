@@ -1,7 +1,7 @@
 ﻿using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
-namespace App.Game.Inventory.External
+namespace App.Game.Inventory.Runtime
 {
     public interface IInventoryController
     {

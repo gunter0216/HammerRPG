@@ -1,0 +1,20 @@
+{
+  "name": "Autumn.Dungeon",
+  "noEngineReferences": true,
+  "references": [
+    "Autumn.DungeonGenerator",
+    "Autumn.Tiles",
+    "Autumn.ConfigLoader",
+    "Autumn.Utility",
+    "Autumn.Logger",
+    "Autumn.Algorithms",
+    "Autumn.DataContainers",
+    "Autumn.ModuleItems",
+    "Autumn.SpriteLoader",
+    "Autumn.DataManager",
+    "Autumn.Modules.Chest",
+    "Autumn.Modules.Container",
+    "Autumn.Modules.TilePosition",
+    "Autumn.Modules.Door"
+  ]
+}

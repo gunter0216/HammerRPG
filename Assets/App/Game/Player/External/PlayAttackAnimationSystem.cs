@@ -1,33 +1,29 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Game.Contexts;
+﻿using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Player.External.Animations;
-using App.Game.Player.Runtime;
 using App.Game.Player.Runtime.Components;
 using App.Game.Player.Runtime.Events;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
 
 namespace App.Game.Player.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(200)]
-    public class PlayAttackAnimationSystem : IInitSystem, IRunSystem
+    public class PlayAttackAnimationSystem : IInitSystem, IUpdateSystem
     {
-        [Inject] private IEcsEventManager m_EcsEventManager;
-        [Inject] private IWorldManager m_WorldManager;
+        private readonly IEcsEventManager m_EcsEventManager;
+        private readonly IWorldManager m_WorldManager;
 
         private EcsFilter m_PlayAttackAnimationEventFilter;
         private EcsEventPool<PlayAttackAnimationEvent> m_PlayAttackAnimationPool;
         private EcsPool<EntityComponent> m_EntitiesPool;
 
         private EntityMeleeWeaponAnimation m_EntityMeleeWeaponAnimation;
+
+        public PlayAttackAnimationSystem(IEcsEventManager ecsEventManager, IWorldManager worldManager)
+        {
+            m_EcsEventManager = ecsEventManager;
+            m_WorldManager = worldManager;
+        }
 
         public void Init()
         {
@@ -39,7 +35,7 @@ namespace App.Game.Player.External
             m_EntityMeleeWeaponAnimation = new EntityMeleeWeaponAnimation();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
             foreach (var i in m_PlayAttackAnimationEventFilter)
             {

@@ -1,0 +1,12 @@
+{
+  "name": "Autumn.Modules.Move",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.DataContainers",
+    "Autumn.Utility",
+    "Autumn.DataManager",
+    "Autumn.Logger",
+    "Autumn.Modules.Transform",
+    "Autumn.Algorithms"
+  ]
+}

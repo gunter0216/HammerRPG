@@ -1,0 +1,9 @@
+{
+  "name": "Autumn.Modules.TilePosition",
+  "references": [
+    "Autumn.DataContainers",
+    "Autumn.DataManager",
+    "Autumn.ModuleItems",
+    "Autumn.Algorithms"
+  ]
+}

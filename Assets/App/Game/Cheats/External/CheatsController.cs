@@ -1,60 +1,64 @@
 ﻿using App.Common.AssetSystem.Runtime;
-using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
+using App.Common.Canvases.External;
+using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
+using App.Common.SpriteLoaders.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.ViewModel;
-using App.Game.Contexts;
-using App.Game.GameItems.External;
-using App.Game.GameItems.Runtime;
 using App.Game.Inventory.External;
-using App.Game.SpriteLoaders.Runtime;
-using App.Game.States.Runtime.Game;
 
 namespace App.Game.Cheats.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 100000)]
     public class CheatsController : IInitSystem
     {
-        [Inject] private readonly IModuleItemsManager m_ModuleItemsManager;
-        [Inject] private readonly InventoryController m_InventoryController;
-        [Inject] private readonly ISpriteLoader m_SpriteLoader;
-        [Inject] private readonly PopupCanvas m_PopupCanvas;
-        [Inject] private readonly IAssetManager m_AssetManager;
-        [Inject] private readonly IGameItemsManager m_GameItemsManager;
-        
-        private CheatsWindowModel m_CheatsWindowModel;
-        
+        private readonly IModuleItemsManager _moduleItemsManager;
+        private readonly InventoryController _inventoryController;
+        private readonly ISpriteLoader _spriteLoader;
+        private readonly ICanvasController _canvasController;
+        private readonly IAssetManager _assetManager;
+
+        private CheatsWindowModel _cheatsWindowModel;
+
+        public CheatsController(
+            IModuleItemsManager moduleItemsManager, 
+            InventoryController inventoryController,
+            ISpriteLoader spriteLoader,
+            ICanvasController canvasController,
+            IAssetManager assetManager)
+        {
+            _moduleItemsManager = moduleItemsManager;
+            _inventoryController = inventoryController;
+            _spriteLoader = spriteLoader;
+            _canvasController = canvasController;
+            _assetManager = assetManager;
+        }
+
         public void Init()
         {
-            var configs = m_ModuleItemsManager.GetConfigs(GameItemsConstants.ModuleItemType);
-            var groups = m_InventoryController.GetGroups();
+            var configs = _moduleItemsManager.GetConfigs(ModuleItemConfigs.GameItemsType);
 
-            m_CheatsWindowModel = new CheatsWindowModel(
-                m_AssetManager,
-                m_PopupCanvas,
-                m_SpriteLoader,
-                m_GameItemsManager,
-                m_InventoryController,
-                configs.Value,
-                groups);
+            _cheatsWindowModel = new CheatsWindowModel(
+                _assetManager,
+                _canvasController,
+                _spriteLoader,
+                _inventoryController,
+                configs.Value);
         }
 
         public bool IsOpen()
         {
-            return m_CheatsWindowModel.IsOpen();
+            return _cheatsWindowModel.IsOpen();
         }
 
         public void CloseWindow()
         {
-            m_CheatsWindowModel.Close();
+            _cheatsWindowModel.Close();
         }
 
         public void OpenWindow()
         {
-            m_CheatsWindowModel.Open();
+            _cheatsWindowModel.Open();
         }
     }
 }

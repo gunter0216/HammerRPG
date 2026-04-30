@@ -2,23 +2,24 @@
 using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Game.Inventory.External.ViewModel;
+using App.Game.Inventory.Runtime.Item;
 
 namespace App.Game.Inventory.External.AddItemStrategy
 {
     public class InventoryAddItemStrategy : IInventoryAddItemStrategy
     {
-        private readonly IModuleItemsManager m_ModuleItemsManager;
-        private readonly InventoryItemsController m_ItemsController;
-        private readonly InventoryWindowModel m_WindowModel;
+        private readonly IModuleItemsManager _moduleItemsManager;
+        private readonly InventoryService _service;
+        private readonly InventoryWindowController _windowController;
 
         public InventoryAddItemStrategy(
             IModuleItemsManager moduleItemsManager, 
-            InventoryItemsController itemsController, 
-            InventoryWindowModel windowModel)
+            InventoryService service, 
+            InventoryWindowController windowController)
         {
-            m_ModuleItemsManager = moduleItemsManager;
-            m_ItemsController = itemsController;
-            m_WindowModel = windowModel;
+            _moduleItemsManager = moduleItemsManager;
+            _service = service;
+            _windowController = windowController;
         }
 
         public bool AddItem(IModuleItemConfig moduleItemConfig)
@@ -40,28 +41,26 @@ namespace App.Game.Inventory.External.AddItemStrategy
                 return false;
             }
             
-            var item = m_ModuleItemsManager.Create(id);
+            var item = _moduleItemsManager.Create(id);
             if (!item.HasValue)
             {
                 HLogger.LogError($"Failed to create item with id {id}");
                 return false;
             }
             
-            HLogger.LogError($">>> Created item {item.Value.ReferenceSelf} for inventory");
-            
             return AddItem(item.Value);
         }
 
         public bool AddItem(IModuleItem moduleItem)
         {
-            var item = m_ItemsController.AddItem(moduleItem);
+            var item = _service.AddItem(moduleItem);
             if (!item.HasValue)
             {
                 HLogger.LogError($"Failed to add item {moduleItem.Id} to inventory");
                 return false;
             }
             
-            m_WindowModel.AddItem(item.Value);
+            _windowController.AddItem(item.Value);
             
             return true;
         }

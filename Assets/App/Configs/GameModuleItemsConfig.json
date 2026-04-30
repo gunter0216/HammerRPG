@@ -1,0 +1,226 @@
+﻿{
+  "items": [
+    {
+      "id": "IronKey",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "IronKeyIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Other"
+        }
+      ]
+    },
+    {
+      "id": "LeatherArmor",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "LeatherArmorIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Armor"
+        }
+      ]
+    },
+    {
+      "id": "LeatherBoots",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "LeatherBootsIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Boots"
+        }
+      ]
+    },
+    {
+      "id": "LeatherHelmet",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "LeatherHelmetIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Helmet"
+        }
+      ]
+    },
+    {
+      "id": "LeatherGloves",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "LeatherGlovesIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "Gloves"
+        }
+      ]
+    },
+    {
+      "id": "WoodenShield",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "WoodenShieldIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Armor"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
+        }
+      ]
+    },
+    {
+      "id": "IronSword",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "IronSwordIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
+        }
+      ]
+    },
+    {
+      "id": "IronAxe",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "IronAxeIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
+        }
+      ]
+    },
+    {
+      "id": "IronBow",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "IronBowIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "Two-handed"
+        }
+      ]
+    },
+    {
+      "id": "IronDagger",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "IronDaggerIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "One-handed"
+        }
+      ]
+    },
+    {
+      "id": "WoodenBow",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "WoodenBowIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Weapon"
+        },
+        {
+          "module": "equipment",
+          "type": "Two-handed"
+        }
+      ]
+    },
+    {
+      "id": "HealthPotion",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "HealthPotionIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Potion"
+        }
+      ]
+    },
+    {
+      "id": "ManaPotion",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "ManaPotionIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Potion"
+        }
+      ]
+    },
+    {
+      "id": "StaminaPotion",
+      "modules": [
+        {
+          "module": "icon",
+          "icon_key": "StaminaPotionIcon"
+        },
+        {
+          "module": "game_item_type",
+          "type": "Potion"
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 ﻿using App.Common.Data.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Inventory.Runtime.Data;
+using App.Game.Inventory.Runtime.Data.Model;
 
-namespace App.Game.Inventory.External.Data
+namespace App.Game.Inventory.Runtime.Data.Loader
 {
     public class InventoryDataLoader
     {

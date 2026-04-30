@@ -1,14 +1,15 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.Autumn.Runtime.Collection;
+﻿using App.Common.Logger.Runtime;
+using App.Core.Startups.External.Attributes;
+using App.Core.Startups.External.Constants;
 
 namespace App.Common.Logger.External
 {
-    [Configurator]    
-    public class LoggerConfigurator : IConfigurator
+    [Configurator(DIContext.GlobalContext)]    
+    public class LoggerConfigurator : Core.Startups.External.Configurator
     {
-        public void Configuration(IConfigurationCollection collection)
+        public override void Configuration()
         {
-            collection.AddSingleton(typeof(Runtime.Logger));
+            Container.Bind<ILogger>().To<Runtime.Logger>().AsSingle();
         }
     }
 }

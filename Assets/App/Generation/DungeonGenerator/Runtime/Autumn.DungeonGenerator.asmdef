@@ -8,6 +8,5 @@
         "Autumn.Algorithms",
         "Autumn.BFS",
         "Autumn.DFS"
-    ],
-    "noEngineReferences": true
+    ]
 }

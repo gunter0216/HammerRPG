@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using App.Common.Autumn.External;
 using App.Common.Data.Runtime;
 using UnityEditor;
 using UnityEngine;
@@ -27,9 +26,9 @@ namespace App.Common.Data.Editor
         [MenuItem("Helper/Data/Save", false, 3)]
         public static void SaveData()
         {
-            var serviceProvider = DiManager.Instance.GetCurrentServiceProvider();
-            var dataManager = serviceProvider.GetService<IDataManager>();
-            dataManager.SaveProgress();
+            // var serviceProvider = DiManager.Instance.GetCurrentServiceProvider();
+            // var dataManager = serviceProvider.GetService<IDataManager>();
+            // dataManager.SaveProgress();
         }
 #endif
     }

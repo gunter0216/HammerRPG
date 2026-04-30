@@ -16,31 +16,26 @@ namespace App.Common.Utilities.Pool.External
             T prefab,
             Transform parent = null,
             int capacity = 0,
-            Action<T> onCreate = null,
-            Action<T> onGet = null,
-            Action<T> onRelease = null,
-            Action<T> onDestroy = null)
+            Action<T> createFunc = null,
+            Action<T> getCallback = null,
+            Action<T> releaseCallback = null)
         {
             m_Pool = new ListPool<T>(
                 createFunc: () =>
                 {
                     var item = Object.Instantiate(prefab, parent);
-                    onCreate?.Invoke(item);
+                    createFunc?.Invoke(item);
                     return Optional<T>.Success(item);
                 },
-                actionOnGet: (item) =>
+                getCallback: (item) =>
                 {
                     item.gameObject.SetActive(true);
-                    onGet?.Invoke(item);
+                    getCallback?.Invoke(item);
                 },
-                actionOnRelease: (item) =>
+                releaseCallback: (item) =>
                 {
                     item.gameObject.SetActive(false);
-                    onRelease?.Invoke(item);
-                },
-                actionOnDestroy: (item) =>
-                {
-                    onDestroy?.Invoke(item);
+                    releaseCallback?.Invoke(item);
                 },
                 capacity: capacity);
         }

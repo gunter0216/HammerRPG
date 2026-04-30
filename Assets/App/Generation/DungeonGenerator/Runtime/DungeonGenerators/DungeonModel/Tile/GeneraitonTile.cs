@@ -2,15 +2,15 @@
 {
     public class GeneraitonTile
     {
-        private string m_Id; // todo make readonly
+        private DungeonTile _tile;
 
-        public string Id
+        public DungeonTile Id
         {
-            get => m_Id;
-            set { m_Id = value; }
+            get => _tile;
+            set { _tile = value; }
         }
 
-        public GeneraitonTile(string id)
+        public GeneraitonTile(DungeonTile id)
         {
             Id = id;
         }

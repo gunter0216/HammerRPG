@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
+using App.Common.Canvases.External;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Pool.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Canvases.External;
 using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
-using App.Game.GameItems.Runtime;
-using App.Game.Inventory.External;
-using App.Game.Inventory.Runtime.Config;
-using App.Game.SpriteLoaders.Runtime;
+using App.Game.Inventory.Runtime;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.ViewModel
@@ -25,38 +24,29 @@ namespace App.Game.Cheats.External.ViewModel
             m_GroundOption,
         };
         
-        private readonly IGameItemsManager m_GameItemsManager;
         private readonly IAssetManager m_AssetManager;
-        private readonly ICanvas m_Canvas;
+        private readonly ICanvasController _canvasController;
         private readonly ISpriteLoader m_SpriteLoader;
         private readonly IInventoryController m_InventoryController;
         private readonly IReadOnlyList<IModuleItemConfig> m_Configs;
-        private readonly IReadOnlyList<IInventoryGroupConfig> m_Groups;
 
         private CheatsWindow m_Window;
         
-        private List<CheatsGroupHeaderViewModel> m_GroupHeaderViewModels;
         private ListPool<CheatsSlotViewModel> m_Slots;
         private List<CheatsSlotViewModel> m_ActiveSlots;
-        
-        private CheatsGroupHeaderViewModel m_SelectedGroup;
 
         public CheatsWindowModel(
             IAssetManager assetManager, 
-            ICanvas canvas, 
+            ICanvasController canvasController, 
             ISpriteLoader spriteLoader, 
-            IGameItemsManager gameItemsManager,
             IInventoryController inventoryController,
-            IReadOnlyList<IModuleItemConfig> configs, 
-            IReadOnlyList<IInventoryGroupConfig> groups)
+            IReadOnlyList<IModuleItemConfig> configs)
         {
             m_AssetManager = assetManager;
-            m_Canvas = canvas;
+            _canvasController = canvasController;
             m_SpriteLoader = spriteLoader;
             m_Configs = configs;
-            m_Groups = groups;
             m_InventoryController = inventoryController;
-            m_GameItemsManager = gameItemsManager;
         }
 
         public void Open()
@@ -85,7 +75,7 @@ namespace App.Game.Cheats.External.ViewModel
         
         private bool CreateWindow()
         {
-            var windowCreator = new CheatsWindowCreator(m_AssetManager, m_Canvas);
+            var windowCreator = new CheatsWindowCreator(m_AssetManager, _canvasController);
             var window = windowCreator.Create();
             if (!window.HasValue)
             {
@@ -100,16 +90,14 @@ namespace App.Game.Cheats.External.ViewModel
 
         private void InitWindow()
         {
-            CreateGroups();
-
             var dropdown = m_Window.CreateItemDropdown;
             dropdown.ClearOptions();
             dropdown.AddOptions(m_PlaceItemsDropdownOptions);
             
             m_Slots = new ListPool<CheatsSlotViewModel>(CreateSlot, 32);
             m_ActiveSlots = new List<CheatsSlotViewModel>();
-            
-            SelectGroup(m_GroupHeaderViewModels[0]);
+
+            ShowItems();
         }
 
         private Optional<CheatsSlotViewModel> CreateSlot()
@@ -135,58 +123,9 @@ namespace App.Game.Cheats.External.ViewModel
             }
         }
 
-        private void CreateGroups()
+        private void ShowItems()
         {
-            var groups = m_Groups;
-            m_GroupHeaderViewModels = new List<CheatsGroupHeaderViewModel>(groups.Count);
-            foreach (var group in groups)
-            {
-                var view = Object.Instantiate(
-                    m_Window.CheatsGroupHeaderViewPrefab,
-                    m_Window.HeaderGroupContent);
-                
-                var viewModel = new CheatsGroupHeaderViewModel(
-                    view, 
-                    group, 
-                    m_SpriteLoader,
-                    OnGroupClick);
-                viewModel.Initialize();
-                m_GroupHeaderViewModels.Add(viewModel);
-            }
-        }
-
-        private void OnGroupClick(CheatsGroupHeaderViewModel viewModel)
-        {
-            if (m_SelectedGroup == viewModel)
-            {
-                return;
-            }
-            
-            SelectGroup(viewModel);
-        }
-
-        private void SelectGroup(CheatsGroupHeaderViewModel viewModel)
-        {
-            m_SelectedGroup = viewModel;
-            foreach (var groupViewModel in m_GroupHeaderViewModels)
-            {
-                groupViewModel.SetActiveStatus(groupViewModel == viewModel);
-            }
-
-            for (int i = 0; i < m_ActiveSlots.Count; ++i)
-            {
-                m_Slots.Release(m_ActiveSlots[i]);
-            }
-            
-            m_ActiveSlots.Clear();
-            
-            var items = m_GameItemsManager.GetItemsByType(m_SelectedGroup.Group.GameType);
-            if (!items.HasValue)
-            {
-                return;
-            }
-
-            foreach (var itemConfig in items.Value)
+            foreach (var itemConfig in m_Configs)
             {
                 var slot = m_Slots.Get();
                 slot.Value.SetItem(itemConfig);

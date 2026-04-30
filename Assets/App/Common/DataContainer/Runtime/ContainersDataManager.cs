@@ -7,7 +7,7 @@ using App.Common.Utilities.Utility.Runtime;
 namespace App.Common.DataContainer.Runtime
 {
     // todo если среднее кол-во дат будет большим, добавить список пустых слотов для каждого контейнера, изменив сложность добавления с O(n) до O(1)
-    public class ContainersDataManager : IContainersDataManager
+    public class ContainersDataManager : IContainersDataManager, IInitSystem
     {
         private readonly IContainerDataLoader m_DataLoader;
         private readonly ILogger m_Logger;
@@ -20,12 +20,13 @@ namespace App.Common.DataContainer.Runtime
             m_Logger = logger;
         }
 
-        public bool Initialize()
+        public void Init()
         {
             var containers = m_DataLoader.Load();
             if (!containers.HasValue)
             {
-                return false;
+                HLogger.LogError("Cant load containers");
+                return;
             }
 
             m_DataContainers = new Dictionary<string, IContainerData>(containers.Value.Count);
@@ -33,8 +34,6 @@ namespace App.Common.DataContainer.Runtime
             {
                 AddContainer(containers.Value[i]);
             }
-            
-            return true;
         }
 
         public void AddContainer(IContainerData container)
@@ -63,25 +62,21 @@ namespace App.Common.DataContainer.Runtime
             }
             
             var container = containerData.Data;
-            HLogger.LogError($"container {containerData.GetContainerKey()} {container.Count}");
             for (int i = 0; i < container.Count; ++i)
             {
                 if (container[i] == null)
                 {
                     container[i] = data;
-                    HLogger.LogError($"qwe {i}");
                     return Optional<DataReference>.Success(new DataReference(key, i));
                 }
             }
             
-            HLogger.LogError($"> data {data}");
             container.Add(data);
-            HLogger.LogError($"< {container[0]}");
             var dataReference = new DataReference(key, container.Count - 1);
-            HLogger.LogError($"asd {container.Count - 1}");
+            
             return Optional<DataReference>.Success(dataReference);
         }
-        
+
         public Optional<DataReference> RemoveData(string key, object data)
         {
             if (!TryGetContainer(key, out var containerData))
@@ -159,10 +154,11 @@ namespace App.Common.DataContainer.Runtime
         {
             if (m_DataContainers.TryGetValue(key, out var containerData))
             {
-                HLogger.LogError($"Get container {containerData.GetContainerKey()} {containerData.Data.Count}");
                 container = containerData;
                 return true;
             }
+            
+            HLogger.LogError($"Cant get container {containerData.GetContainerKey()} {containerData.Data.Count}");
 
             container = null;
             return false;

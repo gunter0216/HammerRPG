@@ -1,0 +1,5 @@
+﻿{
+  "name": "Autumn.Modules.ItemType",
+  "noEngineReferences": true,
+  "references":[ "Autumn.ModuleItems", "Autumn.Utility" ]
+}

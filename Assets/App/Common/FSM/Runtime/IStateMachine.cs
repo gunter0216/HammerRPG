@@ -2,7 +2,7 @@
 {
     public interface IStateMachine
     {
-        void AddState(IStage stage);
+        void AddState(IState state);
         void SyncRun();
     }
 }

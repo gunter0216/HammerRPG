@@ -7,6 +7,8 @@ namespace App.Common.ModuleItem.Runtime
 {
     public interface IModuleItemsManager
     {
+        bool RegisterItems(IModuleItemsConfigLoader moduleItemsConfigLoader, string type);
+        bool RegisterItems(IReadOnlyList<IModuleItemConfig> configs, string type);
         Optional<IModuleItem> Create(DataReference dataReference);
         Optional<IModuleItem> Create(string id);
         bool Destroy(IModuleItem data);

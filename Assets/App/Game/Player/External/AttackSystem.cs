@@ -1,32 +1,30 @@
-﻿using App.Common.Autumn.Runtime.Attributes;
-using App.Common.FSM.Runtime;
-using App.Common.FSM.Runtime.Attributes;
-using App.Common.Timer.Runtime;
-using App.Game.Contexts;
+﻿using App.Common.Timer.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.EcsEvent.Runtime;
 using App.Game.Player.Runtime.Components;
 using App.Game.Player.Runtime.Events;
-using App.Game.States.Runtime.Game;
-using App.Game.Update.Runtime;
-using App.Game.Update.Runtime.Attributes;
 using App.Game.Worlds.Runtime;
 using Leopotam.EcsLite;
 
 namespace App.Game.Player.External
 {
-    [Scoped(typeof(GameSceneContext))]
-    [Stage(typeof(GameInitPhase), 0)]
-    [RunSystem(100)]
-    public class AttackSystem : IInitSystem, IRunSystem
+    public class AttackSystem : IInitSystem, IUpdateSystem
     {
-        [Inject] private IEcsEventManager m_EcsEventManager;
-        [Inject] private IWorldManager m_WorldManager;
-        [Inject] private ITimeManager m_TimeManager;
+        private readonly IEcsEventManager m_EcsEventManager;
+        private readonly IWorldManager m_WorldManager;
+        private readonly ITimeManager m_TimeManager;
         
         private EcsEventPool<AttackEvent> m_AttackEventPool;
         private EcsFilter m_AttackEventFilter;
         private EcsPool<EntityComponent> m_EntitiesPool;
         private EcsEventPool<PlayAttackAnimationEvent> m_PlayAttackAnimationPool;
+
+        public AttackSystem(IEcsEventManager ecsEventManager, IWorldManager worldManager, ITimeManager timeManager)
+        {
+            m_EcsEventManager = ecsEventManager;
+            m_WorldManager = worldManager;
+            m_TimeManager = timeManager;
+        }
 
         public void Init()
         {
@@ -37,8 +35,9 @@ namespace App.Game.Player.External
             m_AttackEventFilter = m_EcsEventManager.GetFilter<AttackEvent>();
         }
 
-        public void Run()
+        public void OnUpdate()
         {
+            return;
             foreach (var i in m_AttackEventFilter)
             {
                 ref var attackEvent = ref m_AttackEventPool.Get(i);

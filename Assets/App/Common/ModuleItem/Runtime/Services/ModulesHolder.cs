@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Data;
 using App.Common.Utilities.Utility.Runtime;
 
@@ -11,7 +12,7 @@ namespace App.Common.ModuleItem.Runtime.Services
         private readonly IContainersDataManager m_ContainersDataManager;
         private readonly IList<DataReference> m_ModuleRefs;
         
-        private IList m_ModuleDatas;
+        private List<IModuleData> m_ModuleDatas;
 
         public ModulesHolder(
             IContainersDataManager containersDataManager, 
@@ -23,7 +24,7 @@ namespace App.Common.ModuleItem.Runtime.Services
 
         public bool Initialize()
         {
-            m_ModuleDatas = new List<object>(m_ModuleRefs.Count);
+            m_ModuleDatas = new List<IModuleData>(m_ModuleRefs.Count);
             foreach (var reference in m_ModuleRefs)
             {
                 var data = m_ContainersDataManager.GetData(reference);
@@ -31,8 +32,13 @@ namespace App.Common.ModuleItem.Runtime.Services
                 {
                     return false;
                 }
+
+                if (data.Value is not IModuleData moduleData)
+                {
+                    return false;
+                }
                 
-                m_ModuleDatas.Add(data.Value);
+                m_ModuleDatas.Add(moduleData);
             }
             
             return true;
@@ -110,6 +116,25 @@ namespace App.Common.ModuleItem.Runtime.Services
             }
             
             return false;
+        }
+
+        public bool Destroy()
+        {
+            if (m_ModuleDatas == null)
+            {
+                HLogger.LogError("Item is already destroyed.");
+                return false;
+            }
+            
+            for (int i = 0; i < m_ModuleDatas.Count; ++i)
+            {
+                var data = m_ModuleDatas[i];
+                m_ContainersDataManager.RemoveData(data.GetModuleKey(), data);
+            }
+
+            m_ModuleDatas = null;
+
+            return true;
         }
     }
 }

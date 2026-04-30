@@ -9,8 +9,14 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
 {
     public class DistributeKeysDungeonGenerator : IDungeonGenerator
     {
+        private class KeyContext
+        {
+            public DungeonKeyData Key;
+            public DungeonGenerationRoom BranchRoot;
+        }
+
         private readonly DungeonKeyCreator m_KeyCreator;
-        
+
         public DistributeKeysDungeonGenerator(DungeonKeyCreator keyCreator)
         {
             m_KeyCreator = keyCreator;
@@ -18,149 +24,160 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.K
 
         public Optional<DungeonGeneration> Process(DungeonGeneration generation)
         {
-            if (!generation.TryGetCash<StartEndPathGenerationCash>(out var cash))
-            {
-                return Optional<DungeonGeneration>.Fail();
-            }
-            
             var roomsData = generation.DungeonGenerationResult.GenerationData.GenerationRooms;
-            var rooms = roomsData.Rooms;
             var startRoom = roomsData.StartGenerationRoom;
             var endRoom = roomsData.EndGenerationRoom;
+
             var visitedRooms = new HashSet<DungeonGenerationRoom>();
-            
-            var path = cash.Path;
-            var roomsInPath = new HashSet<DungeonGenerationRoom>(path);
-            foreach (var room in rooms)
-            {
-                if (roomsInPath.Contains(room))
-                {
-                    continue;
-                }
-
-                if (room.Connections
-                        .Select(x => x.GenerationRoom)
-                        .Count(x => roomsInPath.Contains(x)) >= 2)
-                {
-                    roomsInPath.Add(room);
-                }
-            }
-
-            foreach (var roomData in roomsInPath)
-            {
-                roomData.IsMainPath = true;
-            }
-
             var doorKeys = new Stack<DungeonKeyData>();
             var stack = new List<DungeonGenerationRoom>();
+
             stack.Add(startRoom);
             visitedRooms.Add(startRoom);
-            for (int i = 0; i < 100000; ++i)
+
+            int safety = 0;
+
+            while (stack.Count > 0 && safety++ < 100000)
             {
-                var room = stack.Last();
+                var room = stack[^1];
+
                 if (room == endRoom)
-                {
                     break;
-                }
-                
-                if (room.Connections.Count <= 1)
+
+                var connections = room.Connections
+                    .Select(x => x.GenerationRoom)
+                    .ToList();
+
+                var unvisited = connections
+                    .Where(x => !visitedRooms.Contains(x))
+                    .ToList();
+
+                // Тупик или возврат
+                if (connections.Count <= 1)
                 {
                     if (stack.Count <= 1)
                     {
-                        AddRoomInStack(room.Connections[0].GenerationRoom);
+                        if (connections.Count > 0)
+                            AddRoomInStack(connections[0]);
                     }
                     else
                     {
-                        var doorKey = doorKeys.Peek();
-                        room.AddDoorKey(doorKey);
-                        
-                        for (int j = stack.Count - 1; j >= 0; j--)
+                        // безопасный Peek
+                        if (doorKeys.Count > 0)
                         {
-                            if (stack[j].Connections.Count < 3)
-                            {
-                                continue;
-                            }
-
-                            if (stack[j].Connections
-                                .Select(x => x.GenerationRoom)
-                                .All(x => visitedRooms.Contains(x)))
-                            {
-                                continue;
-                            }
-
-                            stack = stack.GetRange(0, j + 1);
-                            break;
+                            var doorKey = doorKeys.Peek();
+                            room.AddDoorKey(doorKey);
                         }
-                    }
 
-                    continue;
-                }
-
-                if (room.Connections.Count <= 2)
-                {
-                    var nextRoom = room.Connections.First(x => !visitedRooms.Contains(x.GenerationRoom)); 
-                    AddRoomInStack(nextRoom.GenerationRoom);
-                    continue;
-                }
-                
-                if (room.Connections.Count >= 3)
-                {
-                    var notVisitedRooms = room.Connections
-                        .Select(x => x.GenerationRoom)
-                        .Where(x => !visitedRooms.Contains(x))
-                        .ToArray();
-                    
-                    var pathRoom = notVisitedRooms
-                        .FirstOrDefault(x => roomsInPath.Contains(x));
-                    
-                    var notPathRooms = notVisitedRooms
-                        .Where(x => !roomsInPath.Contains(x))
-                        .ToArray();
-
-                    if (notPathRooms.Length <= 0)
-                    {
-                        AddRoomInStack(pathRoom);
-                        doorKeys.Pop();
-                    }
-                    else
-                    {
-                        var doorKey = doorKeys.Count > 0 ? doorKeys.Peek() : null;
-                        var roomWithRequiredDoorKey = room.Connections
-                            .Select(x => x.GenerationRoom)
-                            .FirstOrDefault(x => x.RequiredKey != null && x.RequiredKey == doorKey);
-                        if (roomWithRequiredDoorKey == default)
+                        // 🔥 ВАЖНО: правильный откат без пересоздания списка
+                        for (int j = stack.Count - 2; j >= 0; j--)
                         {
-                            doorKey = m_KeyCreator.Create();
-                            doorKeys.Push(doorKey);
-                            if (notPathRooms.Length >= 2)
+                            var candidate = stack[j];
+
+                            var candidateConnections = candidate.Connections
+                                .Select(x => x.GenerationRoom);
+
+                            var hasUnvisited = candidateConnections
+                                .Any(x => !visitedRooms.Contains(x));
+
+                            if (candidate.Connections.Count >= 3 && hasUnvisited)
                             {
-                                notPathRooms[0].RequiredKey = doorKey;
-                                AddRoomInStack(notPathRooms[1]);
+                                // удаляем всё после j
+                                stack.RemoveRange(j + 1, stack.Count - (j + 1));
+                                break;
                             }
-                            else
-                            {
-                                pathRoom.RequiredKey = doorKey;
-                                AddRoomInStack(notPathRooms[0]);
-                            }
+                        }
+                    } 
+
+                    continue;
+                }
+
+                // Прямая линия
+                if (connections.Count == 2)
+                {
+                    var nextRoom = connections
+                        .FirstOrDefault(x => !visitedRooms.Contains(x));
+
+                    if (nextRoom != null)
+                        AddRoomInStack(nextRoom);
+
+                    continue;
+                }
+
+                // Развилка
+                if (connections.Count >= 3)
+                {
+                    var notVisitedRooms = unvisited;
+
+                    var mainRoom = notVisitedRooms
+                        .FirstOrDefault(x => x.IsMainPath);
+
+                    var notMainRooms = notVisitedRooms
+                        .Where(x => !x.IsMainPath)
+                        .ToList();
+
+                    // если всё посещено → откат
+                    if (mainRoom == null && notMainRooms.Count == 0)
+                    {
+                        stack.RemoveAt(stack.Count - 1);
+                        continue;
+                    }
+
+                    if (notMainRooms.Count == 0)
+                    {
+                        if (mainRoom != null)
+                            AddRoomInStack(mainRoom);
+
+                        if (doorKeys.Count > 0)
+                            doorKeys.Pop();
+
+                        continue;
+                    }
+
+                    var doorKey = doorKeys.Count > 0 ? doorKeys.Peek() : null;
+
+                    var roomWithRequiredDoorKey = connections
+                        .FirstOrDefault(x => x.RequiredKey != null && x.RequiredKey == doorKey);
+
+                    if (roomWithRequiredDoorKey == null)
+                    {
+                        doorKey = m_KeyCreator.Create();
+                        doorKeys.Push(doorKey);
+
+                        if (notMainRooms.Count >= 2)
+                        {
+                            notMainRooms[0].RequiredKey = doorKey;
+                            AddRoomInStack(notMainRooms[1]);
                         }
                         else
                         {
-                            doorKeys.Pop();
-                            AddRoomInStack(roomWithRequiredDoorKey);
+                            if (mainRoom != null)
+                                mainRoom.RequiredKey = doorKey;
+
+                            AddRoomInStack(notMainRooms[0]);
                         }
                     }
-                    
+                    else
+                    {
+                        if (doorKeys.Count > 0)
+                            doorKeys.Pop();
+
+                        AddRoomInStack(roomWithRequiredDoorKey);
+                    }
+
                     continue;
                 }
             }
 
+            return Optional<DungeonGeneration>.Success(generation);
+
             void AddRoomInStack(DungeonGenerationRoom room)
             {
+                if (room == null) return;
+
                 stack.Add(room);
                 visitedRooms.Add(room);
             }
-
-            return Optional<DungeonGeneration>.Success(generation);
         }
 
         public string GetName()

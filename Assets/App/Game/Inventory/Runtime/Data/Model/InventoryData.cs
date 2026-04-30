@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using App.Common.Data.Runtime;
 using Newtonsoft.Json;
 
-namespace App.Game.Inventory.Runtime.Data
+namespace App.Game.Inventory.Runtime.Data.Model
 {
     [Serializable]
     [JsonObject(MemberSerialization.Fields)]
     public class InventoryData : IData
     {
-        [JsonProperty("items")] private List<InventoryItemData> m_Items;
+        [JsonProperty("items")] private List<InventoryItemData> _items;
 
         public List<InventoryItemData> Items
         {
-            get => m_Items;
-            set => m_Items = value;
+            get => _items;
+            set => _items = value;
         }
 
         public string Name()

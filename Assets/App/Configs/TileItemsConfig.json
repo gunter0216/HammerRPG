@@ -1,0 +1,51 @@
+{
+  "items": [
+    {
+      "id": "chest",
+      "modules": [
+        {
+          "module": "chest"
+        },
+        {
+          "module": "container",
+          "rows": 5,
+          "cols": 7
+        },
+        {
+          "module": "fbx",
+          "asset_key": "ChestView"
+        }
+      ]
+    },
+    {
+      "id": "wall",
+      "modules": [
+        {
+          "module": "fbx",
+          "asset_key": "WallView"
+        }
+      ]
+    },
+    {
+      "id": "door",
+      "modules": [
+        {
+          "module": "door"
+        },
+        {
+          "module": "fbx",
+          "asset_key": "DoorView"
+        }
+      ]
+    },
+    {
+      "id": "floor",
+      "modules": [
+        {
+          "module": "fbx",
+          "asset_key": "FloorView"
+        }
+      ]
+    }
+  ]
+}

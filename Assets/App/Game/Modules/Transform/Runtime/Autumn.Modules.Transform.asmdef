@@ -1,0 +1,10 @@
+{
+  "name": "Autumn.Modules.Transform",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.DataContainers",
+    "Autumn.Utility",
+    "Autumn.DataManager",
+    "Autumn.Algorithms"
+  ]
+}

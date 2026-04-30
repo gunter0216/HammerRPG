@@ -1,24 +1,29 @@
 ﻿using App.Common.ModuleItem.Runtime;
-using App.Game.Inventory.Runtime.Config;
-using App.Game.Inventory.Runtime.Data;
+using App.Game.Inventory.Runtime.Data.Model;
 
-namespace App.Game.Inventory.External
+namespace App.Game.Inventory.Runtime.Item
 {
     public class InventoryItem
     {
-        private readonly InventoryItemData m_Data;
-        private readonly IModuleItem m_ModuleItem;
-        private readonly IInventoryGroupConfig m_Group;
+        private readonly InventoryItemData _data;
+        private IModuleItem _moduleItem;
 
-        public InventoryItemData Data => m_Data;
-        public IModuleItem Item => m_ModuleItem;
-        public IInventoryGroupConfig Group => m_Group;
-
-        public InventoryItem(InventoryItemData data, IModuleItem moduleItem, IInventoryGroupConfig group)
+        public InventoryItemData Data => _data;
+        public IModuleItem Item
         {
-            m_Data = data;
-            m_ModuleItem = moduleItem;
-            m_Group = group;
+            get => _moduleItem;
+            set => _moduleItem = value;
+        }
+
+        public InventoryItem(InventoryItemData data)
+        {
+            _data = data;
+        }
+        
+        public InventoryItem(IModuleItem moduleItem, InventoryItemData data)
+        {
+            _moduleItem = moduleItem;
+            _data = data;
         }
     }
 }
