@@ -116,6 +116,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         public RoomConfigVariant ConfigVariant
         {
             get => _configVariant;
+            set => _configVariant = value;
         }
 
         public DungeonGenerationRoom(int uid, Vector2Int position, Vector2Int size)

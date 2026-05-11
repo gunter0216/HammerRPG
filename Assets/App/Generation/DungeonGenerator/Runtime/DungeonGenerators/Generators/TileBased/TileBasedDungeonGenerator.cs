@@ -30,22 +30,35 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         public Optional<DungeonGeneration> Process(DungeonGeneration generation)
         {
-            _result = generation.DungeonGenerationResult.GenerationData.GenerationRooms;
+            _result =
+                generation
+                    .DungeonGenerationResult
+                    .GenerationData
+                    .GenerationRooms;
 
             _rooms = new List<DungeonGenerationRoom>();
+
             _result.Rooms = _rooms;
 
-            var configValue = generation.GetConfig<TileBasedGenerationConfig>();
+            var configValue =
+                generation.GetConfig<TileBasedGenerationConfig>();
+
             _config = configValue.Value;
 
-            _typeToRooms = new Dictionary<RoomType, List<RoomConfigAsset>>();
+            _typeToRooms =
+                new Dictionary<RoomType, List<RoomConfigAsset>>();
 
             foreach (var roomPresetConfig in _config.Rooms)
             {
-                if (!_typeToRooms.TryGetValue(roomPresetConfig.RoomType, out var list))
+                if (!_typeToRooms.TryGetValue(
+                        roomPresetConfig.RoomType,
+                        out var list))
                 {
                     list = new List<RoomConfigAsset>();
-                    _typeToRooms.Add(roomPresetConfig.RoomType, list);
+
+                    _typeToRooms.Add(
+                        roomPresetConfig.RoomType,
+                        list);
                 }
 
                 list.Add(roomPresetConfig);
@@ -61,29 +74,38 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         private void Generate()
         {
-            var startConfig = _typeToRooms[RoomType.Start].Random();
-            var variant = startConfig.Variants.Random();
+            var startConfig =
+                _typeToRooms[RoomType.Start]
+                    .Random();
 
-            var startRoom = _roomCreator.Create(
+            var startVariant =
+                startConfig.Variants
+                    .Random();
+
+            var startRoom =
+                _roomCreator.Create(
                     Vector2Int.Zero,
                     startConfig,
-                    variant);
+                    startVariant);
 
+            startRoom.ConfigVariant = startVariant;
             startRoom.RotateEuler = 0;
             startRoom.Depth = 0;
 
             _rooms.Add(startRoom);
 
-            foreach (var outputDoor in variant.OutputDoors)
+            foreach (var outputDoor in startVariant.OutputDoors)
             {
                 GenerateBranch(
                     startRoom,
-                    new Vector2Int(outputDoor.X, outputDoor.Y),
+                    new Vector2Int(
+                        outputDoor.X,
+                        outputDoor.Y),
                     0);
             }
         }
 
-        private void GenerateBranch(
+        private bool GenerateBranch(
             DungeonGenerationRoom prevRoom,
             Vector2Int exitDoor,
             int depth)
@@ -119,59 +141,89 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             configs.Shuffle();
 
-            bool branchCreated = false;
-
             foreach (var config in configs)
             {
-                if (branchCreated)
-                    break;
+                var variants =
+                    config.Variants
+                        .ToList();
 
-                var variant = config.Variants.Random();
+                variants.Shuffle();
 
-                foreach (var rotation in new[] { 0f, 90f, 180f, 270f })
+                foreach (var variant in variants)
                 {
-                    var inputDoorSide =
-                        GetDoorSide(
-                            config.Size,
-                            config.InputDoor,
-                            rotation);
-
-                    if (!IsOpposite(prevDoorSide, inputDoorSide))
-                        continue;
-
-                    var rotatedInputDoor =
-                        RotatePoint(
-                            config.InputDoor,
-                            config.Size,
-                            rotation);
-
-                    var rotationOffset =
-                        GetRotationOffset(
-                            config.Size,
-                            rotation);
-
-                    var roomPosition =
-                        targetDoorWorldPos
-                        + rotationOffset
-                        - rotatedInputDoor;
-
-                    var room = _roomCreator.Create(
-                            roomPosition,
-                            config,
-                            variant);
-
-                    room.RotateEuler = rotation;
-                    room.Depth = depth + 1;
-
-                    if (Intersects(room))
-                        continue;
-
-                    _rooms.Add(room);
-
-                    branchCreated = true;
-
-                    if (!createEndRoom)
+                    foreach (var rotation in new[] { 0f, 90f, 180f, 270f })
                     {
+                        var inputDoorSide =
+                            GetDoorSide(
+                                config.Size,
+                                config.InputDoor,
+                                rotation);
+
+                        if (!IsOpposite(
+                                prevDoorSide,
+                                inputDoorSide))
+                        {
+                            continue;
+                        }
+
+                        var rotatedInputDoor =
+                            RotatePoint(
+                                config.InputDoor,
+                                config.Size,
+                                rotation);
+
+                        var rotationOffset =
+                            GetRotationOffset(
+                                config.Size,
+                                rotation);
+
+                        var roomPosition =
+                            targetDoorWorldPos
+                            + rotationOffset
+                            - rotatedInputDoor;
+
+                        Debug.LogWarning(
+                            "TRY PLACE ROOM\n" +
+                            $"Config: {config.name}\n" +
+                            $"Variant: {variant.AssetKey.name}\n" +
+                            $"Position: {roomPosition}\n" +
+                            $"Rotation: {rotation}\n" +
+                            $"Depth: {depth + 1}");
+
+                        var room =
+                            _roomCreator.Create(
+                                roomPosition,
+                                config,
+                                variant);
+
+                        room.ConfigVariant = variant;
+                        room.RotateEuler = rotation;
+                        room.Depth = depth + 1;
+
+                        if (Intersects(room))
+                        {
+                            Debug.LogWarning(
+                                "ROOM INTERSECTION\n" +
+                                $"Config: {config.name}\n" +
+                                $"Variant: {variant.AssetKey.name}\n" +
+                                $"Position: {roomPosition}\n" +
+                                $"Rotation: {rotation}");
+
+                            continue;
+                        }
+
+                        _rooms.Add(room);
+
+                        if (createEndRoom)
+                        {
+                            return true;
+                        }
+
+                        var successfulDoors =
+                            new List<Vector2Int>();
+
+                        bool failed = false;
+
                         foreach (var outputDoor in variant.OutputDoors)
                         {
                             var outputDoorPos =
@@ -186,16 +238,208 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                                 continue;
                             }
 
-                            GenerateBranch(
-                                room,
-                                outputDoorPos,
-                                depth + 1);
-                        }
-                    }
+                            bool branchSuccess =
+                                GenerateBranch(
+                                    room,
+                                    outputDoorPos,
+                                    depth + 1);
 
-                    break;
+                            if (branchSuccess)
+                            {
+                                successfulDoors.Add(outputDoorPos);
+                                continue;
+                            }
+
+                            if (TryReplaceVariant(
+                                    room,
+                                    config,
+                                    variant,
+                                    successfulDoors,
+                                    outputDoorPos,
+                                    out var newDoors))
+                            {
+                                foreach (var newDoor in newDoors)
+                                {
+                                    bool success =
+                                        GenerateBranch(
+                                            room,
+                                            newDoor,
+                                            depth + 1);
+
+                                    if (!success)
+                                    {
+                                        Debug.LogError(
+                                            "FAILED GENERATE REPLACEMENT BRANCH\n" +
+                                            $"Room Config: {room.ConfigAsset.name}\n" +
+                                            $"Room Variant: {room.ConfigVariant.AssetKey.name}\n" +
+                                            $"Room Position: {room.Position}\n" +
+                                            $"Room Rotation: {room.RotateEuler}\n" +
+                                            $"Door: {newDoor}");
+
+                                        return false;
+                                    }
+                                }
+
+                                return true;
+                            }
+
+                            failed = true;
+                            break;
+                        }
+
+                        if (!failed)
+                        {
+                            return true;
+                        }
+
+                        _rooms.Remove(room);
+                    }
                 }
             }
+
+            if (roomType != RoomType.End)
+            {
+                Debug.LogError(
+                    "FAILED GENERATE BRANCH\n" +
+                    $"Depth: {depth}\n" +
+                    $"RoomType: {roomType}\n" +
+                    $"PrevRoom Config: {prevRoom.ConfigAsset.name}\n" +
+                    $"PrevRoom Variant: {prevRoom.ConfigVariant.AssetKey.name}\n" +
+                    $"PrevRoom Position: {prevRoom.Position}\n" +
+                    $"PrevRoom Rotation: {prevRoom.RotateEuler}\n" +
+                    $"ExitDoor: {exitDoor}\n" +
+                    $"PrevDoorWorldPos: {prevDoorWorldPos}\n" +
+                    $"PrevDoorSide: {prevDoorSide}\n" +
+                    $"TargetDoorWorldPos: {targetDoorWorldPos}");
+            }
+
+            return false;
+        }
+
+        private bool TryReplaceVariant(
+            DungeonGenerationRoom room,
+            RoomConfigAsset config,
+            RoomConfigVariant currentVariant,
+            List<Vector2Int> successfulDoors,
+            Vector2Int failedDoor,
+            out List<Vector2Int> newDoors)
+        {
+            newDoors = new List<Vector2Int>();
+
+            var variants =
+                config.Variants
+                    .ToList();
+
+            variants.Shuffle();
+
+            Debug.LogWarning(
+                "TRY REPLACE VARIANT\n" +
+                $"Room Config: {config.name}\n" +
+                $"Room Position: {room.Position}\n" +
+                $"Room Rotation: {room.RotateEuler}\n" +
+                $"Current Variant: {currentVariant.AssetKey.name}\n" +
+                $"Failed Door: {failedDoor}\n" +
+                $"Successful Doors: {string.Join(", ", successfulDoors)}");
+
+            foreach (var variant in variants)
+            {
+                if (variant == currentVariant)
+                {
+                    continue;
+                }
+
+                bool valid = true;
+
+                foreach (var usedDoor in successfulDoors)
+                {
+                    bool contains =
+                        variant.OutputDoors.Any(x =>
+                            x.X == usedDoor.X &&
+                            x.Y == usedDoor.Y);
+
+                    if (!contains)
+                    {
+                        Debug.LogWarning(
+                            $"Variant {variant.AssetKey.name} rejected. " +
+                            $"Missing successful door {usedDoor}");
+
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (!valid)
+                {
+                    continue;
+                }
+
+                bool containsFailedDoor =
+                    variant.OutputDoors.Any(x =>
+                        x.X == failedDoor.X &&
+                        x.Y == failedDoor.Y);
+
+                if (containsFailedDoor)
+                {
+                    Debug.LogWarning(
+                        $"Variant {variant.AssetKey.name} rejected. " +
+                        $"Still contains failed door {failedDoor}");
+
+                    continue;
+                }
+
+                foreach (var outputDoor in variant.OutputDoors)
+                {
+                    var door =
+                        new Vector2Int(
+                            outputDoor.X,
+                            outputDoor.Y);
+
+                    bool alreadyUsed =
+                        successfulDoors.Any(x =>
+                            x.X == door.X &&
+                            x.Y == door.Y);
+
+                    if (alreadyUsed)
+                    {
+                        continue;
+                    }
+
+                    if (IsSameDoor(
+                            door,
+                            config.InputDoor))
+                    {
+                        continue;
+                    }
+
+                    newDoors.Add(door);
+                }
+
+                room.ConfigVariant = variant;
+
+                Debug.LogWarning(
+                    "ROOM VARIANT REPLACED\n" +
+                    $"Room Config: {config.name}\n" +
+                    $"Room Position: {room.Position}\n" +
+                    $"Room Rotation: {room.RotateEuler}\n" +
+                    $"Old Variant: {currentVariant.AssetKey.name}\n" +
+                    $"New Variant: {variant.AssetKey.name}\n" +
+                    $"Failed Door: {failedDoor}\n" +
+                    $"Successful Doors: {string.Join(", ", successfulDoors)}\n" +
+                    $"New Doors: {string.Join(", ", newDoors)}");
+
+                return true;
+            }
+
+            Debug.LogError(
+                "FAILED TO REPLACE VARIANT\n" +
+                $"Config: {config.name}\n" +
+                $"Current Variant: {currentVariant.AssetKey.name}\n" +
+                $"Room Position: {room.Position}\n" +
+                $"Room Rotation: {room.RotateEuler}\n" +
+                $"Failed Door: {failedDoor}\n" +
+                $"Successful Doors: {string.Join(", ", successfulDoors)}");
+
+            return false;
         }
 
         private bool Intersects(DungeonGenerationRoom room)
@@ -209,7 +453,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     GetRoomRect(other);
 
                 if (rect1.Overlaps(rect2))
+                {
                     return true;
+                }
             }
 
             return false;
@@ -234,14 +480,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                 size.Y);
         }
 
-        // Unity rotation:
-        // positive Z rotation = counter-clockwise
-        //
-        // 90°  -> LEFT
-        // 180° -> DOWN
-        // 270° -> RIGHT
-        //
-        // We rotate around bottom-left pivot.
         private Vector2Int RotatePoint(
             Vector2Int point,
             Vector2Int size,
@@ -255,12 +493,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             if (Mathf.Approximately(rotation, 0))
             {
-                return new Vector2Int(
-                    x,
-                    y);
+                return new Vector2Int(x, y);
             }
 
-            // 90° CCW
             if (Mathf.Approximately(rotation, 90))
             {
                 return new Vector2Int(
@@ -268,7 +503,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     w - 1 - x);
             }
 
-            // 180°
             if (Mathf.Approximately(rotation, 180))
             {
                 return new Vector2Int(
@@ -276,13 +510,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     h - 1 - y);
             }
 
-            // 270° CCW
             return new Vector2Int(
                 h - 1 - y,
                 x);
         }
 
-        // Offset from rotated AABB min
         private Vector2Int GetRotationOffset(
             Vector2Int size,
             float rotation)
@@ -295,7 +527,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                 return Vector2Int.Zero;
             }
 
-            // 90° CCW
             if (Mathf.Approximately(rotation, 90))
             {
                 return new Vector2Int(
@@ -303,7 +534,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     w - 1);
             }
 
-            // 180°
             if (Mathf.Approximately(rotation, 180))
             {
                 return new Vector2Int(
@@ -311,7 +541,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     h - 1);
             }
 
-            // 270° CCW
             return new Vector2Int(
                 h - 1,
                 0);
@@ -369,13 +598,19 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     rotation);
 
             if (rotatedDoor.X == 0)
+            {
                 return Side.Left;
+            }
 
             if (rotatedDoor.X == rotatedSize.X - 1)
+            {
                 return Side.Right;
+            }
 
             if (rotatedDoor.Y == 0)
+            {
                 return Side.Bottom;
+            }
 
             return Side.Top;
         }

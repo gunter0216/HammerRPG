@@ -142,7 +142,7 @@ namespace App.Generation.DungeonGenerator.Editor
                 //     Quaternion.Euler(0, room.RotateEuler, 0),
                 //     _roomsContent);
 
-                roomObj.name = $"{variant.AssetKey} depth {room.Depth}";
+                roomObj.name = $"{variant.AssetKey.name} depth {room.Depth}";
                 _rooms.Add(roomObj);
 
                 // Логируем localPosition (без внутреннего смещения prefab'а +0.5)
