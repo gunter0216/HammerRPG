@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfda9e69161d4820a7839b629185e178, type: 3}
   m_Name: EndRoom9x9
   m_EditorClassIdentifier: 
-  _assetKey: EndRoom9x9
   _roomType: 3
   _size: {x: 9, y: 9}
-  _inputDoor: {x: 8, y: 4}
-  _outputDoors: []
+  _inputDoor: {x: 0, y: 4}
   _variants:
-  - AssetKey: EndRoom9x9
+  - AssetKey: {fileID: 6976221828500007986, guid: 1bf26f63a2cd24a449ed79ecc55c1ccd, type: 3}
     OutputDoors: []

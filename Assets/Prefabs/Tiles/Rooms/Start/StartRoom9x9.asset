@@ -12,13 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfda9e69161d4820a7839b629185e178, type: 3}
   m_Name: StartRoom9x9
   m_EditorClassIdentifier: 
-  _assetKey: StartRoom9x9
   _roomType: 2
   _size: {x: 9, y: 9}
   _inputDoor: {x: 0, y: 0}
-  _outputDoors:
-  - {x: 8, y: 4}
   _variants:
-  - AssetKey: StartRoom9x9
+  - AssetKey: {fileID: 6976221828500007986, guid: 3e3f744797bdbbe45bcb61c9f7798755, type: 3}
     OutputDoors:
     - {x: 8, y: 4}

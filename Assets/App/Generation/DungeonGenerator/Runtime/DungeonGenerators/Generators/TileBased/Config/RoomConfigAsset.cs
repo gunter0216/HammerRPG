@@ -13,7 +13,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         public class RoomConfigVariant
         {
             [SerializeField, JsonProperty("asset")]
-            public string AssetKey;
+            // public string AssetKey;
+            public GameObject AssetKey;
         
             [SerializeField, JsonProperty("asset")]
             public Vector2Int[] OutputDoors;
@@ -31,7 +32,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         [SerializeField, JsonProperty("asset")]
         private RoomConfigVariant[] _variants;
 
-        public string AssetKey => _variants[0].AssetKey;
+        // public string AssetKey => _variants[0].AssetKey;
+        public GameObject AssetKey => _variants[0].AssetKey;
 
         public RoomType RoomType => _roomType;
 

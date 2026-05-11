@@ -3,7 +3,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
     public enum RoomType
     {
         Workshop,
-        Fight,
+        Transit,
         Start,
         End,
         Empty,

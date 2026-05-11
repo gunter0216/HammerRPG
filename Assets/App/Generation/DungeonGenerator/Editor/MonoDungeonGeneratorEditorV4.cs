@@ -126,11 +126,16 @@ namespace App.Generation.DungeonGenerator.Editor
                 log.AppendLine($"  expectedAABB X[{aabbMinX}..{aabbMaxX}] Y[{aabbMinY}..{aabbMaxY}]");
                 log.AppendLine($"  expectedFinalPos X={aabbMinX} Z={aabbMinY}");
 
-                var roomObj = await Addressables.InstantiateAsync(
-                    config.AssetKey,
+                var roomObjs = await Object.InstantiateAsync(config.AssetKey,
+                    _roomsContent, 
                     finalPos + _roomsContent.position,
-                    Quaternion.Euler(0, room.RotateEuler, 0),
-                    _roomsContent);
+                    Quaternion.Euler(0, room.RotateEuler, 0)).ToUniTask();
+                var roomObj = roomObjs[0];
+                // var roomObj = await Addressables.InstantiateAsync(
+                //     config.AssetKey,
+                //     finalPos + _roomsContent.position,
+                //     Quaternion.Euler(0, room.RotateEuler, 0),
+                //     _roomsContent);
 
                 roomObj.name = $"{config.AssetKey} depth {room.Depth}";
                 _rooms.Add(roomObj);

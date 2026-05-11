@@ -95,7 +95,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             var roomType =
                 createEndRoom
                     ? RoomType.End
-                    : RoomType.Fight;
+                    : RoomType.Transit;
 
             var prevDoorWorldPos =
                 GetDoorWorldPosition(

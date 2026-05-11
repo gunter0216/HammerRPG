@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfda9e69161d4820a7839b629185e178, type: 3}
+  m_Name: TransitRoom_11x11
+  m_EditorClassIdentifier: 
+  _roomType: 1
+  _size: {x: 11, y: 11}
+  _inputDoor: {x: 0, y: 5}
+  _variants:
+  - AssetKey: {fileID: 8638216788256457321, guid: f3e17464d548f93489a051cbc4796a0a, type: 3}
+    OutputDoors:
+    - {x: 10, y: 5}
+    - {x: 5, y: 10}
+    - {x: 5, y: 0}
+  - AssetKey: {fileID: 5341968357427056718, guid: 36d39e51d46cd5a41949e0c843e76802, type: 3}
+    OutputDoors:
+    - {x: 10, y: 5}
+    - {x: 5, y: 0}
+  - AssetKey: {fileID: 3084482136063081338, guid: 6bb8c1fd9d3a16247b4f1d6c60b29b84, type: 3}
+    OutputDoors:
+    - {x: 5, y: 10}
+    - {x: 5, y: 0}
+  - AssetKey: {fileID: 849649943745591837, guid: 23d1fe3dd9df1cd4f94b235eb48c1f6a, type: 3}
+    OutputDoors:
+    - {x: 10, y: 5}
+    - {x: 5, y: 10}
+  - AssetKey: {fileID: 4311821846132636548, guid: f542bf32064df1447893f74b5e375acd, type: 3}
+    OutputDoors:
+    - {x: 5, y: 0}
+  - AssetKey: {fileID: 372701445422572111, guid: ed2183dddc409264a9149aa49e5c5892, type: 3}
+    OutputDoors:
+    - {x: 10, y: 5}
+  - AssetKey: {fileID: 6372097051272960666, guid: 9e4fc183e4de0234cbf8c49de15bc4aa, type: 3}
+    OutputDoors:
+    - {x: 5, y: 10}
