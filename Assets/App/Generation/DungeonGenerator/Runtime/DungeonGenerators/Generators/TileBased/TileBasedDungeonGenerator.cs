@@ -24,8 +24,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         private TileBasedGenerationConfig _config;
         private List<DungeonGenerationRoom> _rooms;
 
-        private StringBuilder _log;
-
         public TileBasedDungeonGenerator(RoomCreator roomCreator)
         {
             _roomCreator = roomCreator;
@@ -33,8 +31,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         public Optional<DungeonGeneration> Process(DungeonGeneration generation)
         {
-            _log = new StringBuilder();
-
             _result = generation.DungeonGenerationResult.GenerationData.GenerationRooms;
 
             _rooms = new List<DungeonGenerationRoom>();
@@ -61,14 +57,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             _result.StartGenerationRoom = _rooms.First();
             _result.EndGenerationRoom = _rooms.Last();
 
-            Debug.Log(_log.ToString());
-
             return Optional<DungeonGeneration>.Success(generation);
-        }
-
-        private void Log(string message)
-        {
-            _log.AppendLine(message);
         }
 
         private void Generate()
@@ -81,14 +70,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             _rooms.Add(startRoom);
 
-            Log("=== START ROOM ===");
-            Log($"  Config size: {startConfig.Size.X}x{startConfig.Size.Y}");
-            Log($"  Position: ({startRoom.Position.X},{startRoom.Position.Y}), Rotation: {startRoom.RotateEuler}");
-            Log($"  Output doors: {startConfig.OutputDoors.Length}");
-
             foreach (var outputDoor in startConfig.OutputDoors)
             {
-                Log($"  Processing output door ({outputDoor.X},{outputDoor.Y})");
                 GenerateBranch(startRoom, new Vector2Int(outputDoor.X, outputDoor.Y), 0);
             }
         }
@@ -101,19 +84,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             bool createEndRoom = depth >= _config.MaxDepth;
             var roomType = createEndRoom ? RoomType.End : RoomType.Fight;
 
-            Log($"\n--- GenerateBranch depth={depth} createEnd={createEndRoom} ---");
-            Log($"  Prev room: pos=({prevRoom.Position.X},{prevRoom.Position.Y}) size={prevRoom.Size.X}x{prevRoom.Size.Y} rot={prevRoom.RotateEuler}");
-            Log($"  Exit door local: ({exitDoor.X},{exitDoor.Y})");
-
             var prevDoorWorldPos = GetDoorWorldPosition(prevRoom, exitDoor);
-            Log($"  Exit door WORLD: ({prevDoorWorldPos.X},{prevDoorWorldPos.Y})");
 
             var prevDoorSide = GetDoorSide(prevRoom.Size, exitDoor, prevRoom.RotateEuler);
             var sideVec = SideToVector(prevDoorSide);
             var newDoorWorldTarget = prevDoorWorldPos + sideVec;
-
-            Log($"  Exit door side: {prevDoorSide}  SideToVector=({sideVec.X},{sideVec.Y})");
-            Log($"  Target WORLD for new input door: ({newDoorWorldTarget.X},{newDoorWorldTarget.Y})");
 
             var configs = _typeToRooms[roomType];
             configs.Shuffle();
@@ -124,30 +99,18 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             {
                 if (branchCreated) break;
 
-                Log($"  Trying config: size={config.Size.X}x{config.Size.Y} inputDoor=({config.InputDoor.X},{config.InputDoor.Y})");
-
                 foreach (var rotation in new[] { 0f, 90f, 180f, 270f })
                 {
                     var rotatedInputDoor = RotatePoint(config.InputDoor, config.Size, rotation);
                     var inputDoorSide    = GetDoorSide(config.Size, config.InputDoor, rotation);
 
-                    Log($"    rot={rotation}: rotatedInputDoor=({rotatedInputDoor.X},{rotatedInputDoor.Y}) side={inputDoorSide}");
-
                     if (!IsOpposite(prevDoorSide, inputDoorSide))
                     {
-                        Log($"    SKIP: {prevDoorSide} vs {inputDoorSide} not opposite");
                         continue;
                     }
 
                     var rotationOffset = GetRotationOffset(config.Size, rotation);
                     var roomPosition   = newDoorWorldTarget - rotationOffset - rotatedInputDoor;
-
-                    Log($"    rotationOffset=({rotationOffset.X},{rotationOffset.Y})");
-                    Log($"    roomPos = ({newDoorWorldTarget.X},{newDoorWorldTarget.Y}) - ({rotationOffset.X},{rotationOffset.Y}) - ({rotatedInputDoor.X},{rotatedInputDoor.Y}) = ({roomPosition.X},{roomPosition.Y})");
-
-                    var verifyDoor = roomPosition + rotationOffset + rotatedInputDoor;
-                    bool match = verifyDoor.X == newDoorWorldTarget.X && verifyDoor.Y == newDoorWorldTarget.Y;
-                    Log($"    VERIFY door=({verifyDoor.X},{verifyDoor.Y}) expected=({newDoorWorldTarget.X},{newDoorWorldTarget.Y}) => {(match ? "OK" : "MISMATCH!")}");
 
                     var room = _roomCreator.Create(roomPosition, config);
                     room.RotateEuler = rotation;
@@ -155,16 +118,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
                     if (Intersects(room))
                     {
-                        Log($"    SKIP: intersects with existing room");
                         continue;
                     }
 
                     _rooms.Add(room);
                     branchCreated = true;
-
-                    var aabbSize = GetRotatedSize(config.Size, rotation);
-                    Log($"    PLACED at ({roomPosition.X},{roomPosition.Y}) rot={rotation}");
-                    Log($"    AABB origin=({roomPosition.X + rotationOffset.X},{roomPosition.Y + rotationOffset.Y}) size={aabbSize.X}x{aabbSize.Y}");
 
                     if (!createEndRoom)
                     {
@@ -174,12 +132,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
                             if (IsSameDoor(outputDoorPos, config.InputDoor))
                             {
-                                Log($"    Skip output door ({outputDoor.X},{outputDoor.Y}): same as input");
                                 continue;
                             }
-
-                            var outDoorWorld = GetDoorWorldPosition(room, outputDoorPos);
-                            Log($"    Output door local=({outputDoor.X},{outputDoor.Y}) world=({outDoorWorld.X},{outDoorWorld.Y}) -> branching");
 
                             GenerateBranch(room, outputDoorPos, depth + 1);
                         }
@@ -188,9 +142,6 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     break;
                 }
             }
-
-            if (!branchCreated)
-                Log($"  WARNING: could not place any room at depth={depth + 1}!");
         }
 
         private bool Intersects(DungeonGenerationRoom room)
