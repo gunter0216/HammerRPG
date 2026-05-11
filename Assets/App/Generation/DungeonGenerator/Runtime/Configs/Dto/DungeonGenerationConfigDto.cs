@@ -1,5 +1,6 @@
 ﻿using System;
 using App.Generation.DungeonGenerator.External.Dto.Generation;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -26,6 +27,9 @@ namespace App.Generation.DungeonGenerator.External.Dto
         
         [JsonProperty("squareGeneration")] [SerializeField]
         private SquareGenerationConfigDto _squareGeneration;
+        
+        [JsonProperty("tileBased")] [SerializeField]
+        private TileBasedGenerationConfig _tileTileBasedGenerationConfigDto;
 
         public CreateRoomsGenerationConfigDto RoomsGeneration => m_RoomsGeneration;
 
@@ -38,5 +42,6 @@ namespace App.Generation.DungeonGenerator.External.Dto
         public string Key => m_Key;
 
         public SquareGenerationConfigDto SquareGeneration => _squareGeneration;
+        public TileBasedGenerationConfig TileBasedGenerationConfigDto => _tileTileBasedGenerationConfigDto;
     }
 }

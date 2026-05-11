@@ -71,12 +71,12 @@ namespace App.Common.Algorithms.Runtime
             => (int)Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
 
         public static Vector2Int Zero => new Vector2Int(0, 0);
-        public static Vector2Int Bottom => new Vector2Int(0, -1);
         public static Vector2Int BottomLeft => new Vector2Int(-1, -1);
-        public static Vector2Int Top => new Vector2Int(0, 1);
         public static Vector2Int Left => new Vector2Int(-1, 0);
         public static Vector2Int Right => new Vector2Int(1, 0);
-        
+        public static Vector2Int Up => new Vector2Int(0, 1);
+        public static Vector2Int Down => new Vector2Int(0, -1);
+
         public Vector2 ToVector()
         {
             return new Vector2(m_X, m_Y);

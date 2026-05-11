@@ -23,7 +23,9 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Spann
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndPath;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndRooms;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generators.PullRooms;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
@@ -39,48 +41,59 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators
         public DungeonGenerator(ILogger logger)
         {
             m_Logger = logger;
+            var generators = Generation2();
+            
+            m_Generators = generators;
+        }
+
+        private List<IDungeonGenerator> Generation2()
+        {
+            var generators = new List<IDungeonGenerator>();
+            
+            var roomCreator = new RoomCreator();
+
+            generators.Add(new TileBasedDungeonGenerator(roomCreator));
+            // generators.Add(new TriangulationDungeonGenerator());
+            // generators.Add(new SpanningTreeDungeonGenerator(m_Logger));
+            // generators.Add(new RoomConnectionsDungeonGenerator());
+            // generators.Add(new StartEndRoomsDungeonGenerator());
+            // generators.Add(new StartEndPathDungeonGenerator());
+            // generators.Add(new CreateCorridorsDungeonGenerator());
+            // generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
+            // generators.Add(new CreateWallsDungeonGenerator());
+            // generators.Add(new ChestDungeonGenerator());
+            // generators.Add(new FloorDungeonGenerator());
+
+            return generators;
+        }
+
+        private List<IDungeonGenerator> Generation1()
+        {
             var generators = new List<IDungeonGenerator>();
             
             var roomCreator = new RoomCreator();
 
             generators.Add(new SquarePartitionDungeonGenerator(roomCreator));
-            // generators.Add(new CreateRoomsDungeonGenerator(roomCreator));
-            // generators.Add(new SeparateRoomsDungeonGenerator());
-            // generators.Add(new SelectSmallRoomsDungeonGenerator());
-            // generators.Add(new DiscardSmallRoomsDungeonGenerator());
-            // generators.Add(new SelectBorderingRoomsDungeonGenerator());
-            // generators.Add(new DiscardBorderingRoomsDungeonGenerator());
             generators.Add(new TriangulationDungeonGenerator());
             generators.Add(new SpanningTreeDungeonGenerator(m_Logger));
             generators.Add(new RoomConnectionsDungeonGenerator());
-            // generators.Add(new CreateRoomCorridorsDungeonGenerator(roomCreator));
             generators.Add(new StartEndRoomsDungeonGenerator());
             generators.Add(new StartEndPathDungeonGenerator());
-            generators.Add(new PullRoomsDungeonGenerator()); // todo
             generators.Add(new CreateCorridorsDungeonGenerator());
             generators.Add(new DistributeKeysDungeonGenerator(new DungeonKeyCreator()));
-            // generators.Add(new ExpendRoomDungeonGenerator());
             generators.Add(new CreateWallsDungeonGenerator());
             generators.Add(new ChestDungeonGenerator());
             generators.Add(new FloorDungeonGenerator());
-            // generators.Add(new CreateDoorsDungeonGenerator());
-            
-            m_Generators = generators;
+
+            return generators;
         }
 
         public Optional<DungeonGeneration> Generate(DungeonGenerationConfig generationConfig)
         {
             for (int i = 0; i < 10; ++i)
             {
-                // try
-                // {
-                    var generate = TryGenerate(generationConfig);
-                    return generate;
-                // }
-                // catch (Exception e)
-                // {
-                //     HLogger.LogError(e);
-                // }
+                var generate = TryGenerate(generationConfig);
+                return generate;
             }
             
             return Optional<DungeonGeneration>.Fail();

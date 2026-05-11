@@ -52,7 +52,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.E
                 else if (connection.Side == RoomConnectSide.Bottom)
                 {
                     curGenerationRoom.IncreaseHeight(m_WallSize);
-                    curGenerationRoom.Move(Vector2Int.Bottom * m_WallSize);
+                    curGenerationRoom.Move(Vector2Int.Down * m_WallSize);
                 } 
                 else if (connection.Side == RoomConnectSide.Right)
                 {

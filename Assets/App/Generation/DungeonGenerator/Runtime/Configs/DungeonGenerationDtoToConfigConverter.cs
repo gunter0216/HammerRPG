@@ -8,6 +8,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Rooms
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.RoomsSeparator.Config;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding.Config;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased;
 
 namespace App.Generation.DungeonGenerator.External
 {
@@ -21,10 +22,16 @@ namespace App.Generation.DungeonGenerator.External
             generationConfigs.Add(CreateSeparateRoomsGenerationConfig(generationDto.SeparationConfig));
             generationConfigs.Add(CreateSelectSmallRoomsGenerationConfig(generationDto.SmallRooms));
             generationConfigs.Add(CreateSquare(generationDto.SquareGeneration));
+            generationConfigs.Add(generationDto.TileBasedGenerationConfigDto);
             
             var generationConfig = new DungeonGenerationConfig(generationDto.Key, generationConfigs);
             return generationConfig;
         }
+
+        // private IGenerationConfig CreateTileBased(TileBasedGenerationConfigDto dto)
+        // {
+        //     return new TileBasedGenerationConfig(dto);
+        // }
 
         private SquarePartitionGenerationConfig CreateSquare(
             SquareGenerationConfigDto dto)
