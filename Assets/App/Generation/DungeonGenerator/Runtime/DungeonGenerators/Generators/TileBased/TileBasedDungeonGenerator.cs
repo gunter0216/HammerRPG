@@ -22,6 +22,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         private DungeonGenerationRooms _result;
         private TileBasedGenerationConfig _config;
         private List<DungeonGenerationRoom> _rooms;
+        private int _outputs;
 
         public TileBasedDungeonGenerator(RoomCreator roomCreator)
         {
@@ -89,8 +90,19 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             Vector2Int exitDoor,
             int depth)
         {
-            bool createEndRoom = depth >= _config.MaxDepth;
-            var roomType = createEndRoom ? RoomType.End : RoomType.Transit;
+            bool isMaxDepth = depth >= _config.MaxDepth;
+            var roomType = RoomType.Transit;
+            if (isMaxDepth)
+            {
+                if (_rooms.Count(x => x.ConfigAsset.RoomType == RoomType.End) >= _config.MaxOutputs)
+                {
+                    roomType = RoomType.Chest;
+                }
+                else
+                {
+                    roomType = RoomType.End;
+                }
+            }
 
             var prevDoorWorldPos = GetDoorWorldPosition(prevRoom, exitDoor);
             var prevDoorSide     = GetDoorSide(prevRoom.Size, exitDoor, prevRoom.RotateEuler);
@@ -126,9 +138,14 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                         if (Intersects(room))
                             continue;
 
+                        if (roomType == RoomType.End)
+                        {
+                            _outputs += 1;
+                        }
+
                         _rooms.Add(room);
 
-                        if (createEndRoom)
+                        if (isMaxDepth)
                             return true;
 
                         // Пробуем построить все ветки от этой комнаты.

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfda9e69161d4820a7839b629185e178, type: 3}
+  m_Name: TransitRoom_7x15
+  m_EditorClassIdentifier: 
+  _roomType: 1
+  _size: {x: 7, y: 15}
+  _inputDoor: {x: 0, y: 7}
+  _variants:
+  - _assetKey: {fileID: 3237396173568529025, guid: a25c8af1c8eab504c8f5387830115d6a, type: 3}
+    _outputDoors:
+    - {x: 3, y: 0}
+    - {x: 3, y: 14}
+  - _assetKey: {fileID: 8736083059517461948, guid: c28af1eda2e77444a8f1a31d904774aa, type: 3}
+    _outputDoors:
+    - {x: 3, y: 0}
+  - _assetKey: {fileID: 3543396095031177691, guid: d8e05821f16b6a746a20f9ec9e969384, type: 3}
+    _outputDoors:
+    - {x: 3, y: 14}
