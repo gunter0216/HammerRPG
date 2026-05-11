@@ -16,5 +16,5 @@ MonoBehaviour:
   _size: {x: 9, y: 9}
   _inputDoor: {x: 0, y: 4}
   _variants:
-  - AssetKey: {fileID: 6976221828500007986, guid: 1bf26f63a2cd24a449ed79ecc55c1ccd, type: 3}
-    OutputDoors: []
+  - _assetKey: {fileID: 6976221828500007986, guid: 1bf26f63a2cd24a449ed79ecc55c1ccd, type: 3}
+    _outputDoors: []
