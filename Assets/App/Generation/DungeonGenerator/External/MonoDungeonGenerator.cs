@@ -8,5 +8,6 @@ namespace App.Generation.DungeonGenerator.External
         [SerializeField] public DungeonGenerationConfigDto Config;
         [SerializeField] public bool ShowLabel;
         [SerializeField] public bool ShowRoomBorders;
+        [SerializeField] public bool ClearConsole;
     }
 }

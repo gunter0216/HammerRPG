@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using App.Common.Logger.External;
 using App.Common.Logger.Runtime;
@@ -20,6 +22,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Logger = App.Common.Logger.Runtime.Logger;
+using Object = UnityEngine.Object;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Editor
@@ -50,6 +53,8 @@ namespace App.Generation.DungeonGenerator.Editor
 
             if (GUILayout.Button("Generate"))
             {
+                if (myScript.ClearConsole)
+                    ClearUnityConsole();
                 var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
                 m_Generation = m_Generator.Generate(config).Value;
                 Rebuild();
@@ -60,6 +65,14 @@ namespace App.Generation.DungeonGenerator.Editor
                 UpdateRoot();
                 Clear();
             }
+        }
+        
+        private static void ClearUnityConsole()
+        {
+            var logEntries = System.Type.GetType("UnityEditor.LogEntries, UnityEditor.dll");
+            var clearMethod = logEntries.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
+
+            clearMethod?.Invoke(null, null);
         }
 
         void WhenUpdate(SceneView sceneView)

@@ -1109,7 +1109,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: ef43ba4b21870dd4aaee655a6a4c0ca9, type: 2}
       - {fileID: 11400000, guid: 7bba4ac1fb2f6704bb1b43382d3bf502, type: 2}
       - {fileID: 11400000, guid: 06b0266281df4f145adfaa68433da310, type: 2}
-      MaxDepth: 1
+      _maxDepth: 3
   ShowLabel: 0
   ShowRoomBorders: 1
 --- !u!1 &156916481
