@@ -15,13 +15,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
             return room;
         }
         
-        public DungeonGenerationRoom Create(Vector2Int position, RoomConfigAsset configAsset)
+        public DungeonGenerationRoom Create(Vector2Int position, RoomConfigAsset configAsset, RoomConfigVariant variant)
         {
             var uid = m_Index++;
-            var room = new DungeonGenerationRoom(uid, position, configAsset.Size)
-            {
-                ConfigAsset = configAsset
-            };
+            var room = new DungeonGenerationRoom(uid, position, configAsset.Size);
+            room.SetConfig(configAsset, variant);
 
             return room;
         }

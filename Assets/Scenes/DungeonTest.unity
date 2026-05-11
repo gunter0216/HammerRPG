@@ -1816,6 +1816,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FightRoom_11x11_2TD
       objectReference: {fileID: 0}
+    - target: {fileID: 3084482136063081338, guid: 6bb8c1fd9d3a16247b4f1d6c60b29b84, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3468722323373454939, guid: 6bb8c1fd9d3a16247b4f1d6c60b29b84, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24.51
@@ -4197,6 +4201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FightRoom_11x11_2TR
       objectReference: {fileID: 0}
+    - target: {fileID: 849649943745591837, guid: 23d1fe3dd9df1cd4f94b235eb48c1f6a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1236159643312813884, guid: 23d1fe3dd9df1cd4f94b235eb48c1f6a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -37.73
@@ -4953,6 +4961,10 @@ PrefabInstance:
     - target: {fileID: 5341968357427056718, guid: 36d39e51d46cd5a41949e0c843e76802, type: 3}
       propertyPath: m_Name
       value: FightRoom_11x11_2RD
+      objectReference: {fileID: 0}
+    - target: {fileID: 5341968357427056718, guid: 36d39e51d46cd5a41949e0c843e76802, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5822964451256999279, guid: 36d39e51d46cd5a41949e0c843e76802, type: 3}
       propertyPath: m_LocalPosition.x

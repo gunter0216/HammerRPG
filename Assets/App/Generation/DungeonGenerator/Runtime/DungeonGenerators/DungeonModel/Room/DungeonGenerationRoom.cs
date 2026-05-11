@@ -29,6 +29,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private bool _isMainPath;
         private DungeonCorridor _corridor;
         private RoomConfigAsset _configAsset;
+        private RoomConfigVariant _configVariant;
         private float _rotateEuler;
         private int _depth;
 
@@ -92,7 +93,12 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         public RoomConfigAsset ConfigAsset
         {
             get => _configAsset;
-            set => _configAsset = value;
+        }
+
+        public void SetConfig(RoomConfigAsset config, RoomConfigVariant variant)
+        {
+            _configAsset = config;
+            _configVariant = variant;
         }
 
         public float RotateEuler
@@ -105,6 +111,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         {
             get => _depth;
             set => _depth = value;
+        }
+
+        public RoomConfigVariant ConfigVariant
+        {
+            get => _configVariant;
         }
 
         public DungeonGenerationRoom(int uid, Vector2Int position, Vector2Int size)

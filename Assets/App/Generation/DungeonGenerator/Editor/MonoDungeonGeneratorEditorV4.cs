@@ -101,6 +101,7 @@ namespace App.Generation.DungeonGenerator.Editor
             foreach (var room in rooms.Rooms)
             {
                 var config = room.ConfigAsset;
+                var variant = room.ConfigVariant;
                 var genPos = room.Position;
                 // Debug.LogError($">>> {config.AssetKey} {genPos} {room.RotateEuler}");
 
@@ -119,25 +120,29 @@ namespace App.Generation.DungeonGenerator.Editor
                 var aabbMaxX   = aabbMinX + aabbSize.X - 1;
                 var aabbMaxY   = aabbMinY + aabbSize.Y - 1;
 
-                log.AppendLine($"--- {config.AssetKey} depth={room.Depth} ---");
+                log.AppendLine($"--- {variant.AssetKey} depth={room.Depth} ---");
                 log.AppendLine($"  genPos=({genPos.X},{genPos.Y})  size={room.Size.X}x{room.Size.Y}  rot={room.RotateEuler}");
                 log.AppendLine($"  compensation=({comp.x},{comp.y})");
                 log.AppendLine($"  finalPos=({finalPos.x},{finalPos.z}) [X,Z]");
                 log.AppendLine($"  expectedAABB X[{aabbMinX}..{aabbMaxX}] Y[{aabbMinY}..{aabbMaxY}]");
                 log.AppendLine($"  expectedFinalPos X={aabbMinX} Z={aabbMinY}");
 
-                var roomObjs = await Object.InstantiateAsync(config.AssetKey,
-                    _roomsContent, 
+                var roomObj = Object.Instantiate(variant.AssetKey,
                     finalPos + _roomsContent.position,
-                    Quaternion.Euler(0, room.RotateEuler, 0)).ToUniTask();
-                var roomObj = roomObjs[0];
+                    Quaternion.Euler(0, room.RotateEuler, 0),
+                    _roomsContent);
+                // var roomObjs = await Object.InstantiateAsync(variant.AssetKey,
+                //     _roomsContent, 
+                //     finalPos + _roomsContent.position,
+                //     Quaternion.Euler(0, room.RotateEuler, 0)).ToUniTask();
+                // var roomObj = roomObjs[0];
                 // var roomObj = await Addressables.InstantiateAsync(
                 //     config.AssetKey,
                 //     finalPos + _roomsContent.position,
                 //     Quaternion.Euler(0, room.RotateEuler, 0),
                 //     _roomsContent);
 
-                roomObj.name = $"{config.AssetKey} depth {room.Depth}";
+                roomObj.name = $"{variant.AssetKey} depth {room.Depth}";
                 _rooms.Add(roomObj);
 
                 // Логируем localPosition (без внутреннего смещения prefab'а +0.5)

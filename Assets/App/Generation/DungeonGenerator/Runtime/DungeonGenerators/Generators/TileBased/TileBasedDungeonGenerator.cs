@@ -61,21 +61,20 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         private void Generate()
         {
-            var startConfig =
-                _typeToRooms[RoomType.Start]
-                    .Random();
+            var startConfig = _typeToRooms[RoomType.Start].Random();
+            var variant = startConfig.Variants.Random();
 
-            var startRoom =
-                _roomCreator.Create(
+            var startRoom = _roomCreator.Create(
                     Vector2Int.Zero,
-                    startConfig);
+                    startConfig,
+                    variant);
 
             startRoom.RotateEuler = 0;
             startRoom.Depth = 0;
 
             _rooms.Add(startRoom);
 
-            foreach (var outputDoor in startConfig.OutputDoors)
+            foreach (var outputDoor in variant.OutputDoors)
             {
                 GenerateBranch(
                     startRoom,
@@ -127,6 +126,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                 if (branchCreated)
                     break;
 
+                var variant = config.Variants.Random();
+
                 foreach (var rotation in new[] { 0f, 90f, 180f, 270f })
                 {
                     var inputDoorSide =
@@ -154,10 +155,10 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                         + rotationOffset
                         - rotatedInputDoor;
 
-                    var room =
-                        _roomCreator.Create(
+                    var room = _roomCreator.Create(
                             roomPosition,
-                            config);
+                            config,
+                            variant);
 
                     room.RotateEuler = rotation;
                     room.Depth = depth + 1;
@@ -171,7 +172,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
                     if (!createEndRoom)
                     {
-                        foreach (var outputDoor in config.OutputDoors)
+                        foreach (var outputDoor in variant.OutputDoors)
                         {
                             var outputDoorPos =
                                 new Vector2Int(
