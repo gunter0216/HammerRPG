@@ -192,6 +192,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorView
       objectReference: {fileID: 0}
+    - target: {fileID: 4719938852255281712, guid: 57e7e77836daa684bb26034aaf0cbe34, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6566873076109634229, guid: 57e7e77836daa684bb26034aaf0cbe34, type: 3}
       propertyPath: m_LocalScale.x
       value: 1

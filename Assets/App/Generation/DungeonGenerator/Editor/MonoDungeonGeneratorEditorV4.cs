@@ -102,13 +102,14 @@ namespace App.Generation.DungeonGenerator.Editor
             {
                 var config = room.ConfigAsset;
                 var genPos = room.Position;
-                Debug.LogError($"{config.AssetKey} {genPos} {room.RotateEuler}");
+                // Debug.LogError($">>> {config.AssetKey} {genPos} {room.RotateEuler}");
 
                 // Компенсация смещения пивота при вращении Unity (ось Y, плоскость XZ).
                 // PivotOffset не нужен — prefab сам имеет внутреннее смещение +0.5 по X и Z,
                 // которое не меняется при вращении и не влияет на стыковку комнат.
                 var comp     = GetRotationCompensation(room.Size, room.RotateEuler);
-                var finalPos = new Vector3(genPos.X + comp.x, 0, genPos.Y + comp.y);
+                // var finalPos = new Vector3(genPos.X + comp.x, 0, genPos.Y + comp.y);
+                var finalPos = new Vector3(genPos.X, 0, genPos.Y);
 
                 // Ожидаемый AABB в тайловых координатах
                 var tileOffset = GetTileRotationOffset(room.Size, room.RotateEuler);
@@ -127,7 +128,7 @@ namespace App.Generation.DungeonGenerator.Editor
 
                 var roomObj = await Addressables.InstantiateAsync(
                     config.AssetKey,
-                    finalPos,
+                    finalPos + _roomsContent.position,
                     Quaternion.Euler(0, room.RotateEuler, 0),
                     _roomsContent);
 

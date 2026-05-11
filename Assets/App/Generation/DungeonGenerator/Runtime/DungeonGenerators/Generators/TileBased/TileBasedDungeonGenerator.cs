@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using App.Common.Algorithms.Runtime;
 using App.Common.Algorithms.Runtime.Extensions;
 using App.Common.Utilities.Utility.Runtime;
@@ -62,9 +61,15 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         private void Generate()
         {
-            var startConfig = _typeToRooms[RoomType.Start].Random();
+            var startConfig =
+                _typeToRooms[RoomType.Start]
+                    .Random();
 
-            var startRoom = _roomCreator.Create(Vector2Int.Zero, startConfig);
+            var startRoom =
+                _roomCreator.Create(
+                    Vector2Int.Zero,
+                    startConfig);
+
             startRoom.RotateEuler = 0;
             startRoom.Depth = 0;
 
@@ -72,7 +77,10 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             foreach (var outputDoor in startConfig.OutputDoors)
             {
-                GenerateBranch(startRoom, new Vector2Int(outputDoor.X, outputDoor.Y), 0);
+                GenerateBranch(
+                    startRoom,
+                    new Vector2Int(outputDoor.X, outputDoor.Y),
+                    0);
             }
         }
 
@@ -81,75 +89,106 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             Vector2Int exitDoor,
             int depth)
         {
-            bool createEndRoom = depth >= _config.MaxDepth;
-            var roomType = createEndRoom ? RoomType.End : RoomType.Fight;
+            bool createEndRoom =
+                depth >= _config.MaxDepth;
 
-            var prevDoorWorldPos = GetDoorWorldPosition(prevRoom, exitDoor);
+            var roomType =
+                createEndRoom
+                    ? RoomType.End
+                    : RoomType.Fight;
 
-            var prevDoorSide = GetDoorSide(prevRoom.Size, exitDoor, prevRoom.RotateEuler);
-            if (prevDoorSide != Side.Top && depth == 1)
-            {
-                // todo
-                return;
-            }
-            
-            var sideVec = SideToVector(prevDoorSide);
-            var newDoorWorldTarget = prevDoorWorldPos + sideVec;
+            var prevDoorWorldPos =
+                GetDoorWorldPosition(
+                    prevRoom,
+                    exitDoor);
 
-            Log(createEndRoom, $"prevDoorSide {prevDoorSide}");
-            Log(createEndRoom, $"prevDoorWorldPos {prevDoorWorldPos}");
-            Log(createEndRoom, $"sideVec {sideVec}");
-            
-            var configs = _typeToRooms[roomType];
+            var prevDoorSide =
+                GetDoorSide(
+                    prevRoom.Size,
+                    exitDoor,
+                    prevRoom.RotateEuler);
+
+            var sideVec =
+                SideToVector(prevDoorSide);
+
+            var targetDoorWorldPos =
+                prevDoorWorldPos + sideVec;
+
+            var configs =
+                _typeToRooms[roomType]
+                    .ToList();
+
             configs.Shuffle();
 
             bool branchCreated = false;
 
             foreach (var config in configs)
             {
-                if (branchCreated) break;
+                if (branchCreated)
+                    break;
 
                 foreach (var rotation in new[] { 0f, 90f, 180f, 270f })
                 {
-                    var inputDoorSide    = GetDoorSide(config.Size, config.InputDoor, rotation);
-                    Log(createEndRoom, $"inputDoorSide {inputDoorSide} rotation {rotation}");
+                    var inputDoorSide =
+                        GetDoorSide(
+                            config.Size,
+                            config.InputDoor,
+                            rotation);
 
                     if (!IsOpposite(prevDoorSide, inputDoorSide))
-                    {
                         continue;
-                    }
 
-                    var rotatedInputDoor = RotatePoint(config.InputDoor, config.Size, rotation);
-                    Log(createEndRoom, $"rotatedInputDoor {rotatedInputDoor}");
-                    var rotationOffset = GetRotationOffset(config.Size, rotation);
-                    Log(createEndRoom, $"rotationOffset {rotationOffset}");
-                    var roomPosition   = newDoorWorldTarget + rotationOffset - rotatedInputDoor;
-                    Log(createEndRoom, $"newDoorWorldTarget {newDoorWorldTarget}");
+                    var rotatedInputDoor =
+                        RotatePoint(
+                            config.InputDoor,
+                            config.Size,
+                            rotation);
 
-                    var room = _roomCreator.Create(roomPosition, config);
+                    var rotationOffset =
+                        GetRotationOffset(
+                            config.Size,
+                            rotation);
+
+                    var roomPosition =
+                        targetDoorWorldPos
+                        + rotationOffset
+                        - rotatedInputDoor;
+
+                    var room =
+                        _roomCreator.Create(
+                            roomPosition,
+                            config);
+
                     room.RotateEuler = rotation;
                     room.Depth = depth + 1;
 
                     if (Intersects(room))
-                    {
                         continue;
-                    }
 
                     _rooms.Add(room);
+
                     branchCreated = true;
 
                     if (!createEndRoom)
                     {
                         foreach (var outputDoor in config.OutputDoors)
                         {
-                            var outputDoorPos = new Vector2Int(outputDoor.X, outputDoor.Y);
+                            var outputDoorPos =
+                                new Vector2Int(
+                                    outputDoor.X,
+                                    outputDoor.Y);
 
-                            if (IsSameDoor(outputDoorPos, config.InputDoor))
+                            if (IsSameDoor(
+                                    outputDoorPos,
+                                    config.InputDoor))
                             {
                                 continue;
                             }
 
-                            GenerateBranch(room, outputDoorPos, depth + 1);
+                            GenerateBranch(
+                                room,
+                                outputDoorPos,
+                                depth + 1);
                         }
                     }
 
@@ -158,21 +197,15 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             }
         }
 
-        private void Log(bool qwe, string empty)
-        {
-            if (qwe)
-            {
-                Debug.LogError(empty);
-            }
-        }
-
         private bool Intersects(DungeonGenerationRoom room)
         {
-            var rect1 = GetRoomRect(room);
+            var rect1 =
+                GetRoomRect(room);
 
             foreach (var other in _rooms)
             {
-                var rect2 = GetRoomRect(other);
+                var rect2 =
+                    GetRoomRect(other);
 
                 if (rect1.Overlaps(rect2))
                     return true;
@@ -183,85 +216,139 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         private RectInt GetRoomRect(DungeonGenerationRoom room)
         {
-            var size   = GetRotatedSize(room.Size, room.RotateEuler);
-            var offset = GetRotationOffset(room.Size, room.RotateEuler);
+            var size =
+                GetRotatedSize(
+                    room.Size,
+                    room.RotateEuler);
+
+            var offset =
+                GetRotationOffset(
+                    room.Size,
+                    room.RotateEuler);
 
             return new RectInt(
-                room.Position.X + offset.X,
-                room.Position.Y + offset.Y,
+                room.Position.X - offset.X,
+                room.Position.Y - offset.Y,
                 size.X,
                 size.Y);
         }
 
-        // Rotation matrix (counter-clockwise), origin = bottom-left corner
-        // 0°:   (x,       y      )  size stays (W, H)
-        // 90°:  (H-1-y,   x      )  size becomes (H, W)
-        // 180°: (W-1-x,   H-1-y  )  size stays (W, H)
-        // 270°: (y,       W-1-x  )  size becomes (H, W)
+        // Unity rotation:
+        // positive Z rotation = counter-clockwise
+        //
+        // 90°  -> LEFT
+        // 180° -> DOWN
+        // 270° -> RIGHT
+        //
+        // We rotate around bottom-left pivot.
         private Vector2Int RotatePoint(
             Vector2Int point,
             Vector2Int size,
             float rotation)
         {
-            int x = point.X, y = point.Y;
-            int w = size.X,  h = size.Y;
+            int x = point.X;
+            int y = point.Y;
+
+            int w = size.X;
+            int h = size.Y;
 
             if (Mathf.Approximately(rotation, 0))
-                return new Vector2Int(x, y);
+            {
+                return new Vector2Int(
+                    x,
+                    y);
+            }
 
+            // 90° CCW
             if (Mathf.Approximately(rotation, 90))
-                return new Vector2Int(h - 1 - y, x);
+            {
+                return new Vector2Int(
+                    y,
+                    w - 1 - x);
+            }
 
+            // 180°
             if (Mathf.Approximately(rotation, 180))
-                return new Vector2Int(w - 1 - x, h - 1 - y);
+            {
+                return new Vector2Int(
+                    w - 1 - x,
+                    h - 1 - y);
+            }
 
-            // 270
-            return new Vector2Int(y, w - 1 - x);
+            // 270° CCW
+            return new Vector2Int(
+                h - 1 - y,
+                x);
         }
 
-        // Offset of the AABB bottom-left corner relative to room.Position after rotation.
-        // 0°:   (0,     0    )
-        // 90°:  (H-1,   0    )
-        // 180°: (W-1,   H-1  )
-        // 270°: (0,     W-1  )
+        // Offset from rotated AABB min
         private Vector2Int GetRotationOffset(
             Vector2Int size,
             float rotation)
         {
-            int w = size.X, h = size.Y;
+            int w = size.X;
+            int h = size.Y;
 
             if (Mathf.Approximately(rotation, 0))
+            {
                 return Vector2Int.Zero;
+            }
 
+            // 90° CCW
             if (Mathf.Approximately(rotation, 90))
-                return new Vector2Int(h - 1, 0);
+            {
+                return new Vector2Int(
+                    0,
+                    w - 1);
+            }
 
+            // 180°
             if (Mathf.Approximately(rotation, 180))
-                return new Vector2Int(w - 1, h - 1);
+            {
+                return new Vector2Int(
+                    w - 1,
+                    h - 1);
+            }
 
-            // 270
-            return new Vector2Int(0, w - 1);
+            // 270° CCW
+            return new Vector2Int(
+                h - 1,
+                0);
         }
 
-        private Vector2Int GetRotatedSize(Vector2Int size, float rotation)
+        private Vector2Int GetRotatedSize(
+            Vector2Int size,
+            float rotation)
         {
             if (Mathf.Approximately(rotation, 90) ||
                 Mathf.Approximately(rotation, 270))
             {
-                return new Vector2Int(size.Y, size.X);
+                return new Vector2Int(
+                    size.Y,
+                    size.X);
             }
 
             return size;
         }
 
-        // World position of a door = roomPosition + rotationOffset + rotatedDoor
         private Vector2Int GetDoorWorldPosition(
             DungeonGenerationRoom room,
             Vector2Int localDoor)
         {
-            var rotatedDoor = RotatePoint(localDoor, room.Size, room.RotateEuler);
-            var offset      = GetRotationOffset(room.Size, room.RotateEuler);
-            return room.Position + offset + rotatedDoor;
+            var rotatedDoor =
+                RotatePoint(
+                    localDoor,
+                    room.Size,
+                    room.RotateEuler);
+
+            var offset =
+                GetRotationOffset(
+                    room.Size,
+                    room.RotateEuler);
+
+            return room.Position
+                   - offset
+                   + rotatedDoor;
         }
 
         private Side GetDoorSide(
@@ -269,8 +356,16 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             Vector2Int door,
             float rotation)
         {
-            var rotatedDoor = RotatePoint(door, size, rotation);
-            var rotatedSize = GetRotatedSize(size, rotation);
+            var rotatedDoor =
+                RotatePoint(
+                    door,
+                    size,
+                    rotation);
+
+            var rotatedSize =
+                GetRotatedSize(
+                    size,
+                    rotation);
 
             if (rotatedDoor.X == 0)
                 return Side.Left;
@@ -288,10 +383,17 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         {
             switch (side)
             {
-                case Side.Left:   return Vector2Int.Left;
-                case Side.Right:  return Vector2Int.Right;
-                case Side.Top:    return Vector2Int.Up;
-                case Side.Bottom: return Vector2Int.Down;
+                case Side.Left:
+                    return Vector2Int.Left;
+
+                case Side.Right:
+                    return Vector2Int.Right;
+
+                case Side.Top:
+                    return Vector2Int.Up;
+
+                case Side.Bottom:
+                    return Vector2Int.Down;
             }
 
             return Vector2Int.Zero;
@@ -299,15 +401,18 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         private bool IsOpposite(Side a, Side b)
         {
-            return (a == Side.Left   && b == Side.Right)
-                || (a == Side.Right  && b == Side.Left)
-                || (a == Side.Top    && b == Side.Bottom)
-                || (a == Side.Bottom && b == Side.Top);
+            return (a == Side.Left && b == Side.Right)
+                   || (a == Side.Right && b == Side.Left)
+                   || (a == Side.Top && b == Side.Bottom)
+                   || (a == Side.Bottom && b == Side.Top);
         }
 
-        private bool IsSameDoor(Vector2Int a, Vector2Int b)
+        private bool IsSameDoor(
+            Vector2Int a,
+            Vector2Int b)
         {
-            return a.X == b.X && a.Y == b.Y;
+            return a.X == b.X
+                   && a.Y == b.Y;
         }
 
         public string GetName()
