@@ -145,7 +145,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             if (roomType != RoomType.End)
             {
-                Debug.LogError(
+                Debug.LogWarning(
                     "FAILED GENERATE BRANCH\n" +
                     $"Depth: {depth}\n" +
                     $"RoomType: {roomType}\n" +
