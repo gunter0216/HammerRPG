@@ -6,6 +6,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         Fight,
         Start,
         End,
-        Empty
+        Empty,
+        Chest,
     }
 }

@@ -17,3 +17,6 @@ MonoBehaviour:
   _size: {x: 9, y: 9}
   _inputDoor: {x: 8, y: 4}
   _outputDoors: []
+  _variants:
+  - AssetKey: EndRoom9x9
+    OutputDoors: []

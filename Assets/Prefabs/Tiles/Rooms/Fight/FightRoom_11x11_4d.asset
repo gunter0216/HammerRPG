@@ -20,3 +20,9 @@ MonoBehaviour:
   - {x: 10, y: 5}
   - {x: 5, y: 10}
   - {x: 5, y: 0}
+  _variants:
+  - AssetKey: FightRoom_11x11_4d
+    OutputDoors:
+    - {x: 10, y: 5}
+    - {x: 5, y: 10}
+    - {x: 5, y: 0}

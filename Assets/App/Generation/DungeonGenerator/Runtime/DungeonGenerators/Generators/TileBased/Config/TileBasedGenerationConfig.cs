@@ -9,8 +9,10 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
     {
         [SerializeField] 
         private RoomConfigAsset[] _rooms;
+        
+        [SerializeField] 
+        public int MaxDepth = 2;
 
         public RoomConfigAsset[] Rooms => _rooms;
-        public int MaxDepth => 1;
     }
 }
