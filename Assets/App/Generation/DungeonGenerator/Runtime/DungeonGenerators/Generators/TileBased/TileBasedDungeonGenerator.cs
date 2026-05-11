@@ -87,9 +87,19 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             var prevDoorWorldPos = GetDoorWorldPosition(prevRoom, exitDoor);
 
             var prevDoorSide = GetDoorSide(prevRoom.Size, exitDoor, prevRoom.RotateEuler);
+            if (prevDoorSide != Side.Top && depth == 1)
+            {
+                // todo
+                return;
+            }
+            
             var sideVec = SideToVector(prevDoorSide);
             var newDoorWorldTarget = prevDoorWorldPos + sideVec;
 
+            Log(createEndRoom, $"prevDoorSide {prevDoorSide}");
+            Log(createEndRoom, $"prevDoorWorldPos {prevDoorWorldPos}");
+            Log(createEndRoom, $"sideVec {sideVec}");
+            
             var configs = _typeToRooms[roomType];
             configs.Shuffle();
 
@@ -101,16 +111,20 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
                 foreach (var rotation in new[] { 0f, 90f, 180f, 270f })
                 {
-                    var rotatedInputDoor = RotatePoint(config.InputDoor, config.Size, rotation);
                     var inputDoorSide    = GetDoorSide(config.Size, config.InputDoor, rotation);
+                    Log(createEndRoom, $"inputDoorSide {inputDoorSide} rotation {rotation}");
 
                     if (!IsOpposite(prevDoorSide, inputDoorSide))
                     {
                         continue;
                     }
 
+                    var rotatedInputDoor = RotatePoint(config.InputDoor, config.Size, rotation);
+                    Log(createEndRoom, $"rotatedInputDoor {rotatedInputDoor}");
                     var rotationOffset = GetRotationOffset(config.Size, rotation);
-                    var roomPosition   = newDoorWorldTarget - rotationOffset - rotatedInputDoor;
+                    Log(createEndRoom, $"rotationOffset {rotationOffset}");
+                    var roomPosition   = newDoorWorldTarget + rotationOffset - rotatedInputDoor;
+                    Log(createEndRoom, $"newDoorWorldTarget {newDoorWorldTarget}");
 
                     var room = _roomCreator.Create(roomPosition, config);
                     room.RotateEuler = rotation;
@@ -141,6 +155,14 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
                     break;
                 }
+            }
+        }
+
+        private void Log(bool qwe, string empty)
+        {
+            if (qwe)
+            {
+                Debug.LogError(empty);
             }
         }
 
