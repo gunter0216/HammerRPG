@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using App.Common.Algorithms.Runtime;
@@ -23,6 +24,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         private TileBasedGenerationConfig _config;
         private List<DungeonGenerationRoom> _rooms;
         private int _outputs;
+        private int _iterations;
 
         public TileBasedDungeonGenerator(RoomCreator roomCreator)
         {
@@ -31,6 +33,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
         public Optional<DungeonGeneration> Process(DungeonGeneration generation)
         {
+            _iterations = 0;
             _result =
                 generation
                     .DungeonGenerationResult
@@ -90,6 +93,13 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             Vector2Int exitDoor,
             int depth)
         {
+            if (_iterations >= _config.MaxIterations)
+            {
+                throw new Exception("Max iterations");
+            }
+
+            _iterations += 1;
+            
             bool isMaxDepth = depth >= _config.MaxDepth;
             var roomType = RoomType.Transit;
             if (isMaxDepth)
@@ -114,6 +124,11 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             foreach (var config in configs)
             {
+                if (prevRoom.ConfigAsset == config)
+                {
+                    continue;
+                }
+                
                 var variants = config.Variants.ToList();
                 variants.Shuffle();
 
