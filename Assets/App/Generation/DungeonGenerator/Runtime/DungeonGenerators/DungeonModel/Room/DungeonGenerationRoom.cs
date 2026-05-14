@@ -28,7 +28,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private DungeonKeyData _requiredKey;
         private bool _isMainPath;
         private DungeonCorridor _corridor;
-        private RoomConfigAsset _configAsset;
+        private RoomGenerationConfig _generationConfig;
         private RoomConfigVariant _configVariant;
         private float _rotateEuler;
         private int _depth;
@@ -90,14 +90,14 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
 
         public List<DungeonGenerationChest> Chests => _chests;
 
-        public RoomConfigAsset ConfigAsset
+        public RoomGenerationConfig GenerationConfig
         {
-            get => _configAsset;
+            get => _generationConfig;
         }
 
-        public void SetConfig(RoomConfigAsset config, RoomConfigVariant variant)
+        public void SetConfig(RoomGenerationConfig generationConfig, RoomConfigVariant variant)
         {
-            _configAsset = config;
+            _generationConfig = generationConfig;
             _configVariant = variant;
         }
 

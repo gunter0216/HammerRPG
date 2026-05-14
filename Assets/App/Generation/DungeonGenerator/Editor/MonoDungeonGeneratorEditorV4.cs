@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using App.Common.Json.External;
 using App.Common.Logger.External;
 using App.Common.Logger.Runtime;
+using App.Game.Dungeon.DungeonCreator.Runtime.Config.Dto;
 using App.Generation.DungeonGenerator.External;
+using App.Generation.DungeonGenerator.External.Dto;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding.Cash;
@@ -55,7 +58,16 @@ namespace App.Generation.DungeonGenerator.Editor
             {
                 if (myScript.ClearConsole)
                     ClearUnityConsole();
-                var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
+                var deserializer = new JsonConfigurator().GetJsonDeserializer();
+                var text = myScript.ConfigAsset.text;
+                var dto = deserializer.Deserialize<GenerationConfigDto>(text);
+                // var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
+                if (!dto.HasValue)
+                {
+                    Debug.LogError("Cant deserialize.");
+                    return;
+                }
+                var config = m_DungeonGenerationDtoToConfigConverter.Convert(dto.Value.Generations[0]);
                 m_Generation = m_Generator.Generate(config).Value;
                 Rebuild();
             }
@@ -113,7 +125,7 @@ namespace App.Generation.DungeonGenerator.Editor
 
             foreach (var room in rooms.Rooms)
             {
-                var config = room.ConfigAsset;
+                var config = room.GenerationConfig;
                 var variant = room.ConfigVariant;
                 var genPos = room.Position;
                 // Debug.LogError($">>> {config.AssetKey} {genPos} {room.RotateEuler}");
@@ -140,22 +152,44 @@ namespace App.Generation.DungeonGenerator.Editor
                 log.AppendLine($"  expectedAABB X[{aabbMinX}..{aabbMaxX}] Y[{aabbMinY}..{aabbMaxY}]");
                 log.AppendLine($"  expectedFinalPos X={aabbMinX} Z={aabbMinY}");
 
-                var roomObj = Object.Instantiate(variant.AssetKey,
-                    finalPos + _roomsContent.position,
-                    Quaternion.Euler(0, room.RotateEuler, 0),
-                    _roomsContent);
+                // var roomObj = Object.Instantiate(variant.AssetKey,
+                //     finalPos + _roomsContent.position,
+                //     Quaternion.Euler(0, room.RotateEuler, 0),
+                //     _roomsContent);
                 // var roomObjs = await Object.InstantiateAsync(variant.AssetKey,
                 //     _roomsContent, 
                 //     finalPos + _roomsContent.position,
                 //     Quaternion.Euler(0, room.RotateEuler, 0)).ToUniTask();
                 // var roomObj = roomObjs[0];
+                
+                string[] guids = AssetDatabase.FindAssets($"{variant.AssetKey} t:Prefab");
+                if (guids.Length == 0)
+                {
+                    Debug.LogError($"Prefab not found: {variant.AssetKey}");
+                    continue;
+                }
+
+                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                var roomObj = (GameObject)PrefabUtility.InstantiatePrefab(prefab, _roomsContent);
+                roomObj.transform.position = finalPos + _roomsContent.position;
+                roomObj.transform.rotation = Quaternion.Euler(0, room.RotateEuler, 0);
+                roomObj.transform.parent = _roomsContent;
+                
+                // await Addressables.InitializeAsync().Task;
+                // var locations = await Addressables.LoadResourceLocationsAsync("TransitRoom_7x15_1D").Task;
+                // Debug.Log($"Locations found: {locations.Count}");
+                // foreach (var loc in locations)
+                //     Debug.Log(loc.PrimaryKey + " | " + loc.InternalId);
+                //
                 // var roomObj = await Addressables.InstantiateAsync(
-                //     config.AssetKey,
+                //     variant.AssetKey,
                 //     finalPos + _roomsContent.position,
                 //     Quaternion.Euler(0, room.RotateEuler, 0),
                 //     _roomsContent);
 
-                roomObj.name = $"{variant.AssetKey.name} depth {room.Depth}";
+                roomObj.name = $"{variant.AssetKey} depth {room.Depth}";
                 _rooms.Add(roomObj);
 
                 // Логируем localPosition (без внутреннего смещения prefab'а +0.5)

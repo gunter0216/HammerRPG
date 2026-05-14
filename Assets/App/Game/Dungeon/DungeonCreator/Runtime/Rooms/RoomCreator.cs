@@ -38,21 +38,20 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         public Optional<Room> CreateRoom(DungeonGenerationRoom generationRoom)
         {
             var data = new RoomData(generationRoom);
-            var room = new Room(data);
+            var room = new Room(data, generationRoom.GenerationConfig, generationRoom.ConfigVariant);
 
-            CreateWalls(room, generationRoom);
-            var chestRoomCreator = new ChestRoomCreator(
-                _moduleItemsManager, 
-                _chestModuleSystem,
-                _containerModuleSystem,
-                _keyCreator);
-            chestRoomCreator.CreateChests(room, generationRoom);
-            var doorRoomCreator = new DoorRoomCreator(
-                _moduleItemsManager,
-                _doorModuleSystem,
-                _keyCreator);
-            doorRoomCreator.CreateDoors(room, generationRoom);
-            CreateFloors(room, generationRoom);
+            // CreateWalls(room, generationRoom);
+            // var chestRoomCreator = new ChestRoomCreator(
+            //     _moduleItemsManager, 
+            //     _chestModuleSystem,
+            //     _containerModuleSystem,
+            //     _keyCreator);
+            // chestRoomCreator.CreateChests(room, generationRoom);
+            // var doorRoomCreator = new DoorRoomCreator(
+            //     _moduleItemsManager,
+            //     _doorModuleSystem,
+            //     _keyCreator);
+            // doorRoomCreator.CreateDoors(room, generationRoom);
             
             return Optional<Room>.Success(room);
         }
@@ -79,14 +78,6 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
                 tile.Value.Data.Position = position;
                 room.Tiles.Add(tile.Value);
                 room.Data.Tiles.Add(tile.Value.Data);
-            }
-        }
-
-        private void CreateFloors(Room room, DungeonGenerationRoom generationRoom)
-        {
-            foreach (var floor in generationRoom.Floors)
-            {
-                room.Data.Floors.Add(floor);    
             }
         }
 

@@ -9,7 +9,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
     public class TileBasedGenerationConfig : IGenerationConfig
     {
         [SerializeField, JsonProperty("rooms")] 
-        private RoomConfigAsset[] _rooms;
+        private RoomGenerationConfig[] _rooms;
         
         [SerializeField, JsonProperty("maxDepth")] 
         private int _maxDepth = 2;
@@ -20,7 +20,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         [SerializeField, JsonProperty("maxIterations")] 
         private int _maxIterations = 300;
 
-        public RoomConfigAsset[] Rooms => _rooms;
+        public RoomGenerationConfig[] Rooms => _rooms;
 
         public int MaxDepth => _maxDepth;
 

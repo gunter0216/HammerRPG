@@ -19,7 +19,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
     {
         private readonly RoomCreator _roomCreator;
 
-        private Dictionary<RoomType, List<RoomConfigAsset>> _typeToRooms;
+        private Dictionary<RoomType, List<RoomGenerationConfig>> _typeToRooms;
         private DungeonGenerationRooms _result;
         private TileBasedGenerationConfig _config;
         private List<DungeonGenerationRoom> _rooms;
@@ -46,13 +46,13 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             var configValue = generation.GetConfig<TileBasedGenerationConfig>();
             _config = configValue.Value;
 
-            _typeToRooms = new Dictionary<RoomType, List<RoomConfigAsset>>();
+            _typeToRooms = new Dictionary<RoomType, List<RoomGenerationConfig>>();
 
             foreach (var roomPresetConfig in _config.Rooms)
             {
                 if (!_typeToRooms.TryGetValue(roomPresetConfig.RoomType, out var list))
                 {
-                    list = new List<RoomConfigAsset>();
+                    list = new List<RoomGenerationConfig>();
                     _typeToRooms.Add(roomPresetConfig.RoomType, list);
                 }
 
@@ -104,7 +104,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             var roomType = RoomType.Transit;
             if (isMaxDepth)
             {
-                if (_rooms.Count(x => x.ConfigAsset.RoomType == RoomType.End) >= _config.MaxOutputs)
+                if (_rooms.Count(x => x.GenerationConfig.RoomType == RoomType.End) >= _config.MaxOutputs)
                 {
                     roomType = RoomType.Chest;
                 }
@@ -124,7 +124,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             foreach (var config in configs)
             {
-                if (prevRoom.ConfigAsset == config)
+                if (prevRoom.GenerationConfig == config)
                 {
                     continue;
                 }
@@ -181,8 +181,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     "FAILED GENERATE BRANCH\n" +
                     $"Depth: {depth}\n" +
                     $"RoomType: {roomType}\n" +
-                    $"PrevRoom Config: {prevRoom.ConfigAsset.name}\n" +
-                    $"PrevRoom Variant: {prevRoom.ConfigVariant.AssetKey.name}\n" +
+                    $"PrevRoom Config: {prevRoom.GenerationConfig}\n" +
+                    $"PrevRoom Variant: {prevRoom.ConfigVariant.AssetKey}\n" +
                     $"PrevRoom Position: {prevRoom.Position}\n" +
                     $"PrevRoom Rotation: {prevRoom.RotateEuler}\n" +
                     $"ExitDoor: {exitDoor}\n" +
@@ -200,7 +200,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         // Возвращает true только если ВСЕ ветки успешно построены.
         private bool TryBuildBranches(
             DungeonGenerationRoom room,
-            RoomConfigAsset config,
+            RoomGenerationConfig generationConfig,
             RoomConfigVariant startVariant,
             int depth)
         {
@@ -209,7 +209,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             var outputDoors = currentVariant.OutputDoors
                 .Select(d => new Vector2Int(d.X, d.Y))
-                .Where(d => !IsSameDoor(d, config.InputDoor))
+                .Where(d => !IsSameDoor(d, generationConfig.InputDoor))
                 .ToList();
 
             int i = 0;
@@ -236,7 +236,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                 // есть все уже успешные двери, но нет проблемной двери
                 if (!TryReplaceVariant(
                         room,
-                        config,
+                        generationConfig,
                         currentVariant,
                         successfulDoors,
                         door,
@@ -262,7 +262,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
         // Возвращает новый вариант и список дверей, которые ещё не построены.
         private bool TryReplaceVariant(
             DungeonGenerationRoom room,
-            RoomConfigAsset config,
+            RoomGenerationConfig generationConfig,
             RoomConfigVariant currentVariant,
             List<Vector2Int> successfulDoors,
             Vector2Int failedDoor,
@@ -272,7 +272,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             newVariant = null;
             newDoors   = new List<Vector2Int>();
 
-            var variants = config.Variants.ToList();
+            var variants = generationConfig.Variants.ToList();
             variants.Shuffle();
 
             foreach (var variant in variants)
@@ -297,7 +297,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                 // Собираем двери, которые ещё не построены
                 var remaining = variant.OutputDoors
                     .Select(d => new Vector2Int(d.X, d.Y))
-                    .Where(d => !IsSameDoor(d, config.InputDoor))
+                    .Where(d => !IsSameDoor(d, generationConfig.InputDoor))
                     .Where(d => !successfulDoors.Any(sd => sd.X == d.X && sd.Y == d.Y))
                     .ToList();
 
@@ -307,9 +307,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
                 Debug.LogWarning(
                     "ROOM VARIANT REPLACED\n" +
-                    $"Config: {config.name}\n" +
-                    $"Old Variant: {currentVariant.AssetKey.name}\n" +
-                    $"New Variant: {variant.AssetKey.name}\n" +
+                    $"Config: {generationConfig}\n" +
+                    $"Old Variant: {currentVariant.AssetKey}\n" +
+                    $"New Variant: {variant.AssetKey}\n" +
                     $"Failed Door: {failedDoor}\n" +
                     $"Successful Doors: {string.Join(", ", successfulDoors)}\n" +
                     $"New Doors to build: {string.Join(", ", remaining)}");
@@ -319,8 +319,8 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             Debug.LogError(
                 "FAILED TO REPLACE VARIANT\n" +
-                $"Config: {config.name}\n" +
-                $"Current Variant: {currentVariant.AssetKey.name}\n" +
+                $"Config: {generationConfig}\n" +
+                $"Current Variant: {currentVariant.AssetKey}\n" +
                 $"Failed Door: {failedDoor}\n" +
                 $"Successful Doors: {string.Join(", ", successfulDoors)}");
 

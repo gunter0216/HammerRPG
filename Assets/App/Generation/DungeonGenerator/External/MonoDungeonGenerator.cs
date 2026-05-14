@@ -6,6 +6,7 @@ namespace App.Generation.DungeonGenerator.External
     public class MonoDungeonGenerator : MonoBehaviour
     {
         [SerializeField] public DungeonGenerationConfigDto Config;
+        [SerializeField] public TextAsset ConfigAsset;
         [SerializeField] public bool ShowLabel;
         [SerializeField] public bool ShowRoomBorders;
         [SerializeField] public bool ClearConsole;

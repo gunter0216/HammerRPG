@@ -18,17 +18,72 @@ MonoBehaviour:
   m_GUID: 1060b35f5af8f3e4c8117ee31d5091fb
   m_SerializeEntries:
   - m_GUID: 1bf26f63a2cd24a449ed79ecc55c1ccd
-    m_Address: EndRoom9x9
+    m_Address: EndRoom_9x9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d58ee6b689a68e49a999ba1287f4509
+    m_Address: ChestRoom_9x9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 23d1fe3dd9df1cd4f94b235eb48c1f6a
+    m_Address: TransitRoom_11x11_2TR
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36d39e51d46cd5a41949e0c843e76802
+    m_Address: TransitRoom_11x11_2RD
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3e3f744797bdbbe45bcb61c9f7798755
-    m_Address: StartRoom9x9
+    m_Address: StartRoom_9x9
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bb8c1fd9d3a16247b4f1d6c60b29b84
+    m_Address: TransitRoom_11x11_2TD
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e4fc183e4de0234cbf8c49de15bc4aa
+    m_Address: TransitRoom_11x11_1T
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a25c8af1c8eab504c8f5387830115d6a
+    m_Address: TransitRoom_7x15_2TD
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c28af1eda2e77444a8f1a31d904774aa
+    m_Address: TransitRoom_7x15_1D
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8e05821f16b6a746a20f9ec9e969384
+    m_Address: TransitRoom_7x15_1T
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed2183dddc409264a9149aa49e5c5892
+    m_Address: TransitRoom_11x11_1R
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f3e17464d548f93489a051cbc4796a0a
-    m_Address: FightRoom_11x11_1
+    m_Address: TransitRoom_11x11_3TRD
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f542bf32064df1447893f74b5e375acd
+    m_Address: TransitRoom_11x11_1D
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fbb773866311b6545bf5e736da8b5014
+    m_Address: TransitRoom_11x13_1R
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

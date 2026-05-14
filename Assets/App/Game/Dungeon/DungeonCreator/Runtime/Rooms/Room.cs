@@ -2,19 +2,24 @@ using System.Collections.Generic;
 using App.Common.Algorithms.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Doors;
 using App.Game.Dungeon.DungeonCreator.Runtime.Tiles;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
 {
     public class Room
     {
         private readonly RoomData _data;
+        private readonly RoomGenerationConfig _config;
+        private readonly RoomConfigVariant _variant;
         private List<Tile> _tiles;
         private List<Door> _doors;
         private List<Chest.Chest> _chests;
 
-        public Room(RoomData data)
+        public Room(RoomData data, RoomGenerationConfig config, RoomConfigVariant variant)
         {
             _data = data;
+            _config = config;
+            _variant = variant;
         }
 
         public RoomData Data => _data;
@@ -25,10 +30,10 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
             set => _tiles = value;
         }
         
-        public int Width => _data.Width;
-        public int Height => _data.Height;
+        public int Width => Config.Size.X;
+        public int Height => Config.Size.Y;
         public Vector2Int Position => _data.Position;
-        public Vector2Int Size => _data.Size;
+        public Vector2Int Size => Config.Size;
         public int Col => Position.X;
         public int Row => Position.Y;
 
@@ -43,6 +48,10 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
             get => _chests;
             set => _chests = value;
         }
+
+        public RoomGenerationConfig Config => _config;
+
+        public RoomConfigVariant Variant => _variant;
 
         public Vector2Int LocalToWorld(int x, int y) 
         {
@@ -71,7 +80,7 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         
         public Vector2 GetCenter()
         {
-            return new Vector2(_data.Position.X + _data.Width * 0.5f, _data.Position.Y + _data.Height * 0.5f);
+            return new Vector2(_data.Position.X + Width * 0.5f, _data.Position.Y + Height * 0.5f);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using App.Common.Json.Runtime.Deserializer;
+﻿using System.Collections.Generic;
+using App.Common.Json.Runtime.Deserializer;
 using App.Common.Json.Runtime.JsonLoader;
 using App.Common.Json.Runtime.JsonSaver;
 using App.Common.Json.Runtime.Serializer;
@@ -11,6 +12,8 @@ namespace App.Common.Json.External
     [Configurator(DIContext.GlobalContext)]    
     public class JsonConfigurator : Core.Startups.External.Configurator
     {
+        private JsonSerializerSettings _settings;
+
         public override void Configuration()
         {
             Container.Bind<IJsonLoader>().FromInstance(BeanJsonLoader());
@@ -21,13 +24,20 @@ namespace App.Common.Json.External
 
         public JsonSerializerSettings GetJsonSerializerSettings()
         {
-            return new JsonSerializerSettings()
+            _settings ??= new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Auto,
                 NullValueHandling = NullValueHandling.Ignore,
                 DateFormatString = "d.M.yyyy HH:mm:ss",
-                Formatting = Formatting.Indented
+                Formatting = Formatting.Indented,
+                Converters = new List<JsonConverter>()
+                {
+                    new Vector2Converter(),
+                    new Vector2IntConverter()
+                }
             };
+            
+            return _settings;
         }
 
         public IJsonLoader BeanJsonLoader()
@@ -40,12 +50,12 @@ namespace App.Common.Json.External
             return new DefaultJsonSaver(BeanJsonSerializer());
         }
 
-        private IJsonDeserializer GetJsonDeserializer()
+        public IJsonDeserializer GetJsonDeserializer()
         {
             return new NewtonsoftJsonDeserializer(GetJsonSerializerSettings());
         }
 
-        private IJsonSerializer BeanJsonSerializer()
+        public IJsonSerializer BeanJsonSerializer()
         {
             return new NewtonsoftJsonSerializer(GetJsonSerializerSettings());
         }

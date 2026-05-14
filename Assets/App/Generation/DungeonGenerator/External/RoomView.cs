@@ -6,8 +6,8 @@ namespace App.Generation.DungeonGenerator.External
     public class RoomView : MonoBehaviour
     {
         [SerializeField] 
-        private RoomConfigAsset _config;
+        private RoomGenerationConfig _generationConfig;
 
-        public RoomConfigAsset Config => _config;
+        public RoomGenerationConfig GenerationConfig => _generationConfig;
     }
 }
