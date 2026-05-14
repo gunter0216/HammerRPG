@@ -66,6 +66,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             var view = viewResult.Value;
             view.transform.position = new Vector3(room.Position.X, 0, room.Position.Y);
             view.transform.rotation = Quaternion.Euler(0, room.Data.Rotation, 0);
+            view.transform.parent = _root.transform;
         }
 
         private void CreateChest()
