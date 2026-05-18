@@ -1,0 +1,4 @@
+{
+  "name": "Autumn.Destroyable.Editor",
+  "references":[ "Autumn.Game" ]
+}
