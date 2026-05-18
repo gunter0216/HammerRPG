@@ -2,6 +2,7 @@
 using App.Common.AssetSystem.Runtime;
 using App.Common.Canvases.External;
 using App.Common.Data.Runtime;
+using App.Common.Input.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.SceneControllers.Runtime;
 using App.Common.Utilities.Utility.Runtime;
@@ -14,10 +15,11 @@ using App.Game.Pause.Runtime;
 using App.Game.Settings.Runtime;
 using App.Game.Utility.Runtime.MenuSM;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace App.Game.GameMenu.External
 {
-    public class GameMenuController : IInitSystem, IUpdateSystem, IDisposable, IWindowController
+    public class GameMenuController : IInitSystem, IDisposable, IWindowController
     {
         private const string m_GameMenuAssetKey = "GameMenuView";
         private readonly StringKeyEvaluator m_GameMenuAssetKeyEvaluator = new(m_GameMenuAssetKey);
@@ -28,6 +30,7 @@ namespace App.Game.GameMenu.External
         private readonly IDataManager _dataManager;
         private readonly ISceneManager _sceneManager;
         private readonly IPauseController _pauseController;
+        private readonly IInputService _inputService;
         
         private GameMenuState m_GameMenuState;
         private SettingsMenuState m_SettingsMenuState;
@@ -42,7 +45,8 @@ namespace App.Game.GameMenu.External
             IDataManager dataManager,
             ISceneManager sceneManager,
             IPauseController pauseController, 
-            IWindowManager windowManager)
+            IWindowManager windowManager, 
+            IInputService inputService)
         {
             _canvasController = canvasController;
             _assetManager = assetManager;
@@ -50,6 +54,7 @@ namespace App.Game.GameMenu.External
             _sceneManager = sceneManager;
             _pauseController = pauseController;
             _windowManager = windowManager;
+            _inputService = inputService;
         }
 
         public void Init()
@@ -79,6 +84,26 @@ namespace App.Game.GameMenu.External
                 m_View.MainMenuPanel, 
                 m_SettingsMenuState,
                 new SaveAndExitStrategy(_sceneManager, _pauseController));
+
+            _inputService.Input.UI.Back.performed += OnBackClick;
+            // todo отписка
+        }
+
+        private void OnBackClick(InputAction.CallbackContext obj)
+        {
+            if (_menuMachine.GetCountInStack() <= 0)
+            {
+                if (_windowManager.IsAnyOpen())
+                {
+                    return;
+                }
+                    
+                _windowManager.Open(this);
+            }
+            else
+            {
+                _menuMachine.PopState();
+            }
         }
 
         private void OnPop(IMenuState _)
@@ -86,26 +111,6 @@ namespace App.Game.GameMenu.External
             if (_menuMachine.GetCountInStack() <= 0)
             {
                 _windowManager.Close(this);
-            }
-        }
-
-        public void OnUpdate()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (_menuMachine.GetCountInStack() <= 0)
-                {
-                    if (_windowManager.IsAnyOpen())
-                    {
-                        return;
-                    }
-                    
-                    _windowManager.Open(this);
-                }
-                else
-                {
-                    _menuMachine.PopState();
-                }
             }
         }
 

@@ -11,32 +11,32 @@ namespace App.Game.Player.External
     {
         public override void Configuration()
         {
-            BindSingle<AttackSystem>();
-            BindSingle<EnemyInitSystem>();
-            BindSingle<HealthSystem>();
-            BindSingle<PlayAttackAnimationSystem>();
-            BindSingle<PlayerAttackSystem>();
+            // BindSingle<AttackSystem>();
+            // BindSingle<EnemyInitSystem>();
+            // BindSingle<HealthSystem>();
+            // BindSingle<PlayAttackAnimationSystem>();
+            // BindSingle<PlayerAttackSystem>();
             // BindSingle<PlayerInitSystem>();
             // BindSingle<PlayerMoveSystem>();
-            BindSingle<WeaponCollisionSystem>();
+            // BindSingle<WeaponCollisionSystem>();
             BindSingle<PlayerController>();
 
-            RegisterFSM<AttackSystem>(FSMStage.CoreInitStage, StageOrders.AttackSystem);
-            RegisterFSM<EnemyInitSystem>(FSMStage.CoreInitStage, StageOrders.EnemyInitSystem);
-            RegisterFSM<HealthSystem>(FSMStage.CoreInitStage, StageOrders.HealthSystem);
-            RegisterFSM<PlayAttackAnimationSystem>(FSMStage.CoreInitStage, StageOrders.PlayAttackAnimationSystem);
-            RegisterFSM<PlayerAttackSystem>(FSMStage.CoreInitStage, StageOrders.PlayerAttackSystem);
+            // RegisterFSM<AttackSystem>(FSMStage.CoreInitStage, StageOrders.AttackSystem);
+            // RegisterFSM<EnemyInitSystem>(FSMStage.CoreInitStage, StageOrders.EnemyInitSystem);
+            // RegisterFSM<HealthSystem>(FSMStage.CoreInitStage, StageOrders.HealthSystem);
+            // RegisterFSM<PlayAttackAnimationSystem>(FSMStage.CoreInitStage, StageOrders.PlayAttackAnimationSystem);
+            // RegisterFSM<PlayerAttackSystem>(FSMStage.CoreInitStage, StageOrders.PlayerAttackSystem);
             // RegisterFSM<PlayerInitSystem>(FSMStage.CoreInitStage, StageOrders.PlayerInitSystem);
             // RegisterFSM<PlayerMoveSystem>(FSMStage.CoreInitStage, StageOrders.PlayerMoveSystem);
-            RegisterFSM<WeaponCollisionSystem>(FSMStage.CoreInitStage, StageOrders.WeaponCollisionSystem);
+            // RegisterFSM<WeaponCollisionSystem>(FSMStage.CoreInitStage, StageOrders.WeaponCollisionSystem);
             RegisterFSM<PlayerController>(FSMStage.CoreInitStage, StageOrders.PlayerController);
 
-            RegisterUpdate<AttackSystem>(UpdateStage.AttackSystem);
-            RegisterUpdate<HealthSystem>(UpdateStage.HealthSystem);
-            RegisterUpdate<PlayAttackAnimationSystem>(UpdateStage.PlayAttackAnimationSystem);
-            RegisterUpdate<PlayerAttackSystem>(UpdateStage.PlayerAttackSystem);
+            // RegisterUpdate<AttackSystem>(UpdateStage.AttackSystem);
+            // RegisterUpdate<HealthSystem>(UpdateStage.HealthSystem);
+            // RegisterUpdate<PlayAttackAnimationSystem>(UpdateStage.PlayAttackAnimationSystem);
+            // RegisterUpdate<PlayerAttackSystem>(UpdateStage.PlayerAttackSystem);
             // RegisterUpdate<PlayerMoveSystem>(UpdateStage.PlayerMoveSystem);
-            RegisterUpdate<WeaponCollisionSystem>(UpdateStage.WeaponCollisionSystem);
+            // RegisterUpdate<WeaponCollisionSystem>(UpdateStage.WeaponCollisionSystem);
             RegisterUpdate<PlayerController>(UpdateStage.PlayerController);
         }
     }

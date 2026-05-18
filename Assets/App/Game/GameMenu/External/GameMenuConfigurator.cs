@@ -14,8 +14,6 @@ namespace App.Game.GameMenu.External
             BindSingle<GameMenuController>();
 
             RegisterFSM<GameMenuController>(FSMStage.CoreInitStage, StageOrders.GameMenu);
-            
-            RegisterUpdate<GameMenuController>(UpdateStage.GameMenu);
         }
     }
 }

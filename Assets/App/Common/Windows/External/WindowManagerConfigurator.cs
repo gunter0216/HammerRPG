@@ -15,7 +15,6 @@ namespace App.Common.Windows.External
             BindSingle<ClosePopWindowService>();
 
             RegisterFSM<WindowManager>(FSMStage.CoreInitStage, StageOrders.WindowManager);
-            RegisterUpdate<ClosePopWindowService>(UpdateStage.PopWindow);
         }
     }
 }

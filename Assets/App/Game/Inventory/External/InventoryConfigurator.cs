@@ -17,8 +17,6 @@ namespace App.Game.Inventory.External
             BindSingle<OpenInventorySystem>();
 
             RegisterFSM<InventoryController>(FSMStage.CoreInitStage, StageOrders.Inventory);
-
-            RegisterUpdate<OpenInventorySystem>(UpdateStage.Inventory);
         }
     }
     
