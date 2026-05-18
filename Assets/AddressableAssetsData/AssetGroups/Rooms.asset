@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Rooms
   m_EditorClassIdentifier: 
   m_GroupName: Rooms
-  m_Data:
-    m_SerializedData: []
   m_GUID: 1060b35f5af8f3e4c8117ee31d5091fb
   m_SerializeEntries:
   - m_GUID: 1bf26f63a2cd24a449ed79ecc55c1ccd
