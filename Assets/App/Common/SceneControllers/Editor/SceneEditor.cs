@@ -26,6 +26,12 @@ namespace App.Common.SceneControllers.Editor
         {
             OpenScene($"Assets/Scenes/{SceneConstants.CoreScene}.unity");
         }
+        
+        [MenuItem("Helper/Scenes/DungeonTest", false, 4)]
+        public static void GoToDungeonTestScene()
+        {
+            OpenScene($"Assets/Scenes/{SceneConstants.DungeonTest}.unity");
+        }
 
         private static void OpenScene(string name)
         {

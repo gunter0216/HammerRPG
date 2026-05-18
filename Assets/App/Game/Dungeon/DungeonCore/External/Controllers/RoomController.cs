@@ -51,10 +51,22 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         {
             _root = new GameObject($"Room {_service.Room.Data.UID.ToString()}");
             _root.transform.parent = _dungeon.transform;
-            CreateFloors();
-            CreateWalls();
-            CreateDoors();
-            CreateChest();
+            CreateRoom();
+            // CreateFloors();
+            // CreateWalls();
+            // CreateDoors();
+            // CreateChest();
+        }
+
+        private void CreateRoom()
+        {
+            var room = _service.Room;
+            var assetKey = room.Variant.AssetKey;
+            var viewResult = _assetManager.InstantiateSync<Transform>(assetKey, _root.transform);
+            var view = viewResult.Value;
+            view.transform.position = new Vector3(room.Position.X, 0, room.Position.Y);
+            view.transform.rotation = Quaternion.Euler(0, room.Data.Rotation, 0);
+            view.transform.parent = _root.transform;
         }
 
         private void CreateChest()
@@ -89,19 +101,6 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             
             var root = new GameObject("Floors").transform;
             root.parent = _root.transform;
-            
-            var room = _service.Room;
-            foreach (var floor in room.Data.Floors)
-            {
-                var model = Object.Instantiate(prefab, root.transform);
-                
-                var worldPosition = room.LocalToWorld(floor.Position);
-                var positionX = worldPosition.X + floor.Width * 0.5f;
-                var positionZ = worldPosition.Y + floor.Height * 0.5f;
-                
-                model.transform.position = new Vector3(positionX, 0, positionZ);
-                model.transform.localScale = new Vector3(floor.Width, 1, floor.Height);
-            }
         }
 
         private void CreateWalls()

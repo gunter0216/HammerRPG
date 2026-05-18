@@ -17,23 +17,27 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         [JsonProperty("position")]
         private readonly Vector2Int _position;
         
-        [JsonProperty("size")]
-        private readonly Vector2Int _size;
+        [JsonProperty("rotation")]
+        private readonly float _rotation;
+        
+        [JsonProperty("configID")]
+        private readonly string _configID;
+        
+        [JsonProperty("variantID")]
+        private readonly string _variantID;
         
         [JsonProperty("tiles")]
         private readonly List<TileData> _tiles;
         
-        [JsonProperty("floors")]
-        private readonly List<RectInt> _floors;
-
         public Vector2Int Position => _position;
 
-        public Vector2Int Size => _size;
-        public int Width => _size.X;
-        public int Height => _size.Y;
         public int UID => _UID;
         public List<TileData> Tiles => _tiles;
-        public List<RectInt> Floors => _floors;
+        public float Rotation => _rotation;
+
+        public string ConfigID => _configID;
+
+        public string VariantID => _variantID;
 
         public RoomData()
         {
@@ -44,9 +48,10 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         {
             _UID = generationRoom.UID;
             _position = generationRoom.Position;
-            _size = generationRoom.Size;
+            _rotation = generationRoom.RotateEuler;
+            _configID = generationRoom.GenerationConfig.ID;
+            _variantID = generationRoom.ConfigVariant.ID;
             _tiles = new List<TileData>();
-            _floors = new List<RectInt>();
         }
     }
 }

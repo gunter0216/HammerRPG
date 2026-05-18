@@ -1,29 +1,31 @@
-﻿using App.Common.Utilities.Utility.Runtime;
-using UnityEngine;
+﻿using App.Common.Input.Runtime;
+using UnityEngine.InputSystem;
 
 namespace App.Game.CharacterWindow.External
 {
-    public class OpenCharacterWindowSystem : IUpdateSystem
+    public class OpenCharacterWindowSystem
     {
         private readonly CharacterWindowController _characterWindowController;
+        private readonly IInputService _inputService;
 
-        public OpenCharacterWindowSystem(CharacterWindowController characterWindowController)
+        public OpenCharacterWindowSystem(CharacterWindowController characterWindowController,
+            IInputService inputService)
         {
             _characterWindowController = characterWindowController;
+            _inputService = inputService;
+
+            _inputService.Input.UI.Character.performed += OnClick;
         }
 
-        public void OnUpdate()
+        private void OnClick(InputAction.CallbackContext obj)
         {
-            if (Input.GetKeyDown(KeyCode.C))
+            if (_characterWindowController.IsOpen())
             {
-                if (_characterWindowController.IsOpen())
-                {
-                    _characterWindowController.Close();
-                }
-                else
-                {
-                    _characterWindowController.Open();   
-                }
+                _characterWindowController.Close();
+            }
+            else
+            {
+                _characterWindowController.Open();
             }
         }
     }

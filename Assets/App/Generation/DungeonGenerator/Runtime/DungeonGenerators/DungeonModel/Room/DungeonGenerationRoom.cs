@@ -8,6 +8,7 @@ using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Chest
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridor;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Corridors;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased;
 using Vector2 = App.Common.Algorithms.Runtime.Vector2;
 using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
@@ -26,7 +27,11 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         private readonly List<RectInt> _floors;
         private DungeonKeyData _requiredKey;
         private bool _isMainPath;
-        private DungeonCorridor _corridor; 
+        private DungeonCorridor _corridor;
+        private RoomGenerationConfig _generationConfig;
+        private RoomConfigVariant _configVariant;
+        private float _rotateEuler;
+        private int _depth;
 
         public int Col => _position.X;
         public int Row => _position.Y;
@@ -84,6 +89,35 @@ namespace App.Generation.DungeonGenerator.Runtime.Rooms
         public List<RectInt> Floors => _floors;
 
         public List<DungeonGenerationChest> Chests => _chests;
+
+        public RoomGenerationConfig GenerationConfig
+        {
+            get => _generationConfig;
+        }
+
+        public void SetConfig(RoomGenerationConfig generationConfig, RoomConfigVariant variant)
+        {
+            _generationConfig = generationConfig;
+            _configVariant = variant;
+        }
+
+        public float RotateEuler
+        {
+            get => _rotateEuler;
+            set => _rotateEuler = value;
+        }
+
+        public int Depth
+        {
+            get => _depth;
+            set => _depth = value;
+        }
+
+        public RoomConfigVariant ConfigVariant
+        {
+            get => _configVariant;
+            set => _configVariant = value;
+        }
 
         public DungeonGenerationRoom(int uid, Vector2Int position, Vector2Int size)
         {

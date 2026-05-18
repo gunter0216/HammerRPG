@@ -1,30 +1,33 @@
-﻿using App.Common.Utilities.Utility.Runtime;
+﻿using App.Common.Input.Runtime;
+using App.Common.Utilities.Utility.Runtime;
 using App.Game.Inventory.Runtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace App.Game.Inventory.External
 {
-    public class OpenInventorySystem : IUpdateSystem
+    public class OpenInventorySystem
     {
         private readonly IInventoryController _inventoryController;
+        private readonly IInputService _inputService;
 
-        public OpenInventorySystem(IInventoryController inventoryController)
+        public OpenInventorySystem(IInventoryController inventoryController, IInputService inputService)
         {
             _inventoryController = inventoryController;
+            _inputService = inputService;
+
+            _inputService.Input.UI.Inventory.performed += OnOpenClick;
         }
 
-        public void OnUpdate()
+        private void OnOpenClick(InputAction.CallbackContext obj)
         {
-            if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
+            if (_inventoryController.IsOpen())
             {
-                if (_inventoryController.IsOpen())
-                {
-                    _inventoryController.CloseWindow();
-                }
-                else
-                {
-                    _inventoryController.OpenWindow();   
-                }
+                _inventoryController.CloseWindow();
+            }
+            else
+            {
+                _inventoryController.OpenWindow();
             }
         }
     }

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: main
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: main
+  m_GUID: 2772e5adae6f15848b011643e3a222ec
+  m_SerializeEntries:
+  - m_GUID: 45230c1bd56cc3b44b940c7c7f2186a4
+    m_Address: Assets/Art/DontTouch/Cats/Effects/SmokeParticle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80afd895097ad144893ad78943aaf475
+    m_Address: Assets/Art/DontTouch/Cats/Effects/RayRoundedParticle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 11ecc77c73e490344b47d72cb07e6226, type: 2}
+    - {fileID: 11400000, guid: 7d8bcde958e83194398ad442540c180f, type: 2}

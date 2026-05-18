@@ -1,4 +1,5 @@
 ﻿using App.Common.Algorithms.Runtime;
+using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common
@@ -11,6 +12,15 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.C
         {
             var uid = m_Index++;
             var room = new DungeonGenerationRoom(uid, position, size);
+            return room;
+        }
+        
+        public DungeonGenerationRoom Create(Vector2Int position, RoomGenerationConfig generationConfig, RoomConfigVariant variant)
+        {
+            var uid = m_Index++;
+            var room = new DungeonGenerationRoom(uid, position, generationConfig.Size);
+            room.SetConfig(generationConfig, variant);
+
             return room;
         }
     }

@@ -36,7 +36,252 @@
         "min_room_size": 11,
         "max_room_size": 30,
         "area_padding": 1,
-        "depth": 4 
+        "depth": 4
+      },
+      "tileBased": {
+        "maxDepth": 3,
+        "maxOutputs": 1,
+        "maxIterations": 300,
+        "rooms": [
+          {
+            "id": "Chest",
+            "type": "Chest",
+            "size": {
+              "x": 9,
+              "y": 9
+            },
+            "inputDoor": {
+              "x": 0,
+              "y": 4
+            },
+            "variants": [
+              {
+                "id": "Chest1",
+                "assetKey": "ChestRoom_9x9",
+                "outputDoors": []
+              }
+            ]
+          },
+          {
+            "id": "Start",
+            "type": "Start",
+            "size": {
+              "x": 9,
+              "y": 9
+            },
+            "inputDoor": {
+              "x": 0,
+              "y": 0
+            },
+            "variants": [
+              {
+                "id": "Start1",
+                "assetKey": "StartRoom_9x9",
+                "outputDoors": [
+                  {
+                    "x": 8,
+                    "y": 4
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "End",
+            "type": "End",
+            "size": {
+              "x": 9,
+              "y": 9
+            },
+            "inputDoor": {
+              "x": 0,
+              "y": 4
+            },
+            "variants": [
+              {
+                "id": "End1",
+                "assetKey": "EndRoom_9x9",
+                "outputDoors": []
+              }
+            ]
+          },
+          {
+            "id": "Transit1",
+            "type": "Transit",
+            "size": {
+              "x": 7,
+              "y": 15
+            },
+            "inputDoor": {
+              "x": 0,
+              "y": 7
+            },
+            "variants": [
+              {
+                "id": "Transit1_1",
+                "assetKey": "TransitRoom_7x15_2TD",
+                "outputDoors": [
+                  {
+                    "x": 3,
+                    "y": 0
+                  },
+                  {
+                    "x": 3,
+                    "y": 14
+                  }
+                ]
+              },
+              {
+                "id": "Transit1_2",
+                "assetKey": "TransitRoom_7x15_1D",
+                "outputDoors": [
+                  {
+                    "x": 3,
+                    "y": 0
+                  }
+                ]
+              },
+              {
+                "id": "Transit1_2",
+                "assetKey": "TransitRoom_7x15_1T",
+                "outputDoors": [
+                  {
+                    "x": 3,
+                    "y": 14
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "Transit2",
+            "type": "Transit",
+            "size": {
+              "x": 11,
+              "y": 11
+            },
+            "inputDoor": {
+              "x": 0,
+              "y": 5
+            },
+            "variants": [
+              {
+                "id": "Transit2_1",
+                "assetKey": "TransitRoom_11x11_3TRD",
+                "outputDoors": [
+                  {
+                    "x": 10,
+                    "y": 5
+                  },
+                  {
+                    "x": 5,
+                    "y": 10
+                  },
+                  {
+                    "x": 5,
+                    "y": 0
+                  }
+                ]
+              },
+              {
+                "id": "Transit2_2",
+                "assetKey": "TransitRoom_11x11_2RD",
+                "outputDoors": [
+                  {
+                    "x": 10,
+                    "y": 5
+                  },
+                  {
+                    "x": 5,
+                    "y": 0
+                  }
+                ]
+              },
+              {
+                "id": "Transit2_3",
+                "assetKey": "TransitRoom_11x11_2TD",
+                "outputDoors": [
+                  {
+                    "x": 5,
+                    "y": 10
+                  },
+                  {
+                    "x": 5,
+                    "y": 0
+                  }
+                ]
+              },
+              {
+                "id": "Transit2_4",
+                "assetKey": "TransitRoom_11x11_2TR",
+                "outputDoors": [
+                  {
+                    "x": 10,
+                    "y": 5
+                  },
+                  {
+                    "x": 5,
+                    "y": 10
+                  }
+                ]
+              },
+              {
+                "id": "Transit2_5",
+                "assetKey": "TransitRoom_11x11_1D",
+                "outputDoors": [
+                  {
+                    "x": 5,
+                    "y": 0
+                  }
+                ]
+              },
+              {
+                "id": "Transit2_6",
+                "assetKey": "TransitRoom_11x11_1R",
+                "outputDoors": [
+                  {
+                    "x": 10,
+                    "y": 5
+                  }
+                ]
+              },
+              {
+                "id": "Transit2_7",
+                "assetKey": "TransitRoom_11x11_1T",
+                "outputDoors": [
+                  {
+                    "x": 5,
+                    "y": 10
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "Transit3",
+            "type": "Transit",
+            "size": {
+              "x": 13,
+              "y": 11
+            },
+            "inputDoor": {
+              "x": 0,
+              "y": 5
+            },
+            "variants": [
+              {
+                "id": "Transit3_1",
+                "assetKey": "TransitRoom_11x13_1R",
+                "outputDoors": [
+                  {
+                    "x": 12,
+                    "y": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     }
   ]

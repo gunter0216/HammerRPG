@@ -12,8 +12,6 @@ namespace App.Game.CharacterWindow.External
         {
             BindSingle<CharacterWindowController>();
             BindSingle<OpenCharacterWindowSystem>();
-
-            RegisterUpdate<OpenCharacterWindowSystem>(UpdateStage.CharacterOpenSystem);
         }
     }
 }

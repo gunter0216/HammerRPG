@@ -1,25 +1,29 @@
+using App.Common.Input.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace App.Common.Windows.External
 {
-    public class ClosePopWindowService : IUpdateSystem
+    public class ClosePopWindowService
     {
         private readonly WindowManager _windowManager;
+        private readonly IInputService _inputService;
 
-        public ClosePopWindowService(WindowManager windowManager)
+        public ClosePopWindowService(WindowManager windowManager, IInputService inputService)
         {
             _windowManager = windowManager;
+            _inputService = inputService;
+
+            _inputService.Input.UI.Back.performed += OnBackClick;
+            // todo otpiska
         }
 
-        public void OnUpdate()
+        private void OnBackClick(InputAction.CallbackContext obj)
         {
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
+            if (_windowManager.IsAnyOpen())
             {
-                if (_windowManager.IsAnyOpen())
-                {
-                    _windowManager.TryPopWindow();
-                }
+                _windowManager.TryPopWindow();
             }
         }
     }

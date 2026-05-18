@@ -15,8 +15,6 @@ namespace App.Game.Cheats.External
             BindSingle<OpenCheatsSystem>();
 
             RegisterFSM<CheatsController>(FSMStage.CoreInitStage, StageOrders.Cheats);
-
-            RegisterUpdate<OpenCheatsSystem>(UpdateStage.Cheats);
         }
     }
 }
