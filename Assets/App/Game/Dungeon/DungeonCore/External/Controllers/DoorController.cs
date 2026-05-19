@@ -2,9 +2,10 @@ using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Dungeon.DungeonCore.External.View;
+using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.Inventory.External;
+using App.Game.Modules.Doors.Runtime;
 using Assets.App.Game.Interactions.Runtime;
-using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
 
 namespace App.Game.Dungeon.DungeonCore.External.Controllers
@@ -15,20 +16,29 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         private readonly IAssetManager _assetManager;
         private readonly InventoryController _inventoryController;
-        private DoorInteractiveView _doorView;
+        private readonly DungeonService _dungeonService;
+        private readonly RoomService _roomService;
         private readonly IModuleItemsManager _moduleItemsManager;
         
+        private DoorInteractiveView _doorView;
+        private DoorService _doorService;
+
         private Animator _animator;
+        private DoorModule _door;
 
         public DoorController(IAssetManager assetManager,
             IModuleItemsManager moduleItemsManager,
-            InventoryController inventoryController, 
-            DoorInteractiveView doorView)
+            InventoryController inventoryController,
+            DoorInteractiveView doorView,
+            DungeonService dungeonService, 
+            RoomService roomService)
         {
             _assetManager = assetManager;
             _moduleItemsManager = moduleItemsManager;
             _inventoryController = inventoryController;
             _doorView = doorView;
+            _dungeonService = dungeonService;
+            _roomService = roomService;
         }
 
         public void Initialize()
@@ -40,10 +50,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             interactableView.OnHoverEnterCallback += OnButtonEnter;
             interactableView.OnHoverExitCallback += OnButtonExit;
 
-            // if (_door.DoorModule.IsOpen)
-            // {
-            //     OpenDoor();
-            // }
+            _doorService = _roomService.CreateDoor();
+            _door = _doorService.Module;
         }
         
         private void OnButtonEnter()
@@ -56,27 +64,18 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         private void OnButtonClick()
         {
+            if (_door.IsOpen)
+            {
+                return;
+            }
+
+            if (!_doorService.CanOpen())
+            {
+                return;
+            }
+            
+            _door.Open();
             OpenDoor();
-            // var doorModule = _door.DoorModule;
-            // if (doorModule.IsOpen)
-            // {
-            //     return;
-            // }
-            //
-            // if (_inventoryController.TryGetItem(_door.DoorModule.RequiredKey, out var inventoryItem))
-            // {
-            //     Debug.LogError("Open");
-            //     
-            //     _door.DoorModule.Open();
-            //     _inventoryController.Remove(inventoryItem);
-            //     _moduleItemsManager.Destroy(inventoryItem.Item);
-            //
-            //     OpenDoor();
-            // }
-            // else
-            // {
-            //     Debug.LogError("Cant open");
-            // }
         }
 
         private void OpenDoor()

@@ -5,7 +5,7 @@ using App.Game.Modules.Chests.Runtime.Data;
 
 namespace App.Game.Modules.Chests.Runtime
 {
-    public class ChestModule
+    public class ChestModule : IModule
     {
         private readonly IModuleItem _moduleItem;
         private readonly ChestModuleData _data;

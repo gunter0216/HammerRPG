@@ -6,7 +6,7 @@ using App.Game.Modules.ContainerModule.Runtime.Data;
 
 namespace App.Game.Modules.ContainerModule.Runtime
 {
-    public class ContainerModule
+    public class ContainerModule : IModule
     {
         private readonly IModuleItem _item;
         private readonly ContainerModuleData _data;

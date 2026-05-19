@@ -64,8 +64,10 @@ namespace App.Game.Modules.ContainerModule.Runtime
 
                 container = containerResult.Value;
             }
-            
-            _modules.Add(moduleItem.ReferenceSelf, new ContainerModule(moduleItem, data, config, container));
+
+            var module = new ContainerModule(moduleItem, data, config, container);
+            _modules.Add(moduleItem.ReferenceSelf, module);
+            moduleItem.AddModule(module);
             
             return Optional<IModuleItem>.Success(moduleItem);
         }

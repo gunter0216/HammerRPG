@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.ModuleItem.Runtime.Data;
@@ -6,16 +7,18 @@ using App.Common.Utilities.Utility.Runtime;
 
 namespace App.Common.ModuleItem.Runtime
 {
-    public class ModuleItem : IModuleItem
+    public partial class ModuleItem : IModuleItem
     {
-        private readonly IModulesHolder m_ModulesHolder;
-        private readonly IModuleItemData m_Data;
-        private readonly IModuleItemConfig m_Config;
-        private readonly DataReference m_ReferenceSelf;
+        private readonly IModulesHolder _modulesHolder;
+        private readonly IModuleItemData _data;
+        private readonly IModuleItemConfig _config;
+        private readonly DataReference _referenceSelf;
 
-        public string Id => m_Config.Id;
-        public DataReference ReferenceSelf => m_ReferenceSelf;
-        internal IModuleItemData Data => m_Data;
+        private List<IModule> _modules;
+        
+        public string Id => _config.Id;
+        public DataReference ReferenceSelf => _referenceSelf;
+        internal IModuleItemData Data => _data;
 
         public ModuleItem(
             IModulesHolder modulesHolder,
@@ -23,60 +26,60 @@ namespace App.Common.ModuleItem.Runtime
             IModuleItemData moduleItemData, 
             DataReference referenceSelf)
         {
-            m_ModulesHolder = modulesHolder;
-            m_Config = moduleItemConfig;
-            m_Data = moduleItemData;
-            m_ReferenceSelf = referenceSelf;
+            _modulesHolder = modulesHolder;
+            _config = moduleItemConfig;
+            _data = moduleItemData;
+            _referenceSelf = referenceSelf;
         }
 
         public bool AddDataModule(IModuleData data)
         {
-            return m_ModulesHolder.AddModule(data);
+            return _modulesHolder.AddModule(data);
         }
         
         public bool RemoveDataModule(IModuleData data)
         {
-            return m_ModulesHolder.RemoveModule(data);
+            return _modulesHolder.RemoveModule(data);
         }
         
         public Optional<T> GetDataModule<T>() where T : class, IModuleData
         {
-            return m_ModulesHolder.GetModule<T>();
+            return _modulesHolder.GetModule<T>();
         }
 
         public bool TryGetDataModule<T>(out T data) where T : class, IModuleData
         {
-            return m_ModulesHolder.TryGetModule<T>(out data);
+            return _modulesHolder.TryGetModule<T>(out data);
         }
 
         public bool HasDataModule<T>() where T : class, IModuleData
         {
-            return m_ModulesHolder.HasModule<T>();
+            return _modulesHolder.HasModule<T>();
         }
 
         public bool HasTag(long tag)
         {
-            return m_Config.HasTag(tag);
+            return _config.HasTag(tag);
         }
 
         public Optional<T> GetConfigModule<T>() where T : class, IModuleConfig
         {
-            return m_Config.GetModule<T>();
+            return _config.GetModule<T>();
         }
 
         public bool TryGetConfigModule<T>(out T config) where T : class, IModuleConfig
         {
-            return m_Config.TryGetModule<T>(out config);
+            return _config.TryGetModule<T>(out config);
         }
 
         public bool HasConfigModule<T>() where T : class, IModuleConfig
         {
-            return m_Config.HasModule<T>();
+            return _config.HasModule<T>();
         }
 
         internal bool Destroy()
         {
-            return m_ModulesHolder.Destroy();
+            return _modulesHolder.Destroy();
         }
     }
 }

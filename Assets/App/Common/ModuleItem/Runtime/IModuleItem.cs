@@ -10,6 +10,12 @@ namespace App.Common.ModuleItem.Runtime
         string Id { get; }
         DataReference ReferenceSelf { get; }
         
+        bool AddModule<T>(T module) where T : class, IModule;
+        bool RemoveModule(IModule module);
+        Optional<T> GetModule<T>() where T : class, IModule;
+        bool TryGetModule<T>(out T module) where T : class, IModule;
+        bool HasModule<T>() where T : class, IModule;
+        
         bool AddDataModule(IModuleData data);
         bool RemoveDataModule(IModuleData data);
         Optional<T> GetDataModule<T>() where T : class, IModuleData;

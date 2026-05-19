@@ -39,7 +39,7 @@
         "depth": 4
       },
       "tileBased": {
-        "maxDepth": 3,
+        "maxDepth": 2,
         "maxOutputs": 1,
         "maxIterations": 300,
         "rooms": [

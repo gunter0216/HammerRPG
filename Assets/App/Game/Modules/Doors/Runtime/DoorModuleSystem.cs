@@ -16,9 +16,9 @@ namespace App.Game.Modules.Doors.Runtime
             _modules = new Dictionary<DataReference, DoorModule>();
         }
 
-        public bool TryGetModule(IModuleItem moduleItem, out DoorModule DoorModule)
+        public bool TryGetModule(IModuleItem moduleItem, out DoorModule doorModule)
         {
-            if (_modules.TryGetValue(moduleItem.ReferenceSelf, out DoorModule))
+            if (_modules.TryGetValue(moduleItem.ReferenceSelf, out doorModule))
             {
                 return true;
             }
@@ -37,13 +37,15 @@ namespace App.Game.Modules.Doors.Runtime
             {
                 data = new DoorModuleData()
                 {
-                    State = DoorState.Open
+                    State = DoorState.Closed
                 };
                 
                 moduleItem.AddDataModule(data);
             }
-            
-            _modules.Add(moduleItem.ReferenceSelf, new DoorModule(moduleItem, data, config));
+
+            var module = new DoorModule(moduleItem, data, config);
+            _modules.Add(moduleItem.ReferenceSelf, module);
+            moduleItem.AddModule(module);
             
             return Optional<IModuleItem>.Success(moduleItem);
         }

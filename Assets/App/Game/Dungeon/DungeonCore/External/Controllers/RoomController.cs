@@ -21,7 +21,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly InventoryController _inventoryController;
         private readonly IFollowIconController _followIconController;
         private readonly IAssetManager _assetManager;
-        
+        private readonly DungeonService _dungeonService;
+
         private GameObject _root;
         private List<DoorController> _doors;
         private List<ChestController> _chests;
@@ -33,8 +34,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             IContainerWindowController containerWindow,
             InventoryController inventoryController,
             IModuleItemsManager moduleItemsManager,
-            IFollowIconController followIconController, 
-            IAssetManager assetManager)
+            IFollowIconController followIconController,
+            IAssetManager assetManager, 
+            DungeonService dungeonService)
         {
             _service = service;
             _dungeon = dungeon;
@@ -44,6 +46,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _moduleItemsManager = moduleItemsManager;
             _followIconController = followIconController;
             _assetManager = assetManager;
+            _dungeonService = dungeonService;
         }
 
         public void Initialize()
@@ -92,7 +95,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 _assetManager,
                 _moduleItemsManager,
                 _inventoryController,
-                doorView);
+                doorView,
+                _dungeonService,
+                _service);
             controller.Initialize();
             _doors.Add(controller);
         }
@@ -103,7 +108,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 _containerWindow,
                 _followIconController,
                 _moduleItemsManager,
-                chestView);
+                chestView,
+                _dungeonService,
+                _service);
             controller.Initialize();
             _chests.Add(controller);
         }

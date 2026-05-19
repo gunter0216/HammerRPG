@@ -42,8 +42,10 @@ namespace App.Game.Modules.Chests.Runtime
                 
                 moduleItem.AddDataModule(data);
             }
-            
-            _modules.Add(moduleItem.ReferenceSelf, new ChestModule(moduleItem, data, config));
+
+            var module = new ChestModule(moduleItem, data, config);
+            _modules.Add(moduleItem.ReferenceSelf, module);
+            moduleItem.AddModule(module);
             
             return Optional<IModuleItem>.Success(moduleItem);
         }

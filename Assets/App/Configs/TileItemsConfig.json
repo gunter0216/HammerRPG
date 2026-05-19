@@ -10,10 +10,6 @@
           "module": "container",
           "rows": 5,
           "cols": 7
-        },
-        {
-          "module": "fbx",
-          "asset_key": "ChestView"
         }
       ]
     },
@@ -31,10 +27,6 @@
       "modules": [
         {
           "module": "door"
-        },
-        {
-          "module": "fbx",
-          "asset_key": "DoorView"
         }
       ]
     },

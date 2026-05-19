@@ -6,7 +6,7 @@ using App.Game.Modules.Doors.Runtime.Data;
 
 namespace App.Game.Modules.Doors.Runtime
 {
-    public class DoorModule
+    public class DoorModule : IModule
     {
         private readonly IModuleItem _moduleItem;
         private readonly DoorModuleData _data;

@@ -70,6 +70,21 @@ namespace App.Game.Dungeon.DungeonCore.External
             return true;
         }
 
+        private bool CreateService()
+        {
+            var dungeon = _dungeonCreator.Create();
+            if (!dungeon.HasValue)
+            {
+                HLogger.LogError("Cant create dungeon");
+                return false;
+            }
+
+            _service = new DungeonService(_moduleItemsManager, _containerWindow, dungeon.Value);
+            _service.Initialize();
+
+            return true;
+        }
+
         private bool CreateControllers()
         {
             var dungeon = new GameObject($"Dungeon"); 
@@ -84,7 +99,8 @@ namespace App.Game.Dungeon.DungeonCore.External
                     _inventoryController,
                     _moduleItemsManager,
                     _followIconController,
-                    _assetManager);
+                    _assetManager,
+                    _service);
                 _rooms.Add(controller);
             }
 
@@ -92,21 +108,6 @@ namespace App.Game.Dungeon.DungeonCore.External
             {
                 room.Initialize();
             }
-
-            return true;
-        }
-
-        private bool CreateService()
-        {
-            var dungeon = _dungeonCreator.Create();
-            if (!dungeon.HasValue)
-            {
-                HLogger.LogError("Cant create dungeon");
-                return false;
-            }
-
-            _service = new DungeonService(dungeon.Value);
-            _service.Initialize();
 
             return true;
         }
