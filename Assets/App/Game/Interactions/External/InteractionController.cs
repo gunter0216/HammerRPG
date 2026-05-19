@@ -21,6 +21,15 @@ namespace App.Game.Interactions.External
         public void Init()
         {
             _camera = Camera.main;
+            _inputService.Input.UI.LeftClick.performed += OnLeftClick;
+        }
+
+        private void OnLeftClick(InputAction.CallbackContext obj)
+        {
+            if (_current != null)
+            {
+                _current.OnClick();
+            }
         }
 
         public void OnUpdate()
@@ -41,11 +50,6 @@ namespace App.Game.Interactions.External
                 _current = newInteractableView;
 
                 _current?.OnHoverEnter();
-            }
-
-            if (_current != null && Input.GetMouseButtonDown(0))
-            {
-                _current.OnClick();
             }
         }
     }

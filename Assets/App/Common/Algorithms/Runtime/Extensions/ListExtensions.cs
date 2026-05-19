@@ -16,5 +16,10 @@ namespace App.Common.Algorithms.Runtime.Extensions
                 (list[i], list[randomIndex]) = (list[randomIndex], list[i]);
             }
         }
+        
+        public static void Swap<T>(this IList<T> array, int first, int second)
+        {
+            (array[first], array[second]) = (array[second], array[first]);
+        }
     }
 }

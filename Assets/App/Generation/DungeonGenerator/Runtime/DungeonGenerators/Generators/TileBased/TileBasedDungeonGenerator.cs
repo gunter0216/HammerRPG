@@ -124,13 +124,23 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 
             foreach (var config in configs)
             {
-                if (prevRoom.GenerationConfig == config)
-                {
-                    continue;
-                }
+                // if (prevRoom.GenerationConfig == config)
+                // {
+                //     continue;
+                // }
                 
                 var variants = config.Variants.ToList();
                 variants.Shuffle();
+
+                for (int i = 0; i < variants.Count; ++i)
+                {
+                    var variant = variants[i];
+                    if (variant.OutputDoors.Length <= 0)
+                    {
+                        variants.Swap(i, variants.Count - 1);
+                        break;
+                    }
+                }
 
                 foreach (var variant in variants)
                 {
