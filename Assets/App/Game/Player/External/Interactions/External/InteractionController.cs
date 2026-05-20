@@ -7,29 +7,29 @@ using UnityEngine.InputSystem;
 
 namespace App.Game.Interactions.External
 {
-    public class InteractionController : IUpdateSystem, IInitSystem
+    public class InteractionController
     {
-        private readonly IInputService _inputService;
         private IInteractableView _current;
         private Camera _camera;
 
-        public InteractionController(IInputService inputService)
+        public InteractionController()
         {
-            _inputService = inputService;
         }
 
-        public void Init()
+        public void Initialize()
         {
             _camera = Camera.main;
-            _inputService.Input.UI.LeftClick.performed += OnLeftClick;
         }
 
-        private void OnLeftClick(InputAction.CallbackContext obj)
+        public bool OnLeftClick()
         {
             if (_current != null)
             {
                 _current.OnClick();
+                return true;
             }
+
+            return false;
         }
 
         public void OnUpdate()

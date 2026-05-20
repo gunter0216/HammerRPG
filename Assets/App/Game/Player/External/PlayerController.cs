@@ -4,6 +4,7 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Dungeon.DungeonCore.Runtime;
+using App.Game.Interactions.External;
 using App.Game.Modules.Experience.Runtime.Config;
 using App.Game.Modules.Experience.Runtime.Data;
 using App.Game.Modules.Level.Runtime.Config;
@@ -38,6 +39,7 @@ namespace App.Game.Player.External
         private PlayerMoveController _playerMoveController;
         private PlayerAttackController _playerAttackController;
         private PlayerContext _context;
+        private LeftClickController _leftClickController;
 
         public EntityView PlayerView => _view;
 
@@ -77,6 +79,13 @@ namespace App.Game.Player.External
             InitLevel();
             InitExperience();
             InitRace();
+            InitLeftClickHandler();
+        }
+
+        private void InitLeftClickHandler()
+        {
+            _leftClickController = new LeftClickController(_inputService, _playerAttackController);
+            _leftClickController.Initialize();
         }
 
         private void InitContext()
@@ -123,9 +132,7 @@ namespace App.Game.Player.External
 
         private void InitAttack()
         {
-            _playerAttackController = new PlayerAttackController(
-                _inputService, 
-                _context);
+            _playerAttackController = new PlayerAttackController(_context);
             _playerAttackController.Initialize();
         }
 
@@ -231,6 +238,7 @@ namespace App.Game.Player.External
         public void OnUpdate()
         {
             _playerMoveController.OnUpdate();
+            _leftClickController.OnUpdate();
         }
     }
 }

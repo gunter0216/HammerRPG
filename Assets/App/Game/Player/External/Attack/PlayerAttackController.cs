@@ -1,4 +1,3 @@
-using App.Common.Input.Runtime;
 using App.Game.Player.External.Context;
 using DG.Tweening;
 using UnityEngine;
@@ -11,25 +10,19 @@ namespace App.Game.Player.External.Attack
         private static readonly int _attack = Animator.StringToHash("Attack");
         private static readonly int _melee = Animator.StringToHash("Melee");
 
-        private readonly IInputService _inputService;
         private readonly PlayerContext _context;
         private readonly PlayerAttackContext _attackContext;
 
         private Camera _camera;
 
-        public PlayerAttackController(
-            IInputService inputService,
-            PlayerContext context)
+        public PlayerAttackController(PlayerContext context)
         {
-            _inputService = inputService;
             _context = context;
             _attackContext = _context.AttackContext;
         }
 
         public void Initialize()
         {
-            _inputService.Input.Player.Attack.performed += OnAttackClick;
-
             _camera = Camera.main;
 
             var view = _context.View;
@@ -38,15 +31,18 @@ namespace App.Game.Player.External.Attack
             view.AttackAnimationEventListener.OnAttackEvent += OnAttackEvent;
         }
 
-        private void OnAttackClick(InputAction.CallbackContext obj)
+        public void OnAttackClick()
         {
             if (_attackContext.IsAttack)
             {
                 return;
             }
+            
+            Attack();
+        }
 
-            RotatePlayerByDirection();
-
+        private void Attack()
+        {
             _attackContext.IsAttack = true;
 
             var view = _context.View;
@@ -58,9 +54,28 @@ namespace App.Game.Player.External.Attack
                 .AppendInterval(view.AttackAnimation.length)
                 .OnComplete(() =>
                 {
+                    if (IsLeftMousePressed())
+                    {
+                        Attack();
+                        return;
+                    }
+                    
                     _attackContext.IsAttack = false;
                     animator.SetBool(_attack, false);
                 });
+        }
+
+        public void OnUpdate()
+        {
+            if (_attackContext.IsAttack && IsLeftMousePressed())
+            {
+                RotatePlayerByDirection();
+            }
+        }
+
+        private bool IsLeftMousePressed()
+        {
+            return Mouse.current.leftButton.isPressed;
         }
 
         private void OnAttackEvent()
