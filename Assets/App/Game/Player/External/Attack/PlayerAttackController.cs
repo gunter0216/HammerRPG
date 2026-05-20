@@ -33,7 +33,7 @@ namespace App.Game.Player.External.Attack
 
         public void OnAttackClick()
         {
-            if (_attackContext.IsAttack)
+            if (_attackContext.IsAttack || IsBlocked())
             {
                 return;
             }
@@ -54,7 +54,7 @@ namespace App.Game.Player.External.Attack
                 .AppendInterval(view.AttackAnimation.length)
                 .OnComplete(() =>
                 {
-                    if (IsLeftMousePressed())
+                    if (IsLeftMousePressed() && !IsBlocked())
                     {
                         Attack();
                         return;
@@ -67,10 +67,15 @@ namespace App.Game.Player.External.Attack
 
         public void OnUpdate()
         {
-            if (_attackContext.IsAttack && IsLeftMousePressed())
+            if (_attackContext.IsAttack && IsLeftMousePressed() && !IsBlocked())
             {
                 RotatePlayerByDirection();
             }
+        }
+
+        private bool IsBlocked()
+        {
+            return _attackContext.AttackBlocked;
         }
 
         private bool IsLeftMousePressed()

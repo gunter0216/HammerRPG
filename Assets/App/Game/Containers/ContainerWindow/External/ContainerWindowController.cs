@@ -64,6 +64,12 @@ namespace App.Game.Containers.ContainerWindow.External
                 new ContainerSlotViewCreator(_window),
                 _spriteLoader);
             _slotsModel.Initialize();
+            _window.SetCloseButtonClickCallback(OnCloseClick);
+        }
+
+        private void OnCloseClick()
+        {
+            Close();
         }
 
         public void OpenWindow(Container.Runtime.Container container, Action onClosed = null)

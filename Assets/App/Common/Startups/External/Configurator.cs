@@ -42,7 +42,7 @@ namespace App.Core.Startups.External
         
         protected void BindSingle<T>()
         {
-            Container.BindInterfacesAndSelfTo<T>().AsSingle();
+            Container.BindInterfacesAndSelfTo<T>().AsSingle().NonLazy();
         }
 
         protected void RegisterFSM<T>(FSMStage stage, StageOrders order) where T : class, IInitSystem

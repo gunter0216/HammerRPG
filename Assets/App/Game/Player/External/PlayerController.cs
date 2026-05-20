@@ -3,6 +3,7 @@ using App.Common.Input.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
+using App.Common.Windows.External;
 using App.Game.Dungeon.DungeonCore.Runtime;
 using App.Game.Interactions.External;
 using App.Game.Modules.Experience.Runtime.Config;
@@ -31,6 +32,7 @@ namespace App.Game.Player.External
         private readonly MoveModuleSystem _moveModuleSystem;
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly IInputService _inputService;
+        private readonly IWindowManager _windowManager;
         
         private EntityView _view;
         private IModuleItem _player;
@@ -50,13 +52,14 @@ namespace App.Game.Player.External
             IAssetManager assetManager,
             MoveModuleSystem moveModuleSystem, 
             IModuleItemsManager moduleItemsManager, 
-            IInputService inputService)
+            IInputService inputService, IWindowManager windowManager)
         {
             _dungeonController = dungeonController;
             _assetManager = assetManager;
             _moveModuleSystem = moveModuleSystem;
             _moduleItemsManager = moduleItemsManager;
             _inputService = inputService;
+            _windowManager = windowManager;
         }
 
         public void Init()
@@ -79,12 +82,16 @@ namespace App.Game.Player.External
             InitLevel();
             InitExperience();
             InitRace();
-            InitLeftClickHandler();
+            InitLeftClickController();
         }
 
-        private void InitLeftClickHandler()
+        private void InitLeftClickController()
         {
-            _leftClickController = new LeftClickController(_inputService, _playerAttackController);
+            _leftClickController = new LeftClickController(
+                _inputService, 
+                _windowManager,
+                _context,
+                _playerAttackController);
             _leftClickController.Initialize();
         }
 

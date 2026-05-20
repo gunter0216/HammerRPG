@@ -5,6 +5,7 @@ using App.Core.Startups.External.Constants;
 using App.Game.Inventory.Runtime.Data;
 using App.Game.Inventory.Runtime.Data.Model;
 using App.Game.Update.External;
+using UnityEngine;
 
 namespace App.Game.Inventory.External
 {

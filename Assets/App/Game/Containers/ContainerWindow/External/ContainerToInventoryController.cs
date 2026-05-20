@@ -19,7 +19,7 @@ namespace App.Game.Containers.ContainerWindow.External
 
         public void Init()
         {
-            _containerWindow.OnWindowPreOpened += OnWindowOpened;
+            _containerWindow.OnWindowOpened += OnWindowOpened;
             _containerWindow.OnWindowClosed += OnWindowClosed;
         }
 
