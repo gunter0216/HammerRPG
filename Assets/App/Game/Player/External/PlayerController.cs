@@ -15,6 +15,8 @@ using App.Game.Modules.Race.Runtime.Config;
 using App.Game.Modules.Race.Runtime.Data;
 using App.Game.Modules.Stats.Runtime.Config;
 using App.Game.Modules.Stats.Runtime.Data;
+using App.Game.Player.External.Attack;
+using App.Game.Player.External.Context;
 using App.Game.Player.External.View;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,6 +36,8 @@ namespace App.Game.Player.External
         private MoveModule _moveModule;
         private InputAction _moveInput;
         private PlayerMoveController _playerMoveController;
+        private PlayerAttackController _playerAttackController;
+        private PlayerContext _context;
 
         public EntityView PlayerView => _view;
 
@@ -65,12 +69,23 @@ namespace App.Game.Player.External
             _player = moduleItem.Value;
             CreateView();
             PlacePlayerOnStartRoom();
+            InitContext();
             InitMove();
+            InitAttack();
             InitStats();
             InitName();
             InitLevel();
             InitExperience();
             InitRace();
+        }
+
+        private void InitContext()
+        {
+            _context = new PlayerContext
+            {
+                ModuleItem = _player,
+                View = _view,
+            };
         }
 
         private void CreateView()
@@ -102,9 +117,16 @@ namespace App.Game.Player.External
             _playerMoveController = new PlayerMoveController(
                 _moveModuleSystem, 
                 _inputService, 
-                Player,
-                PlayerView);
+                _context);
             _playerMoveController.Init();
+        }
+
+        private void InitAttack()
+        {
+            _playerAttackController = new PlayerAttackController(
+                _inputService, 
+                _context);
+            _playerAttackController.Initialize();
         }
 
         private void InitStats()

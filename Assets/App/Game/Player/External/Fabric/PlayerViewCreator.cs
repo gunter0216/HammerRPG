@@ -25,8 +25,8 @@ namespace App.Game.Player.External
                 return Optional<EntityView>.Fail();
             }
             
-            var view = entityView.Value;
-            view.Weapon.gameObject.SetActive(false);
+            // var view = entityView.Value;
+            // view.Weapon.gameObject.SetActive(false);
 
             // var weaponView = entity.View.Weapon.GetComponent<WeaponView>();
             // if (weaponView != null)

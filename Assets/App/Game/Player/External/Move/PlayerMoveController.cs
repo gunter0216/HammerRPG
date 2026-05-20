@@ -1,8 +1,7 @@
 using App.Common.Input.Runtime;
 using App.Common.Logger.Runtime;
-using App.Common.ModuleItem.Runtime;
 using App.Game.Modules.Move.Runtime;
-using App.Game.Player.External.View;
+using App.Game.Player.External.Context;
 using Game.Project.Gameplay.Move.External.View;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,8 +12,7 @@ namespace App.Game.Player.External
     {
         private readonly MoveModuleSystem _moveModuleSystem;
         private readonly IInputService _inputService;
-        private readonly IModuleItem _player;
-        private readonly EntityView _view;
+        private readonly PlayerContext _context;
 
         private MoveModule _moveModule;
         private InputAction _moveInput;
@@ -23,20 +21,18 @@ namespace App.Game.Player.External
         private MoveAnimationPresenter _animationPresenter;
 
         public PlayerMoveController(
-            MoveModuleSystem moveModuleSystem,
-            IInputService inputService,
-            IModuleItem player,
-            EntityView view)
+            MoveModuleSystem moveModuleSystem, 
+            IInputService inputService, 
+            PlayerContext context)
         {
             _moveModuleSystem = moveModuleSystem;
             _inputService = inputService;
-            _player = player;
-            _view = view;
+            _context = context;
         }
 
         public void Init()
         {
-            if (!_moveModuleSystem.TryGetModule(_player, out var moveModule))
+            if (!_moveModuleSystem.TryGetModule(_context.ModuleItem, out var moveModule))
             {
                 HLogger.LogError("Move not found.");
                 return;
@@ -48,7 +44,7 @@ namespace App.Game.Player.External
 
             _camera = Camera.main;
 
-            _rigidbody = _view.GetComponent<Rigidbody>();
+            _rigidbody = _context.View.GetComponent<Rigidbody>();
 
             _animationPresenter = new MoveAnimationPresenter(_rigidbody.transform);
             _animationPresenter.Initialize();
@@ -74,10 +70,15 @@ namespace App.Game.Player.External
             right.Normalize();
 
             velocity = forward * velocity.z + right * velocity.x;
+
+            if (_context.AttackContext.IsAttack)
+            {
+                velocity *= 0.1f;
+            }
             
             _rigidbody.linearVelocity = velocity;
             
-            if (velocity != Vector3.zero)
+            if (velocity != Vector3.zero && !_context.AttackContext.IsAttack)
             {
                 _rigidbody.transform.forward = velocity.normalized;
             }
