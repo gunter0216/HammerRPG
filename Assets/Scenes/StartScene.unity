@@ -6756,21 +6756,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3456840011564309170, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4839040363794779831, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075122, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5016975802056075122, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075127, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6810,6 +6798,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075127, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6757277986337215920, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
+      propertyPath: _showGizmos
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

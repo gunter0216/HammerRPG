@@ -11,19 +11,19 @@ namespace App.Game.Player.External.View
         [Header("Attack")]
         [SerializeField] private Vector3 _boxSize = new(2f, 1f, 2f);
         [SerializeField] private Vector3 _boxOffset = Vector3.zero;
-        [SerializeField] private float _attackDistance = 1.5f;
         [SerializeField] private LayerMask _enemyLayer;
 
         [Header("Debug")]
         [SerializeField] private bool _showGizmos;
 
+        private AttackAnimationEventListener _attackAnimationEventListener;
+
         public Vector3 BoxSize => _boxSize;
-        public float AttackDistance => _attackDistance;
         public LayerMask EnemyLayer => _enemyLayer;
 
         public Vector3 GetAttackCenter()
         {
-            return transform.position + transform.forward * _attackDistance;
+            return transform.position + _boxOffset;
         }
 
         private void OnDrawGizmosSelected()
@@ -62,6 +62,19 @@ namespace App.Game.Player.External.View
                 }
 
                 return _animator;
+            }
+        }
+        
+        public AttackAnimationEventListener AttackAnimationEventListener
+        {
+            get
+            {
+                if (_attackAnimationEventListener == null)
+                {
+                    _attackAnimationEventListener = gameObject.GetComponentInChildren<AttackAnimationEventListener>();
+                }
+
+                return _attackAnimationEventListener;
             }
         }
 

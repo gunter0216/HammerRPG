@@ -17,7 +17,9 @@ namespace App.Game.Player.External.Attack
 
         private Camera _camera;
 
-        public PlayerAttackController(IInputService inputService, PlayerContext context)
+        public PlayerAttackController(
+            IInputService inputService,
+            PlayerContext context)
         {
             _inputService = inputService;
             _context = context;
@@ -27,10 +29,13 @@ namespace App.Game.Player.External.Attack
         public void Initialize()
         {
             _inputService.Input.Player.Attack.performed += OnAttackClick;
+
             _camera = Camera.main;
-            
-            var animator = _context.View.Animator;
+
+            var view = _context.View;
+            var animator = view.Animator;
             animator.SetBool(_melee, true);
+            view.AttackAnimationEventListener.OnAttackEvent += OnAttackEvent;
         }
 
         private void OnAttackClick(InputAction.CallbackContext obj)
@@ -39,40 +44,65 @@ namespace App.Game.Player.External.Attack
             {
                 return;
             }
-            
+
             RotatePlayerByDirection();
+
             _attackContext.IsAttack = true;
+
             var view = _context.View;
             var animator = view.Animator;
+
             animator.SetBool(_attack, true);
-            DOTween.Sequence().AppendInterval(view.AttackAnimation.length).OnComplete(() =>
+
+            DOTween.Sequence()
+                .AppendInterval(view.AttackAnimation.length)
+                .OnComplete(() =>
+                {
+                    _attackContext.IsAttack = false;
+                    animator.SetBool(_attack, false);
+                });
+        }
+
+        private void OnAttackEvent()
+        {
+            var view = _context.View;
+            Vector3 center = view.GetAttackCenter();
+
+            Collider[] hits = Physics.OverlapBox(
+                center,
+                view.BoxSize / 2f,
+                _context.View.transform.rotation,
+                view.EnemyLayer);
+
+            foreach (var hit in hits)
             {
-                _attackContext.IsAttack = false;
-                animator.SetBool(_attack, false);
-            });
+                // if (hit.TryGetComponent<IDamageable>(out var damageable))
+                // {
+                //     damageable.TakeDamage(10);
+                // }
+            }
         }
 
         private void RotatePlayerByDirection()
         {
             var transform = _context.View.transform;
 
-            // Луч из камеры в позицию мыши
-            var ray = _camera.ScreenPointToRay(Mouse.current.position.ReadValue());
+            var ray = _camera.ScreenPointToRay(
+                Mouse.current.position.ReadValue());
 
-            // Плоскость на высоте игрока
             Plane plane = new Plane(Vector3.up, transform.position);
 
             if (plane.Raycast(ray, out float distance))
             {
                 Vector3 hitPoint = ray.GetPoint(distance);
 
-                // Направление до точки атаки
                 Vector3 direction = hitPoint - transform.position;
                 direction.y = 0f;
 
                 if (direction.sqrMagnitude > 0.001f)
                 {
-                    transform.rotation = Quaternion.LookRotation(direction);
+                    transform.rotation =
+                        Quaternion.LookRotation(direction);
                 }
             }
         }
