@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.ModuleItem.Runtime;
+using App.Game.AI.Runtime;
+using App.Game.Dungeon.DungeonCore.External.Controllers;
 using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
 
@@ -10,17 +12,24 @@ namespace App.Game.Dungeon.DungeonCore.External.View.Spawn
     {
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly IAssetManager _assetManager;
-        
+        private readonly IAIController _aiController;
+
         private readonly float _minDistanceBetweenEnemies = 2f;
         private readonly int _maxGlobalAttempts = 300;
 
         private readonly List<ISpawnArea> _areas = new();
         private Transform _roomView;
 
-        public EnemySpawnController(IModuleItemsManager moduleItemsManager, IAssetManager assetManager)
+        private List<AIViewController> _aiControllers;
+
+        public EnemySpawnController(
+            IModuleItemsManager moduleItemsManager, 
+            IAssetManager assetManager,
+            IAIController aiController)
         {
             _moduleItemsManager = moduleItemsManager;
             _assetManager = assetManager;
+            _aiController = aiController;
         }
 
         public void Initialize(Transform view)
@@ -38,21 +47,16 @@ namespace App.Game.Dungeon.DungeonCore.External.View.Spawn
 
         public void SpawnEnemies()
         {
-            var spawnPoints = GetSpawnPositions(3);
+            var spawnPoints = GetSpawnPositions(1);
+            _aiControllers = new List<AIViewController>(3);
             foreach (var spawnPosition in spawnPoints)
             {
-                var enemy = _moduleItemsManager.Create("enemy");
-                var module = enemy.Value.GetConfigModule<AssetModuleConfig>();
-                var assetKey = module.Value.AssetKey;
-
-                var viewResult = _assetManager.InstantiateSync<Transform>(assetKey);
-                var view = viewResult.Value;
-                view.SetParent(_roomView);
-                view.transform.position = spawnPosition;
+                var controller = _aiController.Create("enemy", spawnPosition);
+                _aiControllers.Add(controller.Value);
             }
         }
 
-        private List<Vector3> GetSpawnPositions(int count)
+        public List<Vector3> GetSpawnPositions(int count)
         {
             List<Vector3> positions = new();
 

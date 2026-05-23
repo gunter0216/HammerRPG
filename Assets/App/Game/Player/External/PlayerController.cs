@@ -107,7 +107,7 @@ namespace App.Game.Player.External
         private void CreateView()
         {
             var viewCreator = new PlayerViewCreator(_assetManager);
-            var viewResult = viewCreator.Create();
+            var viewResult = viewCreator.Create(_player);
             if (!viewResult.HasValue)
             {
                 HLogger.LogError("Cant create view.");

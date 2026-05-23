@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using App.Common.ModuleItem.External;
+using UnityEngine;
 
 namespace App.Game.Player.External.View
 {
@@ -79,5 +80,6 @@ namespace App.Game.Player.External.View
         }
 
         public AnimationClip AttackAnimation => _attackAnimation;
+        public ModuleItemView ModuleItemView { get; set; }
     }
 }

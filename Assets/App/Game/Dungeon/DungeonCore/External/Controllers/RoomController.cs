@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.External;
+using App.Game.AI.Runtime;
 using App.Game.Containers.ContainerWindow.Runtime;
 using App.Game.Dungeon.DungeonCore.External.View;
 using App.Game.Dungeon.DungeonCore.External.View.Spawn;
@@ -23,6 +24,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly IFollowIconController _followIconController;
         private readonly IAssetManager _assetManager;
         private readonly DungeonService _dungeonService;
+        private readonly IAIController _aiController;
 
         private GameObject _root;
         private List<DoorController> _doors;
@@ -30,16 +32,16 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private EnemySpawnController _enemySpawnController;
         private Transform _roomView;
 
-        public RoomController(
-            RoomService service,
+        public RoomController(RoomService service,
             GameObject dungeon,
             IItemSpriteLoader spriteLoader,
             IContainerWindowController containerWindow,
             InventoryController inventoryController,
             IModuleItemsManager moduleItemsManager,
             IFollowIconController followIconController,
-            IAssetManager assetManager, 
-            DungeonService dungeonService)
+            IAssetManager assetManager,
+            DungeonService dungeonService, 
+            IAIController aiController)
         {
             _service = service;
             _dungeon = dungeon;
@@ -50,6 +52,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _followIconController = followIconController;
             _assetManager = assetManager;
             _dungeonService = dungeonService;
+            _aiController = aiController;
         }
 
         public void Initialize()
@@ -59,7 +62,10 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             
             _doors = new List<DoorController>();
             _chests = new List<ChestController>();
-            _enemySpawnController = new EnemySpawnController(_moduleItemsManager, _assetManager);
+            _enemySpawnController = new EnemySpawnController(
+                _moduleItemsManager, 
+                _assetManager,
+                _aiController);
             
             CreateRoom();
         }

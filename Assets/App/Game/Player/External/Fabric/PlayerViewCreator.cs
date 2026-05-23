@@ -1,5 +1,7 @@
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.External;
+using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Player.External.View;
 
@@ -16,7 +18,7 @@ namespace App.Game.Player.External
             _assetManager = assetManager;
         }
 
-        public Optional<EntityView> Create()
+        public Optional<EntityView> Create(IModuleItem player)
         {
             var entityView = _assetManager.InstantiateSync<EntityView>(new StringKeyEvaluator(_playerAssetKey));
             if (!entityView.HasValue)
@@ -24,6 +26,10 @@ namespace App.Game.Player.External
                 HLogger.LogError("cant create player");
                 return Optional<EntityView>.Fail();
             }
+
+            var moduleItemView = entityView.Value.gameObject.AddComponent<ModuleItemView>();
+            entityView.Value.ModuleItemView = moduleItemView;
+            moduleItemView.ModuleItem = player;
             
             // var view = entityView.Value;
             // view.Weapon.gameObject.SetActive(false);

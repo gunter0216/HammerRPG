@@ -25,6 +25,7 @@ namespace App.Game.Update.External
         PlayerController = 0,
         FollowIcon = 0,
         HUD = 0,
-        Interactions = 0
+        Interactions = 0,
+        AIController = 0
     }
 }

@@ -45,6 +45,7 @@
         CanvasController = -10_000,
         HUD = 500,
         Camera = 0,
-        Interactions = 0
+        Interactions = 0,
+        AIController = 0
     }
 }
