@@ -5,14 +5,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Converter
 {
-    public class FbxModuleDtoToConfigConverter : IModuleDtoToConfigConverter
+    public class AssetModuleDtoToConfigConverter : IModuleDtoToConfigConverter
     {
-        private const string _moduleKey = "fbx";
+        private const string _moduleKey = "asset";
         
         public Optional<IModuleConfig> Convert(JObject module)
         {
-            var type = module.Value<string>("asset_key");
-            var config = new FbxModuleConfig(type);
+            var type = module.Value<string>("key");
+            var config = new AssetModuleConfig(type);
             
             return Optional<IModuleConfig>.Success(config);
         }

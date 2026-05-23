@@ -6,11 +6,11 @@ using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Converter;
 namespace App.Game.Modules.ModuleItemType.External
 {
     [Configurator(DIContext.GlobalContext)]
-    public class FbxModuleConfigurator : Configurator
+    public class AssetModuleConfigurator : Configurator
     {
         public override void Configuration()
         {
-            BindSingle<FbxModuleDtoToConfigConverter>();
+            BindSingle<AssetModuleDtoToConfigConverter>();
         }
     }
 }

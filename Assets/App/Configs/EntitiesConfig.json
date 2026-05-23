@@ -42,6 +42,38 @@
           "cols": 10
         }
       ]
+    },
+    {
+      "id": "enemy",
+      "modules": [
+        {
+          "module": "transform"
+        },
+        {
+          "module": "name",
+          "name": "Skeleton"
+        },
+        {
+          "module": "race",
+          "race": "Undead"
+        },
+        {
+          "module": "level",
+          "start_level": 1
+        },
+        {
+          "module": "health",
+          "health": 100
+        },
+        {
+          "module": "move",
+          "speed": 10
+        },
+        {
+          "module": "asset",
+          "key": "Enemy"
+        }
+      ]
     }
   ]
 }

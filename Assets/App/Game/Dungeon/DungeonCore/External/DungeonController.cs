@@ -11,6 +11,7 @@ using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.Dungeon.DungeonCreator.Runtime;
 using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
+using Unity.AI.Navigation;
 using UnityEngine;
 using Vector2 = App.Common.Algorithms.Runtime.Vector2;
 
@@ -109,6 +110,14 @@ namespace App.Game.Dungeon.DungeonCore.External
                 room.Initialize();
             }
 
+            var navMeshSurface = dungeon.AddComponent<NavMeshSurface>();
+            navMeshSurface.BuildNavMesh();
+            
+            foreach (var room in _rooms)
+            {
+                room.SpawnEnemies();
+            }
+            
             return true;
         }
 
