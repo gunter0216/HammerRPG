@@ -1,5 +1,6 @@
 using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
+using App.Game.AI.External.States;
 using App.Game.Player.External.View;
 using UnityEngine;
 using UnityEngine.AI;
@@ -17,6 +18,11 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private AITargetDetector _targetDetector;
         private float _timer;
         private EntityView _entityView;
+
+        private IdleAIState _idleAIState;
+        private RunAIState _runAIState;
+        
+        private IAIState _state;
         
         public bool IsActive => _isActive;
 
@@ -54,6 +60,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _targetDetector = _view.gameObject.AddComponent<AITargetDetector>();
             _entityView.ModuleItemView = _view.gameObject.AddComponent<ModuleItemView>();
             _entityView.ModuleItemView.ModuleItem = _enemy;
+
+            _idleAIState = new IdleAIState(_entityView);
+            _runAIState = new RunAIState(_entityView);
             
             _initialized = true;
         }
@@ -82,11 +91,20 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             if (target != null)
             {
                 _agent.SetDestination(target.transform.position);
+                SetState(_runAIState);
             }
             else
             {
                 _agent.ResetPath();
+                SetState(_idleAIState);
             }
+        }
+
+        private void SetState(IAIState state)
+        {
+            _state?.Exit();
+            _state = state;
+            _state.Enter();
         }
     }
 }

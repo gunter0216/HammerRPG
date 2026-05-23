@@ -71,7 +71,7 @@
         },
         {
           "module": "asset",
-          "key": "Enemy"
+          "key": "Skeleton"
         }
       ]
     }
