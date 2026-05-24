@@ -21,9 +21,11 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         private IdleAIState _idleAIState;
         private RunAIState _runAIState;
-        
+        private AttackAIState _attackAIState;
+
         private IAIState _state;
-        
+        private EntityView _target;
+
         public bool IsActive => _isActive;
 
 
@@ -63,6 +65,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
             _idleAIState = new IdleAIState(_entityView);
             _runAIState = new RunAIState(_entityView);
+            _attackAIState = new AttackAIState(_entityView);
             
             _initialized = true;
         }
@@ -72,6 +75,36 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             if (!_isActive)
             {
                 return;
+            }
+
+            if (_state is IUpdateState updateState)
+            {
+                updateState.OnUpdate(Time.deltaTime);
+            }
+
+            if (_state == _attackAIState && _attackAIState.IsAttack())
+            {
+                return;
+            }
+            
+            if (_target != null)
+            {
+                if (_attackAIState.CanAttack(_target))
+                {
+                    if (_attackAIState != _state)
+                    {
+                        SetState(_attackAIState);
+                    }
+
+                    if (!_attackAIState.IsAttack())
+                    {
+                        _attackAIState.Attack(_target);
+                    }
+                    
+                    _agent.ResetPath();
+                    
+                    return;
+                }
             }
 
             if (_timer > 0)
@@ -87,10 +120,10 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         private void UpdateTarget()
         {
-            var target = _targetDetector.FindTarget(_entityView);
-            if (target != null)
+            _target = _targetDetector.FindTarget(_entityView);
+            if (_target != null)
             {
-                _agent.SetDestination(target.transform.position);
+                _agent.SetDestination(_target.transform.position);
                 SetState(_runAIState);
             }
             else
@@ -102,6 +135,11 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         private void SetState(IAIState state)
         {
+            if (_state == state)
+            {
+                return;
+            }
+            
             _state?.Exit();
             _state = state;
             _state.Enter();

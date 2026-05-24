@@ -1,4 +1,5 @@
 using App.Game.Player.External.Context;
+using App.Game.Player.External.View;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +15,7 @@ namespace App.Game.Player.External.Attack
         private readonly PlayerAttackContext _attackContext;
 
         private Camera _camera;
+        private MeleeAttackView _meleeAttackView;
 
         public PlayerAttackController(PlayerContext context)
         {
@@ -26,9 +28,10 @@ namespace App.Game.Player.External.Attack
             _camera = Camera.main;
 
             var view = _context.View;
+            _meleeAttackView = view.GetComponent<MeleeAttackView>();
             var animator = view.Animator;
             animator.SetBool(_melee, true);
-            view.AttackAnimationEventListener.OnAttackEvent += OnAttackEvent;
+            _meleeAttackView.AttackAnimationEventListener.OnAttackEvent += OnAttackEvent;
         }
 
         public void OnAttackClick()
@@ -51,7 +54,7 @@ namespace App.Game.Player.External.Attack
             animator.SetBool(_attack, true);
 
             DOTween.Sequence()
-                .AppendInterval(view.AttackAnimation.length)
+                .AppendInterval(_meleeAttackView.AttackAnimation.length)
                 .OnComplete(() =>
                 {
                     if (IsLeftMousePressed() && !IsBlocked())
@@ -86,13 +89,13 @@ namespace App.Game.Player.External.Attack
         private void OnAttackEvent()
         {
             var view = _context.View;
-            Vector3 center = view.GetAttackCenter();
+            Vector3 center = _meleeAttackView.GetAttackCenter();
 
             Collider[] hits = Physics.OverlapBox(
                 center,
-                view.BoxSize / 2f,
+                _meleeAttackView.BoxSize / 2f,
                 _context.View.transform.rotation,
-                view.EnemyLayer);
+                _meleeAttackView.EnemyLayer);
 
             foreach (var hit in hits)
             {

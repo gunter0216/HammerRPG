@@ -55,13 +55,33 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1571042049591659991, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2635597289669694749}
   m_SourcePrefab: {fileID: 100100000, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
 --- !u!4 &2872624582179557128 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2199628841774520173, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
   m_PrefabInstance: {fileID: 4132960929718638693}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3212839474995025330 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1571042049591659991, guid: 61b3e3801d56a3f429556c96ea2f07d6, type: 3}
+  m_PrefabInstance: {fileID: 4132960929718638693}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2635597289669694749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3212839474995025330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c11b55eac9a4e0e8954e6434261448e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Autumn.Game::App.Game.Player.External.View.AttackAnimationEventListener
 --- !u!1001 &8855188803652810845
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -125,8 +145,36 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 543551637675591000, guid: d6a40db2b45bf904d921b592b3de773e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2872624582179557128}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2443450099018124630, guid: d6a40db2b45bf904d921b592b3de773e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7501493482598799037}
   m_SourcePrefab: {fileID: 100100000, guid: d6a40db2b45bf904d921b592b3de773e, type: 3}
+--- !u!1 &6560358892841448715 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2443450099018124630, guid: d6a40db2b45bf904d921b592b3de773e, type: 3}
+  m_PrefabInstance: {fileID: 8855188803652810845}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7501493482598799037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560358892841448715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53bcfd869da42898c3f59d80dd6c868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Autumn.Game::App.Game.Player.External.View.MeleeAttackView
+  _attackAnimationEventListener: {fileID: 2635597289669694749}
+  _attackAnimation: {fileID: 4805240366591498833, guid: 21a998651bdf326429e37004e170b7d4, type: 3}
+  _boxSize: {x: 2, y: 1.47, z: 2}
+  _boxOffset: {x: 0, y: 0.38, z: 0.5}
+  _enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _showGizmos: 1
 --- !u!4 &9036725649447959813 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 543551637675591000, guid: d6a40db2b45bf904d921b592b3de773e, type: 3}
