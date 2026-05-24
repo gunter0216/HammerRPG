@@ -4,6 +4,7 @@ using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Player.External.View;
+using Game.Project.Gameplay.Weapon.Runtime.DamageHandlers;
 
 namespace App.Game.Player.External
 {
@@ -31,23 +32,8 @@ namespace App.Game.Player.External
             entityView.Value.ModuleItemView = moduleItemView;
             moduleItemView.ModuleItem = player;
             
-            // var view = entityView.Value;
-            // view.Weapon.gameObject.SetActive(false);
-
-            // var weaponView = entity.View.Weapon.GetComponent<WeaponView>();
-            // if (weaponView != null)
-            // {
-            //     weaponView.SetOnTriggerEnter2D((other) =>
-            //     {
-            //         if (other.TryGetComponent<EntityView>(out var attackedEntityView))
-            //         {
-            //             m_WeaponCollisionEventPool.Trigger(new WeaponCollisionEvent(
-            //                 attackerEntityId: playerEntity,
-            //                 attackedEntityId: attackedEntityView.Entity,
-            //                 other: other));
-            //         }
-            //     });
-            // }
+            var hitConsumerView = entityView.Value.gameObject.GetComponent<HitConsumerView>();
+            hitConsumerView.SetModuleItem(player);
             
             return Optional<EntityView>.Success(entityView.Value);
         }

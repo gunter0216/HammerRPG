@@ -2,6 +2,7 @@ using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Game.AI.External.States;
 using App.Game.Player.External.View;
+using Game.Project.Gameplay.Weapon.Runtime.DamageHandlers;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -62,6 +63,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _targetDetector = _view.gameObject.AddComponent<AITargetDetector>();
             _entityView.ModuleItemView = _view.gameObject.AddComponent<ModuleItemView>();
             _entityView.ModuleItemView.ModuleItem = _enemy;
+            
+            var hitConsumerView = _view.gameObject.GetComponent<HitConsumerView>();
+            hitConsumerView.SetModuleItem(_enemy);
 
             _idleAIState = new IdleAIState(_entityView);
             _runAIState = new RunAIState(_entityView);

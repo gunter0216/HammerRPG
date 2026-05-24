@@ -5,7 +5,7 @@ using App.Game.Modules.Health.Runtime.Data;
 
 namespace App.Game.Modules.Health.Runtime
 {
-    public class HealthModule
+    public class HealthModule : IModule
     {
         private readonly IModuleItem _item;
         private readonly HealthModuleData _data;
