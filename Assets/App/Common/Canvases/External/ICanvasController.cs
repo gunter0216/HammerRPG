@@ -1,5 +1,3 @@
-using App.Game.Canvases.External;
-
 namespace App.Common.Canvases.External
 {
     public interface ICanvasController
@@ -7,5 +5,6 @@ namespace App.Common.Canvases.External
          ICanvas GetHudCanvas();
          ICanvas GetWindowCanvas();
          ICanvas GetMenuCanvas();
+         ICanvas GetStatusBarCanvas();
     }
 }

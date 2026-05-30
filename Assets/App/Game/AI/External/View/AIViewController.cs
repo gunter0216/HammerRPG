@@ -1,7 +1,9 @@
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Game.AI.External.States;
 using App.Game.Player.External.View;
+using App.Game.StatusBar.Runtime;
 using Game.Project.Gameplay.Weapon.Runtime.DamageHandlers;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,6 +12,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 {
     public class AIViewController
     {
+        private readonly IStatusBarController _statusBarController;
         private readonly IModuleItem _enemy;
         private readonly Transform _view;
         
@@ -26,12 +29,14 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         private IAIState _state;
         private EntityView _target;
+        private ModuleItemView _moduleItemView;
 
         public bool IsActive => _isActive;
 
 
-        public AIViewController(IModuleItem enemy, Transform view)
+        public AIViewController(IStatusBarController statusBarController, IModuleItem enemy, Transform view)
         {
+            _statusBarController = statusBarController;
             _enemy = enemy;
             _view = view;
         }
@@ -47,6 +52,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
             _timer = 0.2f;
             // _agent.SetDestination(target.position);
+            _statusBarController.Show(_moduleItemView);
 
             _isActive = true;
         }
@@ -61,10 +67,15 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _agent = _view.GetComponent<NavMeshAgent>();
             _entityView = _view.GetComponent<EntityView>();
             _targetDetector = _view.gameObject.AddComponent<AITargetDetector>();
-            _entityView.ModuleItemView = _view.gameObject.AddComponent<ModuleItemView>();
-            _entityView.ModuleItemView.ModuleItem = _enemy;
+            _moduleItemView = _view.gameObject.AddComponent<ModuleItemView>();
+            _moduleItemView.ModuleItem = _enemy;
+
+            if (!_view.gameObject.TryGetComponent<HitConsumerView>(out var hitConsumerView))
+            {
+                HLogger.LogError("HitConsumerView not found.");
+                return;
+            }
             
-            var hitConsumerView = _view.gameObject.GetComponent<HitConsumerView>();
             hitConsumerView.SetModuleItem(_enemy);
 
             _idleAIState = new IdleAIState(_entityView);

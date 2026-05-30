@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 535cd7af4f35d09498a1daeaee586362
   m_SerializeEntries:
+  - m_GUID: 06ea9fdfd4a511d4baa0e0a009d1ac92
+    m_Address: StatusBarView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 27b9552f534148f89807d3aa663064b5
     m_Address: EquipmentConfig
     m_ReadOnly: 0
@@ -72,6 +77,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4ff0cc7a24281f45ac8e4f4eaa37047
     m_Address: FollowIcon_Chest
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da45cc76f78e7234683e5ed2df463510
+    m_Address: StatusBarCanvas
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

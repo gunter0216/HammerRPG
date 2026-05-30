@@ -1,4 +1,5 @@
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.External;
 using App.Common.Utilities.UtilityUnity.Runtime;
 using App.Game.Modules.Race.Runtime.Config;
 using App.Game.Player.External.View;
@@ -19,7 +20,13 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 out var results,
                 _targetMask);
 
-            if (!self.ModuleItemView.ModuleItem.TryGetConfigModule<RaceModuleConfig>(out var raceConfig))
+            if (!self.TryGetComponent<ModuleItemView>(out var selfModuleItemView))
+            {
+                HLogger.LogError("ModuleItemView not found.");
+                return null;
+            }
+            
+            if (!selfModuleItemView.ModuleItem.TryGetConfigModule<RaceModuleConfig>(out var raceConfig))
             {
                 HLogger.LogError($"RaceModuleConfig not found.");
                 return null;
@@ -43,7 +50,13 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                     continue;
                 }
 
-                if (!entity.ModuleItemView.ModuleItem.TryGetConfigModule<RaceModuleConfig>(out raceConfig))
+                if (!entity.TryGetComponent<ModuleItemView>(out var entityModuleItemView))
+                {
+                    HLogger.LogError("ModuleItemView not found.");
+                    return null;
+                }
+                
+                if (!entityModuleItemView.ModuleItem.TryGetConfigModule<RaceModuleConfig>(out raceConfig))
                 {
                     continue;   
                 }

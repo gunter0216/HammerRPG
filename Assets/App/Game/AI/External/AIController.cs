@@ -5,6 +5,7 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Game.AI.Runtime;
 using App.Game.Dungeon.DungeonCore.External.Controllers;
 using App.Game.Player.External;
+using App.Game.StatusBar.Runtime;
 using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,15 +16,17 @@ namespace App.Game.AI.External
     {
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly IAssetManager _assetManager;
+        private readonly IStatusBarController _statusBarController;
         
         private Transform _root;
 
         private List<AIViewController> _controllers;
 
-        public AIController(IModuleItemsManager moduleItemsManager, IAssetManager assetManager)
+        public AIController(IModuleItemsManager moduleItemsManager, IAssetManager assetManager, IStatusBarController statusBarController)
         {
             _moduleItemsManager = moduleItemsManager;
             _assetManager = assetManager;
+            _statusBarController = statusBarController;
         }
 
         public void Init()
@@ -45,7 +48,7 @@ namespace App.Game.AI.External
             view.SetParent(_root);
             agent.Warp(position);
             
-            var aiController = new AIViewController(enemy.Value, view);
+            var aiController = new AIViewController(_statusBarController, enemy.Value, view);
             aiController.Activate();
             
             _controllers.Add(aiController);

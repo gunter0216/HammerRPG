@@ -46,6 +46,7 @@
         HUD = 500,
         Camera = 0,
         Interactions = 0,
-        AIController = 0
+        AIController = 0,
+        StatusBar = 0
     }
 }

@@ -12,6 +12,7 @@ namespace App.Common.Canvases.External
         private BaseCanvas _hudCanvas;
         private BaseCanvas _windowsCanvas;
         private BaseCanvas _menuCanvas;
+        private BaseCanvas _statusBarCanvas;
 
         public CanvasController(IAssetManager assetManager)
         {
@@ -23,6 +24,7 @@ namespace App.Common.Canvases.External
             _hudCanvas = CreateCanvas();
             _windowsCanvas = CreateCanvas();
             _menuCanvas = CreateCanvas();
+            _statusBarCanvas = CreateStatusBarCanvas();
 
             _windowsCanvas.Canvas.sortingOrder = 100;
             _windowsCanvas.name = "WindowsCanvas";
@@ -48,10 +50,26 @@ namespace App.Common.Canvases.External
         {
             return _menuCanvas;
         }
+        
+        public ICanvas GetStatusBarCanvas()
+        {
+            return _statusBarCanvas;
+        }
 
         private BaseCanvas CreateCanvas()
         {
             var canvas = _assetManager.InstantiateSync<BaseCanvas>(new StringKeyEvaluator("BaseCanvas"));
+            if (!canvas.HasValue)
+            {
+                HLogger.LogError("Cant load canvas.");
+            }
+            
+            return canvas.Value;
+        }
+        
+        private BaseCanvas CreateStatusBarCanvas()
+        {
+            var canvas = _assetManager.InstantiateSync<BaseCanvas>(new StringKeyEvaluator("StatusBarCanvas"));
             if (!canvas.HasValue)
             {
                 HLogger.LogError("Cant load canvas.");

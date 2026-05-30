@@ -30,6 +30,19 @@ namespace App.Common.AssetSystem.External
             return LoadSync<T>(new StringKeyEvaluator(key));
         }
 
+        public bool TryLoadSync<T>(string key, out T asset) where T : Object
+        {
+            var assetRes = LoadSync<T>(key);
+            if (!assetRes.HasValue)
+            {
+                asset = null;
+                return false;
+            }
+
+            asset = assetRes.Value;
+            return true;
+        }
+
         public void UnloadAsset(string key)
         {
             UnloadAsset(new StringKeyEvaluator(key));

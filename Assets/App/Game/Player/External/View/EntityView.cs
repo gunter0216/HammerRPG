@@ -20,7 +20,5 @@ namespace App.Game.Player.External.View
                 return _animator;
             }
         }
-
-        public ModuleItemView ModuleItemView { get; set; }
     }
 }

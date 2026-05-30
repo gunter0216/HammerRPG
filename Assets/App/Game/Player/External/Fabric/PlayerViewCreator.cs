@@ -29,10 +29,14 @@ namespace App.Game.Player.External
             }
 
             var moduleItemView = entityView.Value.gameObject.AddComponent<ModuleItemView>();
-            entityView.Value.ModuleItemView = moduleItemView;
             moduleItemView.ModuleItem = player;
             
-            var hitConsumerView = entityView.Value.gameObject.GetComponent<HitConsumerView>();
+            if (!entityView.Value.gameObject.TryGetComponent<HitConsumerView>(out var hitConsumerView))
+            {
+                HLogger.LogError("HitConsumerView not found.");
+                return Optional<EntityView>.Fail();
+            }
+            
             hitConsumerView.SetModuleItem(player);
             
             return Optional<EntityView>.Success(entityView.Value);
