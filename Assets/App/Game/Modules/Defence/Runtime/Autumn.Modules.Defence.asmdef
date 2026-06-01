@@ -1,0 +1,11 @@
+{
+  "name": "Autumn.Modules.Defence",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.DataContainers",
+    "Autumn.Utility",
+    "Autumn.DataManager",
+    "Autumn.Modules.Health",
+    "Autumn.Logger"
+  ]
+}

@@ -1,6 +1,7 @@
 using App.Game.Player.External.Context;
 using App.Game.Player.External.View;
 using DG.Tweening;
+using Game.Project.Gameplay.Weapon.Runtime.DamageHandlers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -99,10 +100,13 @@ namespace App.Game.Player.External.Attack
 
             foreach (var hit in hits)
             {
-                // if (hit.TryGetComponent<IDamageable>(out var damageable))
-                // {
-                //     damageable.TakeDamage(10);
-                // }
+                if (!hit.TryGetComponent<IDamageHandler>(out var handler))
+                {
+                    continue;
+                }
+
+                var hitModel = new HitModel(_context.ModuleItem, 10);
+                handler.Handle(hitModel);
             }
         }
 

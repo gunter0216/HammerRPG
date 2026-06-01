@@ -1,5 +1,6 @@
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
+using App.Game.Modules.Health.Runtime;
 using App.Game.StatusBar.External.View;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace App.Game.StatusBar.External.Controller
         
         private ModuleItemView _moduleItemView;
         private EntityStatusBarView _statusBarView;
+        private HealthModule _healthModule;
 
         public ModuleItemView ItemView => _moduleItemView;
 
@@ -41,13 +43,36 @@ namespace App.Game.StatusBar.External.Controller
                 HLogger.LogError("Not found EntityStatusBarView");
                 return;
             }
+
+            if (!_moduleItemView.ModuleItem.TryGetModule<HealthModule>(out _healthModule))
+            {
+                HLogger.LogError("Not found HealthModule");
+                return;
+            }
+
+            _healthModule.OnHealthChanged += OnHealthChanged;
+            UpdateHealth();
             
             _view.SetActive(true);
+        }
+
+        private void OnHealthChanged()
+        {
+            UpdateHealth();
+        }
+
+        private void UpdateHealth()
+        {
+            _view.SetHealth(_healthModule.Data.Health, _healthModule.Config.MaxHealth);
         }
 
         public void Deactivate()
         {
             _view.SetActive(false);
+            if (_healthModule != null)
+            {
+                _healthModule.OnHealthChanged -= OnHealthChanged;
+            }
         }
     }
 }

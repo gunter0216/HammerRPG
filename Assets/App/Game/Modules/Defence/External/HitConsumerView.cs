@@ -1,7 +1,6 @@
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
-using App.Game.Modules.Health.Runtime;
-using App.Game.Modules.Health.Runtime.Data;
+using App.Game.Modules.Defence.Runtime;
 using UnityEngine;
 
 namespace Game.Project.Gameplay.Weapon.Runtime.DamageHandlers
@@ -16,10 +15,9 @@ namespace Game.Project.Gameplay.Weapon.Runtime.DamageHandlers
         {
             _moduleItem = moduleItem;
 
-            var id = _moduleItem.Id;
             foreach (var handler in _handlers)
             {
-                handler.Initialize(id, OnDamaged);
+                handler.Initialize(_moduleItem, OnDamaged);
             }
         }
 
@@ -31,9 +29,13 @@ namespace Game.Project.Gameplay.Weapon.Runtime.DamageHandlers
                 return;
             }
 
-            var healthData = _moduleItem.GetModule<HealthModule>();
-            healthData.Value.Spend(10);
-            HLogger.LogError($"value {healthData.Value}");
+            if (!_moduleItem.TryGetModule<DefenceModule>(out var defenceModule))
+            {
+                HLogger.LogError("defenceModule not found.");
+                return;
+            }
+
+            defenceModule.OnDamage(model, handler);
         }
     }
 }

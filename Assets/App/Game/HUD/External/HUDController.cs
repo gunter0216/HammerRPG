@@ -54,7 +54,7 @@ namespace App.Game.GameMenu.External
             CreateView();
 
             _player = _playerController.Player;
-            if (!_healthModuleSystem.TryGetModule(_player, out _healthModule))
+            if (!_player.TryGetModule(out _healthModule))
             {
                 HLogger.LogError($"Health module not found.");
                 return;

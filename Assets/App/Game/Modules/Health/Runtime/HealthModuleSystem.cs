@@ -9,21 +9,8 @@ namespace App.Game.Modules.Health.Runtime
 {
     public class HealthModuleSystem : IModuleSystem
     {
-        private readonly Dictionary<DataReference, HealthModule> _modules;
-
         public HealthModuleSystem()
         {
-            _modules = new Dictionary<DataReference, HealthModule>();
-        }
-
-        public bool TryGetModule(IModuleItem moduleItem, out HealthModule healthModule)
-        {
-            if (_modules.TryGetValue(moduleItem.ReferenceSelf, out healthModule))
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public Optional<IModuleItem> OnItemCreated(IModuleItem moduleItem)
@@ -39,17 +26,17 @@ namespace App.Game.Modules.Health.Runtime
                 {
                     Health = config.MaxHealth
                 };
+                
                 moduleItem.AddDataModule(data);
             }
-            
-            _modules.Add(moduleItem.ReferenceSelf, new HealthModule(moduleItem, data, config));
+
+            moduleItem.AddModule(new HealthModule(moduleItem, data, config));
             
             return Optional<IModuleItem>.Success(moduleItem);
         }
 
         public void OnItemDestroyed(IModuleItem moduleItem)
         {
-            _modules.Remove(moduleItem.ReferenceSelf);
         }
 
         public ModuleIndex SortIndex()

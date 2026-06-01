@@ -8,6 +8,7 @@ namespace App.Common.ModuleItem.Runtime
         Chest,
         Move,
         Door,
-        Health
+        Health,
+        Defence
     }
 }

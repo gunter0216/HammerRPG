@@ -1,4 +1,5 @@
 using System;
+using App.Common.ModuleItem.Runtime;
 using UnityEngine;
 
 namespace Game.Project.Gameplay.Weapon.Runtime.DamageHandlers
@@ -8,13 +9,14 @@ namespace Game.Project.Gameplay.Weapon.Runtime.DamageHandlers
     {
         private Action<SimpleDamageHandler, HitModel> _callback;
 
-        public void Initialize(string id, Action<SimpleDamageHandler, HitModel> callback)
+        public void Initialize(IModuleItem moduleItem, Action<SimpleDamageHandler, HitModel> callback)
         {
-            Id = id;
+            ModuleItem = moduleItem;
             _callback = callback;
         }
 
-        public string Id { get; private set; }
+
+        public IModuleItem ModuleItem { get; private set; }
 
         public void Handle(HitModel model)
         {
