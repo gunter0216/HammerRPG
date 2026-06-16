@@ -39,7 +39,7 @@ namespace App.Game.Player.External.View
 
         public Vector3 GetAttackCenter()
         {
-            return transform.position + _boxOffset;
+            return transform.position + transform.rotation * _boxOffset;
         }
 
 #if UNITY_EDITOR
