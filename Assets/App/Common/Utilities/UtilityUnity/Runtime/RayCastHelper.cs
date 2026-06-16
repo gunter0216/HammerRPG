@@ -14,23 +14,24 @@ namespace App.Common.Utilities.UtilityUnity.Runtime
             float maxDistance,
             int layerMask)
         {
-            var count = Physics.SphereCastNonAlloc(ray, radius, _hits, maxDistance, layerMask, QueryTriggerInteraction.UseGlobal);
+            var count = Physics.SphereCastNonAlloc(ray, radius, _hits, maxDistance, layerMask,
+                QueryTriggerInteraction.UseGlobal);
             results = _hits;
             return count;
         }
-        
+
         public static int OverlapSphereNonAlloc(Vector3 position, float radius, out Collider[] results, int layerMask)
         {
             int count = Physics.OverlapSphereNonAlloc(position, radius, _colliders, layerMask);
             results = _colliders;
             return count;
         }
-        
+
         public static bool RaycastNonAllocSingle(
-            Ray ray, 
-            out RaycastHit hit, 
+            Ray ray,
+            out RaycastHit hit,
             float maxDistance = Mathf.Infinity,
-            int layerMask = Physics.DefaultRaycastLayers, 
+            int layerMask = Physics.DefaultRaycastLayers,
             QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
         {
             int hitCount =
@@ -60,6 +61,46 @@ namespace App.Common.Utilities.UtilityUnity.Runtime
                 hit = new RaycastHit();
                 return false;
             }
+        }
+
+        public static int OverlapBoxNonAlloc(
+            Vector3 center,
+            float side,
+            out Collider[] results,
+            int layerMask,
+            Quaternion orientation = default,
+            QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
+        {
+            if (orientation == default)
+            {
+                orientation = Quaternion.identity;
+            }
+
+            Vector3 halfExtents = new Vector3(side, side, side) * 0.5f;
+            int count = Physics.OverlapBoxNonAlloc(center, halfExtents, _colliders, orientation, layerMask,
+                queryTriggerInteraction);
+            results = _colliders;
+            return count;
+        }
+
+        public static int OverlapBoxNonAlloc(
+            Vector3 center,
+            Vector3 size,
+            out Collider[] results,
+            int layerMask,
+            Quaternion orientation = default,
+            QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal)
+        {
+            if (orientation == default)
+            {
+                orientation = Quaternion.identity;
+            }
+
+            Vector3 halfExtents = size * 0.5f;
+            int count = Physics.OverlapBoxNonAlloc(center, halfExtents, _colliders, orientation, layerMask,
+                queryTriggerInteraction);
+            results = _colliders;
+            return count;
         }
     }
 }

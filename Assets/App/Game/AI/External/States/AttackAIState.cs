@@ -1,3 +1,5 @@
+using App.Common.ModuleItem.Runtime;
+using App.Game.Player.External.Attack;
 using App.Game.Player.External.View;
 using DG.Tweening;
 using UnityEngine;
@@ -10,16 +12,22 @@ namespace App.Game.AI.External.States
 
         private readonly MeleeAttackView _meleeAttackView;
         private readonly EntityView _entityView;
+        private readonly IModuleItem _moduleItem;
         private readonly Animator _animator;
+        private readonly MeleeAttackService _attackService;
         private Sequence _attackSeq;
         private bool _isAttack;
         private EntityView _target;
 
-        public AttackAIState(EntityView entityView)
+        public AttackAIState(EntityView entityView, IModuleItem moduleItem)
         {
             _entityView = entityView;
+            _moduleItem = moduleItem;
             _animator = _entityView.Animator;
             _meleeAttackView = _entityView.GetComponent<MeleeAttackView>();
+            _meleeAttackView.AttackAnimationEventListener.OnAttackEvent += OnAttackEvent;
+
+            _attackService = new MeleeAttackService(_moduleItem, _meleeAttackView, _entityView);
         }
 
         public bool CanAttack(EntityView enemyView)
@@ -35,6 +43,11 @@ namespace App.Game.AI.External.States
 
         public void Enter()
         {
+        }
+
+        private void OnAttackEvent()
+        {
+            _attackService.OnAttackEvent();
         }
 
         public void OnUpdate(float deltaTime)

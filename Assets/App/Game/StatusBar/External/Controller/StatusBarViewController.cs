@@ -63,7 +63,7 @@ namespace App.Game.StatusBar.External.Controller
 
         private void UpdateHealth()
         {
-            _view.SetHealth(_healthModule.Data.Health, _healthModule.Config.MaxHealth);
+            _view.SetHealth(_healthModule.Health, _healthModule.MaxHealth);
         }
 
         public void Deactivate()

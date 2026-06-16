@@ -14,6 +14,7 @@ namespace App.Game.Player.External.Attack
 
         private readonly PlayerContext _context;
         private readonly PlayerAttackContext _attackContext;
+        private MeleeAttackService _attackService;
 
         private Camera _camera;
         private MeleeAttackView _meleeAttackView;
@@ -33,6 +34,8 @@ namespace App.Game.Player.External.Attack
             var animator = view.Animator;
             animator.SetBool(_melee, true);
             _meleeAttackView.AttackAnimationEventListener.OnAttackEvent += OnAttackEvent;
+
+            _attackService = new MeleeAttackService(_context.ModuleItem, _meleeAttackView, _context.View);
         }
 
         public void OnAttackClick()
@@ -89,25 +92,7 @@ namespace App.Game.Player.External.Attack
 
         private void OnAttackEvent()
         {
-            var view = _context.View;
-            Vector3 center = _meleeAttackView.GetAttackCenter();
-
-            Collider[] hits = Physics.OverlapBox(
-                center,
-                _meleeAttackView.BoxSize / 2f,
-                _context.View.transform.rotation,
-                _meleeAttackView.EnemyLayer);
-
-            foreach (var hit in hits)
-            {
-                if (!hit.TryGetComponent<IDamageHandler>(out var handler))
-                {
-                    continue;
-                }
-
-                var hitModel = new HitModel(_context.ModuleItem, 10);
-                handler.Handle(hitModel);
-            }
+            _attackService.OnAttackEvent();
         }
 
         private void RotatePlayerByDirection()

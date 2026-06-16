@@ -2,6 +2,7 @@ using System;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Modules.Health.Runtime.Config;
 using App.Game.Modules.Health.Runtime.Data;
+using UnityEngine;
 
 namespace App.Game.Modules.Health.Runtime
 {
@@ -12,15 +13,23 @@ namespace App.Game.Modules.Health.Runtime
         private readonly HealthModuleConfig _config;
 
         private Action _onHealthChanged;
+        private Action _onHealthOver;
 
         public Action OnHealthChanged
         {
             get => _onHealthChanged;
             set => _onHealthChanged = value;
         }
+        
+        public Action OnHealthOver
+        {
+            get => _onHealthOver;
+            set => _onHealthOver = value;
+        }
 
-        public HealthModuleData Data => _data;
-        public HealthModuleConfig Config => _config;
+        public bool IsDie => _data.Health <= 0;
+        public float Health => _data.Health;
+        public float MaxHealth => _config.MaxHealth;
 
         public HealthModule(
             IModuleItem item, 
@@ -34,10 +43,16 @@ namespace App.Game.Modules.Health.Runtime
 
         public void Spend(float health)
         {
+            if (_data.Health <= 0)
+            {
+                return;
+            }
+            
             _data.Health -= health;
-            if (_data.Health < 0)
+            if (Mathf.Approximately(_data.Health, 0))
             {
                 _data.Health = 0;
+                _onHealthOver?.Invoke();
             }
             
             _onHealthChanged?.Invoke();

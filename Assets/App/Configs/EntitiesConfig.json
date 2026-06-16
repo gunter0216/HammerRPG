@@ -63,7 +63,7 @@
         },
         {
           "module": "health",
-          "health": 100
+          "health": 30
         },
         {
           "module": "move",

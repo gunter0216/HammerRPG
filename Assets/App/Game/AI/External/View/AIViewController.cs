@@ -2,6 +2,7 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Game.AI.External.States;
+using App.Game.Modules.Health.Runtime;
 using App.Game.Player.External.View;
 using App.Game.StatusBar.Runtime;
 using Game.Project.Gameplay.Weapon.Runtime.DamageHandlers;
@@ -13,7 +14,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
     public class AIViewController
     {
         private readonly IStatusBarController _statusBarController;
-        private readonly IModuleItem _enemy;
+        private readonly IModuleItem _moduleItem;
         private readonly Transform _view;
         
         private bool _initialized;
@@ -30,14 +31,15 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private IAIState _state;
         private EntityView _target;
         private ModuleItemView _moduleItemView;
+        private HealthModule _healthModule;
+        private DeadAIState _deadAIState;
 
         public bool IsActive => _isActive;
 
-
-        public AIViewController(IStatusBarController statusBarController, IModuleItem enemy, Transform view)
+        public AIViewController(IStatusBarController statusBarController, IModuleItem moduleItem, Transform view)
         {
             _statusBarController = statusBarController;
-            _enemy = enemy;
+            _moduleItem = moduleItem;
             _view = view;
         }
 
@@ -63,12 +65,12 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             {
                 return;
             }
-
+            
             _agent = _view.GetComponent<NavMeshAgent>();
             _entityView = _view.GetComponent<EntityView>();
             _targetDetector = _view.gameObject.AddComponent<AITargetDetector>();
             _moduleItemView = _view.gameObject.AddComponent<ModuleItemView>();
-            _moduleItemView.ModuleItem = _enemy;
+            _moduleItemView.ModuleItem = _moduleItem;
 
             if (!_view.gameObject.TryGetComponent<HitConsumerView>(out var hitConsumerView))
             {
@@ -76,13 +78,29 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 return;
             }
             
-            hitConsumerView.SetModuleItem(_enemy);
+            hitConsumerView.SetModuleItem(_moduleItem);
 
             _idleAIState = new IdleAIState(_entityView);
             _runAIState = new RunAIState(_entityView);
-            _attackAIState = new AttackAIState(_entityView);
+            _deadAIState = new DeadAIState(_entityView);
+            _attackAIState = new AttackAIState(_entityView, _moduleItem);
+
+            if (!_moduleItem.TryGetModule<HealthModule>(out _healthModule))
+            {
+                HLogger.LogError("HealthModule not found.");
+                return;
+            }
+
+            _healthModule.OnHealthOver += OnHealthOver;
             
             _initialized = true;
+        }
+
+        private void OnHealthOver()
+        {
+            _statusBarController.Hide(_moduleItemView);
+            SetState(_deadAIState);
+            _isActive = false;
         }
 
         public void Update()
@@ -91,7 +109,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             {
                 return;
             }
-
+            
             if (_state is IUpdateState updateState)
             {
                 updateState.OnUpdate(Time.deltaTime);

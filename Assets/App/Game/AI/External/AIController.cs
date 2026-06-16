@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
+using App.Game.AI.External.Fabric;
 using App.Game.AI.Runtime;
 using App.Game.Dungeon.DungeonCore.External.Controllers;
 using App.Game.Player.External;
@@ -18,7 +19,7 @@ namespace App.Game.AI.External
         private readonly IAssetManager _assetManager;
         private readonly IStatusBarController _statusBarController;
         
-        private Transform _root;
+        private AICreator _aiCreator;
 
         private List<AIViewController> _controllers;
 
@@ -31,29 +32,20 @@ namespace App.Game.AI.External
 
         public void Init()
         {
-            _root = new GameObject("AI").transform;
             _controllers = new List<AIViewController>();
+
+            _aiCreator = new AICreator(_assetManager, _moduleItemsManager, _statusBarController);
         }
 
         public Optional<AIViewController> Create(string id, Vector3 position)
         {
-            var enemy = _moduleItemsManager.Create(id);
-            var module = enemy.Value.GetConfigModule<AssetModuleConfig>();
-            var assetKey = module.Value.AssetKey;
-
-            var viewResult = _assetManager.InstantiateSync<Transform>(assetKey);
-            var view = viewResult.Value;
-            var agent = view.GetComponent<NavMeshAgent>();
+            var aiController = _aiCreator.Create(id, position);
+            if (aiController.HasValue)
+            {
+                _controllers.Add(aiController.Value);
+            }
             
-            view.SetParent(_root);
-            agent.Warp(position);
-            
-            var aiController = new AIViewController(_statusBarController, enemy.Value, view);
-            aiController.Activate();
-            
-            _controllers.Add(aiController);
-            
-            return Optional<AIViewController>.Success(aiController);
+            return aiController;
         }
 
         public void OnUpdate()

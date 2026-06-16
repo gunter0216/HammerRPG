@@ -100,8 +100,8 @@ namespace App.Game.GameMenu.External
 
         private void UpdateHealth()
         {
-            var current = _healthModule.Data.Health;
-            var max = _healthModule.Config.MaxHealth;
+            var current = _healthModule.Health;
+            var max = _healthModule.MaxHealth;
             _view.SetHealth(Mathf.RoundToInt(current), Mathf.RoundToInt(max));
         }
 
