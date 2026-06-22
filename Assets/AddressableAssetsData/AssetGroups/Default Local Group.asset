@@ -45,6 +45,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4340f4c2a8d13cf4b82d9438b74c6a67
+    m_Address: Human_Sword
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 45d0d761049651747ae95efdabd36cf0
     m_Address: BaseCanvas
     m_ReadOnly: 0

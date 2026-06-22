@@ -5,20 +5,10 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
 using App.Game.Dungeon.DungeonCore.Runtime;
-using App.Game.Interactions.External;
-using App.Game.Modules.Experience.Runtime.Config;
-using App.Game.Modules.Experience.Runtime.Data;
-using App.Game.Modules.Level.Runtime.Config;
-using App.Game.Modules.Level.Runtime.Data;
 using App.Game.Modules.Move.Runtime;
-using App.Game.Modules.Name.Runtime.Config;
-using App.Game.Modules.Name.Runtime.Data;
-using App.Game.Modules.Race.Runtime.Config;
-using App.Game.Modules.Race.Runtime.Data;
-using App.Game.Modules.Stats.Runtime.Config;
-using App.Game.Modules.Stats.Runtime.Data;
 using App.Game.Player.External.Attack;
 using App.Game.Player.External.Context;
+using App.Game.Player.External.Items;
 using App.Game.Player.External.View;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -42,6 +32,7 @@ namespace App.Game.Player.External
         private PlayerAttackController _playerAttackController;
         private PlayerContext _context;
         private LeftClickController _leftClickController;
+        private HandItemsController _handItemsController;
 
         public EntityView PlayerView => _view;
 
@@ -64,25 +55,26 @@ namespace App.Game.Player.External
 
         public void Init()
         {
-            var moduleItem = _moduleItemsManager.Create("player");
-            if (!moduleItem.HasValue)
-            {
-                HLogger.LogError("Cant create player.");
-                return;
-            }
-
-            _player = moduleItem.Value;
+            var playerCreator = new PlayerCreator(_moduleItemsManager);
+            _player = playerCreator.Create();
+            
             CreateView();
             PlacePlayerOnStartRoom();
             InitContext();
             InitMove();
             InitAttack();
-            InitStats();
-            InitName();
-            InitLevel();
-            InitExperience();
-            InitRace();
             InitLeftClickController();
+            InitHandItems();
+        }
+
+        private void InitHandItems()
+        {
+            _handItemsController = new HandItemsController(_context, _assetManager);
+            _handItemsController.Initialize();
+
+            var itemResult = _moduleItemsManager.Create("IronSword");
+            var item = itemResult.Value;
+            _handItemsController.Equip(new EquipHandItemInfo(EHand.Right, item));
         }
 
         private void InitLeftClickController()
@@ -101,6 +93,7 @@ namespace App.Game.Player.External
             {
                 ModuleItem = _player,
                 View = _view,
+                RigProvider = _view.GetComponent<RigProviderView>()
             };
         }
 
@@ -141,105 +134,6 @@ namespace App.Game.Player.External
         {
             _playerAttackController = new PlayerAttackController(_context);
             _playerAttackController.Initialize();
-        }
-
-        private void InitStats()
-        {
-            if (!_player.TryGetDataModule<StatsModuleData>(out var statsModuleData))
-            {
-                if (_player.TryGetConfigModule<StatsModuleConfig>(out var config))
-                {
-                    statsModuleData = new StatsModuleData()
-                    {
-                        Agility = config.Agility,
-                        Strength = config.Strength,
-                        Intelligence = config.Intelligence
-                    };
-                    
-                    _player.AddDataModule(statsModuleData);
-                }
-                else
-                {
-                    HLogger.LogError("StatsModuleConfig not found.");   
-                }
-            }
-        }
-
-        private void InitName()
-        {
-            if (!_player.TryGetDataModule<NameModuleData>(out var data))
-            {
-                if (_player.TryGetConfigModule<NameModuleConfig>(out var config))
-                {
-                    data = new NameModuleData()
-                    {
-                        Name = config.Name,
-                    };
-                    
-                    _player.AddDataModule(data);
-                }
-                else
-                {
-                    HLogger.LogError("StatsModuleConfig not found.");   
-                }
-            }
-        }
-
-        private void InitExperience()
-        {
-            if (!_player.TryGetDataModule<ExperienceModuleData>(out var data))
-            {
-                if (_player.TryGetConfigModule<ExperienceModuleConfig>(out var config))
-                {
-                    data = new ExperienceModuleData();
-                    
-                    _player.AddDataModule(data);
-                }
-                else
-                {
-                    HLogger.LogError("StatsModuleConfig not found.");   
-                }
-            }
-        }
-
-        private void InitLevel()
-        {
-            if (!_player.TryGetDataModule<LevelModuleData>(out var data))
-            {
-                if (_player.TryGetConfigModule<LevelModuleConfig>(out var config))
-                {
-                    data = new LevelModuleData()
-                    {
-                        Level = config.StartLevel,
-                    };
-                    
-                    _player.AddDataModule(data);
-                }
-                else
-                {
-                    HLogger.LogError("StatsModuleConfig not found.");   
-                }
-            }
-        }
-
-        private void InitRace()
-        {
-            if (!_player.TryGetDataModule<RaceModuleData>(out var data))
-            {
-                if (_player.TryGetConfigModule<RaceModuleConfig>(out var config))
-                {
-                    data = new RaceModuleData()
-                    {
-                        Race = config.Race,
-                    };
-                    
-                    _player.AddDataModule(data);
-                }
-                else
-                {
-                    HLogger.LogError("StatsModuleConfig not found.");   
-                }
-            }
         }
 
         public void OnUpdate()

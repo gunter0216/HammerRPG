@@ -14,5 +14,6 @@ namespace App.Game.Player.External.Context
         
         // view
         public EntityView View { get; set; }
+        public RigProviderView RigProvider { get; set; }
     }
 }

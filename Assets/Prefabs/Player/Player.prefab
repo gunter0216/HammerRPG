@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 4468864227038987674}
   - component: {fileID: 4399564357631807362}
   - component: {fileID: 4621330040848344572}
+  - component: {fileID: 2371260148163255708}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -202,6 +203,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Autumn.Game::Game.Project.Gameplay.Weapon.Runtime.DamageHandlers.HitConsumerView
   _handlers:
   - {fileID: 8346739039975552504}
+--- !u!114 &2371260148163255708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5016975802056075122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc674aa2406e485f8c50373712ba4896, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Autumn.Game::App.Game.Player.External.View.RigProviderView
+  _leftHand: {fileID: 1976112098566350051}
+  _rightHand: {fileID: 6508527160942245965}
 --- !u!1001 &9120840400509429539
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -314,9 +329,19 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7123417524254045527}
   m_SourcePrefab: {fileID: 100100000, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
+--- !u!4 &1976112098566350051 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1873722300314729536, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
+  m_PrefabInstance: {fileID: 9120840400509429539}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &3456840011564309170 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
+  m_PrefabInstance: {fileID: 9120840400509429539}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6508527160942245965 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6574882734343921810, guid: 2faa610713d3b3c439473daa55e8c60a, type: 3}
   m_PrefabInstance: {fileID: 9120840400509429539}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8237881779108207218 stripped

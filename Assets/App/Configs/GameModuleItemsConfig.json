@@ -112,6 +112,10 @@
         {
           "module": "equipment",
           "type": "One-handed"
+        },
+        {
+          "module": "asset",
+          "key": "Human_Sword"
         }
       ]
     },
