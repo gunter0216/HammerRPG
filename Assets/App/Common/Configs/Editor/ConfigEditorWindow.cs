@@ -12,6 +12,8 @@ namespace App.Common.Configs.Editor
     {
         private const string ConfigFolder = "Assets/App/Configs";
 
+        private TreeNode _rootNode;
+        
         // ── State ────────────────────────────────────────────────────────────
         private List<GameConfig> _configs = new();
         private GameConfig       _selectedConfig;
@@ -42,17 +44,101 @@ namespace App.Common.Configs.Editor
         // ── Data ─────────────────────────────────────────────────────────────
         private void ReloadConfigs()
         {
-            string[] guids = AssetDatabase.FindAssets($"t:{nameof(GameConfig)}", new[] { ConfigFolder });
+            _configs.Clear();
+            string[] assetPaths =
+                Directory.GetFiles(
+                    ConfigFolder,
+                    "*.asset",
+                    SearchOption.AllDirectories);
 
-            _configs = guids
-                .Select(guid => AssetDatabase.LoadAssetAtPath<GameConfig>(
-                    AssetDatabase.GUIDToAssetPath(guid)))
-                .Where(x => x != null)
-                .OrderBy(x => x.name)
+            foreach (string path in assetPaths)
+            {
+                var config =
+                    AssetDatabase.LoadAssetAtPath<GameConfig>(
+                        path.Replace("\\", "/"));
+
+                if (config != null)
+                    _configs.Add(config);
+            }
+
+            BuildTree();
+
+            if (_selectedConfig != null &&
+                !_configs.Contains(_selectedConfig))
+            {
+                ClearSelection();
+            }
+        }
+        
+        private void BuildTree()
+        {
+            _rootNode = new TreeNode
+            {
+                Name = "Configs",
+                Path = ConfigFolder,
+                IsFolder = true
+            };
+
+            foreach (var config in _configs)
+            {
+                string assetPath =
+                    AssetDatabase.GetAssetPath(config);
+
+                string relativePath =
+                    assetPath.Substring(ConfigFolder.Length)
+                        .TrimStart('/');
+
+                string[] parts = relativePath.Split('/');
+
+                TreeNode current = _rootNode;
+
+                for (int i = 0; i < parts.Length - 1; i++)
+                {
+                    string folderName = parts[i];
+
+                    TreeNode folder =
+                        current.Children.FirstOrDefault(x =>
+                            x.IsFolder &&
+                            x.Name == folderName);
+
+                    if (folder == null)
+                    {
+                        folder = new TreeNode
+                        {
+                            Name = folderName,
+                            Path = current.Path + "/" + folderName,
+                            IsFolder = true
+                        };
+
+                        current.Children.Add(folder);
+                    }
+
+                    current = folder;
+                }
+
+                current.Children.Add(new TreeNode
+                {
+                    Name = config.name,
+                    Config = config,
+                    IsFolder = false
+                });
+            }
+
+            SortTree(_rootNode);
+        }
+        
+        private void SortTree(TreeNode node)
+        {
+            node.Children = node.Children
+                .OrderByDescending(x => x.IsFolder)
+                .ThenBy(x => x.Name)
                 .ToList();
 
-            if (_selectedConfig != null && !_configs.Contains(_selectedConfig))
-                ClearSelection();
+            foreach (var child in node.Children)
+            {
+                if (child.IsFolder)
+                    SortTree(child);
+            }
         }
 
         private void ClearSelection()
@@ -144,38 +230,60 @@ namespace App.Common.Configs.Editor
         private void DrawConfigList(float panelWidth)
         {
             _leftScroll = EditorGUILayout.BeginScrollView(_leftScroll);
+
+            if (_rootNode != null)
             {
-                _configRects.Clear();
-
-                IEnumerable<GameConfig> visible = string.IsNullOrWhiteSpace(_searchQuery)
-                    ? _configs
-                    : _configs.Where(c =>
-                        c.name.IndexOf(_searchQuery, StringComparison.OrdinalIgnoreCase) >= 0);
-
-                var groups = visible
-                    .GroupBy(GetGroupName)
-                    .OrderBy(g => g.Key)
-                    .ToList();
-
-                bool anyDrawn = false;
-                foreach (var group in groups)
+                foreach (var child in _rootNode.Children)
                 {
-                    anyDrawn = true;
-
-                    if (group.Key != string.Empty || groups.Count > 1)
-                        EditorGUILayout.LabelField(group.Key, _groupLabelStyle);
-
-                    foreach (var config in group)
-                        DrawConfigButton(config, panelWidth);
-                }
-
-                if (!anyDrawn)
-                {
-                    GUILayout.Space(8);
-                    EditorGUILayout.HelpBox("No configs found.", MessageType.None);
+                    DrawTreeNode(child, 0);
                 }
             }
+
             EditorGUILayout.EndScrollView();
+        }
+        
+        private void DrawTreeNode(
+            TreeNode node,
+            int indent)
+        {
+            GUILayout.BeginHorizontal();
+
+            GUILayout.Space(indent * 16);
+
+            if (node.IsFolder)
+            {
+                node.Expanded = EditorGUILayout.Foldout(
+                    node.Expanded,
+                    node.Name,
+                    true);
+
+                GUILayout.EndHorizontal();
+
+                if (!node.Expanded)
+                    return;
+
+                foreach (var child in node.Children)
+                {
+                    DrawTreeNode(child, indent + 1);
+                }
+
+                return;
+            }
+
+            bool selected =
+                _selectedConfig == node.Config;
+
+            GUIStyle style =
+                selected
+                    ? _selectedButtonStyle
+                    : _normalButtonStyle;
+
+            if (GUILayout.Button(node.Name, style))
+            {
+                SelectConfig(node.Config);
+            }
+
+            GUILayout.EndHorizontal();
         }
 
         private void DrawConfigButton(GameConfig config, float panelWidth)
