@@ -21,7 +21,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         public event Action<GameConfig> OnConfigSelected;
         public event Action<string> OnFolderSelected;
 
-        public string FolderPath => Path.Combine("Assets", "_Content", "Data", Title);
+        public string FolderPath => Path.Combine("Assets", "App", "Configs", Title);
         
         public GameConfig Selected => _selected;
         
