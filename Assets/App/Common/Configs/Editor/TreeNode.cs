@@ -5,13 +5,11 @@ namespace App.Common.Configs.Editor
 {
     public class TreeNode
     {
-        public string Name;
-        public string Path;
-        public bool IsFolder;
-        public bool Expanded = true;
-
-        public GameConfig Config;
-
+        public string         Name;
+        public string         Path;       // full asset path, e.g. "Assets/App/Configs/Gameplay"
+        public bool           IsFolder;
+        public bool           Expanded = true;
+        public GameConfig     Config;
         public List<TreeNode> Children = new();
     }
 }
