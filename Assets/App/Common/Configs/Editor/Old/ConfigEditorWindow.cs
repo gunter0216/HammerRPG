@@ -22,7 +22,7 @@ namespace App.Common.Configs.Editor
         private RightPanel        _rightPanel;
         private RightClickHandler _rightClickHandler;
 
-        [MenuItem("Tools/Config Editor")]
+        // [MenuItem("Tools/Config Editor")]
         private static void Open() => GetWindow<ConfigEditorWindow>("Config Editor");
 
         private void OnEnable()
@@ -110,8 +110,15 @@ namespace App.Common.Configs.Editor
         {
             EditorGUILayout.BeginVertical();
             {
-                if (_leftPanel.SelectedConfig == null)
+                if (_leftPanel.HasFolderSelection)
+                {
+                    GUILayout.FlexibleSpace();
+                    GUILayout.FlexibleSpace();
+                }
+                else if (_leftPanel.SelectedConfig == null)
+                {
                     DrawEmptyState();
+                }
                 else
                 {
                     DrawConfigHeader();

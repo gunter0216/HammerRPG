@@ -61,15 +61,36 @@ namespace App.Common.Configs.Editor
                 menu.AddSeparator("");
                 menu.AddItem(new GUIContent("New Config"),      false, () => ShowCreateConfigDialog(GetConfigFolder(clickedConfig)));
                 menu.AddItem(new GUIContent("New Folder"),      false, () => ShowCreateFolderDialog(GetConfigFolder(clickedConfig)));
+                
+                _leftPanel.SelectConfig(clickedConfig);
             }
             else if (clickedFolderPath != null)
             {
                 // ── RMB on a folder ───────────────────────────────────────────
-                menu.AddItem(new GUIContent("New Config"),      false, () => ShowCreateConfigDialog(clickedFolderPath));
-                menu.AddItem(new GUIContent("New Folder"),      false, () => ShowCreateFolderDialog(clickedFolderPath));
+                menu.AddItem(
+                    new GUIContent("Direction"),
+                    false,
+                    () => PingFolder(clickedFolderPath));
                 menu.AddSeparator("");
-                menu.AddItem(new GUIContent("Rename Folder"),   false, () => ShowRenameFolderDialog(clickedFolderPath));
-                menu.AddItem(new GUIContent("Delete Folder"),   false, () => ConfirmAndDeleteFolder(clickedFolderPath));
+                menu.AddItem(
+                    new GUIContent("Rename"),
+                    false,
+                    () => ShowRenameFolderDialog(clickedFolderPath));
+                menu.AddItem(
+                    new GUIContent("Delete"),
+                    false,
+                    () => ConfirmAndDeleteFolder(clickedFolderPath));
+                menu.AddSeparator("");
+                menu.AddItem(
+                    new GUIContent("New Config"),
+                    false,
+                    () => ShowCreateConfigDialog(clickedFolderPath));
+                menu.AddItem(
+                    new GUIContent("New Folder"),
+                    false,
+                    () => ShowCreateFolderDialog(clickedFolderPath));
+
+                _leftPanel.SelectFolder(clickedFolderPath);
             }
             else
             {
@@ -276,6 +297,17 @@ namespace App.Common.Configs.Editor
         {
             string path = AssetDatabase.GetAssetPath(config);
             return Path.GetDirectoryName(path)?.Replace("\\", "/") ?? ConfigEditorWindow.ConfigFolder;
+        }
+        
+        private static void PingFolder(string folderPath)
+        {
+            var folder = AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(folderPath);
+
+            if (folder == null)
+                return;
+
+            Selection.activeObject = folder;
+            EditorGUIUtility.PingObject(folder);
         }
     }
 }

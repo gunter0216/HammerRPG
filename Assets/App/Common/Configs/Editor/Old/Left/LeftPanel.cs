@@ -37,6 +37,12 @@ namespace App.Common.Configs.Editor
         private Rect _leftPanelRect;
 
         private GameConfig       _selectedConfig;
+        
+        private string _selectedFolderPath;
+
+        public string SelectedFolderPath => _selectedFolderPath;
+        public bool HasFolderSelection => !string.IsNullOrEmpty(_selectedFolderPath);
+        
         private List<GameConfig> _configs = new();
         private SerializedObject _serializedObject;
 
@@ -78,7 +84,15 @@ namespace App.Common.Configs.Editor
 
         internal void ClearSelection()
         {
-            _selectedConfig   = null;
+            _selectedConfig = null;
+            _selectedFolderPath = null;
+            _serializedObject = null;
+        }
+        
+        public void SelectFolder(string folderPath)
+        {
+            _selectedFolderPath = folderPath;
+            _selectedConfig = null;
             _serializedObject = null;
         }
 
@@ -191,7 +205,8 @@ namespace App.Common.Configs.Editor
 
         internal void SelectConfig(GameConfig config)
         {
-            _selectedConfig   = config;
+            _selectedFolderPath = null;
+            _selectedConfig = config;
             _serializedObject = new SerializedObject(config);
         }
 
@@ -257,13 +272,15 @@ namespace App.Common.Configs.Editor
         // ── Folder row ────────────────────────────────────────────────────────
         private void DrawFolderRow(TreeNode node, int indent)
         {
+            bool isSelected = SelectedFolderPath == node.Path;
+            
             EditorGUILayout.BeginHorizontal(GUILayout.Height(18));
             GUILayout.Space(indent * 14f);
 
             // Foldout triangle
-            float arrowSize = 16f;
-            Rect  arrowRect = GUILayoutUtility.GetRect(arrowSize, 18f,
-                GUILayout.Width(arrowSize), GUILayout.Height(18));
+            float arrowSize = 22f;
+            Rect  arrowRect = GUILayoutUtility.GetRect(arrowSize, 22f,
+                GUILayout.Width(arrowSize), GUILayout.Height(22));
 
             if (Event.current.type == EventType.Repaint)
             {
@@ -277,6 +294,8 @@ namespace App.Common.Configs.Editor
                 node.Expanded = !node.Expanded;
                 Event.current.Use();
             }
+            
+            GUILayout.Space(-4);
 
             // Folder icon + name label
             EditorGUILayout.LabelField(
@@ -286,10 +305,19 @@ namespace App.Common.Configs.Editor
             EditorGUILayout.LabelField(node.Name, EditorStyles.boldLabel);
 
             EditorGUILayout.EndHorizontal();
+            
+            Rect rowRect = GUILayoutUtility.GetLastRect();
+
+            if (Event.current.type == EventType.Repaint && isSelected)
+            {
+                EditorGUI.DrawRect(
+                    rowRect,
+                    new Color(0.24f, 0.49f, 0.91f, 0.35f));
+            }
 
             // Record rect for RMB
             if (Event.current.type == EventType.Repaint)
-                _folderRects[node.Path] = GUILayoutUtility.GetLastRect();
+                _folderRects[node.Path] = rowRect;
 
             // Whole row clickable to toggle
             if (Event.current.type == EventType.MouseDown &&
@@ -297,7 +325,7 @@ namespace App.Common.Configs.Editor
                 fr.Contains(Event.current.mousePosition) &&
                 Event.current.button == 0)
             {
-                node.Expanded = !node.Expanded;
+                SelectFolder(node.Path);
                 Event.current.Use();
             }
 
@@ -330,7 +358,7 @@ namespace App.Common.Configs.Editor
                 labelStyle.Draw(rowRect,
                     new GUIContent(node.Name), false, false, isSelected, false);
 
-                _configRects[node.Config] = GUILayoutUtility.GetLastRect();
+                _configRects[node.Config] = rowRect;
             }
 
             if (Event.current.type == EventType.MouseDown &&
