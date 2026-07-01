@@ -11,7 +11,7 @@ namespace App.Game.Inventory.Runtime.Config
     {
         private readonly IConfigLoader _configLoader;
         
-        private InventoryConfig _config;
+        private InventoryGameConfig _config;
 
         public InventoryConfigService(IConfigLoader configLoader)
         {
@@ -21,21 +21,13 @@ namespace App.Game.Inventory.Runtime.Config
         public bool Initialize()
         {
             var configLoader = new InventoryConfigLoader(_configLoader);
-            var dto = configLoader.Load();
-            if (!dto.HasValue)
+            var config = configLoader.Load();
+            if (!config.HasValue)
             {
                 HLogger.LogError("InventoryConfig is null");
                 return false;
             }
             
-            var converter = new InventoryDtoToConfigConverter();
-            var config = converter.Convert(dto.Value);
-            if (!config.HasValue)
-            {
-                HLogger.LogError("InventoryConfig conversion failed");
-                return false;
-            }
-
             _config = config.Value;
 
             return true;

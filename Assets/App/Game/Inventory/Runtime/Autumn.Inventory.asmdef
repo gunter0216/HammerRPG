@@ -10,5 +10,5 @@
     "Autumn.ModuleItemType",
     "Autumn.DungeonGenerator"
   ],
-  "noEngineReferences": true
+  "noEngineReferences": false
 }

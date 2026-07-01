@@ -5,9 +5,10 @@
     "Autumn.Utility",
     "Autumn.DataManager",
     "Autumn.Logger",
-    "Autumn.Json"
+    "Autumn.Json",
+    "Autumn.ConfigLoader"
   ],
-  "noEngineReferences": true,
+  "noEngineReferences": false,
   "precompiledReferences": [
     "newtonsoft.json.dll"
   ]

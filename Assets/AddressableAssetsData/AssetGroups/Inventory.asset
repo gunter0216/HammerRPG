@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Inventory
   m_EditorClassIdentifier: 
   m_GroupName: Inventory
-  m_Data:
-    m_SerializedData: []
   m_GUID: 6272e820d4e4f104f9058e56645722b4
   m_SerializeEntries:
   - m_GUID: 118b1a764fa8e14478b23cce2f550d45
@@ -29,11 +27,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 78ad774ddf4c42248a748b2a46183331
     m_Address: ArmorInventoryGroupIcon
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 88d01dfee82f49d888f26d9077853a35
-    m_Address: InventoryConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

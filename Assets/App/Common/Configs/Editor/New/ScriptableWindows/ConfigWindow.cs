@@ -21,7 +21,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         public event Action<GameConfig> OnConfigSelected;
         public event Action<string> OnFolderSelected;
 
-        public string FolderPath => Path.Combine("Assets", "App", "Configs", Title);
+        public string FolderPath => Path.Combine("Assets", "App", "Configs");
         
         public GameConfig Selected => _selected;
         
@@ -165,67 +165,120 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 
         internal void CreateConfig(string assetName) => CreateConfig(assetName, _selectedFolder);
 
-        internal void CreateConfig(string assetName, string folderPath)
+        internal void CreateConfig(string assetName, string folder)
         {
-            var settings = AddressableAssetSettingsDefaultObject.Settings;
-            if (settings == null)
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => { try { return a.GetTypes(); } catch { return Array.Empty<Type>(); } })
+                .Where(t => t.IsSubclassOf(typeof(GameConfig)) && !t.IsAbstract)
+                .OrderBy(t => t.Name)
+                .ToList();
+
+            if (types.Count == 0)
             {
-                Debug.LogError("AddressableAssetSettings not found. Init Addressables first.");
+                EditorUtility.DisplayDialog("No Config Types",
+                    "No concrete GameConfig subclasses found in the project.", "OK");
                 return;
             }
             
-            const string groupName = "Config";
+            CreateConfigDialog.Show(types, folder, (type, assetName, folder) =>
+                CreateConfig(type, assetName, folder));
+        }
+
+        private void CreateConfig(Type type, string assetName, string folder)
+        {
+            if (string.IsNullOrEmpty(folder))
+            {
+                folder = FolderPath;
+            }
             
-            var group = settings.FindGroup(groupName);
-            if (group == null)
+            if (!AssetDatabase.IsValidFolder(folder))
             {
-                group = settings.CreateGroup(groupName, false, false, false, null, typeof(BundledAssetGroupSchema));
+                Debug.LogError($"[ConfigEditor] Folder does not exist: {folder}");
+                return;
             }
 
-            EnsureFolders(FolderPath.Split(Path.DirectorySeparatorChar));
+            string path  = AssetDatabase.GenerateUniqueAssetPath($"{folder}/{assetName}.asset");
+            var    asset = ScriptableObject.CreateInstance(type) as GameConfig;
 
-            if(string.IsNullOrEmpty(folderPath))
+            if (asset == null)
             {
-                folderPath = FolderPath;
+                Debug.LogError($"[ConfigEditor] Failed to create instance of {type.Name}");
+                return;
             }
 
-            var path = Path.Combine(folderPath, $"{assetName}.asset");
-            if (File.Exists(path))
-            {
-                var assetNameArray = assetName.Split('_');
-                if (assetName.Contains('_') && int.TryParse(assetNameArray.Last(), out int number))
-                {
-                    assetName = $"{assetNameArray.First()}_{number + 1}";
-                }
-                else
-                {
-                    assetName = $"{assetName}_1";
-                }
-                path = Path.Combine(folderPath, $"{assetName}.asset");
-            }
-            var config = CreateInstance<GameConfig>();
-
-            AssetDatabase.CreateAsset(config, path);
-
-            var guid = AssetDatabase.AssetPathToGUID(path);
-            var entry = settings.CreateOrMoveEntry(guid, group);
-            entry.SetAddress($"{Title}/{config.name}");
-
+            AssetDatabase.CreateAsset(asset, path);
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            Debug.Log($"Created and added {path} to Addressables group {group.Name}");
-
-            UpdateList();
-
-            _collection.Add(config);
-
-            OnConfigsChanged?.Invoke();
             
+            UpdateList();
+            _collection.Add(asset);
+            OnConfigsChanged?.Invoke();
             OnCreated();
-            Select(config);
+            Select(asset);
+            
+            EditorGUIUtility.PingObject(asset);
         }
         
+        // private void CreateConfig(Type type, string assetName, string folder)
+        // {
+        //     var settings = AddressableAssetSettingsDefaultObject.Settings;
+        //     if (settings == null)
+        //     {
+        //         Debug.LogError("AddressableAssetSettings not found. Init Addressables first.");
+        //         return;
+        //     }
+        //     
+        //     const string groupName = "Config";
+        //     
+        //     var group = settings.FindGroup(groupName);
+        //     if (group == null)
+        //     {
+        //         group = settings.CreateGroup(groupName, false, false, false, null, typeof(BundledAssetGroupSchema));
+        //     }
+        //
+        //     EnsureFolders(FolderPath.Split(Path.DirectorySeparatorChar));
+        //
+        //     if(string.IsNullOrEmpty(folder))
+        //     {
+        //         folder = FolderPath;
+        //     }
+        //
+        //     var path = Path.Combine(folder, $"{assetName}.asset");
+        //     if (File.Exists(path))
+        //     {
+        //         var assetNameArray = assetName.Split('_');
+        //         if (assetName.Contains('_') && int.TryParse(assetNameArray.Last(), out int number))
+        //         {
+        //             assetName = $"{assetNameArray.First()}_{number + 1}";
+        //         }
+        //         else
+        //         {
+        //             assetName = $"{assetName}_1";
+        //         }
+        //         path = Path.Combine(folder, $"{assetName}.asset");
+        //     }
+        //     var config = CreateInstance<GameConfig>();
+        //
+        //     AssetDatabase.CreateAsset(config, path);
+        //
+        //     var guid = AssetDatabase.AssetPathToGUID(path);
+        //     var entry = settings.CreateOrMoveEntry(guid, group);
+        //     entry.SetAddress($"{Title}/{config.name}");
+        //
+        //     AssetDatabase.SaveAssets();
+        //     AssetDatabase.Refresh();
+        //
+        //     Debug.Log($"Created and added {path} to Addressables group {group.Name}");
+        //
+        //     UpdateList();
+        //
+        //     _collection.Add(config);
+        //
+        //     OnConfigsChanged?.Invoke();
+        //     
+        //     OnCreated();
+        //     Select(config);
+        // }
+
         internal void DuplicateConfig(GameConfig config)
         {
             var path = AssetDatabase.GetAssetPath(config);

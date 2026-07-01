@@ -23,21 +23,33 @@ namespace App.Common.Configs.External
 
         public Optional<T> LoadConfig<T>(string localKey) where T : class
         {
-            var configKeyEvaluator = new StringKeyEvaluator(localKey);
-            var configJsonResult = m_AssetManager.LoadSync<TextAsset>(configKeyEvaluator);
-            
+            var keyEvaluator = new StringKeyEvaluator(localKey);
+            var configJsonResult = m_AssetManager.LoadSync<TextAsset>(keyEvaluator);
             if (configJsonResult.HasValue)
             {
                 var configResult = m_JsonDeserializer.Deserialize<T>(configJsonResult.Value.text);
-                m_AssetManager.UnloadAsset(configKeyEvaluator);
+                m_AssetManager.UnloadAsset(keyEvaluator);
                 return configResult;
             }
-            
-            Debug.LogError($"[ConfigLoader] In method LoadLocalConfig, cant load local config {typeof(T).Name} with key {localKey}.");
-            
-            return Optional<T>.Empty;
+
+            Debug.LogError(
+                $"[ConfigLoader] In method LoadLocalConfig, cant load local config {typeof(T).Name} with key {keyEvaluator.RuntimeKey}.");
+            return Optional<T>.Fail();
         }
-        
+
+        public Optional<T> LoadGameConfig<T>(string localKey) where T : GameConfig
+        {
+            var keyEvaluator = new StringKeyEvaluator(localKey);
+            var configResult = m_AssetManager.LoadSync<T>(keyEvaluator);
+            if (!configResult.HasValue)
+            {
+                Debug.LogError(
+                    $"[ConfigLoader] In method LoadLocalConfig, cant load local config {typeof(T).Name} with key {keyEvaluator.RuntimeKey}.");
+            }
+            
+            return configResult;
+        }
+
         // public T LoadConfig<T>(string localKey, string serverKey) where T : class
         // {
         //     Result<T> localConfigResult;

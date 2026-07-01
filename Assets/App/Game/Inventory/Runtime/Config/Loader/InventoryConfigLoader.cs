@@ -6,17 +6,17 @@ namespace App.Game.Inventory.Runtime.Config.Loader
 {
     public class InventoryConfigLoader
     {
-        private const string m_LocalConfigKey = "InventoryConfig";
-        private readonly IConfigLoader m_ConfigLoader;
+        private const string LocalConfigKey = "InventoryConfig";
+        private readonly IConfigLoader _configLoader;
 
         public InventoryConfigLoader(IConfigLoader configLoader)
         {
-            m_ConfigLoader = configLoader;
+            _configLoader = configLoader;
         }
 
-        public Optional<InventoryConfigDto> Load()
+        public Optional<InventoryGameConfig> Load()
         {
-            return m_ConfigLoader.LoadConfig<InventoryConfigDto>(m_LocalConfigKey);
+            return _configLoader.LoadGameConfig<InventoryGameConfig>(LocalConfigKey);
         }
     }
 }

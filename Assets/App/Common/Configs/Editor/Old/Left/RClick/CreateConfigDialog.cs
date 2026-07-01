@@ -41,11 +41,17 @@ namespace App.Common.Configs.Editor
                 for (int i = 0; i < _types.Count; i++)
                 {
                     bool selected = _selectedTypeIndex == i;
-                    if (GUILayout.Toggle(selected, _types[i].Name, "Button") && !selected)
+                    var name = _types[i].Name;
+                    if (name.EndsWith("GameConfig"))
+                    {
+                        name = name.Substring(0, name.Length - "GameConfig".Length);
+                    }
+                    
+                    if (GUILayout.Toggle(selected, name, "Button") && !selected)
                     {
                         _selectedTypeIndex = i;
                         if (_assetName == "NewConfig" || _types.Any(t => t.Name == _assetName))
-                            _assetName = _types[i].Name;
+                            _assetName = name;
                     }
                 }
             }
