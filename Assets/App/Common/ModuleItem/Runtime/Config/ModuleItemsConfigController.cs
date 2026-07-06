@@ -15,7 +15,22 @@ namespace App.Common.ModuleItem.Runtime.Config
             m_TypeToConfigs = new Dictionary<string, IReadOnlyList<IModuleItemConfig>>();
         }
 
+        // todo refactor
         public bool RegisterItems(IReadOnlyList<IModuleItemConfig> configs, string type)
+        {
+            m_Configs ??= new Dictionary<string, IModuleItemConfig>(configs.Count);
+            for (int i = 0; i < configs.Count; ++i)
+            {
+                var config = configs[i];
+                m_Configs.Add(config.Id, config);
+            }
+
+            m_TypeToConfigs.Add(type, configs);
+
+            return true;
+        }
+        
+        public bool RegisterItems(IReadOnlyList<ModuleItemGameConfig> configs, string type)
         {
             m_Configs ??= new Dictionary<string, IModuleItemConfig>(configs.Count);
             for (int i = 0; i < configs.Count; ++i)

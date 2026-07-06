@@ -1,8 +1,11 @@
-﻿using App.Common.AssetSystem.Runtime;
+﻿using System.Collections.Generic;
+using App.Common.AssetSystem.Runtime;
 using App.Common.Configs.Runtime;
 using App.Common.Json.Runtime.Deserializer;
 using App.Common.Utilities.Utility.Runtime;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace App.Common.Configs.External
 {
@@ -48,6 +51,30 @@ namespace App.Common.Configs.External
             }
             
             return configResult;
+        }
+
+        public Optional<List<T>> LoadGameConfigs<T>(string tag) where T : GameConfig
+        {
+            AsyncOperationHandle<IList<T>> handle = Addressables.LoadAssetsAsync<T>(
+                tag,
+                null,
+                Addressables.MergeMode.Union);
+
+            handle.WaitForCompletion();
+
+            if (handle.Status != AsyncOperationStatus.Succeeded || handle.Result == null)
+            {
+                if (handle.IsValid())
+                {
+                    Addressables.Release(handle);
+                }
+
+                return Optional<List<T>>.Fail();
+            }
+
+            List<T> result = new List<T>(handle.Result);
+
+            return Optional<List<T>>.Success(result);
         }
 
         // public T LoadConfig<T>(string localKey, string serverKey) where T : class

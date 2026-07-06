@@ -1,5 +1,6 @@
 using App.Common.Configs.Runtime;
 using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime.Config;
 using App.Common.ModuleItem.Runtime.Config.Dto;
 using App.Common.Utilities.Utility.Runtime;
 
@@ -27,17 +28,14 @@ namespace App.Common.ModuleItem.External
 
         public void Init()
         {
-            foreach (var (configKey, groupKey) in _configs)
+            var configs = _configLoader.LoadGameConfigs<ModuleItemGameConfig>(tag: nameof(ModuleItemGameConfig));
+            if (!configs.HasValue)
             {
-                var dto =  _configLoader.LoadConfig<ModuleItemsDto>(configKey);
-                if (!dto.HasValue)
-                {
-                    HLogger.LogError($"Cant load config {configKey}");
-                    return;
-                }
-                
-                _moduleItemsManager.RegisterItems(dto.Value, groupKey);
+                HLogger.LogError($"Cant load config {configs}");
+                return;
             }
+            
+            _moduleItemsManager.RegisterItems(configs.Value, "Default");
         }
     }
 }

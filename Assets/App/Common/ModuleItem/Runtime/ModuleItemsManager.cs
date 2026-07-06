@@ -106,6 +106,11 @@ namespace App.Common.ModuleItem.External
         {
             return _configController.RegisterItems(configs, type);
         }
+        
+        public bool RegisterItems(IReadOnlyList<ModuleItemGameConfig> configs, string type)
+        {
+            return _configController.RegisterItems(configs, type);
+        }
 
         public Optional<IModuleItem> Create(DataReference dataReference)
         {

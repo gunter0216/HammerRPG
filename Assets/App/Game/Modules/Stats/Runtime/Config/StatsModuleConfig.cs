@@ -2,7 +2,7 @@ using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace App.Game.Modules.Stats.Runtime.Config
 {
-    public class StatsModuleConfig : IModuleConfig
+    public class StatsModuleConfig : ModuleConfig
     {
         private readonly int _strength;
         private readonly int _agility;

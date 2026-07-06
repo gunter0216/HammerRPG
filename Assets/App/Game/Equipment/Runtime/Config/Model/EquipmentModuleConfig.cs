@@ -2,7 +2,7 @@
 
 namespace App.Game.Equipment.Runtime.Config.Model
 {
-    public class EquipmentModuleConfig : IModuleConfig
+    public class EquipmentModuleConfig : ModuleConfig
     {
         private readonly string m_Type;
 

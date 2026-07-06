@@ -2,7 +2,7 @@ using App.Common.ModuleItem.Runtime.Config.Interfaces;
 
 namespace App.Game.Modules.Race.Runtime.Config
 {
-    public class RaceModuleConfig : IModuleConfig
+    public class RaceModuleConfig : ModuleConfig
     {
         private readonly string _name;
 

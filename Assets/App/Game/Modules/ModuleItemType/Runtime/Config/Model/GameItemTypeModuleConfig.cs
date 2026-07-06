@@ -2,7 +2,7 @@
 
 namespace Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model
 {
-    public class GameItemTypeModuleConfig : IModuleConfig
+    public class GameItemTypeModuleConfig : ModuleConfig
     {
         private readonly string m_Type;
 

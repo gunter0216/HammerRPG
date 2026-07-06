@@ -2,7 +2,7 @@
 
 namespace App.Game.Modules.Sprite.Runtime
 {
-    public class SpriteModuleConfig : IModuleConfig
+    public class SpriteModuleConfig : ModuleConfig
     {
         private readonly string m_Key;
 

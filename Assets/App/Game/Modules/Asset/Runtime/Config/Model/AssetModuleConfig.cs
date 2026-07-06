@@ -2,7 +2,7 @@
 
 namespace Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model
 {
-    public class AssetModuleConfig : IModuleConfig
+    public class AssetModuleConfig : ModuleConfig
     {
         private readonly string _assetKey;
 

@@ -10,5 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b26bda2c28ea41e8868738951f4d0387, type: 3}
-  m_Name: ModuleItem
+  m_Name: Player
   m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
+  m_Id: 
+  m_Type: 
+  m_Modules: []
+  m_Tags: 0
+  references:
+    version: 2
+    RefIds: []

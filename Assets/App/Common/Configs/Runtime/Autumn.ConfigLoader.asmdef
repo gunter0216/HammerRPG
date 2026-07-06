@@ -1,5 +1,20 @@
-﻿{
-  "name": "Autumn.ConfigLoader",
-  "references":[ "Autumn.Utility" ],
-  "noEngineReferences": false
+{
+    "name": "Autumn.ConfigLoader",
+    "rootNamespace": "",
+    "references": [
+        "Autumn.Utility",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "Autumn.AssetSystem",
+        "Autumn.Json"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

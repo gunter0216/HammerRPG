@@ -31,13 +31,13 @@ namespace App.Common.ModuleItem.Runtime.Config
 
         public Optional<IModuleItemsConfig> Convert(ModuleItemsDto dto, string type)
         {
-            var configs = new ModuleItemConfig[dto.Items.Count];
+            var configs = new ModuleItemGameConfig[dto.Items.Count];
             for (int i = 0; i < dto.Items.Count; ++i)
             {
                 var itemDto = dto.Items[i];
                 var modules = CreateModules(itemDto);
 
-                configs[i] = new ModuleItemConfig(itemDto.Id, itemDto.Tags, modules, type);
+                configs[i] = new ModuleItemGameConfig(itemDto.Id, itemDto.Tags, modules, type);
             }
 
             var gameItemsConfig = new ModuleItemsConfig(configs);
