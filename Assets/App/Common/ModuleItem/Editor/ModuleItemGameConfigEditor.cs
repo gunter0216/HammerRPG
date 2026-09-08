@@ -14,6 +14,14 @@ namespace App.Common.ModuleItem.Editor
     [CustomEditor(typeof(ModuleItemGameConfig)), CanEditMultipleObjects]
     public class ModuleItemGameConfigEditor : UnityEditor.Editor
     {
+        private static GUIStyle s_BoldFoldoutStyle;
+
+        private static GUIStyle BoldFoldoutStyle =>
+            s_BoldFoldoutStyle ??= new GUIStyle(EditorStyles.foldout)
+            {
+                fontStyle = FontStyle.Bold
+            };
+
         private static readonly List<Type> s_ModuleTypes = new();
 
         private SerializedProperty _modulesProperty;
@@ -72,27 +80,63 @@ namespace App.Common.ModuleItem.Editor
         private float GetModuleElementHeight(int index)
         {
             var moduleProp = _modulesProperty.GetArrayElementAtIndex(index);
-            float propHeight = EditorGUI.GetPropertyHeight(moduleProp, GUIContent.none, true);
 
-            // toolbar-заголовок + пара Space + отступы box'а
-            return propHeight + EditorGUIUtility.singleLineHeight + 10f;
+            float height = EditorGUIUtility.singleLineHeight + 4f; // строка заголовка
+            height += 4f; // верхний/нижний паддинг box'а
+
+            if (moduleProp.isExpanded)
+            {
+                height += GetChildrenHeight(moduleProp) + 4f;
+            }
+
+            return height + 4f;
         }
+
+        private static float GetChildrenHeight(SerializedProperty property)
+        {
+            float height = 0f;
+            var child = property.Copy();
+            var end = property.GetEndProperty();
+            bool enterChildren = true;
+
+            while (child.NextVisible(enterChildren) && !SerializedProperty.EqualContents(child, end))
+            {
+                height += EditorGUI.GetPropertyHeight(child, true) + EditorGUIUtility.standardVerticalSpacing;
+                enterChildren = false;
+            }
+
+            return height;
+        }
+
+        private const float DragHandleWidth = 15f;
 
         private void DrawModuleElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             var moduleProp = _modulesProperty.GetArrayElementAtIndex(index);
             string moduleTypeName = GetManagedReferenceTypeName(moduleProp);
+            moduleTypeName = moduleTypeName.Replace("ModuleConfig", string.Empty);
 
             rect.y += 2f;
             rect.height -= 4f;
 
-            // "box"-рамка вокруг элемента
+            // Один box на всю ширину строки (включая зону под системную ручку) —
+            // перекрывает стандартную "плавающую" иконку ReorderableList,
+            // которая иначе центрируется по всей (переменной) высоте элемента.
             GUI.Box(rect, GUIContent.none, "box");
 
-            var toolbarRect = new Rect(rect.x + 2, rect.y + 2, rect.width - 4, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(toolbarRect, $"{index + 1}. {moduleTypeName}", EditorStyles.boldLabel);
+            var contentRect = new Rect(rect.x + DragHandleWidth, rect.y, rect.width - DragHandleWidth, rect.height);
 
-            var removeButtonRect = new Rect(rect.xMax - 27, rect.y + 2, 25, 18);
+            var removeButtonRect = new Rect(contentRect.xMax - 27, contentRect.y + 2, 25, 18);
+            var foldoutRect = new Rect(contentRect.x + 4, contentRect.y + 2,
+                contentRect.width - 8 - removeButtonRect.width, EditorGUIUtility.singleLineHeight);
+
+            moduleProp.isExpanded = EditorGUI.Foldout(
+                foldoutRect,
+                moduleProp.isExpanded,
+                $"{index + 1}. {moduleTypeName}",
+                true,
+                BoldFoldoutStyle);
+
             var originalColor = GUI.color;
             GUI.color = new Color(1f, 0.4f, 0.4f, 1f);
             var buttonStyle = new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold };
@@ -101,7 +145,6 @@ namespace App.Common.ModuleItem.Editor
             if (GUI.Button(removeButtonRect, "×", buttonStyle))
             {
                 GUI.color = originalColor;
-                // нельзя менять массив прямо во время DoLayoutList — откладываем удаление на конец кадра
                 int indexToRemove = index;
                 EditorApplication.delayCall += () => RemoveModuleAt(indexToRemove);
                 return;
@@ -109,14 +152,36 @@ namespace App.Common.ModuleItem.Editor
 
             GUI.color = originalColor;
 
-            var propRect = new Rect(
-                rect.x + 4,
-                rect.y + EditorGUIUtility.singleLineHeight + 4,
-                rect.width - 8,
-                rect.height - EditorGUIUtility.singleLineHeight - 6);
+            if (moduleProp.isExpanded)
+            {
+                var childContentRect = new Rect(
+                    contentRect.x + 4,
+                    foldoutRect.yMax + 4,
+                    contentRect.width - 8,
+                    contentRect.height - foldoutRect.height - 8);
+
+                DrawChildren(childContentRect, moduleProp);
+            }
+        }
+
+        private static void DrawChildren(Rect rect, SerializedProperty property)
+        {
+            var child = property.Copy();
+            var end = property.GetEndProperty();
+            bool enterChildren = true;
+
+            float y = rect.y;
 
             EditorGUI.indentLevel++;
-            EditorGUI.PropertyField(propRect, moduleProp, GUIContent.none, true);
+            while (child.NextVisible(enterChildren) && !SerializedProperty.EqualContents(child, end))
+            {
+                float height = EditorGUI.GetPropertyHeight(child, true);
+                var childRect = new Rect(rect.x, y, rect.width, height);
+                EditorGUI.PropertyField(childRect, child, true);
+                y += height + EditorGUIUtility.standardVerticalSpacing;
+                enterChildren = false;
+            }
+
             EditorGUI.indentLevel--;
         }
 
@@ -248,6 +313,7 @@ namespace App.Common.ModuleItem.Editor
 
         public ModuleTypesDropDown(AdvancedDropdownState state) : base(state)
         {
+            minimumSize = new Vector2(300, minimumSize.y);
         }
 
         public void Init(List<Type> moduleTypes, Action<Type> onTypeSelected)
@@ -286,9 +352,14 @@ namespace App.Common.ModuleItem.Editor
     {
         public Type ModuleType { get; }
 
-        public ModuleTypeDropdownItem(Type moduleType) : base(moduleType.Name)
+        public ModuleTypeDropdownItem(Type moduleType) : base(GetDisplayName(moduleType))
         {
             ModuleType = moduleType;
+        }
+
+        private static string GetDisplayName(Type moduleType)
+        {
+            return moduleType.Name.Replace("ModuleConfig", string.Empty);
         }
     }
 }
