@@ -7,6 +7,7 @@ using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
+using UnityEditorInternal;
 
 namespace App.Common.ModuleItem.Editor
 {
@@ -16,12 +17,27 @@ namespace App.Common.ModuleItem.Editor
         private static readonly List<Type> s_ModuleTypes = new();
 
         private SerializedProperty _modulesProperty;
+        private ReorderableList _modulesList;
 
         private void OnEnable()
         {
             CollectModuleTypes();
 
             _modulesProperty = serializedObject.FindProperty("m_Modules");
+
+            _modulesList = new ReorderableList(
+                serializedObject,
+                _modulesProperty,
+                draggable: true,
+                displayHeader: false,
+                displayAddButton: false,
+                displayRemoveButton: false)
+            {
+                drawElementCallback = DrawModuleElement,
+                elementHeightCallback = GetModuleElementHeight,
+                // немного отступа сверху/снизу под нашу собственную "box"-рамку
+                footerHeight = 0
+            };
         }
 
         public override void OnInspectorGUI()
@@ -50,49 +66,58 @@ namespace App.Common.ModuleItem.Editor
                 return;
             }
 
-            for (int i = 0; i < _modulesProperty.arraySize; i++)
+            _modulesList.DoLayoutList();
+        }
+
+        private float GetModuleElementHeight(int index)
+        {
+            var moduleProp = _modulesProperty.GetArrayElementAtIndex(index);
+            float propHeight = EditorGUI.GetPropertyHeight(moduleProp, GUIContent.none, true);
+
+            // toolbar-заголовок + пара Space + отступы box'а
+            return propHeight + EditorGUIUtility.singleLineHeight + 10f;
+        }
+
+        private void DrawModuleElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            var moduleProp = _modulesProperty.GetArrayElementAtIndex(index);
+            string moduleTypeName = GetManagedReferenceTypeName(moduleProp);
+
+            rect.y += 2f;
+            rect.height -= 4f;
+
+            // "box"-рамка вокруг элемента
+            GUI.Box(rect, GUIContent.none, "box");
+
+            var toolbarRect = new Rect(rect.x + 2, rect.y + 2, rect.width - 4, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(toolbarRect, $"{index + 1}. {moduleTypeName}", EditorStyles.boldLabel);
+
+            var removeButtonRect = new Rect(rect.xMax - 27, rect.y + 2, 25, 18);
+            var originalColor = GUI.color;
+            GUI.color = new Color(1f, 0.4f, 0.4f, 1f);
+            var buttonStyle = new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold };
+            buttonStyle.normal.textColor = Color.white;
+
+            if (GUI.Button(removeButtonRect, "×", buttonStyle))
             {
-                var moduleProp = _modulesProperty.GetArrayElementAtIndex(i);
-                string moduleTypeName = GetManagedReferenceTypeName(moduleProp);
-
-                EditorGUILayout.BeginVertical("box");
-                {
-                    EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-                    {
-                        GUILayout.FlexibleSpace();
-                        EditorGUILayout.LabelField($"{i + 1}. {moduleTypeName}", EditorStyles.boldLabel);
-                        GUILayout.FlexibleSpace();
-
-                        var originalColor = GUI.color;
-                        GUI.color = new Color(1f, 0.4f, 0.4f, 1f);
-                        var buttonStyle = new GUIStyle(GUI.skin.button)
-                        {
-                            fontStyle = FontStyle.Bold
-                        };
-                        buttonStyle.normal.textColor = Color.white;
-
-                        if (GUILayout.Button("×", buttonStyle, GUILayout.Width(25), GUILayout.Height(18)))
-                        {
-                            GUI.color = originalColor;
-                            RemoveModuleAt(i);
-                            EditorGUILayout.EndHorizontal();
-                            EditorGUILayout.EndVertical();
-                            break;
-                        }
-                        GUI.color = originalColor;
-                    }
-                    EditorGUILayout.EndHorizontal();
-
-                    EditorGUILayout.Space(1);
-
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.PropertyField(moduleProp, GUIContent.none, true);
-                    EditorGUI.indentLevel--;
-                }
-                EditorGUILayout.EndVertical();
-
-                EditorGUILayout.Space(1);
+                GUI.color = originalColor;
+                // нельзя менять массив прямо во время DoLayoutList — откладываем удаление на конец кадра
+                int indexToRemove = index;
+                EditorApplication.delayCall += () => RemoveModuleAt(indexToRemove);
+                return;
             }
+
+            GUI.color = originalColor;
+
+            var propRect = new Rect(
+                rect.x + 4,
+                rect.y + EditorGUIUtility.singleLineHeight + 4,
+                rect.width - 8,
+                rect.height - EditorGUIUtility.singleLineHeight - 6);
+
+            EditorGUI.indentLevel++;
+            EditorGUI.PropertyField(propRect, moduleProp, GUIContent.none, true);
+            EditorGUI.indentLevel--;
         }
 
         private void RemoveModuleAt(int index)
