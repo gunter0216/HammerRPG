@@ -15,9 +15,6 @@ namespace App.Common.ModuleItem.Runtime.Config
         [SerializeField]
         private string m_Id;
 
-        [SerializeField]
-        private string m_Type;
-
         // IModuleConfig — интерфейс, поэтому для сериализации нужен конкретный
         // List<>, помеченный [SerializeReference] (полиморфная сериализация).
         [SerializeReference]
@@ -26,20 +23,17 @@ namespace App.Common.ModuleItem.Runtime.Config
         [SerializeField]
         private long m_Tags;
 
-        public string Id => m_Id;
-        public string Type => m_Type;
+        public string Id => m_Id.ToLower();
         public IReadOnlyList<IModuleConfig> Modules => m_Modules;
 
         public ModuleItemGameConfig(
             string id, 
             long tags, 
-            IReadOnlyList<IModuleConfig> modules,
-            string type = "default")
+            IReadOnlyList<IModuleConfig> modules)
         {
             m_Id = id;
             m_Tags = tags;
             // m_Modules = modules != null ? new List<ModuleConfig>(modules) : new List<ModuleConfig>();
-            m_Type = type;
         }
 
         public bool HasTag(long tag)
@@ -47,7 +41,7 @@ namespace App.Common.ModuleItem.Runtime.Config
             return (m_Tags & tag) == tag;
         }
 
-        public Optional<T> GetModule<T>() where T : class, IModuleConfig 
+        public Optional<T> GetModule<T>() where T : ModuleConfig 
         {
             var moduleDto = m_Modules.FirstOrDefault(x => x is T);
             if (moduleDto == default)
@@ -58,7 +52,7 @@ namespace App.Common.ModuleItem.Runtime.Config
             return Optional<T>.Success(moduleDto as T);
         }
 
-        public bool TryGetModule<T>(out T config) where T : class, IModuleConfig 
+        public bool TryGetModule<T>(out T config) where T : ModuleConfig 
         {
             var module = m_Modules.FirstOrDefault(x => x is T);
             if (module == default)
@@ -67,19 +61,17 @@ namespace App.Common.ModuleItem.Runtime.Config
                 return false;
             }
 
-            // config = (T)module;
-            config = null;
+            config = (T)module;
             return true;
         }
 
-        public bool HasModule<T>() where T : class, IModuleConfig 
+        public bool HasModule<T>() where T : ModuleConfig 
         {
             return m_Modules.Any(x => x is T);
         }
 
         public void AddModule(ModuleConfig module)
         {
-            Debug.LogError($"AddModule {module}");
             if (module == null) return;
             m_Modules.Add(module);
         }

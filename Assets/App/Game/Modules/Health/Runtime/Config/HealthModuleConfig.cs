@@ -1,10 +1,11 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using UnityEngine;
 
 namespace App.Game.Modules.Health.Runtime.Config
 {
     public class HealthModuleConfig : ModuleConfig
     {
-        private readonly float _maxHealth;
+        [SerializeField] private float _maxHealth;
 
         public float MaxHealth => _maxHealth;
 

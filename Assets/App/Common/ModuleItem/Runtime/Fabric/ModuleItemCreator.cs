@@ -28,7 +28,7 @@ namespace App.Common.ModuleItem.Runtime.Fabric
         public Optional<IModuleItem> Create(string id)
         {
             var dataReferences = new List<DataReference>();
-            var data = new ModuleItemData(id, dataReferences);
+            var data = new ModuleItemData(id.ToLower(), dataReferences);
             
             var dataReference = _containerController.AddData(ModuleItemData.ContainerKey, data);
             if (!dataReference.HasValue)

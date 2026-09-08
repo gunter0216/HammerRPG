@@ -1,12 +1,13 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using UnityEngine;
 
 namespace App.Game.Modules.Stats.Runtime.Config
 {
     public class StatsModuleConfig : ModuleConfig
     {
-        private readonly int _strength;
-        private readonly int _agility;
-        private readonly int _intelligence;
+        [SerializeField] private int _strength;
+        [SerializeField] private int _agility;
+        [SerializeField] private int _intelligence;
 
         public int Strength => _strength;
         public int Agility => _agility;

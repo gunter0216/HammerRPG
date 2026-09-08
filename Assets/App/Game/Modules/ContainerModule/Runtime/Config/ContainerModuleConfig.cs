@@ -1,11 +1,12 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using UnityEngine;
 
 namespace App.Game.Modules.ContainerModule.Runtime.Config
 {
     public class ContainerModuleConfig : ModuleConfig
     {
-        private readonly int _rows;
-        private readonly int _cols;
+        [SerializeField] private int _rows;
+        [SerializeField] private int _cols;
 
         public ContainerModuleConfig(int rows, int cols)
         {

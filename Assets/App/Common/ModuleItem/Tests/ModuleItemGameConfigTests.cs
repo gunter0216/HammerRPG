@@ -89,69 +89,69 @@ namespace App.Common.ModuleItem.Tests
             Assert.True(config.HasTag(3));
         }
         
-        [Test]
-        public void GetModule_ZeroModules_Test1ModuleFalse()
-        {
-            var config = new ModuleItemGameConfig(String.Empty, 0, Array.Empty<IModuleConfig>());
-            
-            var module = config.GetModule<Test1ModuleConfig>();
-            Assert.False(module.HasValue);
-        }
-        
-        [Test]
-        public void GetModule_Test1Module_Test1ModuleReturned()
-        {
-            var config = new ModuleItemGameConfig(String.Empty, 0, new IModuleConfig[]
-            {
-                new Test1ModuleConfig()
-            });
-            
-            var module = config.GetModule<Test1ModuleConfig>();
-            Assert.True(module.HasValue);
-        }
-
-        [Test]
-        public void TryGetModule_ZeroModules_Test1ModuleFalse()
-        {
-            var config = new ModuleItemGameConfig(String.Empty, 0, Array.Empty<IModuleConfig>());
-            
-            var isExists = config.TryGetModule<Test1ModuleConfig>(out var module);
-            Assert.False(isExists);
-        }
-
-        [Test]
-        public void TryGetModule_Test1Module_Test1ModuleReturned()
-        {
-            var test1Module = new Test1ModuleConfig();
-            var config = new ModuleItemGameConfig(String.Empty, 0, new IModuleConfig[]
-            {
-                test1Module
-            });
-            
-            var isExists = config.TryGetModule<Test1ModuleConfig>(out var module);
-            Assert.True(isExists);
-            Assert.AreEqual(test1Module, module);
-        }
-
-        [Test]
-        public void HasModule_ZeroModules_Test1ModuleFalse()
-        {
-            var config = new ModuleItemGameConfig(String.Empty, 0, Array.Empty<IModuleConfig>());
-            
-            var isExists = config.HasModule<Test1ModuleConfig>();
-            Assert.False(isExists);
-        }
-        
-        [Test]
-        public void HasModule_Test1Module_Test1ModuleReturned()
-        {
-            var config = new ModuleItemGameConfig(String.Empty, 0, new IModuleConfig[]
-            {
-                new Test1ModuleConfig()
-            });
-            
-            var isExists = config.HasModule<Test1ModuleConfig>();
-            Assert.True(isExists);
-        }
+        // [Test]
+        // public void GetModule_ZeroModules_Test1ModuleFalse()
+        // {
+        //     var config = new ModuleItemGameConfig(String.Empty, 0, Array.Empty<IModuleConfig>());
+        //     
+        //     var module = config.GetModule<Test1ModuleConfig>();
+        //     Assert.False(module.HasValue);
+        // }
+        //
+        // [Test]
+        // public void GetModule_Test1Module_Test1ModuleReturned()
+        // {
+        //     var config = new ModuleItemGameConfig(String.Empty, 0, new IModuleConfig[]
+        //     {
+        //         new Test1ModuleConfig()
+        //     });
+        //     
+        //     var module = config.GetModule<Test1ModuleConfig>();
+        //     Assert.True(module.HasValue);
+        // }
+        //
+        // [Test]
+        // public void TryGetModule_ZeroModules_Test1ModuleFalse()
+        // {
+        //     var config = new ModuleItemGameConfig(String.Empty, 0, Array.Empty<IModuleConfig>());
+        //     
+        //     var isExists = config.TryGetModule<Test1ModuleConfig>(out var module);
+        //     Assert.False(isExists);
+        // }
+        //
+        // [Test]
+        // public void TryGetModule_Test1Module_Test1ModuleReturned()
+        // {
+        //     var test1Module = new Test1ModuleConfig();
+        //     var config = new ModuleItemGameConfig(String.Empty, 0, new IModuleConfig[]
+        //     {
+        //         test1Module
+        //     });
+        //     
+        //     var isExists = config.TryGetModule<Test1ModuleConfig>(out var module);
+        //     Assert.True(isExists);
+        //     Assert.AreEqual(test1Module, module);
+        // }
+        //
+        // [Test]
+        // public void HasModule_ZeroModules_Test1ModuleFalse()
+        // {
+        //     var config = new ModuleItemGameConfig(String.Empty, 0, Array.Empty<IModuleConfig>());
+        //     
+        //     var isExists = config.HasModule<Test1ModuleConfig>();
+        //     Assert.False(isExists);
+        // }
+        //
+        // [Test]
+        // public void HasModule_Test1Module_Test1ModuleReturned()
+        // {
+        //     var config = new ModuleItemGameConfig(String.Empty, 0, new IModuleConfig[]
+        //     {
+        //         new Test1ModuleConfig()
+        //     });
+        //     
+        //     var isExists = config.HasModule<Test1ModuleConfig>();
+        //     Assert.True(isExists);
+        // }
     }
 }

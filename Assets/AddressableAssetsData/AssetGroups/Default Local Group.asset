@@ -20,6 +20,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fca479339814f643bfbc26762c600b6
+    m_Address: Assets/App/Configs/Tiles/Door.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 27b9552f534148f89807d3aa663064b5
     m_Address: EquipmentConfig
     m_ReadOnly: 0
@@ -54,6 +60,12 @@ MonoBehaviour:
     m_Address: BaseCanvas
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6dedc6d30ae5e5846859964a2c9dfbb2
+    m_Address: Assets/App/Configs/Tiles/Chest.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9801062e508d4254aa9bbd365649d0bc
     m_Address: TileView

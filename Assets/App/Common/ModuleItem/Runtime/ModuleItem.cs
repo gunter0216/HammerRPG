@@ -62,17 +62,17 @@ namespace App.Common.ModuleItem.Runtime
             return _config.HasTag(tag);
         }
 
-        public Optional<T> GetConfigModule<T>() where T : class, IModuleConfig
+        public Optional<T> GetConfigModule<T>() where T : ModuleConfig
         {
             return _config.GetModule<T>();
         }
 
-        public bool TryGetConfigModule<T>(out T config) where T : class, IModuleConfig
+        public bool TryGetConfigModule<T>(out T config) where T : ModuleConfig
         {
             return _config.TryGetModule<T>(out config);
         }
 
-        public bool HasConfigModule<T>() where T : class, IModuleConfig
+        public bool HasConfigModule<T>() where T : ModuleConfig
         {
             return _config.HasModule<T>();
         }

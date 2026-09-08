@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26bda2c28ea41e8868738951f4d0387, type: 3}
+  m_Name: Goblin
+  m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
+  m_Id: Goblin
+  m_Modules:
+  - rid: 2381230076579545209
+  - rid: 2381230076579545210
+  - rid: 2381230076579545211
+  - rid: 2381230076579545212
+  - rid: 2381230076579545213
+  - rid: 2381230076579545229
+  m_Tags: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2381230076579545209
+      type: {class: NameModuleConfig, ns: App.Game.Modules.Name.Runtime.Config, asm: Autumn.Modules.Name}
+      data:
+        _name: Goblin
+    - rid: 2381230076579545210
+      type: {class: RaceModuleConfig, ns: App.Game.Modules.Race.Runtime.Config, asm: Autumn.Modules.Race}
+      data:
+        _race: 1
+    - rid: 2381230076579545211
+      type: {class: LevelModuleConfig, ns: App.Game.Modules.Level.Runtime.Config, asm: Autumn.Modules.Level}
+      data:
+        _startLevel: 1
+    - rid: 2381230076579545212
+      type: {class: HealthModuleConfig, ns: App.Game.Modules.Health.Runtime.Config, asm: Autumn.Modules.Health}
+      data:
+        _maxHealth: 25
+    - rid: 2381230076579545213
+      type: {class: MoveModuleConfig, ns: App.Game.Modules.Move.Runtime.Config, asm: Autumn.Modules.Move}
+      data:
+        _speed: 5
+    - rid: 2381230076579545229
+      type: {class: PresentableModuleConfig, ns: App.Game.Modules.Asset.Runtime.Config.Model, asm: Autumn.Modules.Fbx}
+      data:
+        _asset: {fileID: 6560358892841448715, guid: 991af4e080640294ab2b96585f83300f, type: 3}

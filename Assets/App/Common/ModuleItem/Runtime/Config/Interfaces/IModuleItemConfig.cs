@@ -8,8 +8,8 @@ namespace App.Common.ModuleItem.Runtime.Config.Interfaces
         
         bool HasTag(long tag);
         
-        Optional<T> GetModule<T>() where T : class, IModuleConfig;
-        bool TryGetModule<T>(out T config) where T : class, IModuleConfig;
-        bool HasModule<T>() where T : class, IModuleConfig;
+        Optional<T> GetModule<T>() where T : ModuleConfig;
+        bool TryGetModule<T>(out T config) where T : ModuleConfig;
+        bool HasModule<T>() where T : ModuleConfig;
     }
 }

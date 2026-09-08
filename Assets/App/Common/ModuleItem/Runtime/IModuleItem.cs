@@ -24,8 +24,8 @@ namespace App.Common.ModuleItem.Runtime
         
         bool HasTag(long tag);
         
-        Optional<T> GetConfigModule<T>() where T : class, IModuleConfig;
-        bool TryGetConfigModule<T>(out T config) where T : class, IModuleConfig;
-        bool HasConfigModule<T>() where T : class, IModuleConfig;
+        Optional<T> GetConfigModule<T>() where T : ModuleConfig;
+        bool TryGetConfigModule<T>(out T config) where T : ModuleConfig;
+        bool HasConfigModule<T>() where T : ModuleConfig;
     }
 }

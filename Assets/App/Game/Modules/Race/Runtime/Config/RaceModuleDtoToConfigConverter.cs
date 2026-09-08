@@ -12,7 +12,7 @@ namespace App.Game.Modules.Race.Runtime.Config
         public Optional<IModuleConfig> Convert(JObject module)
         {
             var race = module.Value<string>("race");
-            var config = new RaceModuleConfig(race);
+            var config = new RaceModuleConfig(ERace.Human);
             
             return Optional<IModuleConfig>.Success(config);
         }

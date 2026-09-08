@@ -40,14 +40,7 @@ namespace App.Game.DragItem.Runtime.Model
                 return;
             }
             
-            var sprite = m_SpriteLoader.Load(spriteModule.Value.Key);
-            if (!sprite.HasValue)
-            {
-                HLogger.LogError($"Failed to load sprite for item");
-                return;
-            }
-
-            m_View.SetIcon(sprite.Value);
+            m_View.SetIcon(spriteModule.Value.Sprite);
         }
 
         public void SetAsLastSibling()

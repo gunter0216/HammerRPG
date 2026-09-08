@@ -3,6 +3,7 @@ using App.Common.AssetSystem.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Dungeon.DungeonCore.External.Controllers;
+using App.Game.Modules.Asset.Runtime.Config.Model;
 using App.Game.StatusBar.Runtime;
 using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
@@ -29,11 +30,10 @@ namespace App.Game.AI.External.Fabric
         public Optional<AIViewController> Create(string id, Vector3 position)
         {
             var enemy = _moduleItemsManager.Create(id);
-            var module = enemy.Value.GetConfigModule<AssetModuleConfig>();
-            var assetKey = module.Value.AssetKey;
+            var module = enemy.Value.GetConfigModule<PresentableModuleConfig>();
 
-            var viewResult = _assetManager.InstantiateSync<Transform>(assetKey);
-            var view = viewResult.Value;
+            var viewResult = module.Value.Instantiate();
+            var view = viewResult.transform;
             var agent = view.GetComponent<NavMeshAgent>();
             
             view.SetParent(_root);

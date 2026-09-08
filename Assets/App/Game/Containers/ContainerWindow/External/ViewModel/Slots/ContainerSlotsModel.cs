@@ -161,15 +161,8 @@ namespace App.Game.Containers.ContainerWindow.External.ViewModel.Slots
                 HLogger.LogError("SpriteModuleConfig is not available for the item.");
                 return Optional<Sprite>.Fail();
             }
-            
-            var sprite = m_SpriteLoader.Load(spriteModule.Value.Key);
-            if (!sprite.HasValue)
-            {
-                HLogger.LogError($"Failed to load sprite for item");
-                return Optional<Sprite>.Fail();
-            }
 
-            return sprite;
+            return Optional<Sprite>.Success(spriteModule.Value.Sprite);
         }
 
         public void Dispose()

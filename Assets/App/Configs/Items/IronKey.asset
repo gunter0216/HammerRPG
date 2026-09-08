@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b26bda2c28ea41e8868738951f4d0387, type: 3}
-  m_Name: Player
+  m_Name: IronKey
   m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
-  m_Id: 
-  m_Type: 
-  m_Modules: []
+  m_Id: IronKey
+  m_Modules:
+  - rid: 2381230076579545240
   m_Tags: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2381230076579545240
+      type: {class: SpriteModuleConfig, ns: App.Game.Modules.Sprite.Runtime, asm: Autumn.Modules.Sprite}
+      data:
+        _sprite: {fileID: 21300000, guid: 01afc6dddc8f9334bb423c0f9529d3ce, type: 3}

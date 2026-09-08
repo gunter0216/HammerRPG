@@ -1,5 +1,6 @@
 using App.Common.AssetSystem.Runtime;
 using App.Common.Logger.Runtime;
+using App.Game.Modules.Asset.Runtime.Config.Model;
 using App.Game.Player.External.Context;
 using App.Game.Player.External.View;
 using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
@@ -37,21 +38,15 @@ namespace App.Game.Player.External.Items
             }
 
             var moduleItem = info.Item;
-            if (!moduleItem.TryGetConfigModule<AssetModuleConfig>(out var assetModuleConfig))
+            if (!moduleItem.TryGetConfigModule<PresentableModuleConfig>(out var assetModuleConfig))
             {
                 HLogger.LogError("AssetModuleConfig not found.");
                 return;
             }
 
-            var assetKey = assetModuleConfig.AssetKey;
-            var itemViewResult = _assetManager.InstantiateSync<Transform>(assetKey);
-            if (!itemViewResult.HasValue)
-            {
-                HLogger.LogError("Cant create view");
-                return;
-            }
+            var asset = assetModuleConfig.Instantiate();
 
-            var itemView = itemViewResult.Value;
+            var itemView = asset.transform;
             itemView.parent = parent;
             itemView.localPosition = Vector3.zero;
             itemView.localRotation = Quaternion.identity;

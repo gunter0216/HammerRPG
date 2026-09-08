@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26bda2c28ea41e8868738951f4d0387, type: 3}
+  m_Name: Chest
+  m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
+  m_Id: chest
+  m_Modules:
+  - rid: 2381230076579545220
+  - rid: 2381230076579545221
+  m_Tags: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2381230076579545220
+      type: {class: ChestModuleConfig, ns: App.Game.Modules.Chests.Runtime.Config, asm: Autumn.Modules.Chest}
+      data: 
+    - rid: 2381230076579545221
+      type: {class: ContainerModuleConfig, ns: App.Game.Modules.ContainerModule.Runtime.Config, asm: Autumn.Modules.Container}
+      data:
+        _rows: 5
+        _cols: 7

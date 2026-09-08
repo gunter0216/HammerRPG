@@ -37,7 +37,7 @@ namespace App.Common.ModuleItem.Runtime.Config
                 var itemDto = dto.Items[i];
                 var modules = CreateModules(itemDto);
 
-                configs[i] = new ModuleItemGameConfig(itemDto.Id, itemDto.Tags, modules, type);
+                configs[i] = new ModuleItemGameConfig(itemDto.Id, itemDto.Tags, modules);
             }
 
             var gameItemsConfig = new ModuleItemsConfig(configs);

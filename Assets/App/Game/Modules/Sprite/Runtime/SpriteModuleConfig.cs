@@ -1,16 +1,17 @@
 ﻿using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using UnityEngine;
 
 namespace App.Game.Modules.Sprite.Runtime
 {
     public class SpriteModuleConfig : ModuleConfig
     {
-        private readonly string m_Key;
+        [SerializeField] private UnityEngine.Sprite _sprite;
 
-        public string Key => m_Key;
+        public UnityEngine.Sprite Sprite => _sprite;
 
-        public SpriteModuleConfig(string key)
+        public SpriteModuleConfig(UnityEngine.Sprite sprite)
         {
-            m_Key = key;
+            _sprite = sprite;
         }
     }
 }

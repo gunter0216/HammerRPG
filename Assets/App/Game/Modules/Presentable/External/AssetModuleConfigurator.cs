@@ -1,16 +1,16 @@
 // using App.Core.Startups.External;
 // using App.Core.Startups.External.Attributes;
 // using App.Core.Startups.External.Constants;
-// using App.Game.Modules.Sprite.Runtime;
+// using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Converter;
 //
-// namespace App.Game.Modules.Sprite.External
+// namespace App.Game.Modules.ModuleItemType.External
 // {
 //     [Configurator(DIContext.GlobalContext)]
-//     public class SpriteModuleConfigurator : Configurator
+//     public class AssetModuleConfigurator : Configurator
 //     {
 //         public override void Configuration()
 //         {
-//             BindSingle<SpriteModuleDtoToConfigConverter>();
+//             BindSingle<AssetModuleDtoToConfigConverter>();
 //         }
 //     }
 // }

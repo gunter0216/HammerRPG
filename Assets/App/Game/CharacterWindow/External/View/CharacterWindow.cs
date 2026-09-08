@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using App.Game.Modules.Race.Runtime.Config;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,9 +47,9 @@ namespace App.Game.CharacterWindow.External.View
             _nameText.text = text;
         }
         
-        public void SetRace(string text)
+        public void SetRace(ERace race)
         {
-            _raceText.text = text;
+            _raceText.text = race.ToString();
         }
         
         public void SetExperience(int currentValue, int maxValue)

@@ -1,5 +1,6 @@
 using System;
 using App.Common.ModuleItem.Runtime.Data;
+using App.Game.Modules.Race.Runtime.Config;
 using Newtonsoft.Json;
 
 namespace App.Game.Modules.Race.Runtime.Data
@@ -9,14 +10,14 @@ namespace App.Game.Modules.Race.Runtime.Data
     public class RaceModuleData : IModuleData
     {
         [JsonProperty("race")] 
-        private string _race;
+        private ERace _race;
 
         public RaceModuleData()
         {
             
         }
 
-        public string Race
+        public ERace Race
         {
             get => _race;
             set => _race = value;

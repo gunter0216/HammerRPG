@@ -1,16 +1,17 @@
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
+using UnityEngine;
 
 namespace App.Game.Modules.Race.Runtime.Config
 {
     public class RaceModuleConfig : ModuleConfig
     {
-        private readonly string _name;
+        [SerializeField] private ERace _race;
 
-        public string Race => _name;
+        public ERace Race => _race;
 
-        public RaceModuleConfig(string race)
+        public RaceModuleConfig(ERace race)
         {
-            _name = race;
+            _race = race;
         }
     }
 }

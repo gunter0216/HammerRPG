@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26bda2c28ea41e8868738951f4d0387, type: 3}
+  m_Name: Player
+  m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
+  m_Id: player
+  m_Modules:
+  - rid: 2381230076579545188
+  - rid: 2381230076579545189
+  - rid: 2381230076579545192
+  - rid: 2381230076579545193
+  - rid: 2381230076579545194
+  - rid: 2381230076579545195
+  - rid: 2381230076579545196
+  - rid: 2381230076579545200
+  - rid: 2381230076579545230
+  m_Tags: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2381230076579545188
+      type: {class: NameModuleConfig, ns: App.Game.Modules.Name.Runtime.Config, asm: Autumn.Modules.Name}
+      data:
+        _name: Simon
+    - rid: 2381230076579545189
+      type: {class: RaceModuleConfig, ns: App.Game.Modules.Race.Runtime.Config, asm: Autumn.Modules.Race}
+      data:
+        _race: 0
+    - rid: 2381230076579545192
+      type: {class: StatsModuleConfig, ns: App.Game.Modules.Stats.Runtime.Config, asm: Autumn.Modules.Stats}
+      data:
+        _strength: 1
+        _agility: 1
+        _intelligence: 1
+    - rid: 2381230076579545193
+      type: {class: LevelModuleConfig, ns: App.Game.Modules.Level.Runtime.Config, asm: Autumn.Modules.Level}
+      data:
+        _startLevel: 1
+    - rid: 2381230076579545194
+      type: {class: ExperienceModuleConfig, ns: App.Game.Modules.Experience.Runtime.Config, asm: Autumn.Modules.Experience}
+      data: 
+    - rid: 2381230076579545195
+      type: {class: HealthModuleConfig, ns: App.Game.Modules.Health.Runtime.Config, asm: Autumn.Modules.Health}
+      data:
+        _maxHealth: 100
+    - rid: 2381230076579545196
+      type: {class: MoveModuleConfig, ns: App.Game.Modules.Move.Runtime.Config, asm: Autumn.Modules.Move}
+      data:
+        _speed: 10
+    - rid: 2381230076579545200
+      type: {class: ContainerModuleConfig, ns: App.Game.Modules.ContainerModule.Runtime.Config, asm: Autumn.Modules.Container}
+      data:
+        _rows: 5
+        _cols: 10
+    - rid: 2381230076579545230
+      type: {class: PresentableModuleConfig, ns: App.Game.Modules.Asset.Runtime.Config.Model, asm: Autumn.Modules.Fbx}
+      data:
+        _asset: {fileID: 5016975802056075122, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}

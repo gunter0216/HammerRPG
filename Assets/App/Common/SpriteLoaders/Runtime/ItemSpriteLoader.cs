@@ -55,7 +55,7 @@ namespace App.Common.SpriteLoaders.External
         
         public Optional<Sprite> LoadItemSprite(SpriteModuleConfig config)
         {
-            return _spriteLoader.Load(config.Key);
+            return Optional<Sprite>.Success(config.Sprite);
         }
 
         public Optional<Sprite> Load(string key)

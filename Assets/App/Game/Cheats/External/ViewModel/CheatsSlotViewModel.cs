@@ -44,14 +44,7 @@ namespace App.Game.Cheats.External.ViewModel
                 return;
             }
 
-            var sprite = m_SpriteLoader.Load(spriteModule.Value.Key);
-            if (!sprite.HasValue)
-            {
-                HLogger.LogError($"not found sprite");
-                return;
-            }
-            
-            m_View.SetSprite(sprite.Value);
+            m_View.SetSprite(spriteModule.Value.Sprite);
         }
 
         public void SetActive(bool status)
