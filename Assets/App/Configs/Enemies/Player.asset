@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
   m_Id: player
   m_Modules:
-  - rid: 2381230076579545188
   - rid: 2381230076579545189
+  - rid: 2381230076579545188
   - rid: 2381230076579545192
   - rid: 2381230076579545193
   - rid: 2381230076579545194

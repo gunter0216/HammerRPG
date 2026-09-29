@@ -61,6 +61,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 547bc3b38f6b4944e9d79589070a1061
+    m_Address: Assets/App/Configs/Items/IronAxe.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c66382079af8d743b633524499c00d0
+    m_Address: ModuleItemGameConfig/IronSword
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6dedc6d30ae5e5846859964a2c9dfbb2
     m_Address: Assets/App/Configs/Tiles/Chest.asset
     m_ReadOnly: 0
@@ -90,6 +102,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a670b303edd39da44b568f0a6133ad07
     m_Address: Assets/App/Configs/Items/ModuleItem.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac68e1564a151894a9c3f6d7ea068adc
+    m_Address: Assets/App/Configs/Items/IronKey.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig
