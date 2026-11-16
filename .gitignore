@@ -84,3 +84,11 @@ Assets/Sprites/Temp.meta
 
 Assets/Sprites/FromMimimi/
 Assets/Sprites/FromMimimi.meta
+
+# Local tools and art source files
+/Tools/
+/ArtSources/
+/ArtSource/
+
+# Temporary agent working files
+/tmp/
