@@ -37,9 +37,13 @@ namespace App.Game.Player.External.View
 
         public float AttackDistance => _attackDistance;
 
-        public Vector3 GetAttackCenter()
+        public Vector3 GetAttackCenter(bool facingLeft = false)
         {
-            return transform.position + transform.rotation * _boxOffset;
+            var offset = _boxOffset;
+            if (facingLeft)
+                offset.x = -offset.x;
+
+            return transform.position + transform.rotation * offset;
         }
 
 #if UNITY_EDITOR

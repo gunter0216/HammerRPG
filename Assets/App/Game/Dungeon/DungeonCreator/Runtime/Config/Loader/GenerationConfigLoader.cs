@@ -1,13 +1,11 @@
 using App.Common.Configs.Runtime;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Dungeon.DungeonCreator.Runtime.Config.Dto;
+using App.Generation.DungeonGenerator.Runtime.Configs;
 
 namespace App.Game.Dungeon.DungeonCreator.Runtime.Config.Loader
 {
     public class GenerationConfigLoader
     {
-        private const string m_LocalConfigKey = "GenerationConfig";
-        
         private readonly IConfigLoader m_ConfigLoader;
 
         public GenerationConfigLoader(IConfigLoader configLoader)
@@ -15,9 +13,9 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Config.Loader
             m_ConfigLoader = configLoader;
         }
 
-        public Optional<GenerationConfigDto> Load()
+        public Optional<GenerationConfig> Load()
         {
-            return m_ConfigLoader.LoadConfig<GenerationConfigDto>(m_LocalConfigKey);
+            return m_ConfigLoader.LoadGameConfig<GenerationConfig>(GenerationConfig.Address);
         }
     }
 }

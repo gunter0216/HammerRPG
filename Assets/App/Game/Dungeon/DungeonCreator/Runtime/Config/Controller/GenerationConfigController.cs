@@ -21,15 +21,16 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Config.Controller
 
         public bool Initialize()
         {
+            m_Config = null;
             var loader = new GenerationConfigLoader(m_ConfigLoader);
-            var converter = new GenerationDtoToConfigConverter();
-            var dto = loader.Load();
-            if (!dto.HasValue)
+            var converter = new GenerationConfigConverter();
+            var asset = loader.Load();
+            if (!asset.HasValue)
             {
                 return false;
             }
 
-            var config = converter.Convert(dto.Value);
+            var config = converter.Convert(asset.Value);
             if (!config.HasValue)
             {
                 return false;
@@ -42,6 +43,9 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Config.Controller
 
         public Optional<DungeonGenerationConfig> GetGeneration(string generationKey = "Default")
         {
+            if (m_Config == null)
+                return Optional<DungeonGenerationConfig>.Fail();
+
             var config = m_Config.Configs.FirstOrDefault(x => x.Key == generationKey);
             if (config == default)
             {

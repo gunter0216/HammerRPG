@@ -47,14 +47,12 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime
         private bool InitConfig()
         {
             _configController = new GenerationConfigController(_configLoader);
-            _configController.Initialize();
-
-            return true;
+            return _configController.Initialize();
         }
 
         public Optional<Dungeon> Create(string generationKey)
         {
-            var generationConfig = _configController.GetGeneration();
+            var generationConfig = _configController.GetGeneration(generationKey);
             if (!generationConfig.HasValue)
             {
                 HLogger.LogError("Config not found");

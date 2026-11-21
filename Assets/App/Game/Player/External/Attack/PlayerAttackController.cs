@@ -1,7 +1,7 @@
+using App.Common.Logger.Runtime;
 using App.Game.Player.External.Context;
+using App.Game.Player.External.Items;
 using App.Game.Player.External.View;
-using DG.Tweening;
-using Game.Project.Gameplay.Weapon.Runtime.DamageHandlers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,114 +9,89 @@ namespace App.Game.Player.External.Attack
 {
     public class PlayerAttackController
     {
-        private static readonly int _attack = Animator.StringToHash("Attack");
-        private static readonly int _melee = Animator.StringToHash("Melee");
+        private static readonly int Attack = Animator.StringToHash("Attack");
+        private static readonly int AttackFacingLeft = Animator.StringToHash("AttackFacingLeft");
 
         private readonly PlayerContext _context;
         private readonly PlayerAttackContext _attackContext;
+        private Animator _animator;
         private MeleeAttackService _attackService;
-
-        private Camera _camera;
-        private MeleeAttackView _meleeAttackView;
+        private bool _facingLeft;
+        private bool _repeatAttack;
 
         public PlayerAttackController(PlayerContext context)
         {
             _context = context;
-            _attackContext = _context.AttackContext;
+            _attackContext = context.AttackContext;
         }
 
-        public void Initialize()
+        public bool Initialize()
         {
-            _camera = Camera.main;
-
             var view = _context.View;
-            _meleeAttackView = view.GetComponent<MeleeAttackView>();
-            var animator = view.Animator;
-            animator.SetBool(_melee, true);
-            _meleeAttackView.AttackAnimationEventListener.OnAttackEvent += OnAttackEvent;
+            _animator = view.Animator;
+            var attackView = view.GetComponent<MeleeAttackView>();
+            var listener = attackView != null ? attackView.AttackAnimationEventListener : null;
+            if (_animator == null || _animator.runtimeAnimatorController == null || listener == null)
+            {
+                HLogger.LogError("Player melee animation or attack event listener is missing.");
+                return false;
+            }
 
-            _attackService = new MeleeAttackService(_context.ModuleItem, _meleeAttackView, _context.View);
+            _attackService = new MeleeAttackService(_context.ModuleItem, attackView, view);
+            listener.OnAttackEvent += OnAttackEvent;
+            listener.OnAttackFinishedEvent += OnAttackFinished;
+            return true;
         }
 
         public void OnAttackClick()
         {
-            if (_attackContext.IsAttack || IsBlocked())
-            {
+            if (_attackContext.IsAttack || _attackContext.AttackBlocked || !_animator.isActiveAndEnabled ||
+                _animator.GetFloat(HandItemsController.WeaponEquipped) < 0.5f)
                 return;
-            }
-            
-            Attack();
-        }
 
-        private void Attack()
-        {
+            _facingLeft = GetAttackDirection();
+            _context.MoveContext.IsFacingLeft = _facingLeft;
             _attackContext.IsAttack = true;
-
-            var view = _context.View;
-            var animator = view.Animator;
-
-            animator.SetBool(_attack, true);
-
-            DOTween.Sequence()
-                .AppendInterval(_meleeAttackView.AttackAnimation.length)
-                .OnComplete(() =>
-                {
-                    if (IsLeftMousePressed() && !IsBlocked())
-                    {
-                        Attack();
-                        return;
-                    }
-                    
-                    _attackContext.IsAttack = false;
-                    animator.SetBool(_attack, false);
-                });
+            _repeatAttack = false;
+            _animator.SetBool(AttackFacingLeft, _facingLeft);
+            _animator.SetTrigger(Attack);
         }
 
         public void OnUpdate()
         {
-            if (_attackContext.IsAttack && IsLeftMousePressed() && !IsBlocked())
-            {
-                RotatePlayerByDirection();
-            }
+            if (!_repeatAttack)
+                return;
+
+            _repeatAttack = false;
+            if (Mouse.current?.leftButton.isPressed == true)
+                OnAttackClick();
         }
 
-        private bool IsBlocked()
+        private bool GetAttackDirection()
         {
-            return _attackContext.AttackBlocked;
-        }
+            var camera = Camera.main;
+            var mouse = Mouse.current;
+            if (camera == null || mouse == null)
+                return _context.MoveContext.IsFacingLeft;
 
-        private bool IsLeftMousePressed()
-        {
-            return Mouse.current.leftButton.isPressed;
+            var player = camera.WorldToScreenPoint(_context.View.transform.position);
+            float offset = mouse.position.ReadValue().x - player.x;
+            return Mathf.Abs(offset) > 1f ? offset < 0f : _context.MoveContext.IsFacingLeft;
         }
 
         private void OnAttackEvent()
         {
-            _attackService.OnAttackEvent();
+            if (_attackContext.IsAttack)
+                _attackService.OnAttackEvent(_facingLeft);
         }
 
-        private void RotatePlayerByDirection()
+        private void OnAttackFinished()
         {
-            var transform = _context.View.transform;
+            if (!_attackContext.IsAttack)
+                return;
 
-            var ray = _camera.ScreenPointToRay(
-                Mouse.current.position.ReadValue());
-
-            Plane plane = new Plane(Vector3.up, transform.position);
-
-            if (plane.Raycast(ray, out float distance))
-            {
-                Vector3 hitPoint = ray.GetPoint(distance);
-
-                Vector3 direction = hitPoint - transform.position;
-                direction.y = 0f;
-
-                if (direction.sqrMagnitude > 0.001f)
-                {
-                    transform.rotation =
-                        Quaternion.LookRotation(direction);
-                }
-            }
+            _attackContext.IsAttack = false;
+            _repeatAttack = true;
         }
     }
 }

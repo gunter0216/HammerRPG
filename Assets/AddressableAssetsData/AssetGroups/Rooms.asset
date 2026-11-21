@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c0f9a94e3ad8be4c85812385c31064e
+    m_Address: DungeonRooms2D/Workshop_02
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 36d39e51d46cd5a41949e0c843e76802
     m_Address: TransitRoom_11x11_2RD
     m_ReadOnly: 0
@@ -65,13 +70,43 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6605a6fd3a121124aa8c36b1dc48a29b
+    m_Address: DungeonRooms2D/Workshop_04B
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6bb8c1fd9d3a16247b4f1d6c60b29b84
     m_Address: TransitRoom_11x11_2TD
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73aee7bcad613e2459c32ee4a1ba84f7
+    m_Address: DungeonRooms2D/Workshop_08
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 762afa9a0d73e864f838d8ce728db011
     m_Address: TransitRoom_19x19_T
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e02ac2e3e1144446a7f796e7e2d63a9
+    m_Address: DungeonRooms2D/Workshop_01
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89b780886ba9a1747b09933e9f93db55
+    m_Address: DungeonRooms2D/Workshop_07
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8fe47733bfa83184eae35cc23865845c
+    m_Address: DungeonRooms2D/Workshop_04A
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91ef71e2faf867846a9926d424bf1281
+    m_Address: DungeonRooms2D/Workshop_03
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -92,6 +127,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b16eadf4d48af594f8d4b4f9198f47df
     m_Address: TransitRoom_19x19_TRD
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b23e1d2f8fb8b0040bacaac66c56442d
+    m_Address: DungeonRooms2D/StartRoom2D_16x15
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8aee7dabcb16f441b390fe932f56248
+    m_Address: DungeonRooms2D/Workshop_05_06
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -127,6 +172,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fbb773866311b6545bf5e736da8b5014
     m_Address: TransitRoom_11x13_1R
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fd53df7539c297f4b8ffb41cc07bad18
+    m_Address: DungeonRooms2D/Workshop_09_10
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

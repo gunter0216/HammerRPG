@@ -1,6 +1,6 @@
-﻿// using System.Collections.Generic;
+// using System.Collections.Generic;
 // using DungeonGenerator.JsonControllers;
-// using DungeonGenerator.Rooms.Dto;
+// using DungeonGenerator.Rooms.Templates;
 // using DungeonGenerator.Utility.Loggers;
 //
 // namespace DungeonGenerator.Rooms
@@ -9,7 +9,7 @@
 //     {
 //         private IJsonController m_JsonController;
 //
-//         private Dictionary<string, RoomDto> m_RoomConfigs = new();
+//         private Dictionary<string, RoomTemplate> m_RoomConfigs = new();
 //         
 //         public RoomController()
 //         {
@@ -24,14 +24,14 @@
 //
 //         private void ReadRoomConfig(string path)
 //         {
-//             var roomDto = m_JsonController.ReadJson<RoomDto>(path);
-//             if (!roomDto.HasValue)
+//             var roomTemplate = m_JsonController.ReadJson<RoomTemplate>(path);
+//             if (!roomTemplate.HasValue)
 //             {
 //                 Logger.Log($"Cant read json {path}");
 //                 return;
 //             }
 //             
-//             m_RoomConfigs.Add(roomDto.Value.Name, roomDto.Value);
+//             m_RoomConfigs.Add(roomTemplate.Value.Name, roomTemplate.Value);
 //         }
 //     }
 // }

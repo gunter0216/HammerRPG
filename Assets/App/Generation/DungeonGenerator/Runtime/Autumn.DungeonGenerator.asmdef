@@ -1,6 +1,8 @@
 {
     "name": "Autumn.DungeonGenerator",
     "references": [
+        "Unity.Addressables",
+        "Autumn.ConfigLoader",
         "Autumn.DelaunayTriangulation",
         "Autumn.KruskalAlgorithm",
         "Autumn.Utility",

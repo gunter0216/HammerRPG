@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using App.Common.Json.External;
 using App.Common.Logger.External;
 using App.Common.Logger.Runtime;
-using App.Game.Dungeon.DungeonCreator.Runtime.Config.Dto;
+using App.Game.Dungeon.DungeonCreator.Runtime.Config.Converter;
+using App.Generation.DungeonGenerator.Runtime.Configs;
 using App.Generation.DungeonGenerator.External;
-using App.Generation.DungeonGenerator.External.Dto;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding.Cash;
@@ -34,7 +33,7 @@ namespace App.Generation.DungeonGenerator.Editor
     public class MonoDungeonGeneratorEditorV4 : UnityEditor.Editor
     {
         private readonly Runtime.DungeonGenerators.DungeonGenerator m_Generator = new(new Logger());
-        private readonly DungeonGenerationDtoToConfigConverter m_DungeonGenerationDtoToConfigConverter = new();
+        private readonly GenerationConfigConverter m_ConfigConverter = new();
 
         private DungeonGeneration m_Generation;
         private bool m_ShowLabel;
@@ -54,21 +53,41 @@ namespace App.Generation.DungeonGenerator.Editor
             var myScript = (MonoDungeonGenerator)target;
             m_ShowLabel = myScript.ShowLabel;
 
+            var configAsset = myScript.GenerationConfig;
+            if (configAsset == null)
+            {
+                configAsset = AssetDatabase.LoadAssetAtPath<GenerationConfig>(
+                    "Assets/Configs/Dungeon/GenerationConfig.asset");
+                EditorGUILayout.ObjectField("Default Generation Config", configAsset, typeof(GenerationConfig), false);
+            }
+
             if (GUILayout.Button("Generate"))
             {
                 if (myScript.ClearConsole)
                     ClearUnityConsole();
-                var deserializer = new JsonConfigurator().GetJsonDeserializer();
-                var text = myScript.ConfigAsset.text;
-                var dto = deserializer.Deserialize<GenerationConfigDto>(text);
-                // var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
-                if (!dto.HasValue)
+                var configs = m_ConfigConverter.Convert(configAsset);
+                if (!configs.HasValue)
                 {
-                    Debug.LogError("Cant deserialize.");
+                    Debug.LogError("Generation config is missing or invalid.");
                     return;
                 }
-                var config = m_DungeonGenerationDtoToConfigConverter.Convert(dto.Value.Generations[0]);
-                m_Generation = m_Generator.Generate(config).Value;
+
+                var key = string.IsNullOrWhiteSpace(myScript.GenerationKey) ? "Default" : myScript.GenerationKey;
+                var config = Array.Find(configs.Value.Configs, item => item.Key == key);
+                if (config == null)
+                {
+                    Debug.LogError($"Generation config not found: {key}");
+                    return;
+                }
+
+                var generation = m_Generator.Generate(config);
+                if (!generation.HasValue)
+                {
+                    Debug.LogError("Dungeon generation failed.");
+                    return;
+                }
+
+                m_Generation = generation.Value;
                 Rebuild();
             }
 
@@ -125,10 +144,8 @@ namespace App.Generation.DungeonGenerator.Editor
 
             foreach (var room in rooms.Rooms)
             {
-                var config = room.GenerationConfig;
                 var variant = room.ConfigVariant;
                 var genPos = room.Position;
-                // Debug.LogError($">>> {config.AssetKey} {genPos} {room.RotateEuler}");
 
                 // Компенсация смещения пивота при вращении Unity (ось Y, плоскость XZ).
                 // PivotOffset не нужен — prefab сам имеет внутреннее смещение +0.5 по X и Z,
@@ -145,51 +162,26 @@ namespace App.Generation.DungeonGenerator.Editor
                 var aabbMaxX   = aabbMinX + aabbSize.X - 1;
                 var aabbMaxY   = aabbMinY + aabbSize.Y - 1;
 
-                log.AppendLine($"--- {variant.AssetKey} depth={room.Depth} ---");
+                log.AppendLine($"--- {variant.ID} depth={room.Depth} ---");
                 log.AppendLine($"  genPos=({genPos.X},{genPos.Y})  size={room.Size.X}x{room.Size.Y}  rot={room.RotateEuler}");
                 log.AppendLine($"  compensation=({comp.x},{comp.y})");
                 log.AppendLine($"  finalPos=({finalPos.x},{finalPos.z}) [X,Z]");
                 log.AppendLine($"  expectedAABB X[{aabbMinX}..{aabbMaxX}] Y[{aabbMinY}..{aabbMaxY}]");
                 log.AppendLine($"  expectedFinalPos X={aabbMinX} Z={aabbMinY}");
 
-                // var roomObj = Object.Instantiate(variant.AssetKey,
-                //     finalPos + _roomsContent.position,
-                //     Quaternion.Euler(0, room.RotateEuler, 0),
-                //     _roomsContent);
-                // var roomObjs = await Object.InstantiateAsync(variant.AssetKey,
-                //     _roomsContent, 
-                //     finalPos + _roomsContent.position,
-                //     Quaternion.Euler(0, room.RotateEuler, 0)).ToUniTask();
-                // var roomObj = roomObjs[0];
-                
-                string[] guids = AssetDatabase.FindAssets($"{variant.AssetKey} t:Prefab");
-                if (guids.Length == 0)
+                var prefab = variant.AssetReference?.editorAsset;
+                if (prefab == null)
                 {
-                    Debug.LogError($"Prefab not found: {variant.AssetKey}");
+                    Debug.LogError($"Room prefab reference is missing: {variant.ID}");
                     continue;
                 }
-
-                string path = AssetDatabase.GUIDToAssetPath(guids[0]);
-                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 
                 var roomObj = (GameObject)PrefabUtility.InstantiatePrefab(prefab, _roomsContent);
                 roomObj.transform.position = finalPos + _roomsContent.position;
                 roomObj.transform.rotation = Quaternion.Euler(0, room.RotateEuler, 0);
                 roomObj.transform.parent = _roomsContent;
                 
-                // await Addressables.InitializeAsync().Task;
-                // var locations = await Addressables.LoadResourceLocationsAsync("TransitRoom_7x15_1D").Task;
-                // Debug.Log($"Locations found: {locations.Count}");
-                // foreach (var loc in locations)
-                //     Debug.Log(loc.PrimaryKey + " | " + loc.InternalId);
-                //
-                // var roomObj = await Addressables.InstantiateAsync(
-                //     variant.AssetKey,
-                //     finalPos + _roomsContent.position,
-                //     Quaternion.Euler(0, room.RotateEuler, 0),
-                //     _roomsContent);
-
-                roomObj.name = $"{variant.AssetKey} depth {room.Depth}";
+                roomObj.name = $"{prefab.name} depth {room.Depth}";
                 _rooms.Add(roomObj);
 
                 // Логируем localPosition (без внутреннего смещения prefab'а +0.5)

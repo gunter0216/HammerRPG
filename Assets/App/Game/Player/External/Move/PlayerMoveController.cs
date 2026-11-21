@@ -16,8 +16,7 @@ namespace App.Game.Player.External
 
         private MoveModule _moveModule;
         private InputAction _moveInput;
-        private Rigidbody _rigidbody;
-        private Camera _camera;
+        private Rigidbody2D _rigidbody;
         private MoveAnimationPresenter _animationPresenter;
 
         public PlayerMoveController(
@@ -30,46 +29,39 @@ namespace App.Game.Player.External
             _context = context;
         }
 
-        public void Init()
+        public bool Init()
         {
             if (!_moveModuleSystem.TryGetModule(_context.ModuleItem, out var moveModule))
             {
                 HLogger.LogError("Move not found.");
-                return;
+                return false;
+            }
+
+            if (!_context.View.TryGetComponent(out _rigidbody))
+            {
+                HLogger.LogError("Player Rigidbody2D not found.");
+                return false;
             }
 
             _moveModule = moveModule;
             
             _moveInput = _inputService.Input.Movement.Move;
 
-            _camera = Camera.main;
-
-            _rigidbody = _context.View.GetComponent<Rigidbody>();
-
-            _animationPresenter = new MoveAnimationPresenter(_rigidbody.transform);
+            _animationPresenter = new MoveAnimationPresenter(_rigidbody.transform, _context.MoveContext);
             _animationPresenter.Initialize();
+            return true;
         }
 
         public void OnUpdate()
         {
+            if (_animationPresenter == null || _rigidbody == null)
+                return;
+
             var direction = _moveInput.ReadValue<Vector2>().normalized;
             _moveModule.SetDirection(new Common.Algorithms.Runtime.Vector2(direction.x, direction.y));
 
             var velocity2 = _moveModule.GetVelocity();
-            var velocity = new Vector3(velocity2.X, 0, velocity2.Y);
-
-            _animationPresenter.OnUpdate(velocity, Time.deltaTime);
-            
-            Vector3 forward = _camera.transform.forward;
-            Vector3 right = _camera.transform.right;
-
-            forward.y = 0f;
-            right.y = 0f;
-
-            forward.Normalize();
-            right.Normalize();
-
-            velocity = forward * velocity.z + right * velocity.x;
+            var velocity = new Vector2(velocity2.X, velocity2.Y);
 
             if (_context.AttackContext.IsAttack)
             {
@@ -77,11 +69,7 @@ namespace App.Game.Player.External
             }
             
             _rigidbody.linearVelocity = velocity;
-            
-            if (velocity != Vector3.zero && !_context.AttackContext.IsAttack)
-            {
-                _rigidbody.transform.forward = velocity.normalized;
-            }
+            _animationPresenter.OnUpdate(velocity, _context.AttackContext.IsAttack);
         }
     }
 }

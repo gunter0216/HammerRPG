@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.ModuleItem.Runtime;
+using App.Common.Logger.Runtime;
 using App.Common.SpriteLoaders.External;
 using App.Game.AI.Runtime;
 using App.Game.Containers.ContainerWindow.Runtime;
@@ -67,14 +68,21 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 _assetManager,
                 _aiController);
             
-            CreateRoom();
+            if (!CreateRoom())
+                HLogger.LogError($"Failed to create room {_service.Room.Data.UID}.");
         }
 
-        private void CreateRoom()
+        private bool CreateRoom()
         {
             var room = _service.Room;
-            var assetKey = room.Variant.AssetKey;
-            var viewResult = _assetManager.InstantiateSync<Transform>(assetKey, _root.transform);
+            var assetReference = room.Variant.AssetReference;
+            if (assetReference == null || !assetReference.RuntimeKeyIsValid())
+                return false;
+
+            var viewResult = _assetManager.InstantiateSync<Transform>(assetReference, _root.transform);
+            if (!viewResult.HasValue)
+                return false;
+
             _roomView = viewResult.Value;
             _roomView.transform.position = new Vector3(room.Position.X, 0, room.Position.Y);
             _roomView.transform.rotation = Quaternion.Euler(0, room.Data.Rotation, 0);
@@ -97,6 +105,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                     CreateChest(chestView);
                 }
             }
+
+            return true;
         }
 
         private void CreateDoor(DoorInteractiveView doorView)
@@ -127,6 +137,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
         public void SpawnEnemies()
         {
+            if (_roomView == null)
+                return;
+
             _enemySpawnController.Initialize(_roomView);
             _enemySpawnController.SpawnEnemies();
         }

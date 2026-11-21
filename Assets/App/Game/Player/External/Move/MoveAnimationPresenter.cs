@@ -1,95 +1,45 @@
+using App.Game.Player.External.Context;
 using UnityEngine;
 
 namespace Game.Project.Gameplay.Move.External.View
 {
     public class MoveAnimationPresenter
     {
-        private static readonly int MoveX = Animator.StringToHash("MoveX");
-        private static readonly int MoveY = Animator.StringToHash("MoveY");
-        
-        private readonly Transform _transform;
-        
-        private Animator _animator;
-        private float _animatorVelocity;
-        
-        private bool _hasMoveX;
-        private bool _hasMoveY;
+        private static readonly int IsWalkingLeft = Animator.StringToHash("IsWalkingLeft");
+        private static readonly int IsWalkingRight = Animator.StringToHash("IsWalkingRight");
 
-        private float _sprinting;
-        
-        public MoveAnimationPresenter(Transform transform)
+        private readonly Transform _transform;
+        private readonly PlayerMoveContext _context;
+
+        private Animator _animator;
+
+        public MoveAnimationPresenter(Transform transform, PlayerMoveContext context)
         {
             _transform = transform;
+            _context = context;
         }
 
         public void Initialize()
         {
             _animator = _transform.GetComponentInChildren<Animator>();
-            
-            if (_animator != null && _animator.runtimeAnimatorController != null)
-            {
-                var parameters = _animator.parameters;
-                _hasMoveX = HasParameter(parameters, MoveX);
-                _hasMoveY = HasParameter(parameters, MoveY);
-            }
-        }
-        
-        private bool HasParameter(AnimatorControllerParameter[] parameters, int hash)
-        {
-            foreach (var param in parameters)
-            {
-                if (param.nameHash == hash)
-                    return true;
-            }
-            return false;
         }
 
-        // public void OnUpdate(Vector3 inputVelocity, float deltaTime)
-        // {
-        //     if (_animator == null) return;
-        //
-        //     const float velocitySmoothing = 4f;
-        //
-        //     var velocity = new Vector2(inputVelocity.x, Mathf.Abs(inputVelocity.z));
-        //     velocity.x = Mathf.Abs(velocity.x) < 0.5f ? 0f : velocity.x / Mathf.Abs(velocity.x);
-        //     velocity.y = Mathf.Abs(velocity.y) < 0.5f ? 0f : velocity.y / Mathf.Abs(velocity.y);
-        //
-        //     _animatorVelocity = Vector2.Lerp(_animatorVelocity, velocity,
-        //         ExpDecayAlpha(velocitySmoothing, deltaTime));
-        //
-        //     if (_hasMoveX) _animator.SetFloat(MoveX, _animatorVelocity.x);
-        //     if (_hasMoveY) _animator.SetFloat(MoveY, _animatorVelocity.y);
-        // }
-        
-        public void OnUpdate(Vector3 inputVelocity, float deltaTime)
+        public void OnUpdate(Vector2 velocity, bool isAttacking)
         {
-            if (_animator == null)
+            if (_animator == null || _animator.runtimeAnimatorController == null)
                 return;
 
-            const float velocitySmoothing = 4f;
+            bool facingLeft = _context.IsFacingLeft;
+            if (Mathf.Abs(velocity.x) > 0.01f)
+            {
+                facingLeft = velocity.x < 0f;
+                if (!isAttacking)
+                    _context.IsFacingLeft = facingLeft;
+            }
 
-
-            var hasMovement =
-                Mathf.Abs(inputVelocity.x) > 0.01f ||
-                Mathf.Abs(inputVelocity.z) > 0.01f;
-
-            float velocity = hasMovement ? 1f : 0f;
-
-            _animatorVelocity = Mathf.Lerp(
-                _animatorVelocity,
-                velocity,
-                ExpDecayAlpha(velocitySmoothing, deltaTime));
-            
-            // if (_hasMoveX)
-            //     _animator.SetFloat(MoveX, 0);
-
-            if (_hasMoveY)
-                _animator.SetFloat(MoveY, _animatorVelocity);
-        }
-
-        public float ExpDecayAlpha(float speed, float deltaTime)
-        {
-            return 1 - Mathf.Exp(-speed * deltaTime);
+            var isWalking = velocity.sqrMagnitude > 0.0001f;
+            _animator.SetBool(IsWalkingLeft, isWalking && facingLeft);
+            _animator.SetBool(IsWalkingRight, isWalking && !facingLeft);
         }
     }
 }

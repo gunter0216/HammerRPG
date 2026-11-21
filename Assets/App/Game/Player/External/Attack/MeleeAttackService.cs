@@ -19,15 +19,15 @@ namespace App.Game.Player.External.Attack
             _moduleItem = moduleItem;
         }
 
-        public void OnAttackEvent()
+        public void OnAttackEvent(bool facingLeft = false)
         {
-            var handlers = GetHandlers();
+            var handlers = GetHandlers(facingLeft);
             ProduceDamage(handlers);
         }
 
-        public List<IDamageHandler> GetHandlers()
+        public List<IDamageHandler> GetHandlers(bool facingLeft = false)
         {
-            var center = _attackView.GetAttackCenter();
+            var center = _attackView.GetAttackCenter(facingLeft);
 
             var count = RayCastHelper.OverlapBoxNonAlloc(
                 center,
@@ -40,7 +40,8 @@ namespace App.Game.Player.External.Attack
 
             for (int i = 0; i < count; ++i)
             {
-                if (!hits[i].TryGetComponent<IDamageHandler>(out var handler))
+                var hit = hits[i];
+                if (hit.transform.IsChildOf(_entityView.transform) || !hit.TryGetComponent<IDamageHandler>(out var handler))
                 {
                     continue;
                 }
@@ -49,17 +50,6 @@ namespace App.Game.Player.External.Attack
             }
 
             return result;
-            
-            foreach (var hit in hits)
-            {
-                if (!hit.TryGetComponent<IDamageHandler>(out var handler))
-                {
-                    continue;
-                }
-        
-                var hitModel = new HitModel(_moduleItem, 10);
-                handler.Handle(hitModel);
-            }
         }
 
         public void ProduceDamage(IReadOnlyList<IDamageHandler> handlers)

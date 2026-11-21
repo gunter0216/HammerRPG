@@ -1,25 +1,19 @@
-using System;
-using App.Common.Algorithms.Runtime;
-using Newtonsoft.Json;
+using UnityEngine.AddressableAssets;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased
 {
-    [Serializable]
     public class RoomConfigVariant
     {
-        [JsonProperty("id")]
-        private string _id;
-        
-        [JsonProperty("assetKey")] 
-        private string _assetKey;
-        
-        [JsonProperty("outputDoors")] 
-        private Vector2Int[] _outputDoors;
-            
-        public string AssetKey => _assetKey;
+        public string ID { get; }
+        public AssetReferenceGameObject AssetReference { get; }
+        public Vector2Int[] OutputDoors { get; }
 
-        public Vector2Int[] OutputDoors => _outputDoors;
-
-        public string ID => _id;
+        public RoomConfigVariant(string id, AssetReferenceGameObject assetReference, Vector2Int[] outputDoors)
+        {
+            ID = id;
+            AssetReference = assetReference;
+            OutputDoors = outputDoors;
+        }
     }
 }

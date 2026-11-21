@@ -1,7 +1,8 @@
 {
   "name": "Autumn.Dungeon",
-  "noEngineReferences": true,
+  "noEngineReferences": false,
   "references": [
+    "Unity.Addressables",
     "Autumn.DungeonGenerator",
     "Autumn.Tiles",
     "Autumn.ConfigLoader",

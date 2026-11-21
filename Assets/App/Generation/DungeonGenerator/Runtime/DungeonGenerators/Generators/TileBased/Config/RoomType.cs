@@ -2,11 +2,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 {
     public enum RoomType
     {
-        Workshop,
-        Transit,
-        Start,
-        End,
-        Empty,
-        Chest,
+        // Explicit values preserve existing serialized Start and Transit rooms.
+        Start = 2,
+        Transit = 1,
+        Content = 3,
     }
 }

@@ -10,6 +10,9 @@ namespace App.Game.Player.External.Items
 {
     public class HandItemsController : IHandItemsController
     {
+        internal const string IronSwordId = "ironsword";
+        internal static readonly int WeaponEquipped = Animator.StringToHash("WeaponEquipped");
+
         private readonly IAssetManager _assetManager;
         private readonly PlayerContext _context;
         private RigProviderView _rigProvider;
@@ -27,6 +30,13 @@ namespace App.Game.Player.External.Items
         
         public void Equip(EquipHandItemInfo info)
         {
+            var moduleItem = info.Item;
+            if (info.Hand == EHand.Right && moduleItem.Id == IronSwordId)
+            {
+                _context.View.Animator.SetFloat(WeaponEquipped, 1f);
+                return;
+            }
+
             Transform parent = null;
             if (info.Hand == EHand.Left)
             {
@@ -37,7 +47,6 @@ namespace App.Game.Player.External.Items
                 parent = _rigProvider.RightHand;
             }
 
-            var moduleItem = info.Item;
             if (!moduleItem.TryGetConfigModule<PresentableModuleConfig>(out var assetModuleConfig))
             {
                 HLogger.LogError("AssetModuleConfig not found.");
@@ -45,6 +54,8 @@ namespace App.Game.Player.External.Items
             }
 
             var asset = assetModuleConfig.Instantiate();
+            if (info.Hand == EHand.Right)
+                _context.View.Animator.SetFloat(WeaponEquipped, 0f);
 
             var itemView = asset.transform;
             itemView.parent = parent;
@@ -54,6 +65,8 @@ namespace App.Game.Player.External.Items
 
         public void UnEquip(UnEquipHandItemInfo info)
         {
+            if (info.Hand == EHand.Right)
+                _context.View.Animator.SetFloat(WeaponEquipped, 0f);
         }
     }
 }

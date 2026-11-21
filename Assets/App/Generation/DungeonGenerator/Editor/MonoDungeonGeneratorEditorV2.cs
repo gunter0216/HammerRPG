@@ -1,4 +1,4 @@
-﻿// using System.Collections.Generic;
+// using System.Collections.Generic;
 // using System.Text;
 // using App.Generation.DungeonGenerator.External;
 // using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
@@ -28,7 +28,7 @@
 //         }
 //         
 //         private readonly Runtime.DungeonGenerators.DungeonGenerator m_Generator = new(new Logger());
-//         private readonly DungeonGenerationDtoToConfigConverter m_DungeonGenerationDtoToConfigConverter = new();
+//         private readonly DungeonGenerationConfigConverter m_DungeonGenerationConfigConverter = new();
 //         
 //         private DungeonGeneration m_Generation;
 //         private bool m_ShowLabel;
@@ -51,7 +51,7 @@
 //             m_ShowRoomBorders = myScript.ShowRoomBorders;
 //             if (GUILayout.Button("Start Generate"))
 //             {
-//                 var config = m_DungeonGenerationDtoToConfigConverter.Convert(myScript.Config);
+//                 var config = m_DungeonGenerationConfigConverter.Convert(myScript.Config);
 //                 m_Generator.StartGeneration(config);
 //             }
 //             

@@ -61,9 +61,10 @@ namespace App.Game.Player.External
             CreateView();
             PlacePlayerOnStartRoom();
             InitContext();
-            InitMove();
-            InitAttack();
-            InitLeftClickController();
+            if (!InitMove())
+                return;
+            if (InitAttack())
+                InitLeftClickController();
             InitHandItems();
         }
 
@@ -72,9 +73,14 @@ namespace App.Game.Player.External
             _handItemsController = new HandItemsController(_context, _assetManager);
             _handItemsController.Initialize();
 
-            var itemResult = _moduleItemsManager.Create("IronSword");
-            var item = itemResult.Value;
-            _handItemsController.Equip(new EquipHandItemInfo(EHand.Right, item));
+            var itemResult = _moduleItemsManager.Create(HandItemsController.IronSwordId);
+            if (!itemResult.HasValue)
+            {
+                HLogger.LogError("Could not create the player's starting sword.");
+                return;
+            }
+
+            _handItemsController.Equip(new EquipHandItemInfo(EHand.Right, itemResult.Value));
         }
 
         private void InitLeftClickController()
@@ -118,28 +124,28 @@ namespace App.Game.Player.External
                 return;
             }
             
-            PlayerView.transform.position = new Vector3(position.Value.X, 1, position.Value.Y);
+            PlayerView.transform.position = new Vector3(position.Value.X, position.Value.Y, 0);
         }
 
-        private void InitMove()
+        private bool InitMove()
         {
             _playerMoveController = new PlayerMoveController(
                 _moveModuleSystem, 
                 _inputService, 
                 _context);
-            _playerMoveController.Init();
+            return _playerMoveController.Init();
         }
 
-        private void InitAttack()
+        private bool InitAttack()
         {
             _playerAttackController = new PlayerAttackController(_context);
-            _playerAttackController.Initialize();
+            return _playerAttackController.Initialize();
         }
 
         public void OnUpdate()
         {
             _playerMoveController.OnUpdate();
-            _leftClickController.OnUpdate();
+            _leftClickController?.OnUpdate();
         }
     }
 }

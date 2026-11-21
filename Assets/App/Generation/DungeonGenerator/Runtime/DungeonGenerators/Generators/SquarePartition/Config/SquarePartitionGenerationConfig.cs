@@ -1,12 +1,12 @@
 using System;
-using App.Generation.DungeonGenerator.External.Dto.Common;
+using App.Generation.DungeonGenerator.Runtime.Configs.Settings.Common;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition
 {
     [Serializable]
     public class SquarePartitionGenerationConfig : IGenerationConfig
     {
-        private readonly SizeIntDto _size;
+        private readonly SizeInt _size;
         private readonly float _offset;
         private readonly int _minAreaSize;
         private readonly int _minRoomSize;
@@ -14,7 +14,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
         private readonly int _areaPadding;
         private readonly int _depth;
 
-        public SizeIntDto Size => _size;
+        public SizeInt Size => _size;
         public int MinAreaSize => _minAreaSize;
 
         public int MinRoomSize => _minRoomSize;
@@ -27,7 +27,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.S
 
         public int AreaPadding => _areaPadding;
 
-        public SquarePartitionGenerationConfig(SizeIntDto size,
+        public SquarePartitionGenerationConfig(SizeInt size,
             int minAreaSize,
             int minRoomSize, 
             int maxRoomSize,

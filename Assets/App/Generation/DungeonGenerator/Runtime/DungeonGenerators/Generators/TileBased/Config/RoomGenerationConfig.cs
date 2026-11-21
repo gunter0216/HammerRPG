@@ -1,42 +1,25 @@
-using System;
-using App.Common.Algorithms.Runtime;
-using Newtonsoft.Json;
+using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.TileBased
 {
-    [Serializable]
     public class RoomGenerationConfig
     {
-        [JsonProperty("id")]
-        private string _id;
-        
-        [JsonProperty("type")]
-        private string _roomType;
-        
-        [JsonProperty("size")]
-        private Vector2Int _size;
-        
-        [JsonProperty("inputDoor")]
-        private Vector2Int _inputDoor;
-        
-        [JsonProperty("variants")]
-        private RoomConfigVariant[] _variants;
+        public string ID { get; }
+        public RoomType RoomType { get; }
+        public Vector2Int Size { get; }
+        public Vector2Int InputDoor { get; }
+        public Vector2Int PrefabOrigin { get; }
+        public RoomConfigVariant Variant { get; }
 
-        public RoomType RoomType
+        public RoomGenerationConfig(string id, RoomType roomType, Vector2Int size, Vector2Int inputDoor,
+            Vector2Int prefabOrigin, RoomConfigVariant variant)
         {
-            get
-            {
-                Enum.TryParse<RoomType>(_roomType, out var type);
-                return type;
-            }
+            ID = id;
+            RoomType = roomType;
+            Size = size;
+            InputDoor = inputDoor;
+            PrefabOrigin = prefabOrigin;
+            Variant = variant;
         }
-
-        public Vector2Int Size => new(_size.X, _size.Y);
-
-        public Vector2Int InputDoor => new(_inputDoor.X, _inputDoor.Y);
-
-        public RoomConfigVariant[] Variants => _variants;
-
-        public string ID => _id;
     }
 }
