@@ -21,7 +21,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         public event Action<GameConfig> OnConfigSelected;
         public event Action<string> OnFolderSelected;
 
-        public string FolderPath => Path.Combine("Assets", "App", "Configs");
+        public string FolderPath => ConfigEditorWindow.ConfigFolder;
         
         public GameConfig Selected => _selected;
         
@@ -129,13 +129,19 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 
         private void LoadCollection()
         {
-            string[] assetPaths = Directory.GetFiles(
-                ConfigEditorWindow.ConfigFolder, "*.asset",
-                SearchOption.AllDirectories);
+            _collection.Clear();
 
-            foreach (string path in assetPaths)
+            if (!AssetDatabase.IsValidFolder(FolderPath))
             {
-                var config = AssetDatabase.LoadAssetAtPath<GameConfig>(path.Replace("\\", "/"));
+                OnConfigsChanged?.Invoke();
+                return;
+            }
+
+            var guids = AssetDatabase.FindAssets($"t:{nameof(GameConfig)}", new[] { FolderPath });
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var config = AssetDatabase.LoadAssetAtPath<GameConfig>(path);
                 if (config != null)
                     _collection.Add(config);
             }

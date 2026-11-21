@@ -15,6 +15,7 @@ MonoBehaviour:
   m_Id: IronKey
   m_Modules:
   - rid: 2381230076579545240
+  - rid: 3362484061470195837
   m_Tags: 0
   references:
     version: 2
@@ -23,3 +24,8 @@ MonoBehaviour:
       type: {class: SpriteModuleConfig, ns: App.Game.Modules.Sprite.Runtime, asm: Autumn.Modules.Sprite}
       data:
         _sprite: {fileID: 21300000, guid: 01afc6dddc8f9334bb423c0f9529d3ce, type: 3}
+    - rid: 3362484061470195837
+      type: {class: ContainerItemModuleConfig, ns: App.Game.Modules.ContainerItem.Runtime.Config, asm: Autumn.Modules.ContainerItem}
+      data:
+        _width: 1
+        _height: 1

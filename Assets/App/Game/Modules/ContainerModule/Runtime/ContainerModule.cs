@@ -1,4 +1,3 @@
-using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Containers.Container.Runtime;
 using App.Game.Modules.ContainerModule.Runtime.Config;
@@ -34,8 +33,11 @@ namespace App.Game.Modules.ContainerModule.Runtime
         }
 
         // todo здесь должна быть крутая логика со слотами
-        public void AddItem(IModuleItem moduleItem)
+        public bool AddItem(IModuleItem moduleItem)
         {
+            if (moduleItem == null)
+                return false;
+
             for (int i = 0; i < _container.Items.Count; ++i)
             {
                 var item = _container.Items[i];
@@ -46,10 +48,10 @@ namespace App.Game.Modules.ContainerModule.Runtime
                 
                 _container.AddItem(moduleItem, i);
                 
-                return;
+                return true;
             }
             
-            HLogger.LogError($"Cant add item = {moduleItem.Id}. Not found empty slot.");
+            return false;
         }
     }
 }

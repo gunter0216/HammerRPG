@@ -56,7 +56,9 @@
         "Autumn.Modules.TilePosition",
         "Autumn.Modules.Transform",
         "Autumn.Modules.Fbx",
-        "Autumn.Modules.Defence"
+        "Autumn.Modules.Defence",
+        "Autumn.Modules.IssuedItems",
+        "Autumn.Modules.ContainerItem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

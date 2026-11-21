@@ -1,136 +1,79 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Canvases.External;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
-using App.Common.SpriteLoaders.Runtime;
-using App.Common.Utilities.Pool.Runtime;
-using App.Common.Utilities.Utility.Runtime;
-using App.Game.Canvases.External;
 using App.Game.Cheats.External.Services;
 using App.Game.Cheats.External.View;
-using App.Game.Inventory.Runtime;
+using App.Game.Modules.ContainerItem.Runtime.Config;
+using App.Game.Modules.Sprite.Runtime;
 using UnityEngine;
 
 namespace App.Game.Cheats.External.ViewModel
 {
     public class CheatsWindowModel
     {
-        private const string m_GroundOption = "Ground";
-        private const string m_InventoryOption = "Inventory";
-        private readonly List<string> m_PlaceItemsDropdownOptions = new List<string>
-        {
-            m_InventoryOption,
-            m_GroundOption,
-        };
-        
-        private readonly IAssetManager m_AssetManager;
+        private readonly IAssetManager _assetManager;
         private readonly ICanvasController _canvasController;
-        private readonly ISpriteLoader m_SpriteLoader;
-        private readonly IInventoryController m_InventoryController;
-        private readonly IReadOnlyList<IModuleItemConfig> m_Configs;
+        private readonly IReadOnlyList<IModuleItemConfig> _items;
+        private readonly Func<IModuleItemConfig, bool> _addItem;
 
-        private CheatsWindow m_Window;
-        
-        private ListPool<CheatsSlotViewModel> m_Slots;
-        private List<CheatsSlotViewModel> m_ActiveSlots;
+        private CheatsWindow _window;
 
-        public CheatsWindowModel(
-            IAssetManager assetManager, 
-            ICanvasController canvasController, 
-            ISpriteLoader spriteLoader, 
-            IInventoryController inventoryController,
-            IReadOnlyList<IModuleItemConfig> configs)
+        public CheatsWindowModel(IAssetManager assetManager, ICanvasController canvasController,
+            IReadOnlyList<IModuleItemConfig> items, Func<IModuleItemConfig, bool> addItem)
         {
-            m_AssetManager = assetManager;
+            _assetManager = assetManager;
             _canvasController = canvasController;
-            m_SpriteLoader = spriteLoader;
-            m_Configs = configs;
-            m_InventoryController = inventoryController;
+            _items = items;
+            _addItem = addItem;
         }
 
         public void Open()
         {
-            if (m_Window == null)
+            if (_window == null && !CreateWindow())
             {
-                if (!CreateWindow())
-                {
-                    HLogger.LogError("Failed to create inventory window.");
-                    return;
-                }
+                HLogger.LogError("Failed to create cheats window.");
+                return;
             }
-            
-            m_Window.SetActive(true);
+
+            _window.transform.SetAsLastSibling();
+            _window.SetActive(true);
         }
-        
+
         public void Close()
         {
-            m_Window.SetActive(false);
+            if (_window != null)
+                _window.SetActive(false);
         }
-        
-        public bool IsOpen()
-        {
-            return m_Window != null && m_Window.IsActive();
-        }
-        
+
+        public bool IsOpen() => _window != null && _window.IsActive();
+
         private bool CreateWindow()
         {
-            var windowCreator = new CheatsWindowCreator(m_AssetManager, _canvasController);
-            var window = windowCreator.Create();
+            var creator = new CheatsWindowCreator(_assetManager, _canvasController);
+            var window = creator.Create();
             if (!window.HasValue)
-            {
                 return false;
-            }
 
-            m_Window = window.Value;
-            InitWindow();
-            
+            _window = window.Value;
+            foreach (var config in _items)
+            {
+                if (!config.TryGetModule<ContainerItemModuleConfig>(out var size))
+                    continue;
+                var view = UnityEngine.Object.Instantiate(_window.CheatsSlotViewPrefab, _window.SlotsContent);
+                view.name = "CheatItem_" + config.Id;
+                view.SetLabel($"{config.Id}\n{size.Width} × {size.Height}");
+                view.SetSprite(config.TryGetModule<SpriteModuleConfig>(out var icon) ? icon.Sprite : null);
+                view.SetButtonClickCallback(() =>
+                {
+                    if (!_addItem(config))
+                        Debug.LogWarning($"Could not add '{config.Id}' to the player's container.");
+                });
+                view.SetActive(true);
+            }
             return true;
-        }
-
-        private void InitWindow()
-        {
-            var dropdown = m_Window.CreateItemDropdown;
-            dropdown.ClearOptions();
-            dropdown.AddOptions(m_PlaceItemsDropdownOptions);
-            
-            m_Slots = new ListPool<CheatsSlotViewModel>(CreateSlot, 32);
-            m_ActiveSlots = new List<CheatsSlotViewModel>();
-
-            ShowItems();
-        }
-
-        private Optional<CheatsSlotViewModel> CreateSlot()
-        {
-            var view = Object.Instantiate(
-                m_Window.CheatsSlotViewPrefab,
-                m_Window.SlotsContent);
-                    
-            var viewModel = new CheatsSlotViewModel(m_SpriteLoader, view, OnSlotClick);
-            return Optional<CheatsSlotViewModel>.Success(viewModel);
-        }
-
-        private void OnSlotClick(CheatsSlotViewModel viewModel)
-        {
-            var value = m_PlaceItemsDropdownOptions[m_Window.CreateItemDropdown.value];
-            if (value == m_InventoryOption)
-            {
-                m_InventoryController.AddItem(viewModel.Item);
-            }
-            else if (value == m_GroundOption)
-            {
-                HLogger.LogError("not implemented yet: place item on ground");
-            }
-        }
-
-        private void ShowItems()
-        {
-            foreach (var itemConfig in m_Configs)
-            {
-                var slot = m_Slots.Get();
-                slot.Value.SetItem(itemConfig);
-                m_ActiveSlots.Add(slot.Value);
-            }
         }
     }
 }

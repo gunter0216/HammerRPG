@@ -10,7 +10,7 @@ namespace App.Common.Configs.Editor
 {
     public class ConfigEditorWindow : EditorWindow
     {
-        internal const string ConfigFolder = "Assets/App/Configs";
+        internal const string ConfigFolder = "Assets/Configs";
 
         // ── Splitter ──────────────────────────────────────────────────────────
         private const float SplitterWidth = 4f;

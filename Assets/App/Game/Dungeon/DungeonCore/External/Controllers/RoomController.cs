@@ -59,7 +59,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         public void Initialize()
         {
             _root = new GameObject($"Room {_service.Room.Data.UID.ToString()}");
-            _root.transform.parent = _dungeon.transform;
+            _root.transform.SetParent(_dungeon.transform, false);
             
             _doors = new List<DoorController>();
             _chests = new List<ChestController>();
@@ -84,9 +84,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 return false;
 
             _roomView = viewResult.Value;
-            _roomView.transform.position = new Vector3(room.Position.X, 0, room.Position.Y);
-            _roomView.transform.rotation = Quaternion.Euler(0, room.Data.Rotation, 0);
-            _roomView.transform.parent = _root.transform;
+            RoomPlacement.Apply(_roomView, room.Position, room.Config.PrefabOrigin, room.Data.Rotation);
             
             foreach (var transform in _roomView.GetComponentsInChildren<Transform>(includeInactive: false))
             {

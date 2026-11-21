@@ -23,6 +23,7 @@ MonoBehaviour:
   - rid: 2381230076579545196
   - rid: 2381230076579545200
   - rid: 2381230076579545230
+  - rid: 3362484061470195824
   m_Tags: 0
   references:
     version: 2
@@ -65,3 +66,7 @@ MonoBehaviour:
       type: {class: PresentableModuleConfig, ns: App.Game.Modules.Asset.Runtime.Config.Model, asm: Autumn.Modules.Fbx}
       data:
         _asset: {fileID: 5016975802056075122, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
+    - rid: 3362484061470195824
+      type: {class: IssuedItemsModuleConfig, ns: App.Game.Modules.IssuedItems.Runtime.Config, asm: Autumn.Modules.IssuedItems}
+      data:
+        _items: []

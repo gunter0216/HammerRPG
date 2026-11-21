@@ -1009,7 +1009,7 @@ namespace InputSystem
                 {
                     ""name"": """",
                     ""id"": ""ea102cdb-eaad-4cbb-b6ac-fda395ad7192"",
-                    ""path"": ""<Keyboard>/backquote"",
+                    ""path"": ""<Keyboard>/backslash"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

@@ -1,31 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using App.Common.Logger.External;
 using App.Common.Logger.Runtime;
+using App.Game.Dungeon.DungeonCore.External.View;
 using App.Game.Dungeon.DungeonCreator.Runtime.Config.Converter;
-using App.Generation.DungeonGenerator.Runtime.Configs;
 using App.Generation.DungeonGenerator.External;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;
+using App.Generation.DungeonGenerator.Runtime.Configs;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.BorderingRoomsDiscarding.Cash;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.CreateDoors.Cash;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SmallRoomsDiscarding.Cash;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SpanningTree.Cash;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.SquarePartition;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.StartEndPath.Cash;
-using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Triangulation.Cash;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
-using Cysharp.Threading.Tasks;
-using NUnit.Framework;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 using Logger = App.Common.Logger.Runtime.Logger;
-using Object = UnityEngine.Object;
-using Vector2Int = App.Common.Algorithms.Runtime.Vector2Int;
 
 namespace App.Generation.DungeonGenerator.Editor
 {
@@ -34,240 +22,150 @@ namespace App.Generation.DungeonGenerator.Editor
     {
         private readonly Runtime.DungeonGenerators.DungeonGenerator m_Generator = new(new Logger());
         private readonly GenerationConfigConverter m_ConfigConverter = new();
-
         private DungeonGeneration m_Generation;
-        private bool m_ShowLabel;
-        private Transform _roomsContent;
-        private List<GameObject> _rooms;
+        private Transform m_Root;
 
-        void OnEnable()
+        private void OnEnable()
         {
             HLogger.SetInstance(new UnityLogger());
-            SceneView.duringSceneGui += WhenUpdate;
+            SceneView.duringSceneGui += DrawLabels;
+            Undo.undoRedoPerformed += OnUndoRedo;
+        }
+
+        private void OnDisable()
+        {
+            SceneView.duringSceneGui -= DrawLabels;
+            Undo.undoRedoPerformed -= OnUndoRedo;
+        }
+
+        private void OnUndoRedo()
+        {
+            m_Generation = null;
+            SceneView.RepaintAll();
         }
 
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
+            var component = (MonoDungeonGenerator)target;
+            if (component.GenerationConfig == null)
+                EditorGUILayout.ObjectField("Default Generation Config", GetConfig(), typeof(GenerationConfig), false);
 
-            var myScript = (MonoDungeonGenerator)target;
-            m_ShowLabel = myScript.ShowLabel;
-
-            var configAsset = myScript.GenerationConfig;
-            if (configAsset == null)
+            using (new EditorGUI.DisabledScope(EditorApplication.isPlayingOrWillChangePlaymode))
             {
-                configAsset = AssetDatabase.LoadAssetAtPath<GenerationConfig>(
-                    "Assets/Configs/Dungeon/GenerationConfig.asset");
-                EditorGUILayout.ObjectField("Default Generation Config", configAsset, typeof(GenerationConfig), false);
+                if (GUILayout.Button("Generate") && !Generate())
+                    Debug.LogError("Could not generate the 2D dungeon. Check the generation config and room prefabs.", component);
+                if (GUILayout.Button("Clear") && !ClearGenerated())
+                    Debug.LogError("Could not clear the generated dungeon.", component);
+            }
+        }
+
+        private GenerationConfig GetConfig() => ((MonoDungeonGenerator)target).GenerationConfig != null
+            ? ((MonoDungeonGenerator)target).GenerationConfig
+            : AssetDatabase.LoadAssetAtPath<GenerationConfig>("Assets/Configs/Dungeon/GenerationConfig.asset");
+
+        public bool Generate()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return false;
+            var component = (MonoDungeonGenerator)target;
+            if (component.ClearConsole)
+                Type.GetType("UnityEditor.LogEntries, UnityEditor.dll")?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public)?.Invoke(null, null);
+            var configs = m_ConfigConverter.Convert(GetConfig());
+            if (!configs.HasValue) return false;
+            var key = string.IsNullOrWhiteSpace(component.GenerationKey) ? "Default" : component.GenerationKey;
+            var config = Array.Find(configs.Value.Configs, item => item.Key == key);
+            if (config == null) return false;
+            var result = m_Generator.Generate(config);
+            if (!result.HasValue) return false;
+            var rooms = result.Value.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms;
+            foreach (var room in rooms)
+            {
+                var prefab = room.ConfigVariant.AssetReference?.editorAsset;
+                if (prefab == null || FindMap(prefab, "Floor") == null || FindMap(prefab, "Walls") == null)
+                    return false;
             }
 
-            if (GUILayout.Button("Generate"))
-            {
-                if (myScript.ClearConsole)
-                    ClearUnityConsole();
-                var configs = m_ConfigConverter.Convert(configAsset);
-                if (!configs.HasValue)
-                {
-                    Debug.LogError("Generation config is missing or invalid.");
-                    return;
-                }
-
-                var key = string.IsNullOrWhiteSpace(myScript.GenerationKey) ? "Default" : myScript.GenerationKey;
-                var config = Array.Find(configs.Value.Configs, item => item.Key == key);
-                if (config == null)
-                {
-                    Debug.LogError($"Generation config not found: {key}");
-                    return;
-                }
-
-                var generation = m_Generator.Generate(config);
-                if (!generation.HasValue)
-                {
-                    Debug.LogError("Dungeon generation failed.");
-                    return;
-                }
-
-                m_Generation = generation.Value;
-                Rebuild();
-            }
-
-            if (GUILayout.Button("Clear"))
+            Undo.IncrementCurrentGroup();
+            var undoGroup = Undo.GetCurrentGroup();
+            Undo.SetCurrentGroupName("Generate 2D dungeon");
+            try
             {
                 UpdateRoot();
-                Clear();
+                ClearRooms();
+                foreach (var room in rooms)
+                {
+                    var prefab = room.ConfigVariant.AssetReference.editorAsset;
+                    var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, m_Root);
+                    Undo.RegisterCreatedObjectUndo(instance, "Create dungeon room");
+                    RoomPlacement.Apply(instance.transform, room.Position, room.GenerationConfig.PrefabOrigin, room.RotateEuler);
+                    instance.transform.localScale = Vector3.one;
+                    instance.name = $"{prefab.name} depth {room.Depth}";
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(instance.transform);
+                }
+                m_Generation = result.Value;
+                EditorSceneManager.MarkSceneDirty(component.gameObject.scene);
+                Undo.CollapseUndoOperations(undoGroup);
+                SceneView.RepaintAll();
+                return true;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, component);
+                Undo.RevertAllDownToGroup(undoGroup);
+                return false;
             }
         }
-        
-        private static void ClearUnityConsole()
-        {
-            var logEntries = System.Type.GetType("UnityEditor.LogEntries, UnityEditor.dll");
-            var clearMethod = logEntries.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
 
-            clearMethod?.Invoke(null, null);
-        }
-
-        void WhenUpdate(SceneView sceneView)
-        {
-            if (!m_Generator.IsStart()) return;
-            if (m_Generation == null)   return;
-            Draw();
-        }
-
-        private void Draw()    => DrawRoomLabels();
-        private void Rebuild() { UpdateRoot(); Clear(); RebuildRooms().Forget(); }
-
-        private void Clear()
-        {
-            if (_rooms == null) return;
-            for (int i = _roomsContent.childCount - 1; i >= 0; --i)
-                Object.DestroyImmediate(_roomsContent.GetChild(i).gameObject);
-            _rooms.Clear();
-        }
+        private static Tilemap FindMap(GameObject room, string name) =>
+            Array.Find(room.GetComponentsInChildren<Tilemap>(true), map => map.name == name);
 
         private void UpdateRoot()
         {
-            _rooms ??= new List<GameObject>();
-            if (_roomsContent != null) return;
-
-            foreach (var go in SceneManager.GetActiveScene().GetRootGameObjects())
-                if (go.name == "Rooms") { _roomsContent = go.transform; break; }
-
-            if (_roomsContent == null)
-                _roomsContent = new GameObject("Rooms").transform;
+            var component = (MonoDungeonGenerator)target;
+            m_Root = component.transform.Find("Rooms");
+            if (m_Root != null) return;
+            var root = new GameObject("Rooms");
+            SceneManager.MoveGameObjectToScene(root, component.gameObject.scene);
+            Undo.RegisterCreatedObjectUndo(root, "Create dungeon root");
+            Undo.SetTransformParent(root.transform, component.transform, "Parent dungeon root");
+            root.transform.localPosition = Vector3.zero;
+            root.transform.localRotation = Quaternion.identity;
+            root.transform.localScale = Vector3.one;
+            m_Root = root.transform;
         }
 
-        private async UniTask RebuildRooms()
+        private void ClearRooms()
         {
-            var rooms = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
-            var log   = new StringBuilder();
-            log.AppendLine("=== RebuildRooms ===");
+            for (var i = m_Root.childCount - 1; i >= 0; i--)
+                Undo.DestroyObjectImmediate(m_Root.GetChild(i).gameObject);
+        }
 
-            foreach (var room in rooms.Rooms)
+        public bool ClearGenerated()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode) return false;
+            m_Root = ((MonoDungeonGenerator)target).transform.Find("Rooms");
+            if (m_Root == null) return true;
+            Undo.IncrementCurrentGroup();
+            var group = Undo.GetCurrentGroup();
+            Undo.SetCurrentGroupName("Clear 2D dungeon");
+            ClearRooms();
+            m_Generation = null;
+            Undo.CollapseUndoOperations(group);
+            return true;
+        }
+
+        private void DrawLabels(SceneView view)
+        {
+            if (m_Generation == null || m_Root == null || !((MonoDungeonGenerator)target).ShowLabel) return;
+            foreach (var room in m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms)
             {
-                var variant = room.ConfigVariant;
-                var genPos = room.Position;
-
-                // Компенсация смещения пивота при вращении Unity (ось Y, плоскость XZ).
-                // PivotOffset не нужен — prefab сам имеет внутреннее смещение +0.5 по X и Z,
-                // которое не меняется при вращении и не влияет на стыковку комнат.
-                var comp     = GetRotationCompensation(room.Size, room.RotateEuler);
-                // var finalPos = new Vector3(genPos.X + comp.x, 0, genPos.Y + comp.y);
-                var finalPos = new Vector3(genPos.X, 0, genPos.Y);
-
-                // Ожидаемый AABB в тайловых координатах
-                var tileOffset = GetTileRotationOffset(room.Size, room.RotateEuler);
-                var aabbSize   = GetRotatedSize(room.Size, room.RotateEuler);
-                var aabbMinX   = genPos.X + tileOffset.X;
-                var aabbMinY   = genPos.Y + tileOffset.Y;
-                var aabbMaxX   = aabbMinX + aabbSize.X - 1;
-                var aabbMaxY   = aabbMinY + aabbSize.Y - 1;
-
-                log.AppendLine($"--- {variant.ID} depth={room.Depth} ---");
-                log.AppendLine($"  genPos=({genPos.X},{genPos.Y})  size={room.Size.X}x{room.Size.Y}  rot={room.RotateEuler}");
-                log.AppendLine($"  compensation=({comp.x},{comp.y})");
-                log.AppendLine($"  finalPos=({finalPos.x},{finalPos.z}) [X,Z]");
-                log.AppendLine($"  expectedAABB X[{aabbMinX}..{aabbMaxX}] Y[{aabbMinY}..{aabbMaxY}]");
-                log.AppendLine($"  expectedFinalPos X={aabbMinX} Z={aabbMinY}");
-
-                var prefab = variant.AssetReference?.editorAsset;
-                if (prefab == null)
-                {
-                    Debug.LogError($"Room prefab reference is missing: {variant.ID}");
-                    continue;
-                }
-
-                var roomObj = (GameObject)PrefabUtility.InstantiatePrefab(prefab, _roomsContent);
-                roomObj.transform.position = finalPos + _roomsContent.position;
-                roomObj.transform.rotation = Quaternion.Euler(0, room.RotateEuler, 0);
-                roomObj.transform.parent = _roomsContent;
-                
-                roomObj.name = $"{prefab.name} depth {room.Depth}";
-                _rooms.Add(roomObj);
-
-                // Логируем localPosition (без внутреннего смещения prefab'а +0.5)
-                var lp = roomObj.transform.localPosition;
-                bool matchX = Mathf.Approximately(lp.x, aabbMinX);
-                bool matchZ = Mathf.Approximately(lp.z, aabbMinY);
-                log.AppendLine($"  localPos=({lp.x},{lp.z}) [X,Z]  match={matchX && matchZ}");
+                var index = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms.Rooms.IndexOf(room);
+                if (index >= m_Root.childCount) continue;
+                var instance = m_Root.GetChild(index);
+                var origin = room.GenerationConfig.PrefabOrigin;
+                var center = instance.TransformPoint(new Vector3(origin.X + room.Size.X * .5f, origin.Y + room.Size.Y * .5f));
+                Handles.Label(center, $"{room.GenerationConfig.RoomType}\nUID: {room.UID}\nDepth: {room.Depth}");
             }
-
-            Debug.Log(log.ToString());
-        }
-
-        // Компенсация смещения пивота при вращении Unity по оси Y (плоскость XZ).
-        // Пивот = левый нижний угол комнаты. После вращения он остаётся на месте,
-        // но комната "растёт" в другую сторону — компенсируем сдвигом позиции.
-        //
-        //   rot=0°:   (0, 0)
-        //   rot=90°:  (0, W)   — комната уходит по -Z, сдвигаем +Z на W
-        //   rot=180°: (W, H)
-        //   rot=270°: (H, 0)   — комната уходит по -X, сдвигаем +X на H
-        private Vector2 GetRotationCompensation(Vector2Int size, float rotation)
-        {
-            int w = size.X, h = size.Y;
-
-            if (Mathf.Approximately(rotation, 90))  return new Vector2(0, w);
-            if (Mathf.Approximately(rotation, 180)) return new Vector2(w, h);
-            if (Mathf.Approximately(rotation, 270)) return new Vector2(h, 0);
-            return Vector2.zero;
-        }
-
-        // Тайловый offset AABB относительно room.Position (только для логов)
-        private Vector2Int GetTileRotationOffset(Vector2Int size, float rotation)
-        {
-            int w = size.X, h = size.Y;
-
-            if (Mathf.Approximately(rotation, 90))  return new Vector2Int(h - 1, 0);
-            if (Mathf.Approximately(rotation, 180)) return new Vector2Int(w - 1, h - 1);
-            if (Mathf.Approximately(rotation, 270)) return new Vector2Int(0,     w - 1);
-            return new Vector2Int(0, 0);
-        }
-
-        private Vector2Int GetRotatedSize(Vector2Int size, float rotation)
-        {
-            if (Mathf.Approximately(rotation, 90) || Mathf.Approximately(rotation, 270))
-                return new Vector2Int(size.Y, size.X);
-            return size;
-        }
-
-        private void DrawRoomLabels()
-        {
-            var roomsData = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
-            var rooms = roomsData.Rooms;
-            if (rooms == null) return;
-
-            for (int i = 0; i < rooms.Count; ++i)
-            {
-                var room         = rooms[i];
-                var roomPosition = room.GetCenter();
-                var position     = new Vector3(roomPosition.X, roomPosition.Y);
-                if (m_ShowLabel)
-                    Handles.Label(position, RoomToString(room));
-            }
-        }
-
-        private string RoomToString(DungeonGenerationRoom generationRoom)
-        {
-            var roomsData = m_Generation.DungeonGenerationResult.GenerationData.GenerationRooms;
-            var start = roomsData.StartGenerationRoom;
-            var end   = roomsData.EndGenerationRoom;
-
-            var str = new StringBuilder();
-            str.Append("[ ");
-            if (generationRoom == start)    str.Append("START\n");
-            else if (generationRoom == end) str.Append("END\n");
-
-            str.Append($"UID: {generationRoom.UID}");
-            str.Append($"\nIsMain: {generationRoom.IsMainPath}");
-
-            if (generationRoom.RequiredKey != null)
-                str.Append($"\nRequiredKey: {generationRoom.RequiredKey.UID}");
-
-            if (generationRoom.ContainsDoorKeys.Count > 0)
-                str.Append($"\nContainsKey: {generationRoom.ContainsDoorKeys[0].UID}");
-
-            str.Append(" ]");
-            return str.ToString();
         }
     }
 }

@@ -31,7 +31,7 @@ namespace App.Generation.DungeonGenerator.Runtime.Configs
 
             config = new RuntimeDungeonGenerationConfig(
                 settings.Key,
-                new IGenerationConfig[] { new TileBasedGenerationConfig(rooms, source.MaxDepth, source.MaxIterations) });
+                new IGenerationConfig[] { new TileBasedGenerationConfig(rooms, source.MaxDepth, source.MaxIterations, source.DisableRoomRotation) });
             return true;
         }
     }

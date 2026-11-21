@@ -86,9 +86,11 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
                 containerModule);
 
             var key = _keyCreator.Create(generationChest.Key);
-            if (key != null)
+            if (key != null && !containerModule.AddItem(key))
             {
-                containerModule.AddItem(key);
+                HLogger.LogError("Could not add key to chest container.");
+                if (!_moduleItemsManager.Destroy(key))
+                    HLogger.LogError("Could not clean up key rejected by chest container.");
             }
 
             return chest;

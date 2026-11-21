@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26bda2c28ea41e8868738951f4d0387, type: 3}
+  m_Name: TestSquareIronHatchet
+  m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
+  m_Id: test_square_iron_hatchet
+  m_Modules:
+  - rid: 3362484061470195937
+  - rid: 3362484061470195938
+  - rid: 3362484061470195939
+  m_Tags: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 3362484061470195937
+      type: {class: SpriteModuleConfig, ns: App.Game.Modules.Sprite.Runtime, asm: Autumn.Modules.Sprite}
+      data:
+        _sprite: {fileID: 21300000, guid: 1f51d5535cbd961498117f19d09f3691, type: 3}
+    - rid: 3362484061470195938
+      type: {class: ContainerItemModuleConfig, ns: App.Game.Modules.ContainerItem.Runtime.Config, asm: Autumn.Modules.ContainerItem}
+      data:
+        _width: 1
+        _height: 1
+    - rid: 3362484061470195939
+      type: {class: NameModuleConfig, ns: App.Game.Modules.Name.Runtime.Config, asm: Autumn.Modules.Name}
+      data:
+        _name: "\u0416\u0435\u043B\u0435\u0437\u043D\u044B\u0439 \u0442\u043E\u043F\u043E\u0440\u0438\u043A"

@@ -29,7 +29,7 @@ namespace App.Game.CameraFollow.External
             var playerPosition = _playerController.PlayerView.Transform.position;
 
             _camera.transform.SetPositionX(playerPosition.x);
-            _camera.transform.SetPositionZ(playerPosition.z);
+            _camera.transform.SetPositionY(playerPosition.y);
         }
     }
 }

@@ -6,6 +6,8 @@ using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
 using App.Game.Dungeon.DungeonCore.Runtime;
 using App.Game.Modules.Move.Runtime;
+using App.Game.Modules.IssuedItems.Runtime;
+using App.Game.Modules.ContainerModule.Runtime;
 using App.Game.Player.External.Attack;
 using App.Game.Player.External.Context;
 using App.Game.Player.External.Items;
@@ -57,6 +59,11 @@ namespace App.Game.Player.External
         {
             var playerCreator = new PlayerCreator(_moduleItemsManager);
             _player = playerCreator.Create();
+            if (_player == null)
+                return;
+
+            if (!IssueStartingItems())
+                HLogger.LogError("Could not issue all starting items to the player.");
             
             CreateView();
             PlacePlayerOnStartRoom();
@@ -72,15 +79,15 @@ namespace App.Game.Player.External
         {
             _handItemsController = new HandItemsController(_context, _assetManager);
             _handItemsController.Initialize();
+        }
 
-            var itemResult = _moduleItemsManager.Create(HandItemsController.IronSwordId);
-            if (!itemResult.HasValue)
-            {
-                HLogger.LogError("Could not create the player's starting sword.");
-                return;
-            }
+        private bool IssueStartingItems()
+        {
+            if (!_player.TryGetModule<IssuedItemsModule>(out var module))
+                return true;
 
-            _handItemsController.Equip(new EquipHandItemInfo(EHand.Right, itemResult.Value));
+            return _player.TryGetModule<ContainerModule>(out var container) &&
+                   module.TryIssueItems(_moduleItemsManager, container);
         }
 
         private void InitLeftClickController()
@@ -144,7 +151,7 @@ namespace App.Game.Player.External
 
         public void OnUpdate()
         {
-            _playerMoveController.OnUpdate();
+            _playerMoveController?.OnUpdate();
             _leftClickController?.OnUpdate();
         }
     }

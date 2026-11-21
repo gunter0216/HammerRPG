@@ -1,64 +1,74 @@
-﻿using App.Common.AssetSystem.Runtime;
+using System;
+using System.Collections.Generic;
+using App.Common.AssetSystem.Runtime;
 using App.Common.Canvases.External;
-using App.Common.ModuleItem.External;
+using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
-using App.Common.SpriteLoaders.Runtime;
+using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
-using App.Game.Canvases.External;
 using App.Game.Cheats.External.ViewModel;
-using App.Game.Inventory.External;
+using App.Game.Modules.ContainerItem.Runtime.Config;
+using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Player.External;
 
 namespace App.Game.Cheats.External
 {
     public class CheatsController : IInitSystem
     {
-        private readonly IModuleItemsManager _moduleItemsManager;
-        private readonly InventoryController _inventoryController;
-        private readonly ISpriteLoader _spriteLoader;
         private readonly ICanvasController _canvasController;
         private readonly IAssetManager _assetManager;
+        private readonly IModuleItemsManager _itemsManager;
+        private readonly PlayerController _playerController;
 
         private CheatsWindowModel _cheatsWindowModel;
 
-        public CheatsController(
-            IModuleItemsManager moduleItemsManager, 
-            InventoryController inventoryController,
-            ISpriteLoader spriteLoader,
-            ICanvasController canvasController,
-            IAssetManager assetManager)
+        public CheatsController(ICanvasController canvasController, IAssetManager assetManager,
+            IModuleItemsManager itemsManager, PlayerController playerController)
         {
-            _moduleItemsManager = moduleItemsManager;
-            _inventoryController = inventoryController;
-            _spriteLoader = spriteLoader;
             _canvasController = canvasController;
             _assetManager = assetManager;
+            _itemsManager = itemsManager;
+            _playerController = playerController;
         }
 
         public void Init()
         {
-            var configs = _moduleItemsManager.GetConfigs(ModuleItemConfigs.GameItemsType);
+            var configs = _itemsManager.GetConfigs("Default");
+            if (!configs.HasValue)
+            {
+                HLogger.LogError("Could not load the cheats item catalog.");
+                return;
+            }
 
-            _cheatsWindowModel = new CheatsWindowModel(
-                _assetManager,
-                _canvasController,
-                _spriteLoader,
-                _inventoryController,
-                configs.Value);
+            var items = new List<IModuleItemConfig>();
+            foreach (var config in configs.Value)
+                if (config.HasModule<ContainerItemModuleConfig>())
+                    items.Add(config);
+            items.Sort((left, right) => StringComparer.Ordinal.Compare(left.Id, right.Id));
+            _cheatsWindowModel = new CheatsWindowModel(_assetManager, _canvasController, items, TryAddItem);
         }
 
-        public bool IsOpen()
+        public bool TryAddItem(IModuleItemConfig config)
         {
-            return _cheatsWindowModel.IsOpen();
+            if (config == null || !config.HasModule<ContainerItemModuleConfig>() ||
+                _playerController.Player == null ||
+                !_playerController.Player.TryGetModule<ContainerModule>(out var container))
+                return false;
+
+            var item = _itemsManager.Create(config.Id);
+            if (!item.HasValue)
+                return false;
+
+            if (container.AddItem(item.Value))
+                return true;
+
+            if (!_itemsManager.Destroy(item.Value))
+                HLogger.LogError($"Could not clean up cheat item '{config.Id}'.");
+            return false;
         }
 
-        public void CloseWindow()
-        {
-            _cheatsWindowModel.Close();
-        }
-
-        public void OpenWindow()
-        {
-            _cheatsWindowModel.Open();
-        }
+        public bool IsOpen() => _cheatsWindowModel != null && _cheatsWindowModel.IsOpen();
+        public void CloseWindow() => _cheatsWindowModel?.Close();
+        public void OpenWindow() => _cheatsWindowModel?.Open();
     }
 }

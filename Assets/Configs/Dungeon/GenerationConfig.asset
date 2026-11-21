@@ -28,3 +28,4 @@ MonoBehaviour:
       - {fileID: 11400000, guid: e7ecbd870f6417841b37b3f8c3b57d18, type: 2}
       _maxDepth: 2
       _maxIterations: 300
+      _disableRoomRotation: 1

@@ -1,33 +1,32 @@
-﻿using App.Common.Input.Runtime;
-using App.Common.Utilities.Utility.Runtime;
-using UnityEngine;
+using System;
+using App.Common.Input.Runtime;
 using UnityEngine.InputSystem;
 
 namespace App.Game.Cheats.External
 {
-    public class OpenCheatsSystem
+    public class OpenCheatsSystem : IDisposable
     {
-        private readonly CheatsController m_CheatsController;
+        private readonly CheatsController _cheatsController;
         private readonly IInputService _inputService;
 
         public OpenCheatsSystem(CheatsController cheatsController, IInputService inputService)
         {
-            m_CheatsController = cheatsController;
+            _cheatsController = cheatsController;
             _inputService = inputService;
-
             _inputService.Input.UI.Cheats.performed += OnClick;
         }
 
-        private void OnClick(InputAction.CallbackContext obj)
+        private void OnClick(InputAction.CallbackContext context)
         {
-            if (m_CheatsController.IsOpen())
-            {
-                m_CheatsController.CloseWindow();
-            }
+            if (_cheatsController.IsOpen())
+                _cheatsController.CloseWindow();
             else
-            {
-                m_CheatsController.OpenWindow();
-            }
+                _cheatsController.OpenWindow();
+        }
+
+        public void Dispose()
+        {
+            _inputService.Input.UI.Cheats.performed -= OnClick;
         }
     }
 }

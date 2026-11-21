@@ -16,6 +16,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
 {
     public class TileBasedDungeonGenerator : IDungeonGenerator
     {
+        private static readonly float[] Unrotated = { 0f };
+        private static readonly float[] QuarterTurns = { 0f, 90f, 180f, 270f };
+
         private readonly RoomCreator _roomCreator;
 
         private Dictionary<RoomType, List<RoomGenerationConfig>> _typeToRooms;
@@ -107,7 +110,9 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             var prevDoorWorldPos = GetDoorWorldPosition(prevRoom, exitDoor);
             var prevDoorSide     = GetDoorSide(prevRoom.Size, exitDoor, prevRoom.RotateEuler);
             var sideVec          = SideToVector(prevDoorSide);
-            var targetDoorWorldPos = prevDoorWorldPos + sideVec;
+            // Door coordinates identify empty cells just outside the floor lip.
+            // Join the existing floor lips directly instead of leaving two empty rows.
+            var targetDoorWorldPos = prevDoorWorldPos - sideVec;
 
             var configs = new List<RoomGenerationConfig>();
             if (!isMaxDepth)
@@ -124,7 +129,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             foreach (var config in configs)
             {
                 var variant = config.Variant;
-                foreach (var rotation in new[] { 0f, 90f, 180f, 270f })
+                foreach (var rotation in _config.DisableRoomRotation ? Unrotated : QuarterTurns)
                 {
                     var inputDoorSide = GetDoorSide(config.Size, config.InputDoor, rotation);
 
@@ -140,7 +145,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                     room.RotateEuler   = rotation;
                     room.Depth         = depth + 1;
 
-                    if (Intersects(room))
+                    if (Intersects(room, prevRoom, prevDoorSide))
                         continue;
 
                     _rooms.Add(room);
@@ -192,7 +197,7 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
                 _rooms.RemoveRange(idx, _rooms.Count - idx);
         }
 
-        private bool Intersects(DungeonGenerationRoom room)
+        private bool Intersects(DungeonGenerationRoom room, DungeonGenerationRoom previous, Side connectionSide)
         {
             var rect1 = GetRoomRect(room);
 
@@ -200,11 +205,29 @@ namespace App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.T
             {
                 var rect2 = GetRoomRect(other);
 
+                // Bounds include the empty opening row and the wall caps. Only the
+                // connected parent may share that two-cell border band.
+                if (other == previous && IsConnectionBorder(rect1, rect2, connectionSide))
+                    continue;
+
                 if (rect1.Overlaps(rect2))
                     return true;
             }
 
             return false;
+        }
+
+        private static bool IsConnectionBorder(RectInt candidate, RectInt previous, Side side)
+        {
+            const int border = 2;
+            switch (side)
+            {
+                case Side.Right: return candidate.Position.X >= previous.Position.X + previous.Width - border;
+                case Side.Left: return candidate.Position.X + candidate.Width <= previous.Position.X + border;
+                case Side.Top: return candidate.Position.Y >= previous.Position.Y + previous.Height - border;
+                case Side.Bottom: return candidate.Position.Y + candidate.Height <= previous.Position.Y + border;
+                default: return false;
+            }
         }
 
         private RectInt GetRoomRect(DungeonGenerationRoom room)

@@ -20,8 +20,32 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 07fc69bb28a42a84aabcc0520c72c578
+    m_Address: ModuleItemGameConfig/TestWineFurMantle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1215f527aadf3e3499492cbf0ef13a73
+    m_Address: ModuleItemGameConfig/TestStrappedAnkleBoots
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e185f70284f7c54f8ae75e9c0ac0a98
+    m_Address: ModuleItemGameConfig/TestAshSelfBow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1fca479339814f643bfbc26762c600b6
     m_Address: Assets/App/Configs/Tiles/Door.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26740568b8fba6b4386ecd9b78f363c4
+    m_Address: ModuleItemGameConfig/TestCopperRimShield
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig
@@ -46,10 +70,22 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37fa4a558e37d854994bd5242697e35e
+    m_Address: ModuleItemGameConfig/TestRivetedLeatherVest
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d60c5c765390b042ad095c154c570d8
     m_Address: GenerationConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ddb1368ebade124eb2f7db914c31deb
+    m_Address: ModuleItemGameConfig/TestOchreLeatherGloves
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ed9b8e9423cb044a8e9bca7d720153a
     m_Address: Camera
@@ -61,13 +97,49 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44e5f0296aeb69a4798932ab270fc98e
+    m_Address: ModuleItemGameConfig/TestGreenMailShirt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 45d0d761049651747ae95efdabd36cf0
     m_Address: BaseCanvas
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4bb9195baafb2f14d8ef1cbf780f18b2
+    m_Address: ModuleItemGameConfig/TestSteelGauntlets
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f5c178e5d0e3fd4a91a7822f23bca0d
+    m_Address: ModuleItemGameConfig/TestBluedKettleHelm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 547bc3b38f6b4944e9d79589070a1061
-    m_Address: Assets/App/Configs/Items/IronAxe.asset
+    m_Address: ModuleItemGameConfig/IronAxe
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 606d03eed1c369b4984e3ddf6b120fc5
+    m_Address: ModuleItemGameConfig/TestDarkBodkinArrows
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 623c0c385ffe58e40843240d47fb4540
+    m_Address: ModuleItemGameConfig/TestPouchBelt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 688c5a19631c9e24c9cd72f6abf39ed6
+    m_Address: ModuleItemGameConfig/TestBronzeNasalHelm
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig
@@ -84,18 +156,78 @@ MonoBehaviour:
     m_SerializedLabels:
     - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75f60c5798398b4428e28382205ede47
+    m_Address: ModuleItemGameConfig/TestPlatedGreaves
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 784365669039c4f46aca013b6540f0f4
+    m_Address: ModuleItemGameConfig/TestForkheadArrows
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79faad4ca7e89a5409368b3c8d3a392e
+    m_Address: ModuleItemGameConfig/TestSandHoodedCloak
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ca51db4310fe3e438d1b99d0fd13036
+    m_Address: ModuleItemGameConfig/TestCrescentGuardSaber
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f481efbbbd07264592e87a172e22742
+    m_Address: ModuleItemGameConfig/TestBronzeSignet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9801062e508d4254aa9bbd365649d0bc
     m_Address: TileView
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98e5c8acd73d75b4488df2bb9c23474d
+    m_Address: ModuleItemGameConfig/TestSteelBreastplate
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 991af4e080640294ab2b96585f83300f
     m_Address: Skeleton
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 991dfe3af25926e44a95a4090dde29b7
+    m_Address: ModuleItemGameConfig/TestIronShortsword
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9b690b530583a4848bab43c1556df2c1
-    m_Address: Assets/App/Configs/Items/Player.asset
+    m_Address: ModuleItemGameConfig/Player
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a34259aebae0419438490f05bc0c64a2
+    m_Address: ModuleItemGameConfig/TestPaintedKiteShield
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4b25b3242144ef479f83c457f993ac9
+    m_Address: ModuleItemGameConfig/TestCedarLeafArrows
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a4d0128fcd441a846ae43c0627d8dd9c
+    m_Address: ModuleItemGameConfig/TestBlueSilverRing
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig
@@ -111,8 +243,62 @@ MonoBehaviour:
     m_SerializedLabels:
     - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a711b9bb5443f464f82326030652ace3
+    m_Address: ModuleItemGameConfig/TestBroadFalchion
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9432aa586c40ee43b0b3f95ce9fc8cd
+    m_Address: ModuleItemGameConfig/TestGreenClawPendant
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a94876ed844467549925e76cd79135a2
+    m_Address: ModuleItemGameConfig/TestBlackIronBelt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ac68e1564a151894a9c3f6d7ea068adc
-    m_Address: Assets/App/Configs/Items/IronKey.asset
+    m_Address: ModuleItemGameConfig/IronKey
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4c1b5debf218a24f904ed9e35077e39
+    m_Address: ModuleItemGameConfig/TestMailMitts
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb43d5bead85812428a49f35bef0c5f9
+    m_Address: ModuleItemGameConfig/TestCrescentAxe
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c700cf9ccf2f9a34dbd153fb587abfee
+    m_Address: ModuleItemGameConfig/TestSteelVisoredHelm
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc46ff617a60c954e99d609fa6585f5a
+    m_Address: ModuleItemGameConfig/TestCopperBuckleBelt
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc697268a92c0634e84c29b545b6a7f6
+    m_Address: ModuleItemGameConfig/TestAntlerCrescentNecklace
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cceb081fdfc95ce4a8d32d9713c82839
+    m_Address: ModuleItemGameConfig/TestRidingBoots
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig
@@ -121,6 +307,18 @@ MonoBehaviour:
     m_Address: FollowIcon_EmptyChest
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cfc8ea37e42b7d2488cee869d1c0dbce
+    m_Address: ModuleItemGameConfig/TestOakRoundShield
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0c835945ff3c0147be14d6ee666e18a
+    m_Address: ModuleItemGameConfig/TestAmberGoldRing
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d20a7ccc256dae049920961a063c213c
     m_Address: ChestView
@@ -132,6 +330,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da3b96d5427dec44b82e696a3631ac1e
+    m_Address: ModuleItemGameConfig/TestYewLimbBow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da45cc76f78e7234683e5ed2df463510
     m_Address: StatusBarCanvas
     m_ReadOnly: 0
@@ -142,10 +346,40 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb3411edeac2e5f44a768598b1a3755d
+    m_Address: ModuleItemGameConfig/TestOakBeardedAxe
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed5a0448a4bcfe1438a5c78b454db5c6
+    m_Address: ModuleItemGameConfig/TestRecurvedHuntingBow
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef05549b2ebf4c94297e107fd80ccfeb
     m_Address: InventoryConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f86b8b96e36cefb4986027e99c3b39f5
+    m_Address: ModuleItemGameConfig/TestCopperLocket
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fadc3f2a0c4c40a46a87d1c2b7f08875
+    m_Address: ModuleItemGameConfig/TestMossShoulderCloak
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fcb1544bf9029ec4a9be88eaf505445c
+    m_Address: ModuleItemGameConfig/TestSquareIronHatchet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 952aecbf9e861ad4ca852f3c810a1183, type: 2}

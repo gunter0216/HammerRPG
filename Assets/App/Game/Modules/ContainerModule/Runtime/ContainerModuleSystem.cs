@@ -74,7 +74,8 @@ namespace App.Game.Modules.ContainerModule.Runtime
 
         public void OnItemDestroyed(IModuleItem moduleItem)
         {
-            var module = _modules[moduleItem.ReferenceSelf];
+            if (!_modules.TryGetValue(moduleItem.ReferenceSelf, out var module))
+                return;
             _containerController.DestroyContainer(module.Container);
             _modules.Remove(moduleItem.ReferenceSelf);
         }

@@ -15,6 +15,7 @@ MonoBehaviour:
   m_Id: IronAxe
   m_Modules:
   - rid: 2381230076579545240
+  - rid: 3362484061470195836
   m_Tags: 0
   references:
     version: 2
@@ -23,3 +24,8 @@ MonoBehaviour:
       type: {class: SpriteModuleConfig, ns: App.Game.Modules.Sprite.Runtime, asm: Autumn.Modules.Sprite}
       data:
         _sprite: {fileID: 21300000, guid: b14c5fb6a8b9edc4f9ca00bd37ce1560, type: 3}
+    - rid: 3362484061470195836
+      type: {class: ContainerItemModuleConfig, ns: App.Game.Modules.ContainerItem.Runtime.Config, asm: Autumn.Modules.ContainerItem}
+      data:
+        _width: 1
+        _height: 1

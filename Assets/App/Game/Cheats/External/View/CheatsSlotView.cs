@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace App.Game.Cheats.External.View
 {
     public class CheatsSlotView : MonoBehaviour
     {
-        [SerializeField] private Button m_Button;
+        [SerializeField] private UnityEngine.UI.Button m_Button;
 
         [SerializeField]
-        private Image m_Image;
+        private UnityEngine.UI.Image m_Image;
+
+        [SerializeField] private TMPro.TMP_Text m_Label;
         
         public void SetButtonClickCallback(UnityEngine.Events.UnityAction callback)
         {
@@ -19,6 +20,12 @@ namespace App.Game.Cheats.External.View
         public void SetSprite(Sprite sprite)
         {
             m_Image.sprite = sprite;
+            m_Image.enabled = sprite != null;
+        }
+
+        public void SetLabel(string text)
+        {
+            m_Label.text = text;
         }
 
         public void SetActive(bool status)
