@@ -4,6 +4,8 @@ using App.Common.SpriteLoaders.External;
 using App.Game.DragItem.Runtime;
 using App.Game.DragItem.Runtime.Events;
 using App.Game.DragItem.Runtime.Model;
+using App.Game.DragItem.Runtime.View;
+using App.Game.Modules.ContainerItem.Runtime;
 using App.Game.Modules.Equipment.Runtime;
 using App.Game.Modules.Equipment.Runtime.Config;
 using UnityEngine;
@@ -22,17 +24,20 @@ namespace App.Game.Inventory.External.View
         private EquipmentModule _equipment;
         private DragItemController _dragItemController;
         private IItemSpriteLoader _spriteLoader;
+        private UnityEngine.UI.GridLayoutGroup _inventoryGrid;
         private EquippedItemSlotModel _model;
         private bool _pointerOver;
 
         public IModuleItem Item => _model?.GetItem();
 
-        public void Bind(EquipmentModule equipment, DragItemController dragItemController, IItemSpriteLoader spriteLoader)
+        public void Bind(EquipmentModule equipment, DragItemController dragItemController, IItemSpriteLoader spriteLoader,
+            UnityEngine.UI.GridLayoutGroup inventoryGrid)
         {
             Unbind();
             _equipment = equipment;
             _dragItemController = dragItemController;
             _spriteLoader = spriteLoader;
+            _inventoryGrid = inventoryGrid;
             _model = new EquippedItemSlotModel(equipment, _slot, _itemImage);
             _equipment.SlotChanged += OnSlotChanged;
             UpdateItem();
@@ -62,7 +67,13 @@ namespace App.Game.Inventory.External.View
             {
                 var loaded = _spriteLoader.LoadItemSprite(item);
                 if (loaded.HasValue)
+                {
                     sprite = loaded.Value;
+                    var hasFootprint = item.TryGetModule<ContainerItemModule>(out var footprint);
+                    int width = hasFootprint ? footprint.Width : 1;
+                    int height = hasFootprint ? footprint.Height : 1;
+                    ItemSlotView.SetCenteredIconFootprint(_itemImage, _inventoryGrid, width, height);
+                }
             }
 
             _itemImage.sprite = sprite;

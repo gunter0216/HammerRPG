@@ -40,7 +40,7 @@ namespace App.Game.Player.External
 
         private void OnLeftClick(InputAction.CallbackContext obj)
         {
-            if (_interactionController.OnLeftClick())
+            if (_windowManager.IsAnyOpen() || _interactionController.OnLeftClick())
             {
                 return;
             }

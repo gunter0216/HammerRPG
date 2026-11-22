@@ -85,7 +85,8 @@ namespace App.Game.Inventory.External.ViewModel
         public bool BindEquipment(EquipmentModule equipment)
         {
             var slots = _window.EquipmentSlots;
-            if (slots == null || slots.Count == 0)
+            if (slots == null || slots.Count == 0 || _window.SlotsContent == null ||
+                !_window.SlotsContent.TryGetComponent<UnityEngine.UI.GridLayoutGroup>(out var inventoryGrid))
                 return false;
 
             foreach (var slot in slots)
@@ -95,7 +96,7 @@ namespace App.Game.Inventory.External.ViewModel
             }
 
             foreach (var slot in slots)
-                slot.Bind(equipment, _dragItemController, _spriteLoader);
+                slot.Bind(equipment, _dragItemController, _spriteLoader, inventoryGrid);
             return true;
         }
 

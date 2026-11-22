@@ -52,7 +52,8 @@ namespace App.Game.Dungeon.DungeonCore.External.View.Spawn
             foreach (var spawnPosition in spawnPoints)
             {
                 var controller = _aiController.Create("Goblin", spawnPosition);
-                _aiControllers.Add(controller.Value);
+                if (controller.HasValue)
+                    _aiControllers.Add(controller.Value);
             }
         }
 

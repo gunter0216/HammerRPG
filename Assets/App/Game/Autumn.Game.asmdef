@@ -4,6 +4,7 @@
     "references": [
         "Unity.AI.Navigation",
         "Unity.InputSystem",
+        "Zenject",
         "Autumn.Inventory",
         "Autumn.AssetSystem",
         "Autumn.Core",

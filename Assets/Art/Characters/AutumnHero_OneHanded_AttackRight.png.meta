@@ -102,7 +102,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 128
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0.125}
@@ -122,9 +122,9 @@ TextureImporter:
       name: AutumnHero_OneHanded_AttackRight_02
       rect:
         serializedVersion: 2
-        x: 64
+        x: 128
         y: 0
-        width: 64
+        width: 128
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0.125}
@@ -144,9 +144,9 @@ TextureImporter:
       name: AutumnHero_OneHanded_AttackRight_03
       rect:
         serializedVersion: 2
-        x: 128
+        x: 256
         y: 0
-        width: 64
+        width: 128
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0.125}
@@ -166,9 +166,9 @@ TextureImporter:
       name: AutumnHero_OneHanded_AttackRight_04
       rect:
         serializedVersion: 2
-        x: 192
+        x: 384
         y: 0
-        width: 64
+        width: 128
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0.125}
@@ -188,9 +188,9 @@ TextureImporter:
       name: AutumnHero_OneHanded_AttackRight_05
       rect:
         serializedVersion: 2
-        x: 256
+        x: 512
         y: 0
-        width: 64
+        width: 128
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0.125}
@@ -210,9 +210,9 @@ TextureImporter:
       name: AutumnHero_OneHanded_AttackRight_06
       rect:
         serializedVersion: 2
-        x: 320
+        x: 640
         y: 0
-        width: 64
+        width: 128
         height: 128
       alignment: 9
       pivot: {x: 0.5, y: 0.125}
@@ -226,6 +226,50 @@ TextureImporter:
       internalID: -444127146
       vertices: []
       indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutumnHero_OneHanded_AttackRight_07
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8785a0dcf3d76a544ba96cfc956a6476
+      internalID: -1782774694
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutumnHero_OneHanded_AttackRight_08
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b02c423ee611e474584636fb876c5dab
+      internalID: -1277205072
+      vertices: []
+      indices:
       edges: []
       weights: []
     outline: []
@@ -248,6 +292,8 @@ TextureImporter:
       AutumnHero_OneHanded_AttackRight_04: 1214754624
       AutumnHero_OneHanded_AttackRight_05: 1931447839
       AutumnHero_OneHanded_AttackRight_06: -444127146
+      AutumnHero_OneHanded_AttackRight_07: -1782774694
+      AutumnHero_OneHanded_AttackRight_08: -1277205072
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

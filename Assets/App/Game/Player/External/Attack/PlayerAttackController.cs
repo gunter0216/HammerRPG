@@ -1,4 +1,5 @@
 using App.Common.Logger.Runtime;
+using App.Game.Equipment.Runtime.Config.Model;
 using App.Game.Player.External.Context;
 using App.Game.Player.External.Items;
 using App.Game.Player.External.View;
@@ -14,15 +15,18 @@ namespace App.Game.Player.External.Attack
 
         private readonly PlayerContext _context;
         private readonly PlayerAttackContext _attackContext;
+        private readonly HandItemsController _handItems;
         private Animator _animator;
-        private MeleeAttackService _attackService;
+        private MeleeAttack2D _meleeAttack;
+        private OneHandedWeaponModuleConfig _pendingWeapon;
         private bool _facingLeft;
         private bool _repeatAttack;
 
-        public PlayerAttackController(PlayerContext context)
+        public PlayerAttackController(PlayerContext context, HandItemsController handItems)
         {
             _context = context;
             _attackContext = context.AttackContext;
+            _handItems = handItems;
         }
 
         public bool Initialize()
@@ -37,7 +41,7 @@ namespace App.Game.Player.External.Attack
                 return false;
             }
 
-            _attackService = new MeleeAttackService(_context.ModuleItem, attackView, view);
+            _meleeAttack = new MeleeAttack2D(_context.ModuleItem, attackView);
             listener.OnAttackEvent += OnAttackEvent;
             listener.OnAttackFinishedEvent += OnAttackFinished;
             return true;
@@ -45,10 +49,14 @@ namespace App.Game.Player.External.Attack
 
         public void OnAttackClick()
         {
-            if (_attackContext.IsAttack || _attackContext.AttackBlocked || !_animator.isActiveAndEnabled ||
-                _animator.GetFloat(HandItemsController.WeaponEquipped) < 0.5f)
+            if (_attackContext.IsAttack || _attackContext.AttackBlocked || !_animator.isActiveAndEnabled)
                 return;
 
+            var weapon = _handItems.OneHandedWeapon;
+            if (weapon == null)
+                return;
+
+            _pendingWeapon = weapon;
             _facingLeft = GetAttackDirection();
             _context.MoveContext.IsFacingLeft = _facingLeft;
             _attackContext.IsAttack = true;
@@ -81,8 +89,12 @@ namespace App.Game.Player.External.Attack
 
         private void OnAttackEvent()
         {
-            if (_attackContext.IsAttack)
-                _attackService.OnAttackEvent(_facingLeft);
+            if (_pendingWeapon == null)
+                return;
+
+            var weapon = _pendingWeapon;
+            _pendingWeapon = null;
+            _meleeAttack.Strike(weapon, _facingLeft);
         }
 
         private void OnAttackFinished()
@@ -91,6 +103,7 @@ namespace App.Game.Player.External.Attack
                 return;
 
             _attackContext.IsAttack = false;
+            _pendingWeapon = null;
             _repeatAttack = true;
         }
     }

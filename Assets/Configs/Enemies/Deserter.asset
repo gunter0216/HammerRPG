@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26bda2c28ea41e8868738951f4d0387, type: 3}
+  m_Name: Deserter
+  m_EditorClassIdentifier: Autumn.ModuleItems::App.Common.ModuleItem.Runtime.Config.ModuleItemGameConfig
+  m_Id: deserter
+  m_Modules:
+  - rid: 3362484091087224932
+  - rid: 3362484091087224933
+  - rid: 3362484091087224934
+  - rid: 3362484091087224936
+  - rid: 3362484091087224937
+  - rid: 3362484091087224938
+  m_Tags: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 3362484091087224932
+      type: {class: NameModuleConfig, ns: App.Game.Modules.Name.Runtime.Config, asm: Autumn.Modules.Name}
+      data:
+        _name: "\u0414\u0435\u0437\u0435\u0440\u0442\u0438\u0440"
+    - rid: 3362484091087224933
+      type: {class: RaceModuleConfig, ns: App.Game.Modules.Race.Runtime.Config, asm: Autumn.Modules.Race}
+      data:
+        _race: 0
+    - rid: 3362484091087224934
+      type: {class: PresentableModuleConfig, ns: App.Game.Modules.Asset.Runtime.Config.Model, asm: Autumn.Modules.Fbx}
+      data:
+        _asset: {fileID: 6362834034576211871, guid: 79f5845bb00aa64409950fd671727268, type: 3}
+    - rid: 3362484091087224936
+      type: {class: HealthModuleConfig, ns: App.Game.Modules.Health.Runtime.Config, asm: Autumn.Modules.Health}
+      data:
+        _maxHealth: 25
+    - rid: 3362484091087224937
+      type: {class: MoveModuleConfig, ns: App.Game.Modules.Move.Runtime.Config, asm: Autumn.Modules.Move}
+      data:
+        _speed: 3
+    - rid: 3362484091087224938
+      type: {class: OneHandedWeaponModuleConfig, ns: App.Game.Equipment.Runtime.Config.Model, asm: Autumn.Equipment}
+      data:
+        _nearSprite: {fileID: 0}
+        _farSprite: {fileID: 0}
+        _damage: 10
+        _reach: 1.18
+        _sweepWidth: 0.82

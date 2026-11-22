@@ -16,6 +16,8 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 {
     public sealed class ConfigWindow : EditorWindow
     {
+        public static Func<GameConfig, Sprite> ConfigIconProvider { get; set; }
+
         public event Action OnConfigsChanged;
         public event Action<string> OnFolderChanged;
         public event Action<GameConfig> OnConfigSelected;
@@ -51,6 +53,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             
             if (_selected == null)
             {
+                _inspector.Unbind();
                 _propertiesScroll.visible = false;
                 return;
             }
@@ -98,7 +101,10 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
                 return;
             }
             
+            _inspector.Unbind();
             _inspector.Bind(serializedObject);
+            _inspector.TrackSerializedObjectValue(serializedObject, changed =>
+                _view.RefreshConfigIcon(changed.targetObject as GameConfig));
         }
 
         protected void OnEnable()

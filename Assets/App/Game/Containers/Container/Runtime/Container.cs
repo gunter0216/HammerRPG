@@ -16,6 +16,7 @@ namespace App.Game.Containers.Container.Runtime
         public int Guid => m_Data.Guid;
 
         public event Action<int> ItemChanged;
+        public event Action<IModuleItem> ItemAdded;
 
         public List<IModuleItem> Items => m_Items;
 
@@ -141,7 +142,9 @@ namespace App.Game.Containers.Container.Runtime
                 return false;
 
             WriteSlot(slotIndex, item);
-            ItemChanged?.Invoke(slotIndex);
+            ItemAdded?.Invoke(item);
+            if (ReferenceEquals(m_Items[slotIndex], item))
+                ItemChanged?.Invoke(slotIndex);
             return true;
         }
 

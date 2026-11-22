@@ -79,6 +79,8 @@ MonoBehaviour:
           _quantity: 1
         - _item: {fileID: 11400000, guid: d0c835945ff3c0147be14d6ee666e18a, type: 2}
           _quantity: 3
+        - _item: {fileID: 11400000, guid: 991dfe3af25926e44a95a4090dde29b7, type: 2}
+          _quantity: 1
         _items: []
     - rid: 7010000000000000000
       type: {class: EquipmentModuleConfig, ns: App.Game.Modules.Equipment.Runtime.Config, asm: Autumn.Modules.Equipment}

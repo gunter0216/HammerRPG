@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using App.Common.AssetSystem.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.AI.External.Fabric;
 using App.Game.AI.Runtime;
 using App.Game.Dungeon.DungeonCore.External.Controllers;
+using App.Game.Modules.Move.Runtime;
 using App.Game.Player.External;
 using App.Game.StatusBar.Runtime;
 using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
@@ -16,17 +16,18 @@ namespace App.Game.AI.External
     public class AIController : IInitSystem, IAIController, IUpdateSystem
     {
         private readonly IModuleItemsManager _moduleItemsManager;
-        private readonly IAssetManager _assetManager;
+        private readonly MoveModuleSystem _moveModules;
         private readonly IStatusBarController _statusBarController;
         
         private AICreator _aiCreator;
 
         private List<AIViewController> _controllers;
 
-        public AIController(IModuleItemsManager moduleItemsManager, IAssetManager assetManager, IStatusBarController statusBarController)
+        public AIController(IModuleItemsManager moduleItemsManager, MoveModuleSystem moveModules,
+            IStatusBarController statusBarController)
         {
             _moduleItemsManager = moduleItemsManager;
-            _assetManager = assetManager;
+            _moveModules = moveModules;
             _statusBarController = statusBarController;
         }
 
@@ -34,7 +35,7 @@ namespace App.Game.AI.External
         {
             _controllers = new List<AIViewController>();
 
-            _aiCreator = new AICreator(_assetManager, _moduleItemsManager, _statusBarController);
+            _aiCreator = new AICreator(_moduleItemsManager, _moveModules, _statusBarController);
         }
 
         public Optional<AIViewController> Create(string id, Vector3 position)

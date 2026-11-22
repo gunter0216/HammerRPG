@@ -9,6 +9,7 @@ namespace App.Common.ModuleItem.Runtime
         Move,
         Door,
         Health,
-        Defence
+        Defence,
+        Equipment
     }
 }

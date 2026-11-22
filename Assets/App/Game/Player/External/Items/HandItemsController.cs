@@ -1,72 +1,66 @@
-using App.Common.AssetSystem.Runtime;
-using App.Common.Logger.Runtime;
-using App.Game.Modules.Asset.Runtime.Config.Model;
+using App.Game.Equipment.Runtime.Config.Model;
+using App.Game.Equipment.Runtime.Constants;
+using App.Game.Modules.Equipment.Runtime;
+using App.Game.Modules.Equipment.Runtime.Config;
 using App.Game.Player.External.Context;
-using App.Game.Player.External.View;
-using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
 
 namespace App.Game.Player.External.Items
 {
-    public class HandItemsController : IHandItemsController
+    public class HandItemsController
     {
-        internal const string IronSwordId = "ironsword";
-        internal static readonly int WeaponEquipped = Animator.StringToHash("WeaponEquipped");
+        private static readonly int WeaponEquipped = Animator.StringToHash("WeaponEquipped");
 
-        private readonly IAssetManager _assetManager;
         private readonly PlayerContext _context;
-        private RigProviderView _rigProvider;
+        private Animator _animator;
+        private EquipmentModule _equipment;
 
-        public HandItemsController(PlayerContext context, IAssetManager assetManager)
+        public HandItemsController(PlayerContext context)
         {
             _context = context;
-            _assetManager = assetManager;
         }
 
-        public void Initialize()
+        public OneHandedWeaponModuleConfig OneHandedWeapon { get; private set; }
+
+        public bool Initialize()
         {
-            _rigProvider = _context.RigProvider;
-        }
-        
-        public void Equip(EquipHandItemInfo info)
-        {
-            var moduleItem = info.Item;
-            if (info.Hand == EHand.Right && moduleItem.Id == IronSwordId)
-            {
-                _context.View.Animator.SetFloat(WeaponEquipped, 1f);
-                return;
-            }
+            _animator = _context.View.Animator;
+            if (_animator == null || _animator.runtimeAnimatorController == null ||
+                _context.RigProvider?.HasWeaponRenderers != true)
+                return false;
 
-            Transform parent = null;
-            if (info.Hand == EHand.Left)
-            {
-                parent = _rigProvider.LeftHand;
-            }
-            else
-            {
-                parent = _rigProvider.RightHand;
-            }
+            if (_context.ModuleItem.TryGetModule<EquipmentModule>(out _equipment))
+                _equipment.SlotChanged += OnSlotChanged;
 
-            if (!moduleItem.TryGetConfigModule<PresentableModuleConfig>(out var assetModuleConfig))
-            {
-                HLogger.LogError("AssetModuleConfig not found.");
-                return;
-            }
-
-            var asset = assetModuleConfig.Instantiate();
-            if (info.Hand == EHand.Right)
-                _context.View.Animator.SetFloat(WeaponEquipped, 0f);
-
-            var itemView = asset.transform;
-            itemView.parent = parent;
-            itemView.localPosition = Vector3.zero;
-            itemView.localRotation = Quaternion.identity;
+            RefreshWeapon();
+            return true;
         }
 
-        public void UnEquip(UnEquipHandItemInfo info)
+        private void OnSlotChanged(EquipmentSlotId slot)
         {
-            if (info.Hand == EHand.Right)
-                _context.View.Animator.SetFloat(WeaponEquipped, 0f);
+            if (slot is EquipmentSlotId.RightHand or EquipmentSlotId.LeftHand)
+                RefreshWeapon();
+        }
+
+        private void RefreshWeapon()
+        {
+            OneHandedWeapon = GetOneHandedWeapon(EquipmentSlotId.RightHand) ??
+                              GetOneHandedWeapon(EquipmentSlotId.LeftHand);
+
+            _context.RigProvider.SetWeaponSprites(OneHandedWeapon?.NearSprite, OneHandedWeapon?.FarSprite);
+            _animator.SetFloat(WeaponEquipped, OneHandedWeapon != null ? 1f : 0f);
+        }
+
+        private OneHandedWeaponModuleConfig GetOneHandedWeapon(EquipmentSlotId slot)
+        {
+            if (_equipment == null || !_equipment.TryGetEquippedItem(slot, out var item) ||
+                !item.TryGetConfigModule<EquipmentItemModuleConfig>(out var equipmentItem) ||
+                equipmentItem.Type != EquipmentTypeConstants.OneHanded ||
+                !item.TryGetConfigModule<OneHandedWeaponModuleConfig>(out var weapon) ||
+                weapon.NearSprite == null || weapon.FarSprite == null)
+                return null;
+
+            return weapon;
         }
     }
 }

@@ -518,9 +518,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: CheatsWindow
       objectReference: {fileID: 0}
+    - target: {fileID: 1194429326723274133, guid: e6ebc54830929f94f813eb8c3b886871, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5569396450660999908, guid: e6ebc54830929f94f813eb8c3b886871, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 32
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4549,6 +4553,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5830421661676910631, guid: c62548afe9bd8264f9cfbc0e65685167, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4290566886
+      objectReference: {fileID: 0}
     - target: {fileID: 5939277658315331220, guid: c62548afe9bd8264f9cfbc0e65685167, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -5104,6 +5112,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2906046743185970920, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2906046743185970920, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075122, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_Name
       value: Player
@@ -5114,11 +5130,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075127, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.422
+      value: 12.05
       objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075127, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 74.207
+      value: 11.92
       objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075127, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5149,6 +5165,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5016975802056075127, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5508196639257240697, guid: d3d1b64ed838776418497adc12b6cb3d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}

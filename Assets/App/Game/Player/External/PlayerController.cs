@@ -85,15 +85,16 @@ namespace App.Game.Player.External
             InitContext();
             if (!InitMove())
                 return;
+            InitHandItems();
             if (InitAttack())
                 InitLeftClickController();
-            InitHandItems();
         }
 
         private void InitHandItems()
         {
-            _handItemsController = new HandItemsController(_context, _assetManager);
-            _handItemsController.Initialize();
+            _handItemsController = new HandItemsController(_context);
+            if (!_handItemsController.Initialize())
+                HLogger.LogError("Could not initialize the player's weapon display.");
         }
 
         private bool IssueStartingItems()
@@ -160,7 +161,7 @@ namespace App.Game.Player.External
 
         private bool InitAttack()
         {
-            _playerAttackController = new PlayerAttackController(_context);
+            _playerAttackController = new PlayerAttackController(_context, _handItemsController);
             return _playerAttackController.Initialize();
         }
 

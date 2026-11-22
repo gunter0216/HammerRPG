@@ -174,15 +174,39 @@ namespace App.Game.DragItem.Runtime.View
             SetFootprint(m_Item.rectTransform, width, height, spacing, 0);
             if (m_ItemBackground != null)
                 SetFootprint(m_ItemBackground.rectTransform, width, height, spacing, 1);
-            m_Item.preserveAspect = width > 1 || height > 1;
+            m_Item.preserveAspect = PreserveFootprintAspect(width, height);
         }
+
+        internal static void SetCenteredIconFootprint(UnityEngine.UI.Image icon,
+            UnityEngine.UI.GridLayoutGroup grid, int width, int height)
+        {
+            var size = Vector2.Scale(grid.cellSize, new Vector2(width, height)) +
+                       GetFootprintSpacing(width, height, grid.spacing);
+            var rect = icon.rectTransform;
+            var worldWidth = grid.transform.TransformVector(Vector3.right * size.x);
+            var worldHeight = grid.transform.TransformVector(Vector3.up * size.y);
+            var center = new Vector2(0.5f, 0.5f);
+            rect.anchorMin = center;
+            rect.anchorMax = center;
+            rect.pivot = center;
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = new Vector2(rect.InverseTransformVector(worldWidth).magnitude,
+                rect.InverseTransformVector(worldHeight).magnitude);
+            icon.preserveAspect = PreserveFootprintAspect(width, height);
+        }
+
+        private static bool PreserveFootprintAspect(int width, int height) => width > 1 || height > 1;
+
+        private static Vector2 GetFootprintSpacing(int width, int height, Vector2 spacing) =>
+            new Vector2(spacing.x * (width - 1), spacing.y * (height - 1));
 
         private static void SetFootprint(RectTransform rect, int width, int height, Vector2 spacing, float inset)
         {
+            var gaps = GetFootprintSpacing(width, height, spacing);
             rect.anchorMin = new Vector2(0, 1 - height);
             rect.anchorMax = new Vector2(width, 1);
-            rect.offsetMin = new Vector2(inset, -spacing.y * (height - 1) + inset);
-            rect.offsetMax = new Vector2(spacing.x * (width - 1) - inset, -inset);
+            rect.offsetMin = new Vector2(inset, -gaps.y + inset);
+            rect.offsetMax = new Vector2(gaps.x - inset, -inset);
         }
 
         public Vector2 GetCellPointerOffset(Vector2 screenPoint)

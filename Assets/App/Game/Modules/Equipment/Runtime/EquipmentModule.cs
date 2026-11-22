@@ -20,6 +20,7 @@ namespace App.Game.Modules.Equipment.Runtime
         private readonly EquipmentModuleData _data;
         private readonly IModuleItemsManager _itemsManager;
         private readonly Dictionary<EquipmentSlotId, IModuleItem> _items = new();
+        private Containers.Container.Runtime.Container _ownerContainer;
         private bool _changingSlots;
 
         public EquipmentModule(IModuleItem owner, EquipmentModuleConfig config, EquipmentModuleData data,
@@ -34,6 +35,27 @@ namespace App.Game.Modules.Equipment.Runtime
         public IReadOnlyList<EquipmentModuleConfig.SlotRule> Slots => _config.Slots;
 
         public event Action<EquipmentSlotId> SlotChanged;
+
+        internal void SubscribeToContainer()
+        {
+            if (!_owner.TryGetModule<ContainerModule>(out var inventory))
+                return;
+
+            _ownerContainer = inventory.Container;
+            _ownerContainer.ItemAdded += OnContainerItemAdded;
+        }
+
+        private void OnContainerItemAdded(IModuleItem item)
+        {
+            if (_changingSlots || !_ownerContainer.Items.Contains(item))
+                return;
+
+            foreach (var rule in Slots)
+            {
+                if (TryEquip(rule.Slot, item))
+                    return;
+            }
+        }
 
         public bool CanEquip(EquipmentSlotId slot, IModuleItem item)
         {
@@ -196,6 +218,8 @@ namespace App.Game.Modules.Equipment.Runtime
         internal void DestroyEquippedItems()
         {
             _changingSlots = true;
+            if (_ownerContainer != null)
+                _ownerContainer.ItemAdded -= OnContainerItemAdded;
             SlotChanged = null;
             var ownedItems = new List<IModuleItem>(_data.Slots.Count);
             foreach (var slot in _data.Slots.Keys)

@@ -245,7 +245,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 8216efb975bc13c4aa9e9b0c7e9adc32, type: 2}
+  m_Motion: {fileID: 4370032804758374165}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -372,7 +372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845020ae3adf10a4dbc755eaf324e02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Autumn.Game::App.Game.Player.External.Attack.PlayerMeleeAttackState
-  _normalizedContactTime: 0.3846154
+  _normalizedContactTime: 0.4375
 --- !u!114 &804787011869701379
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -385,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845020ae3adf10a4dbc755eaf324e02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Autumn.Game::App.Game.Player.External.Attack.PlayerMeleeAttackState
-  _normalizedContactTime: 0.3846154
+  _normalizedContactTime: 0.4375
 --- !u!1102 &1269139145893991973
 AnimatorState:
   serializedVersion: 6
@@ -408,7 +408,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9d0f51b1a3ed53b43a9d762ce8f9738d, type: 2}
+  m_Motion: {fileID: 5215451565361660156}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -436,7 +436,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 0260a014f29ec8e439a0010e299e6c94, type: 2}
+  m_Motion: {fileID: -4344931520459542115}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -464,7 +464,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: febe65c10f2f5f24e8423924d023abab, type: 2}
+  m_Motion: {fileID: -4991060328884456295}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

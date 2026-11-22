@@ -161,7 +161,8 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
                 style = { flexShrink = 1, marginRight = 10 }
             };
             leftColumn.Add(_searchPanel = new SearchAndFilterPanel<GameConfig>());
-            leftColumn.Add(_configListPanel = new ConfigListPanel<GameConfig>());
+            leftColumn.Add(_configListPanel = new ConfigListPanel<GameConfig>(
+                config => ConfigWindow.ConfigIconProvider?.Invoke(config)));
 
             _configListPanel.CustomFilter = _window.CustomFilter;
             
@@ -220,6 +221,8 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
                 _propertiesPanel.SetAddButtonVisible(_window.Selected != null);
             };
         }
+
+        public void RefreshConfigIcon(GameConfig config) => _configListPanel.RefreshIcon(config);
 
         private void DuplicateConfig(GameConfig config)
         {

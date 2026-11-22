@@ -14,6 +14,7 @@ using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
 using Unity.AI.Navigation;
 using UnityEngine;
+using Zenject;
 using Vector2 = App.Common.Algorithms.Runtime.Vector2;
 
 namespace App.Game.Dungeon.DungeonCore.External
@@ -28,6 +29,7 @@ namespace App.Game.Dungeon.DungeonCore.External
         private readonly IFollowIconController _followIconController;
         private readonly IAssetManager _assetManager;
         private readonly IAIController _aiController;
+        private readonly DiContainer _container;
 
         private List<RoomController> _rooms;
         private DungeonService _service;
@@ -39,7 +41,9 @@ namespace App.Game.Dungeon.DungeonCore.External
             InventoryController inventoryController,
             IModuleItemsManager moduleItemsManager, 
             IFollowIconController followIconController, 
-            IAssetManager assetManager, IAIController aiController)
+            IAssetManager assetManager,
+            IAIController aiController,
+            DiContainer container)
         {
             _dungeonCreator = dungeonCreator;
             _spriteLoader = spriteLoader;
@@ -49,6 +53,7 @@ namespace App.Game.Dungeon.DungeonCore.External
             _followIconController = followIconController;
             _assetManager = assetManager;
             _aiController = aiController;
+            _container = container;
         }
 
         public void Init()
@@ -68,6 +73,7 @@ namespace App.Game.Dungeon.DungeonCore.External
 
             if (!CreateControllers())
             {
+                _service = null;
                 return false;
             }
             
@@ -91,7 +97,8 @@ namespace App.Game.Dungeon.DungeonCore.External
 
         private bool CreateControllers()
         {
-            var dungeon = new GameObject($"Dungeon"); 
+            var dungeon = new GameObject("Dungeon");
+            dungeon.SetActive(false);
             _rooms = new List<RoomController>(_service.Rooms.Count);
             foreach (var room in _service.Rooms)
             {
@@ -106,9 +113,21 @@ namespace App.Game.Dungeon.DungeonCore.External
                     _assetManager,
                     _service,
                     _aiController);
+                controller.CreateView();
                 _rooms.Add(controller);
             }
 
+            foreach (var room in _rooms)
+            {
+                if (!room.TryInjectDynamicObjects(_container))
+                {
+                    Object.Destroy(dungeon);
+                    _rooms.Clear();
+                    return false;
+                }
+            }
+
+            dungeon.SetActive(true);
             foreach (var room in _rooms)
             {
                 room.Initialize();

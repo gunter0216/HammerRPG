@@ -17,6 +17,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         protected readonly ListView _listView;
         protected readonly List<T> _allConfigs = new();
         protected readonly List<Row> _flat = new();
+        private readonly Func<T, Sprite> _getIcon;
         private readonly HashSet<string> _expandedFolders = new();
         private readonly HashSet<string> _collapsedFilteredFolders = new();
         private FolderNode _rootFolder;
@@ -53,8 +54,10 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         public event Action OnUpdateRequested;
         public event Action<T, string> OnConfigRenameRequested;
 
-        public ConfigListPanel()
+        public ConfigListPanel(Func<T, Sprite> getIcon)
         {
+            _getIcon = getIcon;
+
             style.flexGrow = 1;
             style.flexShrink = 1;
             style.minHeight = 0;

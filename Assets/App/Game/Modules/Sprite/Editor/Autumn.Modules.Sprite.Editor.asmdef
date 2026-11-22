@@ -1,0 +1,12 @@
+{
+    "name": "Autumn.Modules.Sprite.Editor",
+    "references": [
+        "Autumn.ConfigLoader",
+        "Autumn.ModuleItems",
+        "Autumn.Modules.Sprite",
+        "Game.Core.Modules.Config.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ]
+}

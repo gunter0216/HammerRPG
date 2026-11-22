@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using App.Common.AssetSystem.Runtime;
 using App.Common.ModuleItem.Runtime;
@@ -11,6 +12,7 @@ using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
 using UnityEngine;
+using Zenject;
 
 namespace App.Game.Dungeon.DungeonCore.External.Controllers
 {
@@ -27,7 +29,6 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private readonly DungeonService _dungeonService;
         private readonly IAIController _aiController;
 
-        private GameObject _root;
         private List<DoorController> _doors;
         private List<ChestController> _chests;
         private EnemySpawnController _enemySpawnController;
@@ -56,36 +57,59 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _aiController = aiController;
         }
 
-        public void Initialize()
+        public void CreateView()
         {
-            _root = new GameObject($"Room {_service.Room.Data.UID.ToString()}");
-            _root.transform.SetParent(_dungeon.transform, false);
-            
-            _doors = new List<DoorController>();
-            _chests = new List<ChestController>();
-            _enemySpawnController = new EnemySpawnController(
-                _moduleItemsManager, 
-                _assetManager,
-                _aiController);
-            
-            if (!CreateRoom())
+            var root = new GameObject($"Room {_service.Room.Data.UID}");
+            root.transform.SetParent(_dungeon.transform, false);
+
+            if (!CreateRoom(root.transform))
                 HLogger.LogError($"Failed to create room {_service.Room.Data.UID}.");
         }
 
-        private bool CreateRoom()
+        private bool CreateRoom(Transform parent)
         {
             var room = _service.Room;
             var assetReference = room.Variant.AssetReference;
             if (assetReference == null || !assetReference.RuntimeKeyIsValid())
                 return false;
 
-            var viewResult = _assetManager.InstantiateSync<Transform>(assetReference, _root.transform);
+            var viewResult = _assetManager.InstantiateSync<Transform>(assetReference, parent);
             if (!viewResult.HasValue)
                 return false;
 
             _roomView = viewResult.Value;
             RoomPlacement.Apply(_roomView, room.Position, room.Config.PrefabOrigin, room.Data.Rotation);
-            
+
+            return true;
+        }
+
+        public bool TryInjectDynamicObjects(DiContainer container)
+        {
+            var dynamicRoot = _roomView != null ? _roomView.Find("[DYNAMIC]") : null;
+            if (dynamicRoot == null)
+                return true;
+
+            try
+            {
+                container.InjectGameObject(dynamicRoot.gameObject);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                HLogger.LogError($"Failed to inject dynamic objects in room {_service.Room.Data.UID}: {exception}");
+                return false;
+            }
+        }
+
+        public void Initialize()
+        {
+            if (_roomView == null)
+                return;
+
+            _doors = new List<DoorController>();
+            _chests = new List<ChestController>();
+            _enemySpawnController = new EnemySpawnController(_moduleItemsManager, _assetManager, _aiController);
+
             foreach (var transform in _roomView.GetComponentsInChildren<Transform>(includeInactive: false))
             {
                 if (transform.GetComponent<IInteractiveView>() == null)
@@ -103,8 +127,6 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                     CreateChest(chestView);
                 }
             }
-
-            return true;
         }
 
         private void CreateDoor(DoorInteractiveView doorView)

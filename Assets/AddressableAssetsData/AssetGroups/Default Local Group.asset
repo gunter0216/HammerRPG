@@ -138,12 +138,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 547bc3b38f6b4944e9d79589070a1061
-    m_Address: ModuleItemGameConfig/IronAxe
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ModuleItemGameConfig
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 606d03eed1c369b4984e3ddf6b120fc5
     m_Address: ModuleItemGameConfig/DarkBodkinArrows
     m_ReadOnly: 0
@@ -162,14 +156,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6c66382079af8d743b633524499c00d0
-    m_Address: ModuleItemGameConfig/IronSword
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ModuleItemGameConfig
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6dedc6d30ae5e5846859964a2c9dfbb2
-    m_Address: Assets/App/Configs/Tiles/Chest.asset
+    m_Address: ModuleItemGameConfig/Chest
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig
@@ -279,14 +267,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ac68e1564a151894a9c3f6d7ea068adc
-    m_Address: ModuleItemGameConfig/IronKey
+  - m_GUID: b4c1b5debf218a24f904ed9e35077e39
+    m_Address: ModuleItemGameConfig/MailMitts
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b4c1b5debf218a24f904ed9e35077e39
-    m_Address: ModuleItemGameConfig/MailMitts
+  - m_GUID: b8248c166003a2440837cfb0733fc562
+    m_Address: ModuleItemGameConfig/Deserter
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig

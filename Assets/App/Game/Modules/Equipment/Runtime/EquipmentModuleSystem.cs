@@ -32,9 +32,11 @@ namespace App.Game.Modules.Equipment.Runtime
                     return Optional<IModuleItem>.Fail();
             }
 
-            if (!item.AddModule(new EquipmentModule(item, config, data, _itemsManager)))
+            var equipment = new EquipmentModule(item, config, data, _itemsManager);
+            if (!item.AddModule(equipment))
                 return Optional<IModuleItem>.Fail();
 
+            equipment.SubscribeToContainer();
             return Optional<IModuleItem>.Success(item);
         }
 
@@ -60,7 +62,7 @@ namespace App.Game.Modules.Equipment.Runtime
             return true;
         }
 
-        public ModuleIndex SortIndex() => ModuleIndex.Default;
+        public ModuleIndex SortIndex() => ModuleIndex.Equipment;
 
         public void OnItemDestroyed(IModuleItem item)
         {

@@ -95,10 +95,11 @@ namespace App.Game.Inventory.External.ViewModel.Slots
                 return false;
             }
 
-            if (!_service.AddItem(item, slot.Index).HasValue)
+            var result = _service.AddItem(item, slot.Index);
+            if (!result.HasValue)
                 return false;
 
-            UpdateSlot(slot, item);
+            UpdateSlot(result.Value);
             return true;
         }
 

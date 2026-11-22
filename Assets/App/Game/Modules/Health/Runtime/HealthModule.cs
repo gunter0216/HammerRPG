@@ -49,7 +49,7 @@ namespace App.Game.Modules.Health.Runtime
             }
             
             _data.Health -= health;
-            if (Mathf.Approximately(_data.Health, 0))
+            if (_data.Health <= 0 || Mathf.Approximately(_data.Health, 0))
             {
                 _data.Health = 0;
                 _onHealthOver?.Invoke();
