@@ -43,8 +43,8 @@ namespace App.Game.Containers.ContainerWindow.External.ViewModel.Slots
         
         public void ShowContainer(Container.Runtime.Container container)
         {
+            HideContainer();
             m_Container = container;
-            HideAllSlots();
             
             for (int i = 0; i < container.Items.Count; ++i)
             {
@@ -58,23 +58,20 @@ namespace App.Game.Containers.ContainerWindow.External.ViewModel.Slots
                 slot.Value.Clear();
                 slot.Value.SetAsLastSibling();
 
-                var item = container.Items[i];
-                if (item != null)
-                {
-                    var sprite = GetSprite(item);
-                    if (!sprite.HasValue)
-                    {
-                        HLogger.LogError("Cant load sprite");
-                        return;
-                    }
-                    
-                    slot.Value.SetItem(item, sprite.Value);
-                }
-                
                 slot.Value.SetIndex(i);
-                
                 m_Slots.Add(slot.Value);
+                UpdateSlot(i);
             }
+            m_Container.ItemChanged += UpdateSlot;
+        }
+
+        public void HideContainer()
+        {
+            if (m_Container == null)
+                return;
+            m_Container.ItemChanged -= UpdateSlot;
+            m_Container = null;
+            HideAllSlots();
         }
 
         private Optional<ItemSlotController> CreateSlot()
@@ -92,7 +89,9 @@ namespace App.Game.Containers.ContainerWindow.External.ViewModel.Slots
                 clickCallback: OnSlotClick,
                 canPlaceFunc: CanPlace,
                 placeFunc: Place,
-                removeFunc: Remove);
+                removeFunc: Remove,
+                getContainer: () => m_Container,
+                getSlot: index => m_Slots[index]);
             viewModel.Initialize();
             
             return Optional<ItemSlotController>.Success(viewModel);
@@ -121,15 +120,12 @@ namespace App.Game.Containers.ContainerWindow.External.ViewModel.Slots
                 return false;
             }
 
-            UpdateSlot(slot, item);
-            m_Container.AddItem(item, slot.Index);
-            
-            return true;
+            return m_Container.AddItem(item, slot.Index);
         }
 
         private bool CanPlace(ItemSlotController controller, IModuleItem item)
         {
-            return true;
+            return m_Container?.CanPlace(item, controller.Index, controller.GetItem()) == true;
         }
         
         private void OnSlotClick(ItemSlotController controller)
@@ -137,10 +133,17 @@ namespace App.Game.Containers.ContainerWindow.External.ViewModel.Slots
             EventManager.Trigger(new ItemSlotClickEvent(controller));
         }
 
-        private void UpdateSlot(ItemSlotController slot, IModuleItem item)
+        private void UpdateSlot(int index)
         {
+            var slot = m_Slots[index];
+            var item = m_Container.Items[index];
+            if (item == null)
+            {
+                slot.Clear();
+                return;
+            }
             var sprite = GetSprite(item);
-            slot.SetItem(item, sprite.Value);
+            slot.SetItem(item, sprite.HasValue ? sprite.Value : null);
         }
 
         private void HideAllSlots()
@@ -167,6 +170,7 @@ namespace App.Game.Containers.ContainerWindow.External.ViewModel.Slots
 
         public void Dispose()
         {
+            HideContainer();
         }
     }
 }

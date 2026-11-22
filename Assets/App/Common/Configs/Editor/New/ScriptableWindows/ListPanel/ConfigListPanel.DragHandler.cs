@@ -110,10 +110,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
                     AssetDatabase.Refresh();
 
                     _owner.Filter(_owner._searchText, _owner._selectedTags);
-                    _owner._expanded.Add(targetFolder);
-                    _owner.RebuildFlat();
-                    _owner._listView.itemsSource = _owner._flat;
-                    _owner._listView.Rebuild();
+                    _owner.RevealFolder(targetFolder);
                 }
             }
         }

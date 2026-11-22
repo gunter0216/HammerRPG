@@ -16,6 +16,8 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 
         public PropertiesPanel(VisualElement content)
         {
+            style.flexGrow = 1;
+            style.minHeight = 0;
             _content = content;
             _tagsToolbar = new TagsToolbarPanel();
 

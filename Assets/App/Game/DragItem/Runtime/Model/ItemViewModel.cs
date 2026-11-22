@@ -31,12 +31,19 @@ namespace App.Game.DragItem.Runtime.Model
             }
         }
 
-        public void SetItem(IModuleItem item)
+        public void SetItem(IModuleItem item, UnityEngine.UI.Image sourceIcon = null)
         {
+            if (sourceIcon != null)
+            {
+                m_View.SetIcon(sourceIcon.overrideSprite, sourceIcon);
+                return;
+            }
+
             var spriteModule = item.GetConfigModule<SpriteModuleConfig>();
             if (!spriteModule.HasValue)
             {
                 HLogger.LogError("SpriteModuleConfig is not available for the item.");
+                m_View.SetIcon(null);
                 return;
             }
             
@@ -58,9 +65,9 @@ namespace App.Game.DragItem.Runtime.Model
             m_View.SetLocalPosition(position);
         }
         
-        public void SetPosition(Vector2 position)
+        public bool TrySetScreenPosition(Vector2 position)
         {
-            m_View.SetPosition(position);
+            return m_View.TrySetScreenPosition(position);
         }
 
         public void SetParent(Transform parent)

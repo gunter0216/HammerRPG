@@ -98,6 +98,7 @@ namespace App.Game.Containers.ContainerWindow.External
         protected override void OnClosed()
         {
             base.OnClosed();
+            _slotsModel.HideContainer();
             
             _onClosedTemp?.Invoke();
             _onClosedTemp = null;

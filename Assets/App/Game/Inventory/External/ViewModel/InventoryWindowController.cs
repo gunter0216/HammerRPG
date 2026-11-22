@@ -7,10 +7,12 @@ using App.Common.SpriteLoaders.Runtime;
 using App.Common.Windows.External;
 using App.Common.Windows.Runtime;
 using App.Game.Canvases.External;
+using App.Game.DragItem.Runtime;
 using App.Game.Inventory.External.View;
 using App.Game.Inventory.External.ViewModel.Fabric;
 using App.Game.Inventory.External.ViewModel.Slots;
 using App.Game.Inventory.Runtime.Item;
+using App.Game.Modules.Equipment.Runtime;
 
 namespace App.Game.Inventory.External.ViewModel
 {
@@ -20,6 +22,7 @@ namespace App.Game.Inventory.External.ViewModel
         
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly InventoryService _service;
+        private readonly DragItemController _dragItemController;
 
         private InventorySlotsController _slotsController;
 
@@ -28,10 +31,12 @@ namespace App.Game.Inventory.External.ViewModel
             IAssetManager assetManager,
             ICanvasController canvasController,
             IItemSpriteLoader spriteLoader,
-            InventoryService service) : base(windowManager, assetManager, canvasController)
+            InventoryService service,
+            DragItemController dragItemController) : base(windowManager, assetManager, canvasController)
         {
             _spriteLoader = spriteLoader;
             _service = service;
+            _dragItemController = dragItemController;
         }
 
         protected override void OnInitWindow()
@@ -39,6 +44,8 @@ namespace App.Game.Inventory.External.ViewModel
             base.OnInitWindow();
             
             InitSlots();
+            if (!_window.InitializeItemHover(_dragItemController))
+                HLogger.LogError("Could not initialize inventory item info window.");
             
             _window.SetCloseButtonClickCallback(OnCloseButtonClick);
         }
@@ -75,6 +82,23 @@ namespace App.Game.Inventory.External.ViewModel
             _slotsController.UpdateSlot(item);
         }
 
+        public bool BindEquipment(EquipmentModule equipment)
+        {
+            var slots = _window.EquipmentSlots;
+            if (slots == null || slots.Count == 0)
+                return false;
+
+            foreach (var slot in slots)
+            {
+                if (slot == null)
+                    return false;
+            }
+
+            foreach (var slot in slots)
+                slot.Bind(equipment, _dragItemController, _spriteLoader);
+            return true;
+        }
+
         protected override string GetWindowAssetKey()
         {
             return WindowKey;
@@ -87,6 +111,14 @@ namespace App.Game.Inventory.External.ViewModel
 
         public void Dispose()
         {
+            if (_window != null && _window.EquipmentSlots != null)
+            {
+                foreach (var slot in _window.EquipmentSlots)
+                {
+                    if (slot != null)
+                        slot.Unbind();
+                }
+            }
             _slotsController?.Dispose();
         }
     }

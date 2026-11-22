@@ -7,7 +7,9 @@ using App.Common.Windows.External;
 using App.Game.Dungeon.DungeonCore.Runtime;
 using App.Game.Modules.Move.Runtime;
 using App.Game.Modules.IssuedItems.Runtime;
-using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Inventory.External;
+using App.Game.Modules.Container.Runtime;
+using App.Game.Modules.Equipment.Runtime;
 using App.Game.Player.External.Attack;
 using App.Game.Player.External.Context;
 using App.Game.Player.External.Items;
@@ -25,6 +27,7 @@ namespace App.Game.Player.External
         private readonly IModuleItemsManager _moduleItemsManager;
         private readonly IInputService _inputService;
         private readonly IWindowManager _windowManager;
+        private readonly InventoryController _inventoryController;
         
         private EntityView _view;
         private IModuleItem _player;
@@ -45,7 +48,8 @@ namespace App.Game.Player.External
             IAssetManager assetManager,
             MoveModuleSystem moveModuleSystem, 
             IModuleItemsManager moduleItemsManager, 
-            IInputService inputService, IWindowManager windowManager)
+            IInputService inputService, IWindowManager windowManager,
+            InventoryController inventoryController)
         {
             _dungeonController = dungeonController;
             _assetManager = assetManager;
@@ -53,6 +57,7 @@ namespace App.Game.Player.External
             _moduleItemsManager = moduleItemsManager;
             _inputService = inputService;
             _windowManager = windowManager;
+            _inventoryController = inventoryController;
         }
 
         public void Init()
@@ -61,6 +66,16 @@ namespace App.Game.Player.External
             _player = playerCreator.Create();
             if (_player == null)
                 return;
+
+            if (!_player.TryGetModule<ContainerModule>(out var inventoryContainer) ||
+                !_inventoryController.BindContainer(inventoryContainer.Container))
+            {
+                HLogger.LogError("Could not bind player's container to inventory.");
+                return;
+            }
+
+            if (_player.TryGetModule<EquipmentModule>(out var equipment) && !_inventoryController.BindEquipment(equipment))
+                HLogger.LogError("Could not bind player's equipment to inventory.");
 
             if (!IssueStartingItems())
                 HLogger.LogError("Could not issue all starting items to the player.");

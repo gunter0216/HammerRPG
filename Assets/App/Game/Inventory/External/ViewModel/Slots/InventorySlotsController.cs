@@ -64,7 +64,9 @@ namespace App.Game.Inventory.External.ViewModel.Slots
                     clickCallback: OnSlotClick,
                     canPlaceFunc: CanPlace,
                     placeFunc: Place,
-                    removeFunc: Remove);
+                    removeFunc: Remove,
+                    getContainer: () => _service.Container,
+                    getSlot: index => _slots[index]);
                 viewModel.Initialize();
                 _slots.Add(viewModel);
             }
@@ -93,14 +95,16 @@ namespace App.Game.Inventory.External.ViewModel.Slots
                 return false;
             }
 
+            if (!_service.AddItem(item, slot.Index).HasValue)
+                return false;
+
             UpdateSlot(slot, item);
-            _service.AddItem(item, slot.Index);
             return true;
         }
 
         private bool CanPlace(ItemSlotController controller, IModuleItem item)
         {
-            return true;
+            return _service.Container?.CanPlace(item, controller.Index, controller.GetItem()) == true;
         }
 
         private void OnSlotClick(ItemSlotController controller)
@@ -131,7 +135,9 @@ namespace App.Game.Inventory.External.ViewModel.Slots
             Sprite sprite = null;
             if (item != null)
             {
-                sprite = GetSprite(item).Value;
+                var loadedSprite = GetSprite(item);
+                if (loadedSprite.HasValue)
+                    sprite = loadedSprite.Value;
             }
 
             slot.SetItem(item, sprite);

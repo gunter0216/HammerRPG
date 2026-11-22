@@ -5,6 +5,7 @@
     "Autumn.DataContainers",
     "Autumn.DataManager",
     "Autumn.Utility",
-    "Autumn.Logger"
+    "Autumn.Logger",
+    "Autumn.Modules.ContainerItem"
   ]
 }

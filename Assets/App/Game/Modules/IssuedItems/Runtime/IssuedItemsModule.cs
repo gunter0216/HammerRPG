@@ -1,6 +1,7 @@
+using System;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
-using ItemContainerModule = App.Game.Modules.ContainerModule.Runtime.ContainerModule;
+using ItemContainerModule = App.Game.Modules.Container.Runtime.ContainerModule;
 using App.Game.Modules.IssuedItems.Runtime.Config;
 using App.Game.Modules.IssuedItems.Runtime.Data;
 
@@ -24,27 +25,39 @@ namespace App.Game.Modules.IssuedItems.Runtime
             if (itemsManager == null || container == null || _config.Items == null || _data.IssuedCount < 0)
                 return false;
 
-            for (int i = _data.IssuedCount; i < _config.Items.Count; i++)
+            long totalQuantity = 0;
+            foreach (var entry in _config.Items)
             {
-                if (_config.Items[i] == null || string.IsNullOrWhiteSpace(_config.Items[i].Id))
+                if (entry == null || entry.Item == null || entry.Quantity < 1 || string.IsNullOrWhiteSpace(entry.Item.Id))
+                    return false;
+
+                totalQuantity += entry.Quantity;
+                if (totalQuantity > int.MaxValue)
                     return false;
             }
 
-            while (_data.IssuedCount < _config.Items.Count)
+            int alreadyIssued = _data.IssuedCount;
+            foreach (var entry in _config.Items)
             {
-                var itemConfig = _config.Items[_data.IssuedCount];
-                var item = itemsManager.Create(itemConfig.Id);
-                if (!item.HasValue)
-                    return false;
+                int issuedInEntry = Math.Min(alreadyIssued, entry.Quantity);
+                alreadyIssued -= issuedInEntry;
+                string itemId = entry.Item.Id;
 
-                if (!container.AddItem(item.Value))
+                for (int i = issuedInEntry; i < entry.Quantity; i++)
                 {
-                    if (!itemsManager.Destroy(item.Value))
-                        HLogger.LogError($"Could not clean up unissued item '{itemConfig.Id}'.");
-                    return false;
-                }
+                    var item = itemsManager.Create(itemId);
+                    if (!item.HasValue)
+                        return false;
 
-                _data.IssuedCount++;
+                    if (!container.AddItem(item.Value))
+                    {
+                        if (!itemsManager.Destroy(item.Value))
+                            HLogger.LogError($"Could not clean up unissued item '{itemId}'.");
+                        return false;
+                    }
+
+                    _data.IssuedCount++;
+                }
             }
 
             return true;

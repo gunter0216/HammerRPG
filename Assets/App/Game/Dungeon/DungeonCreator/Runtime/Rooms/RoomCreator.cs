@@ -5,7 +5,7 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Tiles;
 using App.Game.Modules.Chests.Runtime;
-using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Modules.Container.Runtime;
 using App.Game.Modules.Doors.Runtime;
 using App.Game.Modules.TilePosition.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.DungeonModel;

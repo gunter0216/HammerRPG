@@ -2,6 +2,8 @@
   "name": "Autumn.Modules.ContainerItem",
   "references": [
     "Autumn.ModuleItems",
-    "Autumn.Utility"
+    "Autumn.Utility",
+    "Autumn.DataContainers",
+    "Autumn.DataManager"
   ]
 }

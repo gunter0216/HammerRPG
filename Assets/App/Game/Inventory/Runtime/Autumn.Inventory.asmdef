@@ -8,7 +8,8 @@
     "Autumn.ModuleItems",
     "Autumn.DataContainers",
     "Autumn.ModuleItemType",
-    "Autumn.DungeonGenerator"
+    "Autumn.DungeonGenerator",
+    "Autumn.Container"
   ],
   "noEngineReferences": false
 }

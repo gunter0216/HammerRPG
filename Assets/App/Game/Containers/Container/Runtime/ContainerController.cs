@@ -57,6 +57,7 @@ namespace App.Game.Containers.Container.Runtime
                 if (!moduleItem.HasValue)
                 {
                     HLogger.LogError($"Cant create item.");
+                    items.Add(null);
                     continue;
                 }
                     

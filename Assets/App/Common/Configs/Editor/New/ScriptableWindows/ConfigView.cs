@@ -196,10 +196,9 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 
             _window.OnFolderChanged += createdPath =>
             {
-                _window.Select(null);
-                _window.SelectFolder(createdPath);
-
-                //_configListPanel.StartFolderInlineRename(createdPath);
+                BindData();
+                SelectFolder(createdPath);
+                _configListPanel.ScrollToFolder(createdPath);
             };
 
             _window.OnFolderSelected += createdPath =>
@@ -258,14 +257,9 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             _configListPanel.ScrollToAndEditConfig(_window.Selected);
         }
 
-        public void CreateFolder()
+        public void CreateFolder(string folder)
         {
-            _window.CreateNewFolder();
-            
-            BindData();
-
-            _propertiesPanel.SetAddButtonVisible(_window.Selected != null);
-            _configListPanel.ScrollToAndEditConfig(_window.Selected);
+            _window.CreateNewFolder(folder);
         }
 
         public void UpdatesList()

@@ -2,7 +2,7 @@ using System;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Containers.ContainerWindow.Runtime;
 using App.Game.Modules.Chests.Runtime;
-using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Modules.Container.Runtime;
 
 namespace App.Game.Dungeon.DungeonCore.Runtime.Services
 {

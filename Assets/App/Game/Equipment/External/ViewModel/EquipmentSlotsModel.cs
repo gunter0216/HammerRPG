@@ -91,10 +91,11 @@ namespace App.Game.Equipment.External.ViewModel
                 return Optional<IModuleItem>.Fail();
             }
 
+            var item = slot.GetItem();
             slot.Clear();
             m_SlotsController.RemoveItem(slot.Slot);
 
-            return Optional<IModuleItem>.Success(slot.GetItem());
+            return Optional<IModuleItem>.Success(item);
         }
 
         private bool Place(EquipmentItemSlotModel slot, IModuleItem item)

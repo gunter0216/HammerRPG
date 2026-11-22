@@ -180,8 +180,8 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            _expanded.Add(newPath);
             Filter(_searchText, _selectedTags);
+            RevealFolder(newPath);
             CancelEditing();
         }
 

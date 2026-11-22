@@ -16,11 +16,10 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 
         protected readonly ListView _listView;
         protected readonly List<T> _allConfigs = new();
-        protected List<T> _filteredConfigs = new();
         protected readonly List<Row> _flat = new();
-        protected readonly Dictionary<string, FolderNode> _folders = new();
-        protected readonly HashSet<string> _expanded = new();
-        protected readonly List<T> _rootItems = new();
+        private readonly HashSet<string> _expandedFolders = new();
+        private readonly HashSet<string> _collapsedFilteredFolders = new();
+        private FolderNode _rootFolder;
 
         protected string _rootFolderPath;
         protected string _searchText = "";
@@ -35,12 +34,14 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         protected string _editingFolderPath;
         protected TextField _editingFolderField;
 
-        protected class FolderNode
+        private class FolderNode
         {
             public string Path;
-            public string Name;
-            public readonly List<T> Items = new();
+            public List<T> Items;
+            public List<FolderNode> Children;
         }
+
+        private bool IsFiltering => !string.IsNullOrWhiteSpace(_searchText) || _selectedTags.Count > 0;
 
         public event Action<T> OnConfigSelected;
         public event Action<string> OnFolderSelected;
@@ -48,7 +49,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         public event Action<T> OnDuplicateConfigRequested;
         public event Action<T> OnConfigDeleteRequested;
         public event Action<string> OnCreateConfigRequested;
-        public event Action OnCreateFolderRequested;
+        public event Action<string> OnCreateFolderRequested;
         public event Action OnUpdateRequested;
         public event Action<T, string> OnConfigRenameRequested;
 
@@ -84,50 +85,32 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         private void OnContextClick(ContextualMenuPopulateEvent evt)
         {
             string folderPath = null;
-            if (evt.target is VisualElement targetElement)
+            for (var element = evt.target as VisualElement; element != null && element != _listView; element = element.parent)
             {
-                if (targetElement.userData is RowWidgets rowWidgets)
+                if (element.userData is RowWidgets { Row: { } row })
                 {
-                    var row = rowWidgets.Row;
-                    if (row.IsFolder) folderPath = row.FolderPath;
-                    else
-                    {
-                        var assetPath = AssetDatabase.GetAssetPath(row.Config);
-                        var directory = Path.GetDirectoryName(assetPath);
-                        if (directory != _rootFolderPath) folderPath = directory;
-                    }
+                    folderPath = row.FolderPath;
+                    break;
                 }
             }
             evt.menu.AppendAction("New config", _ => OnCreateConfigRequested?.Invoke(folderPath), DropdownMenuAction.AlwaysEnabled);
-            evt.menu.AppendAction("New folder", _ => OnCreateFolderRequested?.Invoke(), DropdownMenuAction.AlwaysEnabled);
+            evt.menu.AppendAction("New folder", _ => OnCreateFolderRequested?.Invoke(folderPath), DropdownMenuAction.AlwaysEnabled);
             evt.menu.AppendSeparator();
             evt.menu.AppendAction("Update", _ => OnUpdateRequested?.Invoke(), DropdownMenuAction.AlwaysEnabled);
         }
 
         public void BindTo(IEnumerable<T> configs, string folderPath)
         {
-            _allConfigs.Clear();
-
-            if (configs != null)
-                _allConfigs.AddRange(configs.Where(x => x != null));
-            foreach(var cfg in _rootItems.Where(c => c != null).OrderBy(c => c.name, StringComparer.OrdinalIgnoreCase))
+            string normalizedPath = folderPath?.Replace('\\', '/').TrimEnd('/');
+            if (_rootFolderPath != normalizedPath)
             {
-                if(!_allConfigs.Contains(cfg))
-                    _allConfigs.Add(cfg);
+                _expandedFolders.Clear();
+                _rootFolderPath = normalizedPath;
             }
 
-            // Если ничего не пришло — грузим сами все ассеты типа T
-            if (_allConfigs.Count == 0)
-                LoadAllAssetsIfNeeded();
-
-            // Определяем корень (если не передан) по общему префиксу путей ассетов
-            _rootFolderPath = string.IsNullOrEmpty(folderPath) ? FindCommonRoot(_allConfigs) : folderPath?.Replace('\\', '/');
-
-            // Разворачиваем корневые папки по умолчанию
-            _expanded.Clear();
-            if (!string.IsNullOrEmpty(_rootFolderPath))
-                _expanded.Add(_rootFolderPath);
-
+            _allConfigs.Clear();
+            if (configs != null)
+                _allConfigs.AddRange(configs.Where(config => config != null));
             Filter(_searchText, _selectedTags);
         }
 
@@ -157,28 +140,24 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
                 });
             }
 
-            _filteredConfigs = query.ToList();
-
-            RebuildFolders();
-            RebuildFlat();
-
-            _listView.itemsSource = _flat;
-            _listView.Rebuild();
+            _collapsedFilteredFolders.Clear();
+            _rootFolder = null;
+            if (!string.IsNullOrEmpty(_rootFolderPath) && AssetDatabase.IsValidFolder(_rootFolderPath))
+            {
+                var itemsByFolder = query.ToLookup(GetConfigFolder);
+                _rootFolder = BuildFolder(_rootFolderPath, itemsByFolder);
+            }
+            RefreshRows();
         }
 
         public void ScrollToAndEditConfig(T config)
         {
             if (config == null) return;
 
-            string path = AssetDatabase.GetAssetPath(config);
-            string folder = Path.GetDirectoryName(path)?.Replace('\\', '/');
+            string folder = GetConfigFolder(config);
             if (string.IsNullOrEmpty(folder)) return;
 
-            _expanded.Add(folder);
-
-            RebuildFlat();
-            _listView.itemsSource = _flat;
-            _listView.Rebuild();
+            RevealFolder(folder);
 
             int idx = _flat.FindIndex(r => !r.IsFolder && Equals(r.Config, config));
             if (idx >= 0)
@@ -189,189 +168,104 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             }
         }
 
-        private void LoadAllAssetsIfNeeded()
+        public void ScrollToFolder(string folderPath)
         {
-            var guids = AssetDatabase.FindAssets($"t:{typeof(T).Name}");
-            foreach (var guid in guids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var cfg = AssetDatabase.LoadAssetAtPath<T>(path);
-                if (cfg != null) _allConfigs.Add(cfg);
-            }
+            RevealFolder(folderPath);
+            int index = _flat.FindIndex(row => row.IsFolder && row.FolderPath == folderPath);
+            if (index >= 0)
+                _listView.ScrollToItem(index);
         }
 
-        private static string FindCommonRoot(List<T> assets)
+        private static string GetConfigFolder(T config)
         {
-            if (assets == null || assets.Count == 0) return null;
+            return GetParentFolder(AssetDatabase.GetAssetPath(config));
+        }
 
-            var allPaths = assets
-                .Select(a => AssetDatabase.GetAssetPath(a))
-                .Where(p => !string.IsNullOrEmpty(p))
-                .Select(p => Path.GetDirectoryName(p)?.Replace('\\', '/'))
-                .Where(p => !string.IsNullOrEmpty(p))
-                .Distinct()
+        private static string GetParentFolder(string path)
+        {
+            return Path.GetDirectoryName(path)?.Replace('\\', '/');
+        }
+
+        private FolderNode BuildFolder(string path, ILookup<string, T> itemsByFolder)
+        {
+            var children = AssetDatabase.GetSubFolders(path)
+                .OrderBy(childPath => childPath, StringComparer.OrdinalIgnoreCase)
+                .Select(childPath => BuildFolder(childPath, itemsByFolder))
+                .Where(child => child != null)
                 .ToList();
 
-            if (allPaths.Count == 0) return null;
-            if (allPaths.Count == 1) return allPaths[0];
+            var items = itemsByFolder[path].OrderBy(config => config.name, StringComparer.OrdinalIgnoreCase).ToList();
+            if (IsFiltering && children.Count == 0 && items.Count == 0)
+                return null;
 
-            // Находим общий префикс по сегментам
-            var split = allPaths.Select(p => p.Split('/')).ToList();
-            int minLen = split.Min(s => s.Length);
-            int i = 0;
-            for (; i < minLen; i++)
-            {
-                var seg = split[0][i];
-                if (split.Any(s => s[i] != seg))
-                    break;
-            }
-            if (i == 0) return null;
-            return string.Join("/", split[0].Take(i));
+            return new FolderNode { Path = path, Items = items, Children = children };
         }
 
-        private void RebuildFolders()
+        private void RefreshRows()
         {
-            _folders.Clear();
-            _rootItems.Clear();
-
-            var root = _rootFolderPath;
-
-            if (!string.IsNullOrEmpty(root) && AssetDatabase.IsValidFolder(root))
-            {
-                var source = _filteredConfigs ?? Enumerable.Empty<T>();
-                foreach (var config in source)
-                {
-                    var p = AssetDatabase.GetAssetPath(config);
-                    if (string.IsNullOrEmpty(p)) continue;
-                    var cfgDir = Path.GetDirectoryName(p)?.Replace('\\', '/');
-                    if (string.IsNullOrEmpty(cfgDir)) continue;
-
-                    if (string.Equals(cfgDir, root, StringComparison.Ordinal))
-                    {
-                        _rootItems.Add(config);
-                        continue;
-                    }
-
-                    var immediate = GetImmediateChildFolder(root, cfgDir);
-                    var key = string.IsNullOrEmpty(immediate) ? cfgDir : immediate;
-
-                    if (!_folders.TryGetValue(key, out var node) && key != root)
-                    {
-                        node = new FolderNode { Path = key, Name = Path.GetFileName(key) };
-                        _folders[key] = node;
-                    }
-
-                    node?.Items.Add(config);
-                }
-            }
-            else
-            {
-                var source = _filteredConfigs ?? Enumerable.Empty<T>();
-                foreach (var config in source)
-                {
-                    var p = AssetDatabase.GetAssetPath(config);
-                    if (string.IsNullOrEmpty(p)) continue;
-                    var folderPath = Path.GetDirectoryName(p)?.Replace('\\', '/');
-                    if (string.IsNullOrEmpty(folderPath)) { _rootItems.Add(config); continue; }
-
-                    if (!_folders.TryGetValue(folderPath, out var node))
-                    {
-                        node = new FolderNode { Path = folderPath, Name = Path.GetFileName(folderPath) };
-                        _folders[folderPath] = node;
-                    }
-
-                    node.Items.Add(config);
-                }
-            }
-            // удаляем папки без элементов, чтобы не показывать их в списке
-            var emptyKeys = _folders
-                .Where(kvp => kvp.Value == null || kvp.Value.Items == null || kvp.Value.Items.Count == 0)
-                .Select(kvp => kvp.Key)
-                .ToList();
-
-            foreach (var key in emptyKeys)
-                _folders.Remove(key);
-
-            // раскрываем все оставшиеся папки при первой сборке
-            foreach (var key in _folders.Keys)
-                _expanded.Add(key);
-        }
-
-        private void RebuildFlat()
-        {
+            var selected = _listView.selectedItem as Row;
             _flat.Clear();
+            if (_rootFolder != null)
+                AppendFolderContents(_rootFolder, 0);
+            _listView.Rebuild();
 
-            foreach (var cfg in _rootItems.Where(c => c != null).OrderBy(c => c.name, StringComparer.OrdinalIgnoreCase))
+            if (selected != null)
+            {
+                int index = _flat.FindIndex(row => row.IsFolder == selected.IsFolder &&
+                    (row.IsFolder ? row.FolderPath == selected.FolderPath : row.Config == selected.Config));
+                _listView.SetSelectionWithoutNotify(index >= 0 ? new[] { index } : Array.Empty<int>());
+            }
+        }
+
+        private void AppendFolderContents(FolderNode folder, int depth)
+        {
+            foreach (var child in folder.Children)
+            {
+                bool canExpand = child.Children.Count > 0 || child.Items.Count > 0;
+                bool expanded = canExpand && (IsFiltering
+                    ? !_collapsedFilteredFolders.Contains(child.Path)
+                    : _expandedFolders.Contains(child.Path));
+                _flat.Add(new Row
+                {
+                    IsFolder = true,
+                    FolderPath = child.Path,
+                    FolderName = Path.GetFileName(child.Path),
+                    CanExpand = canExpand,
+                    Expanded = expanded,
+                    Depth = depth
+                });
+                if (expanded)
+                    AppendFolderContents(child, depth + 1);
+            }
+
+            foreach (var config in folder.Items)
             {
                 _flat.Add(new Row
                 {
-                    IsFolder = false,
-                    Config = cfg,
-                    ConfigName = cfg.name,
-                    FolderPath = _rootFolderPath,
-                    Depth = 0
+                    Config = config,
+                    ConfigName = config.name,
+                    FolderPath = folder.Path,
+                    Depth = depth
                 });
             }
-
-            foreach (var folder in _folders.Values.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase))
-            {
-                bool isExpanded = _expanded.Contains(folder.Path);
-
-                if (folder.Path != _rootFolderPath?.Replace('\\', '/'))
-                {
-                    _flat.Add(new Row
-                    {
-                        IsFolder = true,
-                        FolderPath = folder.Path,
-                        FolderName = folder.Name,
-                        Expanded = isExpanded,
-                        Depth = 0
-                    });
-                }
-
-                if (!isExpanded) continue;
-
-                foreach (var cfg in folder.Items.OrderBy(c => c.name, StringComparer.OrdinalIgnoreCase))
-                {
-                    _flat.Add(new Row
-                    {
-                        IsFolder = false,
-                        Config = cfg,
-                        ConfigName = cfg.name,
-                        FolderPath = folder.Path,
-                        Depth = 1
-                    });
-                }
-            }
-        }
-        
-        protected void ToggleFolder(string folderPath)
-        {
-            if (_expanded.Contains(folderPath)) 
-                _expanded.Remove(folderPath);
-            else 
-                _expanded.Add(folderPath);
-
-            RebuildFlat();
-            _listView.itemsSource = _flat;
-            _listView.Rebuild();
         }
 
-        protected static string GetImmediateChildFolder(string root, string targetDir)
+        private void ToggleFolder(string folderPath)
         {
-            if (string.IsNullOrEmpty(root) || string.IsNullOrEmpty(targetDir)) 
-                return string.Empty;
-                
-            if (!targetDir.StartsWith(root, StringComparison.Ordinal)) 
-                return string.Empty;
+            var toggledFolders = IsFiltering ? _collapsedFilteredFolders : _expandedFolders;
+            if (!toggledFolders.Remove(folderPath))
+                toggledFolders.Add(folderPath);
 
-            var rest = targetDir.Length == root.Length ? string.Empty : targetDir.Substring(root.Length).TrimStart('/');
-            if (string.IsNullOrEmpty(rest)) 
-                return string.Empty;
+            RefreshRows();
+        }
 
-            int slash = rest.IndexOf('/');
-            string first = slash >= 0 ? rest.Substring(0, slash) : rest;
-            return string.IsNullOrEmpty(first) ? string.Empty : $"{root}/{first}";
+        private void RevealFolder(string folderPath)
+        {
+            bool changed = false;
+            for (string path = folderPath; !string.IsNullOrEmpty(path) && path != _rootFolderPath; path = GetParentFolder(path))
+                changed |= IsFiltering ? _collapsedFilteredFolders.Remove(path) : _expandedFolders.Add(path);
+            if (changed)
+                RefreshRows();
         }
     }
 }

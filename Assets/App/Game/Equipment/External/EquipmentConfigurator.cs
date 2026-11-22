@@ -26,7 +26,7 @@ namespace App.Game.Equipment.External
     {
         public override void Configuration()
         {
-            BindSingle<EquipmentModuleDtoToConfigConverter>();
+            BindSingle<EquipmentItemModuleDtoToConfigConverter>();
             RegisterData<EquipmentData>();
         }
     }

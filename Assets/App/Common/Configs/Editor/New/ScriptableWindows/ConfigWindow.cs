@@ -35,7 +35,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         
         private SerializedObject _serializedObject;
         private ConfigView _view;
-        private VisualElement _propertiesContainer;
+        private ScrollView _propertiesScroll;
         private InspectorElement _inspector;
         
         private static string Title => "Game Config Window";
@@ -44,16 +44,19 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 
         public void Select(GameConfig config)
         {
+            if (_selected != config)
+                _propertiesScroll.scrollOffset = Vector2.zero;
+
             _selected = config;
             
             if (_selected == null)
             {
-                _propertiesContainer.visible = false;
+                _propertiesScroll.visible = false;
                 return;
             }
 
             _serializedObject = new SerializedObject(config);
-            _propertiesContainer.visible = true;
+            _propertiesScroll.visible = true;
             
             Bind(_serializedObject);
 
@@ -62,7 +65,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
         public void SelectFolder(string folderPath)
         {
             _selectedFolder = folderPath;
-            _propertiesContainer.visible = false;
+            _propertiesScroll.visible = false;
 
             //OnFolderSelected?.Invoke(folderPath);
         }
@@ -111,18 +114,20 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
 
         private void DrawGraph()
         {
-            _propertiesContainer = new VisualElement
+            _propertiesScroll = new ScrollView(ScrollViewMode.Vertical)
             {
+                name = "PropertiesScroll",
+                style = { flexGrow = 1, minHeight = 0 },
                 visible = false,
             };
 
             var styleSheet = (StyleSheet)EditorGUIUtility.Load("Configs/ConfigWindow.uss");
 
-            _view = new ConfigView(this, _propertiesContainer);
+            _view = new ConfigView(this, _propertiesScroll);
             _view.styleSheets.Add(styleSheet);
             _view.StretchToParentSize();
             
-            CreateProperties(_propertiesContainer);
+            CreateProperties(_propertiesScroll);
 
             rootVisualElement.Add(_view);
         }
@@ -323,11 +328,14 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             OnConfigsChanged?.Invoke();
             AssetDatabase.DeleteAsset(path);
         }
-        internal void CreateNewFolder()
+        internal void CreateNewFolder(string targetParent)
         {
-            EnsureFolders(FolderPath.Split(Path.DirectorySeparatorChar));
+            EnsureFolders(FolderPath.Split('/'));
 
-            string targetParent = FolderPath;
+            if (string.IsNullOrEmpty(targetParent))
+                targetParent = FolderPath;
+            if (!AssetDatabase.IsValidFolder(targetParent))
+                return;
 
             const string leaf = "New Folder";
             string uniquePath = AssetDatabase.GenerateUniqueAssetPath(
@@ -336,12 +344,14 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             string parent = Path.GetDirectoryName(uniquePath).Replace('\\', '/');
             string name = Path.GetFileName(uniquePath);
 
-            AssetDatabase.CreateFolder(parent, name);
+            string guid = AssetDatabase.CreateFolder(parent, name);
+            if (string.IsNullOrEmpty(guid))
+                return;
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            string createdPath = Path.Combine(parent, name).Replace('\\', '/');
-            OnFolderChanged?.Invoke(createdPath);
+            OnFolderChanged?.Invoke(AssetDatabase.GUIDToAssetPath(guid));
         }
 
         internal void DeleteFolder(string folderPath)

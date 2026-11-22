@@ -62,7 +62,7 @@ namespace App.Game.Equipment.Runtime.Items
         public bool CanPlace(EquipmentSlot slot, IModuleItem item)
         {
             var slotKey = slot.Data.SlotKey;
-            if (!item.TryGetConfigModule<EquipmentModuleConfig>(out var config))
+            if (!item.TryGetConfigModule<EquipmentItemModuleConfig>(out var config))
             {
                 HLogger.LogError("Config not found");
                 return false;

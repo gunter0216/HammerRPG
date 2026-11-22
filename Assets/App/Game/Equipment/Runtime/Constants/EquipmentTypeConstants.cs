@@ -14,5 +14,27 @@ namespace App.Game.Equipment.Runtime.Constants
         public const string Boots = "Boots";
         public const string OneHanded = "One-handed";
         public const string TwoHanded = "Two-handed";
+
+        public static bool TryGetType(string name, out EquipmentType type)
+        {
+            EquipmentType? match = name switch
+            {
+                Helmet => EquipmentType.Helmet,
+                Armor => EquipmentType.Armor,
+                Shoulder => EquipmentType.Shoulder,
+                Gloves => EquipmentType.Gloves,
+                Amulet => EquipmentType.Amulet,
+                Bracer => EquipmentType.Bracer,
+                Ring => EquipmentType.Ring,
+                Belt => EquipmentType.Belt,
+                Pants => EquipmentType.Pants,
+                Boots => EquipmentType.Boots,
+                OneHanded => EquipmentType.OneHanded,
+                TwoHanded => EquipmentType.TwoHanded,
+                _ => null
+            };
+            type = match.GetValueOrDefault();
+            return match.HasValue;
+        }
     }
 }

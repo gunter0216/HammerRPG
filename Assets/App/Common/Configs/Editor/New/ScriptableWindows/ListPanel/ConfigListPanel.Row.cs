@@ -11,6 +11,7 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             public bool IsFolder;
             public string FolderPath;
             public string FolderName;
+            public bool CanExpand;
             public bool Expanded;
             public int Depth;
             public T Config;
@@ -43,16 +44,32 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             fold.style.width = 18;
             fold.style.height = 18;
             fold.style.marginRight = 4;
+            fold.style.flexShrink = 0;
 
-            var label = new Label { style = { flexGrow = 1 } };
+            var label = new Label
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    overflow = Overflow.Hidden,
+                    textOverflow = TextOverflow.Ellipsis,
+                    whiteSpace = WhiteSpace.NoWrap
+                }
+            };
 
             root.Add(fold);
             root.Add(label);
 
             root.AddManipulator(new ContextualMenuManipulator(MenuBuilder));
 
-            var dnd = new DragHandler(root);
-            root.userData = new RowWidgets { FolderButton = fold, Label = label, DragHandler = dnd };
+            var widgets = new RowWidgets { FolderButton = fold, Label = label, DragHandler = new DragHandler(root) };
+            root.userData = widgets;
+            fold.clicked += () =>
+            {
+                if (widgets.Row?.CanExpand == true)
+                    ToggleFolder(widgets.Row.FolderPath);
+            };
+            fold.focusable = true;
 
             return root;
 
@@ -116,24 +133,22 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
             var row = _flat[index];
 
             element.name = row.IsFolder ? row.FolderName : row.ConfigName;
+            element.tooltip = element.name;
             element.style.paddingLeft = 6 + row.Depth * Indent;
 
             widgets.Row = row;
-            widgets.FolderButton.clicked -= Dummy; // сбрасываем хендлер (иначе накапливаются делегаты)
             widgets.DragHandler.Bind(row, this, element);
 
             if (row.IsFolder)
             {
-                widgets.FolderButton.style.visibility = Visibility.Visible;
+                widgets.FolderButton.style.visibility = row.CanExpand ? Visibility.Visible : Visibility.Hidden;
                 widgets.FolderButton.text = row.Expanded ? "▾" : "▸";
                 widgets.Label.style.unityFontStyleAndWeight = FontStyle.Bold;
 
                 if (_editMode == EditMode.Folder && _editingFolderPath == row.FolderPath)
                     EnsureFolderInlineEditor(element, widgets, row);
                 else
-                    RestoreLabel(element, widgets, $"{row.FolderName}");
-
-                widgets.FolderButton.clicked += () => ToggleFolder(row.FolderPath);
+                    RestoreLabel(element, widgets, row.FolderName);
             }
             else
             {
@@ -161,7 +176,5 @@ namespace Game.Core.Modules.Config.Editor.ScriptableWindows
                 OnConfigSelected?.Invoke(row.Config);
             }
         }
-
-        private static void Dummy() { }
     }
 }

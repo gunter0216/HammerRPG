@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using App.Common.DataContainer.Runtime;
+using System;
+using ItemContainer = App.Game.Containers.Container.Runtime.Container;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
@@ -9,58 +11,72 @@ using App.Game.Inventory.Runtime.Data.Model;
 
 namespace App.Game.Inventory.Runtime.Item
 {
-    public class InventoryService
+    public class InventoryService : IDisposable
     {
         private readonly InventoryConfigService _configService;
-        private readonly InventoryDataService _dataService;
-        private readonly IModuleItemsManager _moduleItemsManager;
         
         private List<InventoryItem> _items;
+        private ItemContainer _container;
+        public ItemContainer Container => _container;
+
+        public event Action<InventoryItem> ItemChanged;
+
+        public bool BindContainer(ItemContainer container)
+        {
+            if (container == null || _items == null || container.Items.Count != _items.Count)
+                return false;
+
+            if (_container != null)
+                _container.ItemChanged -= OnContainerItemChanged;
+
+            _container = container;
+            _container.ItemChanged += OnContainerItemChanged;
+            for (int i = 0; i < _items.Count; i++)
+                OnContainerItemChanged(i);
+            return true;
+        }
+
+        private void OnContainerItemChanged(int index)
+        {
+            var item = _container.Items[index];
+            _items[index] = new InventoryItem(item, new InventoryItemData(index, item?.ReferenceSelf));
+            ItemChanged?.Invoke(_items[index]);
+        }
+
+        public void Dispose()
+        {
+            if (_container != null)
+                _container.ItemChanged -= OnContainerItemChanged;
+        }
         
-        public InventoryService(
-            InventoryConfigService configService, 
-            InventoryDataService dataService, 
-            IModuleItemsManager moduleItemsManager)
+        public InventoryService(InventoryConfigService configService)
         {
             _configService = configService;
-            _dataService = dataService;
-            _moduleItemsManager = moduleItemsManager;
         }
 
         public bool Initialize()
         {
-            var items = _dataService.GetItems();
-            _items = new List<InventoryItem>(items.Count);
-            foreach (var itemData in items)
-            {
-                var item = new InventoryItem(itemData);
+            int cols = _configService.GetCols();
+            int rows = _configService.GetRows();
+            if (cols <= 0 || rows <= 0)
+                return false;
 
-                if (itemData.DataReference != null)
-                {
-                    var moduleItem = _moduleItemsManager.Create(itemData.DataReference);
-                    if (moduleItem.HasValue)
-                    {
-                        item.Item = moduleItem.Value;
-                    }
-                }
-
-                _items.Add(item);
-            }
+            int count = cols * rows;
+            _items = new List<InventoryItem>(count);
+            for (int i = 0; i < count; i++)
+                _items.Add(new InventoryItem(new InventoryItemData(i)));
             
             return true;
         }
 
         public Optional<InventoryItem> AddItem(IModuleItem moduleItem)
         {
-            for (int i = 0; i < _items.Count; ++i)
-            {
-                if (_items[i].Item != null)
-                {
-                    continue;
-                }
+            if (_container == null)
+                return Optional<InventoryItem>.Fail();
 
-                return AddItem(moduleItem, i);
-            }
+            int index = _container.FindSpace(moduleItem);
+            if (index >= 0)
+                return AddItem(moduleItem, index);
 
             HLogger.LogError("not found empty slot");
 
@@ -69,13 +85,13 @@ namespace App.Game.Inventory.Runtime.Item
         
         public Optional<InventoryItem> AddItem(IModuleItem moduleItem, int index)
         {
-            var data = new InventoryItemData(index, moduleItem.ReferenceSelf);
-            var item = new InventoryItem(moduleItem, data);
-                
-            _items[index] = item;
-            _dataService.AddItem(data);
-            
-            return Optional<InventoryItem>.Success(item);
+            if (_container == null || moduleItem == null || index < 0 || index >= _items.Count || _items[index].Item != null)
+                return Optional<InventoryItem>.Fail();
+
+            if (!_container.AddItem(moduleItem, index))
+                return Optional<InventoryItem>.Fail();
+
+            return Optional<InventoryItem>.Success(_items[index]);
         }
 
         public IReadOnlyList<InventoryItem> GetItems()
@@ -90,8 +106,8 @@ namespace App.Game.Inventory.Runtime.Item
 
         public void RemoveItem(int index)
         {
-            _items[index].Item = null;
-            _dataService.RemoveItem(index);
+            if (_container != null && index >= 0 && index < _items.Count)
+                _container.Remove(index);
         }
 
         public int GetRows()

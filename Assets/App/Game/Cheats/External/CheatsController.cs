@@ -7,8 +7,8 @@ using App.Common.ModuleItem.Runtime;
 using App.Common.ModuleItem.Runtime.Config.Interfaces;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.Cheats.External.ViewModel;
+using App.Game.Modules.Container.Runtime;
 using App.Game.Modules.ContainerItem.Runtime.Config;
-using App.Game.Modules.ContainerModule.Runtime;
 using App.Game.Player.External;
 
 namespace App.Game.Cheats.External

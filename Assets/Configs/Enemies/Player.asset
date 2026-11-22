@@ -24,6 +24,7 @@ MonoBehaviour:
   - rid: 2381230076579545200
   - rid: 2381230076579545230
   - rid: 3362484061470195824
+  - rid: 7010000000000000000
   m_Tags: 0
   references:
     version: 2
@@ -58,7 +59,7 @@ MonoBehaviour:
       data:
         _speed: 10
     - rid: 2381230076579545200
-      type: {class: ContainerModuleConfig, ns: App.Game.Modules.ContainerModule.Runtime.Config, asm: Autumn.Modules.Container}
+      type: {class: ContainerModuleConfig, ns: App.Game.Modules.Container.Runtime.Config, asm: Autumn.Modules.Container}
       data:
         _rows: 5
         _cols: 10
@@ -69,4 +70,50 @@ MonoBehaviour:
     - rid: 3362484061470195824
       type: {class: IssuedItemsModuleConfig, ns: App.Game.Modules.IssuedItems.Runtime.Config, asm: Autumn.Modules.IssuedItems}
       data:
+        _entries:
+        - _item: {fileID: 11400000, guid: 3adf9b27e7815cd47bcce1d061ec75c2, type: 2}
+          _quantity: 1
+        - _item: {fileID: 11400000, guid: 37a54bfbc076b494aa19254748281c21, type: 2}
+          _quantity: 1
+        - _item: {fileID: 11400000, guid: 36942c2736ac1ba45b39b56ae6e6c476, type: 2}
+          _quantity: 1
+        - _item: {fileID: 11400000, guid: d0c835945ff3c0147be14d6ee666e18a, type: 2}
+          _quantity: 3
         _items: []
+    - rid: 7010000000000000000
+      type: {class: EquipmentModuleConfig, ns: App.Game.Modules.Equipment.Runtime.Config, asm: Autumn.Modules.Equipment}
+      data:
+        _slots:
+        - _slot: 0
+          _allowedEquipmentTypes: 00000000
+          _legacyAllowedTypes: []
+        - _slot: 1
+          _allowedEquipmentTypes: 01000000
+          _legacyAllowedTypes: []
+        - _slot: 2
+          _allowedEquipmentTypes: 07000000
+          _legacyAllowedTypes: []
+        - _slot: 3
+          _allowedEquipmentTypes: 03000000
+          _legacyAllowedTypes: []
+        - _slot: 4
+          _allowedEquipmentTypes: 06000000
+          _legacyAllowedTypes: []
+        - _slot: 5
+          _allowedEquipmentTypes: 06000000
+          _legacyAllowedTypes: []
+        - _slot: 6
+          _allowedEquipmentTypes: 0a0000000b000000
+          _legacyAllowedTypes: []
+        - _slot: 7
+          _allowedEquipmentTypes: 0a0000000b000000
+          _legacyAllowedTypes: []
+        - _slot: 8
+          _allowedEquipmentTypes: 04000000
+          _legacyAllowedTypes: []
+        - _slot: 9
+          _allowedEquipmentTypes: 02000000
+          _legacyAllowedTypes: []
+        - _slot: 10
+          _allowedEquipmentTypes: 09000000
+          _legacyAllowedTypes: []

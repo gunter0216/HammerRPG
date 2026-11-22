@@ -2,7 +2,9 @@
 using App.Common.ModuleItem.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Game.DragItem.Runtime.View;
+using App.Game.Modules.ContainerItem.Runtime;
 using UnityEngine;
+using ItemContainer = App.Game.Containers.Container.Runtime.Container;
 
 namespace App.Game.DragItem.Runtime.Model
 {
@@ -14,11 +16,15 @@ namespace App.Game.DragItem.Runtime.Model
         private readonly Func<ItemSlotController, IModuleItem, bool> m_CanPlaceFunc;
         private readonly Func<ItemSlotController, IModuleItem, bool> m_PlaceFunc;
         private readonly Func<ItemSlotController, Optional<IModuleItem>> m_RemoveFunc;
+        private readonly Func<ItemContainer> _getContainer;
+        private readonly Func<int, ItemSlotController> _getSlot;
         private event Action<ItemSlotController> m_ClickCallback;
 
         private IModuleItem m_Item;
 
         public int Index => m_Index;
+        public ItemContainer Container => _getContainer();
+        public UnityEngine.UI.Image Icon => m_View.Icon;
 
         public ItemSlotController(
             ItemSlotView view, 
@@ -26,19 +32,40 @@ namespace App.Game.DragItem.Runtime.Model
             Action<ItemSlotController> clickCallback, 
             Func<ItemSlotController, IModuleItem, bool> canPlaceFunc, 
             Func<ItemSlotController, IModuleItem, bool> placeFunc, 
-            Func<ItemSlotController, Optional<IModuleItem>> removeFunc)
+            Func<ItemSlotController, Optional<IModuleItem>> removeFunc,
+            Func<ItemContainer> getContainer,
+            Func<int, ItemSlotController> getSlot)
         {
             m_View = view;
             m_CanPlaceFunc = canPlaceFunc;
             m_PlaceFunc = placeFunc;
             m_RemoveFunc = removeFunc;
+            _getContainer = getContainer;
+            _getSlot = getSlot;
             m_Index = index;
             m_ClickCallback = clickCallback;
         }
 
         public void Initialize()
         {
+            m_View.Bind(this);
             m_View.SetButtonClickCallback(OnButtonClick);
+        }
+
+        public void ShowDropPreview(IModuleItem item)
+        {
+            if (item != null && item.TryGetModule<ContainerItemModule>(out var size))
+                m_View.SetDropPreview(true, size.Width, size.Height);
+        }
+
+        public void HideDropPreview()
+        {
+            m_View.SetDropPreview(false);
+        }
+
+        public void SetHovered(bool hovered)
+        {
+            m_View.SetItemHovered(hovered);
         }
 
         public void SetIndex(int index)
@@ -55,8 +82,27 @@ namespace App.Game.DragItem.Runtime.Model
         public void SetItem(IModuleItem item, Sprite sprite)
         {
             m_Item = item;
+            if (item != null && item.TryGetModule<ContainerItemModule>(out var size))
+                m_View.SetFootprint(size.Width, size.Height);
+            else
+                m_View.SetFootprint(1, 1);
             m_View.SetSprite(sprite);
             m_View.SetItemActive(sprite != null);
+        }
+
+        public ItemSlotController ResolveAnchor()
+        {
+            int anchor = Container?.GetAnchorIndex(Index) ?? -1;
+            return anchor >= 0 && anchor != Index ? _getSlot(anchor) : this;
+        }
+
+        public ItemSlotController ResolveDrop(IModuleItem item, Vector2? screenPoint)
+        {
+            Vector2 offset = screenPoint.HasValue ? m_View.GetCellPointerOffset(screenPoint.Value) : Vector2.zero;
+            int anchor = Container?.FindDropIndex(item, Index, offset.x, offset.y) ?? -1;
+            if (anchor < 0)
+                return null;
+            return anchor == Index ? this : _getSlot(anchor);
         }
         
         private void OnButtonClick()
@@ -101,6 +147,11 @@ namespace App.Game.DragItem.Runtime.Model
 
         public void SetActive(bool status)
         {
+            if (!status)
+            {
+                Clear();
+                DownItem();
+            }
             m_View.gameObject.SetActive(status);
         }
         

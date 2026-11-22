@@ -13,6 +13,7 @@ using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
 using App.Game.Canvases.External;
+using App.Game.DragItem.Runtime;
 using App.Game.Inventory.External.AddItemStrategy;
 using App.Game.Inventory.External.ViewModel;
 using App.Game.Inventory.Runtime;
@@ -20,64 +21,77 @@ using App.Game.Inventory.Runtime.Config;
 using App.Game.Inventory.Runtime.Config.Model;
 using App.Game.Inventory.Runtime.Data;
 using App.Game.Inventory.Runtime.Item;
+using App.Game.Modules.Equipment.Runtime;
 
 namespace App.Game.Inventory.External
 {
     public class InventoryController : IInitSystem, IInventoryController, IDisposable
     {
-        private readonly IDataManager _dataManager;
         private readonly IConfigLoader _configLoader;
         private readonly IWindowManager _windowManager;
         private readonly IAssetManager _assetManager;
         private readonly ICanvasController _canvasController;
         private readonly IItemSpriteLoader _spriteLoader;
         private readonly IModuleItemsManager _moduleItemsManager;
+        private readonly DragItemController _dragItemController;
 
-        private InventoryDataService _dataService;
         private InventoryConfigService _configService;
         private InventoryWindowController _inventoryWindowController;
         private InventoryService _service;
         private InventoryAddItemStrategy _addItemStrategy;
 
         public InventoryController(
-            IDataManager dataManager, 
             IConfigLoader configLoader,
             IWindowManager windowManager,
             IAssetManager assetManager,
             IItemSpriteLoader spriteLoader,
             IModuleItemsManager moduleItemsManager,
-            ICanvasController canvasController)
+            ICanvasController canvasController,
+            DragItemController dragItemController)
         {
-            _dataManager = dataManager;
             _configLoader = configLoader;
             _windowManager = windowManager;
             _assetManager = assetManager;
             _spriteLoader = spriteLoader;
             _moduleItemsManager = moduleItemsManager;
             _canvasController = canvasController;
+            _dragItemController = dragItemController;
         }
 
         public void Init()
         {
-            InitConfig();
-            InitData();
-            InitItems();
-            InitWindow();
+            if (!InitConfig() || !InitItems() || !InitWindow())
+            {
+                HLogger.LogError("Could not initialize inventory window.");
+                return;
+            }
             _addItemStrategy = new InventoryAddItemStrategy(
                 _moduleItemsManager,
                 _service,
                 _inventoryWindowController);
+            _service.ItemChanged += _inventoryWindowController.AddItem;
         }
 
-        private void InitWindow()
+        public bool BindContainer(App.Game.Containers.Container.Runtime.Container container)
+        {
+            return _addItemStrategy != null && _service.BindContainer(container);
+        }
+
+        public bool BindEquipment(EquipmentModule equipment)
+        {
+            return equipment != null && _addItemStrategy != null && _inventoryWindowController.BindEquipment(equipment);
+        }
+
+        private bool InitWindow()
         {
             _inventoryWindowController = new InventoryWindowController(
                 _windowManager,
                 _assetManager,
                 _canvasController,
                 _spriteLoader,
-                _service);
-            _inventoryWindowController.CreateWindow();
+                _service,
+                _dragItemController);
+            return _inventoryWindowController.CreateWindow();
         }
 
         private bool InitConfig()
@@ -86,18 +100,9 @@ namespace App.Game.Inventory.External
             return _configService.Initialize();
         }
 
-        private bool InitData()
-        {
-            _dataService = new InventoryDataService(_dataManager);
-            return _dataService.Initialize(_configService.GetCols(), _configService.GetRows());
-        }
-
         private bool InitItems()
         {
-            _service = new InventoryService(
-                _configService,
-                _dataService,
-                _moduleItemsManager);
+            _service = new InventoryService(_configService);
             if (!_service.Initialize())
             {
                 HLogger.LogError("Failed to initialize InventoryItemsController");
@@ -149,6 +154,12 @@ namespace App.Game.Inventory.External
 
         public void Dispose()
         {
+            if (_service != null)
+            {
+                if (_inventoryWindowController != null)
+                    _service.ItemChanged -= _inventoryWindowController.AddItem;
+                _service.Dispose();
+            }
             _inventoryWindowController?.Dispose();
         }
     }

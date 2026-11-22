@@ -3,7 +3,7 @@ using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Chest;
 using App.Game.Modules.Chests.Runtime;
-using App.Game.Modules.ContainerModule.Runtime;
+using App.Game.Modules.Container.Runtime;
 using App.Game.Modules.TilePosition.Runtime;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Chest;
 using App.Generation.DungeonGenerator.Runtime.DungeonGenerators.Generation.Common;
