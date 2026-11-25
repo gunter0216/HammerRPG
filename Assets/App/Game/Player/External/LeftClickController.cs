@@ -3,7 +3,6 @@ using App.Common.Windows.External;
 using App.Game.Interactions.External;
 using App.Game.Player.External.Attack;
 using App.Game.Player.External.Context;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace App.Game.Player.External
@@ -15,26 +14,24 @@ namespace App.Game.Player.External
         private readonly PlayerContext _context;
         private readonly PlayerAttackController _playerAttackController;
 
-        private InteractionController _interactionController;
-        private Camera _camera;
+        private readonly InteractionController _interactionController;
 
         public LeftClickController(IInputService inputService,
             IWindowManager windowManager,
             PlayerContext context,
-            PlayerAttackController playerAttackController)
+            PlayerAttackController playerAttackController,
+            InteractionController interactionController)
         {
             _inputService = inputService;
             _windowManager = windowManager;
             _context = context;
             _playerAttackController = playerAttackController;
+            _interactionController = interactionController;
         }
 
         public void Initialize()
         {
-            _interactionController = new InteractionController();
             _interactionController.Initialize();
-            
-            _camera = Camera.main;
             _inputService.Input.UI.LeftClick.performed += OnLeftClick;
         }
 
@@ -52,7 +49,7 @@ namespace App.Game.Player.External
         {
             _context.AttackContext.AttackBlocked = _windowManager.IsAnyOpen();
             
-            _interactionController.OnUpdate();
+            _interactionController.OnUpdate(!_context.AttackContext.AttackBlocked);
             _playerAttackController.OnUpdate();
         }
     }

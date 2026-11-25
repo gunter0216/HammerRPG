@@ -2,6 +2,7 @@ using App.Common.FSM.External;
 using App.Core.Startups.External;
 using App.Core.Startups.External.Attributes;
 using App.Core.Startups.External.Constants;
+using App.Game.Interactions.External;
 using App.Game.Update.External;
 
 namespace App.Game.Player.External
@@ -20,6 +21,7 @@ namespace App.Game.Player.External
             // BindSingle<PlayerMoveSystem>();
             // BindSingle<WeaponCollisionSystem>();
             BindSingle<PlayerController>();
+            BindSingle<InteractionController>();
 
             // RegisterFSM<AttackSystem>(FSMStage.CoreInitStage, StageOrders.AttackSystem);
             // RegisterFSM<EnemyInitSystem>(FSMStage.CoreInitStage, StageOrders.EnemyInitSystem);
