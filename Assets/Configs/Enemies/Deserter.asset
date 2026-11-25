@@ -20,6 +20,7 @@ MonoBehaviour:
   - rid: 3362484091087224936
   - rid: 3362484091087224937
   - rid: 3362484091087224938
+  - rid: 3362484108603424867
   m_Tags: 0
   references:
     version: 2
@@ -50,5 +51,11 @@ MonoBehaviour:
         _nearSprite: {fileID: 0}
         _farSprite: {fileID: 0}
         _damage: 10
+        _attackSpeed: 1
         _reach: 1.18
         _sweepWidth: 0.82
+    - rid: 3362484108603424867
+      type: {class: AIModuleConfig, ns: App.Game.Modules.AI.Runtime.Config, asm: Autumn.Modules.AI}
+      data:
+        _detectionRadius: 5
+        _targetScanInterval: 0.2

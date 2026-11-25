@@ -360,6 +360,32 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: South_Wall_Tall
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape:
+      - - {x: -32, y: -32}
+        - {x: -32, y: -16}
+        - {x: 32, y: -16}
+        - {x: 32, y: -32}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a6c064f3174f2c4eac912d5df46d92c
+      internalID: 316066368
+      vertices: []
+      indices:
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -382,6 +408,7 @@ TextureImporter:
       Floor_Chipped: -257181838
       Floor_Cracked: 513806872
       Floor_Dirt: -1668159887
+      South_Wall_Tall: 316066368
       Wall_E: 1776714715
       Wall_N: 1193578383
       Wall_S: 1388630253

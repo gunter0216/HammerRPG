@@ -5,7 +5,6 @@ using App.Game.Dungeon.DungeonCore.External.View;
 using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.Inventory.External;
 using App.Game.Modules.Doors.Runtime;
-using Assets.App.Game.Interactions.Runtime;
 using UnityEngine;
 
 namespace App.Game.Dungeon.DungeonCore.External.Controllers
@@ -45,10 +44,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         {
             _animator = _doorView.GetComponent<Animator>();
             
-            var interactableView = _doorView.gameObject.AddComponent<InteractableView>();
-            interactableView.OnClickCallback += OnButtonClick;
-            interactableView.OnHoverEnterCallback += OnButtonEnter;
-            interactableView.OnHoverExitCallback += OnButtonExit;
+            _doorView.OnClickCallback += OnButtonClick;
+            _doorView.OnHoverEnterCallback += OnButtonEnter;
+            _doorView.OnHoverExitCallback += OnButtonExit;
 
             _doorService = _roomService.CreateDoor();
             _door = _doorService.Module;

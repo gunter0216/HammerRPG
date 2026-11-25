@@ -11,6 +11,7 @@ using App.Game.Dungeon.DungeonCore.External.View.Spawn;
 using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.FollowIcon.External;
 using App.Game.Inventory.External;
+using Assets.App.Game.Interactions.Runtime;
 using UnityEngine;
 using Zenject;
 
@@ -110,21 +111,16 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             _chests = new List<ChestController>();
             _enemySpawnController = new EnemySpawnController(_moduleItemsManager, _assetManager, _aiController);
 
-            foreach (var transform in _roomView.GetComponentsInChildren<Transform>(includeInactive: false))
+            foreach (var view in _roomView.GetComponentsInChildren<InteractableView>(includeInactive: false))
             {
-                if (transform.GetComponent<IInteractiveView>() == null)
+                switch (view)
                 {
-                    continue;
-                }
-
-                if (transform.TryGetComponent<DoorInteractiveView>(out var doorView))
-                {
-                    CreateDoor(doorView);
-                }
-                
-                if (transform.TryGetComponent<ChestInteractiveView>(out var chestView))
-                {
-                    CreateChest(chestView);
+                    case DoorInteractiveView doorView:
+                        CreateDoor(doorView);
+                        break;
+                    case ChestInteractiveView chestView:
+                        CreateChest(chestView);
+                        break;
                 }
             }
         }

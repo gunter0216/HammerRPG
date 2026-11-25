@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WorkshopIronboundChest_Vertical
+  m_Controller: {fileID: 9100000, guid: 073d46eb8bffcdd48aa44b42256dfa05, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 6fa0a3e70eca872488054955e04e98da, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 7ae89965bed5a9e449372e82d05c85d3, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: ffa5cc3dbca512d47a5b5942f57786a3, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: c8871a24b8d7f5845b866b9ee6a007ff, type: 2}

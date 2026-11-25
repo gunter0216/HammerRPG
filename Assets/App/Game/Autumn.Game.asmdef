@@ -60,7 +60,8 @@
         "Autumn.Modules.Defence",
         "Autumn.Modules.IssuedItems",
         "Autumn.Modules.ContainerItem",
-        "Autumn.Modules.Equipment"
+        "Autumn.Modules.Equipment",
+        "Autumn.Modules.AI"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

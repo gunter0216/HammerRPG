@@ -1,0 +1,7 @@
+{
+  "name": "Autumn.Modules.AI",
+  "references": [
+    "Autumn.ModuleItems",
+    "Autumn.Utility"
+  ]
+}

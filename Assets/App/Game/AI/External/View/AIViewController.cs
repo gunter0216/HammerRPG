@@ -2,6 +2,7 @@ using App.Common.ModuleItem.External;
 using App.Common.ModuleItem.Runtime;
 using App.Game.AI.External.View;
 using App.Game.AI.External.States;
+using App.Game.Modules.AI.Runtime;
 using App.Game.Modules.Health.Runtime;
 using App.Game.Modules.Move.Runtime;
 using App.Game.Player.External.View;
@@ -56,6 +57,8 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
                 return false;
 
             _timer = 0.2f;
+            if (_combat2D != null)
+                SetState(_combat2D.GetNextState());
             _statusBarController.Show(_moduleItemView);
 
             _isActive = true;
@@ -71,12 +74,15 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
             if (_view.TryGetComponent<Rigidbody2D>(out var body))
             {
-                if (!_moveModules.TryGetModule(_moduleItem, out var move))
+                if (!_moduleItem.TryGetModule<AIModule>(out var ai) ||
+                    !_moveModules.TryGetModule(_moduleItem, out var move))
                     return false;
 
-                _combat2D = new EnemyCombat2D(_moduleItem, _entityView, body, move);
+                _combat2D = new EnemyCombat2D(_moduleItem, _entityView, body, move, ai);
                 if (!_combat2D.Initialize())
                     return false;
+
+                _deadAIState = new DeadAIState(_entityView);
             }
             else
             {
@@ -101,10 +107,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         {
             _healthModule.OnHealthOver -= OnHealthOver;
             _statusBarController.Hide(_moduleItemView);
+            SetState(_deadAIState);
             if (_combat2D != null)
                 _combat2D.Die();
-            else
-                SetState(_deadAIState);
             _isActive = false;
         }
 
@@ -117,7 +122,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
             if (_combat2D != null)
             {
-                _combat2D.Update();
+                SetState(_combat2D.GetNextState());
+                if (_state is IUpdateState combatState)
+                    combatState.OnUpdate(Time.deltaTime);
                 return;
             }
             

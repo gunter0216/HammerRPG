@@ -43,6 +43,7 @@ MonoBehaviour:
         _nearSprite: {fileID: -2073294036, guid: e1b8ef6bb3d57f242950cb72690698b2, type: 3}
         _farSprite: {fileID: -1321072276, guid: e1b8ef6bb3d57f242950cb72690698b2, type: 3}
         _damage: 10
+        _attackSpeed: 1
         _reach: 1.45
         _sweepWidth: 1.3
     - rid: 7010000000000000000

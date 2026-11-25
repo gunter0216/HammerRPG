@@ -11,6 +11,7 @@ namespace App.Game.Player.External.Attack
     public class PlayerAttackController
     {
         private static readonly int Attack = Animator.StringToHash("Attack");
+        private static readonly int AttackSpeed = Animator.StringToHash("AttackSpeed");
         private static readonly int AttackFacingLeft = Animator.StringToHash("AttackFacingLeft");
 
         private readonly PlayerContext _context;
@@ -53,7 +54,7 @@ namespace App.Game.Player.External.Attack
                 return;
 
             var weapon = _handItems.OneHandedWeapon;
-            if (weapon == null)
+            if (weapon == null || !weapon.IsAttackSpeedValid)
                 return;
 
             _pendingWeapon = weapon;
@@ -62,6 +63,7 @@ namespace App.Game.Player.External.Attack
             _attackContext.IsAttack = true;
             _repeatAttack = false;
             _animator.SetBool(AttackFacingLeft, _facingLeft);
+            _animator.SetFloat(AttackSpeed, weapon.AttackSpeed);
             _animator.SetTrigger(Attack);
         }
 

@@ -8,7 +8,6 @@ using App.Game.Dungeon.DungeonCore.Runtime.Services;
 using App.Game.Dungeon.DungeonCreator.Runtime.Chest;
 using App.Game.FollowIcon.External;
 using App.Game.Modules.Chests.Runtime;
-using Assets.App.Game.Interactions.Runtime;
 using Assets.App.Game.Modules.ModuleItemType.Runtime.Config.Model;
 using UnityEngine;
 
@@ -47,10 +46,9 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         {
             _animator = _view.GetComponent<Animator>();
             
-            var interactableView = _view.gameObject.AddComponent<InteractableView>();
-            interactableView.OnClickCallback += OnButtonClick;
-            interactableView.OnHoverEnterCallback += OnButtonEnter;
-            interactableView.OnHoverExitCallback += OnButtonExit;
+            _view.OnClickCallback += OnButtonClick;
+            _view.OnHoverEnterCallback += OnButtonEnter;
+            _view.OnHoverExitCallback += OnButtonExit;
             
             _chestService = _roomService.CreateChest();
             _chest = _chestService.Module;
