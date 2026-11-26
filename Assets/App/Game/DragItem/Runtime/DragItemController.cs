@@ -41,6 +41,12 @@ namespace App.Game.DragItem.Runtime
 
         public bool IsDragging => _draggedItem != null;
 
+        internal void CancelDrag()
+        {
+            if (IsDragging)
+                FinishDrag();
+        }
+
         public void CancelDragFrom(IItemSlotModel slot)
         {
             if (m_SourceSlot != null && m_SourceSlot == slot)

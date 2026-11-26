@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6205621094330681162}
   - component: {fileID: 1268087575213704726}
   - component: {fileID: 6908038299543208021}
+  - component: {fileID: 3309127284904149210}
   m_Layer: 0
   m_Name: WorkshopMixedWeaponRack
   m_TagString: Untagged
@@ -104,3 +105,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cfdd109cfb00f9458e419770ebc2f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Autumn.Game::App.Game.Dungeon.DungeonCore.External.View.ContainerInteractiveObject
+--- !u!114 &3309127284904149210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3589727870239047962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 600d56ff72cd93e4cb01a55c9b74c9fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Autumn.Game::App.Game.Dungeon.DungeonCore.External.View.CreatingModuleItemView
+  _config: {fileID: 11400000, guid: 27fffa8caf4cd4e44898067543e5f64d, type: 2}
+  _objectId: 

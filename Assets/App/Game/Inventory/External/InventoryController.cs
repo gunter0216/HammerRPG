@@ -40,6 +40,8 @@ namespace App.Game.Inventory.External
         private InventoryService _service;
         private InventoryAddItemStrategy _addItemStrategy;
 
+        internal event Action WindowClosed;
+
         public InventoryController(
             IConfigLoader configLoader,
             IWindowManager windowManager,
@@ -91,6 +93,7 @@ namespace App.Game.Inventory.External
                 _spriteLoader,
                 _service,
                 _dragItemController);
+            _inventoryWindowController.Closed += () => WindowClosed?.Invoke();
             return _inventoryWindowController.CreateWindow();
         }
 

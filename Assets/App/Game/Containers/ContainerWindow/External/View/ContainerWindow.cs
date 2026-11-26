@@ -15,6 +15,11 @@ namespace App.Game.Containers.ContainerWindow.External.View
         
         public ItemSlotView ItemSlotViewPrefab => m_ItemSlotViewPrefab;
         public Transform SlotsContent => m_SlotsContent;
+
+        public void SetColumns(int columns)
+        {
+            m_SlotsContent.GetComponent<GridLayoutGroup>().constraintCount = columns;
+        }
         
         public void SetActive(bool isActive)
         {

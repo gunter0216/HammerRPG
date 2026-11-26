@@ -102,6 +102,37 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
             }
         }
 
+        public bool TryBindDynamicModuleItems()
+        {
+            var dynamicRoot = _roomView != null ? _roomView.Find("[DYNAMIC]") : null;
+            if (dynamicRoot == null)
+                return true;
+
+            var views = dynamicRoot.GetComponentsInChildren<CreatingModuleItemView>(true);
+            var ids = new HashSet<string>();
+            foreach (var view in views)
+            {
+                if (view.Config == null || !Guid.TryParseExact(view.ObjectId, "N", out _) || !ids.Add(view.ObjectId))
+                {
+                    HLogger.LogError($"Invalid module item placement '{view.name}' in room {_service.Room.Data.UID}.");
+                    return false;
+                }
+            }
+
+            foreach (var view in views)
+            {
+                if (!_service.TryResolveObject(view.ObjectId, view.Config.Id, out var item))
+                {
+                    HLogger.LogError($"Could not bind module item '{view.ObjectId}' in room {_service.Room.Data.UID}.");
+                    return false;
+                }
+
+                view.ModuleItem = item;
+            }
+
+            return true;
+        }
+
         public void Initialize()
         {
             if (_roomView == null)

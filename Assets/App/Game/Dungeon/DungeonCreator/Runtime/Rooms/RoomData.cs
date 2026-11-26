@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using App.Common.Algorithms.Runtime;
+using App.Common.DataContainer.Runtime;
 using App.Game.Dungeon.DungeonCreator.Runtime.Tiles;
 using App.Generation.DungeonGenerator.Runtime.Rooms;
 using Newtonsoft.Json;
@@ -28,6 +29,9 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         
         [JsonProperty("tiles")]
         private readonly List<TileData> _tiles;
+
+        [JsonProperty("object_references")]
+        private readonly Dictionary<string, DataReference> _objectReferences = new();
         
         public Vector2Int Position => _position;
 
@@ -38,6 +42,12 @@ namespace App.Game.Dungeon.DungeonCreator.Runtime.Rooms
         public string ConfigID => _configID;
 
         public string VariantID => _variantID;
+
+        public bool TryGetObjectReference(string objectId, out DataReference reference) =>
+            _objectReferences.TryGetValue(objectId, out reference);
+
+        public bool TryAddObjectReference(string objectId, DataReference reference) =>
+            !string.IsNullOrWhiteSpace(objectId) && reference != null && _objectReferences.TryAdd(objectId, reference);
 
         public RoomData()
         {

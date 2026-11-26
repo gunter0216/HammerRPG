@@ -1,0 +1,5 @@
+{
+    "name": "Autumn.Dungeon.Core.Editor",
+    "references": ["Autumn.Core", "Autumn.Game"],
+    "includePlatforms": ["Editor"]
+}

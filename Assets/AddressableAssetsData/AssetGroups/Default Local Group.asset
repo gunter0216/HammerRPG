@@ -32,6 +32,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14501c4337fc81d4d8f9be594973c542
+    m_Address: ModuleItemGameConfig/WorkshopScabbardCrate
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1e185f70284f7c54f8ae75e9c0ac0a98
     m_Address: ModuleItemGameConfig/AshSelfBow
     m_ReadOnly: 0
@@ -54,6 +60,12 @@ MonoBehaviour:
     m_Address: EquipmentConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27fffa8caf4cd4e44898067543e5f64d
+    m_Address: ModuleItemGameConfig/WorkshopMixedWeaponRack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2c5d70d5043b05d4eb72dd5f132ee4c7
     m_Address: TransparentImage
@@ -109,6 +121,12 @@ MonoBehaviour:
     m_Address: Camera
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4317965e64bfd474c8d4eeae08794210
+    m_Address: ModuleItemGameConfig/WorkshopArmorStand
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4340f4c2a8d13cf4b82d9438b74c6a67
     m_Address: Human_Sword
@@ -336,6 +354,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d56f98a4bf0783440b2a6c17ead818ae
+    m_Address: ModuleItemGameConfig/WorkshopShieldRack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6c24a97bc279a144a9337885726ca80
+    m_Address: ModuleItemGameConfig/WorkshopSpearRack
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da3b96d5427dec44b82e696a3631ac1e
     m_Address: ModuleItemGameConfig/YewLimbBow
     m_ReadOnly: 0
@@ -383,6 +413,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fcb1544bf9029ec4a9be88eaf505445c
     m_Address: ModuleItemGameConfig/SquareIronHatchet
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ModuleItemGameConfig
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe1a6736782d7e34a8e7f71d6382bc73
+    m_Address: ModuleItemGameConfig/WorkshopSwordRack
     m_ReadOnly: 0
     m_SerializedLabels:
     - ModuleItemGameConfig

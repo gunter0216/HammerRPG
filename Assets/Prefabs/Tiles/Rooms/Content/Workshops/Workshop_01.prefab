@@ -1,37 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1710756278309791656
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2134055129822685476}
-  m_Layer: 0
-  m_Name: Armory
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2134055129822685476
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710756278309791656}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3699420354659645762}
-  m_Father: {fileID: 3161407484646551411}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2417939245220705810
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +31,6 @@ Transform:
   m_Children:
   - {fileID: 8338957675582484822}
   - {fileID: 3161407484646551411}
-  - {fileID: 7399803024622505026}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3371189272479340197
@@ -1434,9 +1401,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2134055129822685476}
+  - {fileID: 3699420354659645762}
   - {fileID: 5745368268265453160}
   - {fileID: 4322911631733137105}
+  - {fileID: 7399803024622505026}
   m_Father: {fileID: 5211054938710468276}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4713203745338835109
@@ -1445,8 +1413,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2134055129822685476}
+    m_TransformParent: {fileID: 3161407484646551411}
     m_Modifications:
+    - target: {fileID: 454720262893042682, guid: 58ac70c0bf1a15a439b49dca3cf7b090, type: 3}
+      propertyPath: _objectId
+      value: 11a6a89613324024a35223d755a056dc
+      objectReference: {fileID: 0}
     - target: {fileID: 5880397762112680993, guid: 58ac70c0bf1a15a439b49dca3cf7b090, type: 3}
       propertyPath: m_Name
       value: WorkshopArmorStand
@@ -1549,6 +1521,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5885028573054007713, guid: 5aaa2ea9d748f6b4f885c2e51ee34b9b, type: 3}
+      propertyPath: _objectId
+      value: 65339b7d1d654726bd82d790ce158b56
+      objectReference: {fileID: 0}
     - target: {fileID: 8355012930880180496, guid: 5aaa2ea9d748f6b4f885c2e51ee34b9b, type: 3}
       propertyPath: m_Name
       value: WorkshopIronboundChest
@@ -1569,15 +1545,19 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 5211054938710468276}
+    m_TransformParent: {fileID: 3161407484646551411}
     m_Modifications:
+    - target: {fileID: 586286040499760191, guid: d3c2c40018185fb4fb01d70c12f24e09, type: 3}
+      propertyPath: _objectId
+      value: ed8a2a9c2b794851bff6cc11de1d64bd
+      objectReference: {fileID: 0}
     - target: {fileID: 1517561733466419900, guid: d3c2c40018185fb4fb01d70c12f24e09, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5016384
       objectReference: {fileID: 0}
     - target: {fileID: 1517561733466419900, guid: d3c2c40018185fb4fb01d70c12f24e09, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.73
+      value: 5.7299995
       objectReference: {fileID: 0}
     - target: {fileID: 1517561733466419900, guid: d3c2c40018185fb4fb01d70c12f24e09, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1633,6 +1613,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3161407484646551411}
     m_Modifications:
+    - target: {fileID: 2383398350358370420, guid: ecc036abe8b4bd64ead605349d15d070, type: 3}
+      propertyPath: _objectId
+      value: 964642f4a4e64652aa7d6fcd9ee4065c
+      objectReference: {fileID: 0}
     - target: {fileID: 4688148386529456886, guid: ecc036abe8b4bd64ead605349d15d070, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.07

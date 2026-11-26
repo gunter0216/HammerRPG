@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8232108307559496167}
   - component: {fileID: 7765556983774099147}
   - component: {fileID: 4595150523147204944}
+  - component: {fileID: 454720262893042682}
   m_Layer: 0
   m_Name: WorkshopArmorStand
   m_TagString: Untagged
@@ -105,6 +106,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cfdd109cfb00f9458e419770ebc2f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Autumn.Game::App.Game.Dungeon.DungeonCore.External.View.ContainerInteractiveObject
+--- !u!114 &454720262893042682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5880397762112680993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 600d56ff72cd93e4cb01a55c9b74c9fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Autumn.Game::App.Game.Dungeon.DungeonCore.External.View.CreatingModuleItemView
+  _config: {fileID: 11400000, guid: 4317965e64bfd474c8d4eeae08794210, type: 2}
+  _objectId: 
 --- !u!1 &6683710182294236033
 GameObject:
   m_ObjectHideFlags: 0

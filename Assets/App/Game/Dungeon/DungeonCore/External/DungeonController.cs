@@ -119,7 +119,7 @@ namespace App.Game.Dungeon.DungeonCore.External
 
             foreach (var room in _rooms)
             {
-                if (!room.TryInjectDynamicObjects(_container))
+                if (!room.TryInjectDynamicObjects(_container) || !room.TryBindDynamicModuleItems())
                 {
                     Object.Destroy(dungeon);
                     _rooms.Clear();

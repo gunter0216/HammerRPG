@@ -26,6 +26,8 @@ namespace App.Game.Inventory.External.ViewModel
 
         private InventorySlotsController _slotsController;
 
+        internal event Action Closed;
+
         public InventoryWindowController(
             IWindowManager windowManager,
             IAssetManager assetManager,
@@ -55,6 +57,12 @@ namespace App.Game.Inventory.External.ViewModel
             base.OnOpened();
             
             _slotsController.OnWindowOpened();
+        }
+
+        protected override void OnClosed()
+        {
+            base.OnClosed();
+            Closed?.Invoke();
         }
 
         private void OnCloseButtonClick()

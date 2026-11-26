@@ -60,6 +60,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 463745ccb95ae6844bd010ed395dd9a9
+    m_Address: DungeonRooms2D/BastionCellar
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4bda4ef2548e0d7439e4359a1080f655
     m_Address: TransitRoom_19x19_D
     m_ReadOnly: 0

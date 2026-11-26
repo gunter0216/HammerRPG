@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 411814092116195887}
   - component: {fileID: 3066058908650759433}
   - component: {fileID: 2036066911077884521}
+  - component: {fileID: 8391873492201344180}
   m_Layer: 0
   m_Name: WorkshopSpearRack
   m_TagString: Untagged
@@ -183,3 +184,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cfdd109cfb00f9458e419770ebc2f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Autumn.Game::App.Game.Dungeon.DungeonCore.External.View.ContainerInteractiveObject
+--- !u!114 &8391873492201344180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7317684753300576317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 600d56ff72cd93e4cb01a55c9b74c9fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Autumn.Game::App.Game.Dungeon.DungeonCore.External.View.CreatingModuleItemView
+  _config: {fileID: 11400000, guid: d6c24a97bc279a144a9337885726ca80, type: 2}
+  _objectId: 

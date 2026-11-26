@@ -74,6 +74,9 @@ namespace App.Game.Containers.ContainerWindow.External
 
         public void OpenWindow(Container.Runtime.Container container, Action onClosed = null)
         {
+            if (container == null || IsOpen())
+                return;
+
             _onWindowPreOpened?.Invoke();
             
             _onClosedTemp = onClosed;
@@ -90,19 +93,23 @@ namespace App.Game.Containers.ContainerWindow.External
         {
             base.OnOpened();
 
+            _window.SetColumns(_container.Columns);
             _slotsModel.ShowContainer(_container);
             
             _onWindowOpened?.Invoke();
+            // The inventory backdrop spans the screen and must sit below the container.
+            _window.transform.SetAsLastSibling();
         }
 
         protected override void OnClosed()
         {
             base.OnClosed();
             _slotsModel.HideContainer();
-            
-            _onClosedTemp?.Invoke();
+            _container = null;
+
+            var onClosed = _onClosedTemp;
             _onClosedTemp = null;
-            
+            onClosed?.Invoke();
             _onWindowClosed?.Invoke();
         }
 

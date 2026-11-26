@@ -50,6 +50,7 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
 
             _doorService = _roomService.CreateDoor();
             _door = _doorService.Module;
+            ApplyDoorState();
         }
         
         private void OnButtonEnter()
@@ -63,25 +64,30 @@ namespace App.Game.Dungeon.DungeonCore.External.Controllers
         private void OnButtonClick()
         {
             if (_door.IsOpen)
-            {
+                _door.Close();
+            else if (_doorService.CanOpen())
+                _door.Open();
+            else
                 return;
-            }
 
-            if (!_doorService.CanOpen())
-            {
-                return;
-            }
-            
-            _door.Open();
-            OpenDoor();
+            ApplyDoorState();
         }
 
-        private void OpenDoor()
+        private void ApplyDoorState()
         {
-            _animator.SetBool(_opened, true);
+            bool isOpen = _door.IsOpen;
+            if (_animator != null)
+                _animator.SetBool(_opened, isOpen);
 
-            var collider = _animator.GetComponentInChildren<Collider>();
-            collider.enabled = false;
+            if (_doorView.TryGetComponent<Collider2D>(out var collider2D))
+            {
+                collider2D.enabled = !isOpen;
+                return;
+            }
+
+            var collider = _doorView.GetComponentInChildren<Collider>();
+            if (collider != null)
+                collider.enabled = !isOpen;
         }
     }
 }

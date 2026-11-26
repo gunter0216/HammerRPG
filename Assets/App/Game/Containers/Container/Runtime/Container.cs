@@ -14,6 +14,7 @@ namespace App.Game.Containers.Container.Runtime
         private int _columns;
 
         public int Guid => m_Data.Guid;
+        public int Columns => _columns;
 
         public event Action<int> ItemChanged;
         public event Action<IModuleItem> ItemAdded;

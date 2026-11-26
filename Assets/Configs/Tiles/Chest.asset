@@ -16,6 +16,7 @@ MonoBehaviour:
   m_Modules:
   - rid: 2381230076579545220
   - rid: 2381230076579545221
+  - rid: 3362484180750172253
   m_Tags: 0
   references:
     version: 2
@@ -24,7 +25,16 @@ MonoBehaviour:
       type: {class: ChestModuleConfig, ns: App.Game.Modules.Chests.Runtime.Config, asm: Autumn.Modules.Chest}
       data: 
     - rid: 2381230076579545221
-      type: {class: ContainerModuleConfig, ns: App.Game.Modules.ContainerModule.Runtime.Config, asm: Autumn.Modules.Container}
+      type: {class: ContainerModuleConfig, ns: App.Game.Modules.Container.Runtime.Config, asm: Autumn.Modules.Container}
       data:
         _rows: 5
         _cols: 7
+    - rid: 3362484180750172253
+      type: {class: IssuedItemsModuleConfig, ns: App.Game.Modules.IssuedItems.Runtime.Config, asm: Autumn.Modules.IssuedItems}
+      data:
+        _entries:
+        - _item: {fileID: 11400000, guid: 8f481efbbbd07264592e87a172e22742, type: 2}
+          _quantity: 1
+        - _item: {fileID: 11400000, guid: 3ddb1368ebade124eb2f7db914c31deb, type: 2}
+          _quantity: 1
+        _items: []

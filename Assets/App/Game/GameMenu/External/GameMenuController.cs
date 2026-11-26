@@ -2,7 +2,6 @@
 using App.Common.AssetSystem.Runtime;
 using App.Common.Canvases.External;
 using App.Common.Data.Runtime;
-using App.Common.Input.Runtime;
 using App.Common.Logger.Runtime;
 using App.Common.SceneControllers.Runtime;
 using App.Common.Utilities.Utility.Runtime;
@@ -15,7 +14,6 @@ using App.Game.Pause.Runtime;
 using App.Game.Settings.Runtime;
 using App.Game.Utility.Runtime.MenuSM;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace App.Game.GameMenu.External
 {
@@ -30,7 +28,7 @@ namespace App.Game.GameMenu.External
         private readonly IDataManager _dataManager;
         private readonly ISceneManager _sceneManager;
         private readonly IPauseController _pauseController;
-        private readonly IInputService _inputService;
+        private readonly ClosePopWindowService _backService;
         
         private GameMenuState m_GameMenuState;
         private SettingsMenuState m_SettingsMenuState;
@@ -46,7 +44,7 @@ namespace App.Game.GameMenu.External
             ISceneManager sceneManager,
             IPauseController pauseController, 
             IWindowManager windowManager, 
-            IInputService inputService)
+            ClosePopWindowService backService)
         {
             _canvasController = canvasController;
             _assetManager = assetManager;
@@ -54,7 +52,7 @@ namespace App.Game.GameMenu.External
             _sceneManager = sceneManager;
             _pauseController = pauseController;
             _windowManager = windowManager;
-            _inputService = inputService;
+            _backService = backService;
         }
 
         public void Init()
@@ -85,11 +83,10 @@ namespace App.Game.GameMenu.External
                 m_SettingsMenuState,
                 new SaveAndExitStrategy(_sceneManager, _pauseController));
 
-            _inputService.Input.UI.Back.performed += OnBackClick;
-            // todo отписка
+            _backService.BackUnhandled += OnBackClick;
         }
 
-        private void OnBackClick(InputAction.CallbackContext obj)
+        private void OnBackClick()
         {
             if (_menuMachine.GetCountInStack() <= 0)
             {
@@ -137,6 +134,7 @@ namespace App.Game.GameMenu.External
 
         public void Dispose()
         {
+            _backService.BackUnhandled -= OnBackClick;
             m_SettingsMenuState?.Dispose();
             m_GameMenuState?.Dispose();
         }

@@ -25,7 +25,7 @@ namespace App.Game.Modules.IssuedItems.Runtime.Config
             }
         }
 
-        [SerializeField, Tooltip("Предметы, выдаваемые в ContainerModule игрока на старте.")]
+        [SerializeField, Tooltip("Начальное содержимое ContainerModule владельца.")]
         private List<Entry> _entries = new();
 
         [SerializeField, HideInInspector]

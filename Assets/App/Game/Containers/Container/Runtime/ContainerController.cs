@@ -91,8 +91,10 @@ namespace App.Game.Containers.Container.Runtime
             }
 
             var container = CreateContainerInternal(dataContainer.Value, moduleItems);
-            
-            return Optional<Container>.Success(container.Value);
+            if (container.HasValue)
+                m_Containers.Add(dataContainer.Value.Guid, container.Value);
+
+            return container;
         }
 
         public Optional<Container> GetContainer(int guid)

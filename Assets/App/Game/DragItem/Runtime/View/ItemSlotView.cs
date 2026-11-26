@@ -16,6 +16,7 @@ namespace App.Game.DragItem.Runtime.View
         [SerializeField] private Button m_Button;
 
         private RectTransform _visualLayer;
+        private RectTransform _backgroundRoot;
         private RectTransform _iconRoot;
         private RectTransform _previewRoot;
         private Color _restingBackgroundColor;
@@ -51,6 +52,12 @@ namespace App.Game.DragItem.Runtime.View
                 layoutElement = _visualLayer.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
             layoutElement.ignoreLayout = true;
 
+            if (m_ItemBackground != null)
+            {
+                var backgrounds = GetOrCreateLayer(_visualLayer, "Backgrounds");
+                backgrounds.SetAsFirstSibling();
+                _backgroundRoot = CreateVisualRoot(backgrounds, m_ItemBackground.rectTransform);
+            }
             var previews = GetOrCreateLayer(_visualLayer, "Previews");
             var icons = GetOrCreateLayer(_visualLayer, "Icons");
             icons.SetAsLastSibling();
@@ -103,13 +110,18 @@ namespace App.Game.DragItem.Runtime.View
         private void LateUpdate()
         {
             if (m_Item.gameObject.activeSelf)
+            {
                 SyncVisualRoot(_iconRoot);
+                SyncVisualRoot(_backgroundRoot);
+            }
             if (m_DropPreview != null && m_DropPreview.gameObject.activeSelf)
                 SyncVisualRoot(_previewRoot);
         }
 
         private void OnEnable()
         {
+            if (_backgroundRoot != null)
+                _backgroundRoot.gameObject.SetActive(true);
             if (_iconRoot != null)
                 _iconRoot.gameObject.SetActive(true);
             if (_previewRoot != null)
@@ -118,6 +130,8 @@ namespace App.Game.DragItem.Runtime.View
 
         private void OnDisable()
         {
+            if (_backgroundRoot != null)
+                _backgroundRoot.gameObject.SetActive(false);
             if (_iconRoot != null)
                 _iconRoot.gameObject.SetActive(false);
             if (_previewRoot != null)
@@ -126,6 +140,8 @@ namespace App.Game.DragItem.Runtime.View
 
         private void OnDestroy()
         {
+            if (_backgroundRoot != null)
+                Destroy(_backgroundRoot.gameObject);
             if (_iconRoot != null)
                 Destroy(_iconRoot.gameObject);
             if (_previewRoot != null)
@@ -169,6 +185,7 @@ namespace App.Game.DragItem.Runtime.View
         public void SetFootprint(int width, int height)
         {
             SyncVisualRoot(_iconRoot);
+            SyncVisualRoot(_backgroundRoot);
             var layout = m_RectTransform.parent.GetComponent<UnityEngine.UI.GridLayoutGroup>();
             var spacing = layout != null ? layout.spacing : Vector2.zero;
             SetFootprint(m_Item.rectTransform, width, height, spacing, 0);
