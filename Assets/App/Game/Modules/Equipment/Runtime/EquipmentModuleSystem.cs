@@ -36,7 +36,6 @@ namespace App.Game.Modules.Equipment.Runtime
             if (!item.AddModule(equipment))
                 return Optional<IModuleItem>.Fail();
 
-            equipment.SubscribeToContainer();
             return Optional<IModuleItem>.Success(item);
         }
 

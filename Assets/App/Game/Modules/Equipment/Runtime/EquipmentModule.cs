@@ -20,7 +20,6 @@ namespace App.Game.Modules.Equipment.Runtime
         private readonly EquipmentModuleData _data;
         private readonly IModuleItemsManager _itemsManager;
         private readonly Dictionary<EquipmentSlotId, IModuleItem> _items = new();
-        private Containers.Container.Runtime.Container _ownerContainer;
         private bool _changingSlots;
 
         public EquipmentModule(IModuleItem owner, EquipmentModuleConfig config, EquipmentModuleData data,
@@ -36,45 +35,50 @@ namespace App.Game.Modules.Equipment.Runtime
 
         public event Action<EquipmentSlotId> SlotChanged;
 
-        internal void SubscribeToContainer()
-        {
-            if (!_owner.TryGetModule<ContainerModule>(out var inventory))
-                return;
-
-            _ownerContainer = inventory.Container;
-            _ownerContainer.ItemAdded += OnContainerItemAdded;
-        }
-
-        private void OnContainerItemAdded(IModuleItem item)
-        {
-            if (_changingSlots || !_ownerContainer.Items.Contains(item))
-                return;
-
-            foreach (var rule in Slots)
-            {
-                if (TryEquip(rule.Slot, item))
-                    return;
-            }
-        }
-
         public bool CanEquip(EquipmentSlotId slot, IModuleItem item)
         {
-            if (item == null || !item.TryGetConfigModule<EquipmentItemModuleConfig>(out var config) ||
-                !EquipmentTypeConstants.TryGetType(config.Type, out var itemType))
+            if (!TryGetEquipmentType(item, out var itemType))
                 return false;
 
             foreach (var rule in Slots)
             {
-                if (rule.Slot != slot)
-                    continue;
+                if (rule.Slot == slot)
+                    return AllowsType(rule, itemType);
+            }
 
-                foreach (var type in rule.AllowedTypes)
-                {
-                    if (type == itemType)
-                        return true;
-                }
+            return false;
+        }
 
+        public bool TryGetEquippedItemForComparison(IModuleItem item, out IModuleItem equipped)
+        {
+            equipped = null;
+            if (!TryGetEquipmentType(item, out var itemType))
                 return false;
+
+            foreach (var rule in Slots)
+            {
+                if (itemType == EquipmentType.Ring && rule.Slot != EquipmentSlotId.Ring1)
+                    continue;
+                if (AllowsType(rule, itemType) && TryGetEquippedItem(rule.Slot, out equipped))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool TryGetEquipmentType(IModuleItem item, out EquipmentType type)
+        {
+            type = default;
+            return item != null && item.TryGetConfigModule<EquipmentItemModuleConfig>(out var config) &&
+                   EquipmentTypeConstants.TryGetType(config.Type, out type);
+        }
+
+        private static bool AllowsType(EquipmentModuleConfig.SlotRule rule, EquipmentType type)
+        {
+            foreach (var allowed in rule.AllowedTypes)
+            {
+                if (allowed == type)
+                    return true;
             }
 
             return false;
@@ -218,8 +222,6 @@ namespace App.Game.Modules.Equipment.Runtime
         internal void DestroyEquippedItems()
         {
             _changingSlots = true;
-            if (_ownerContainer != null)
-                _ownerContainer.ItemAdded -= OnContainerItemAdded;
             SlotChanged = null;
             var ownedItems = new List<IModuleItem>(_data.Slots.Count);
             foreach (var slot in _data.Slots.Keys)

@@ -107,7 +107,19 @@ namespace App.Game.Player.External
                 return true;
 
             return _player.TryGetModule<ContainerModule>(out var container) &&
-                   module.TryIssueItems(_moduleItemsManager, container);
+                   module.TryIssueItems(_moduleItemsManager, container, EquipStartingItem);
+        }
+
+        private void EquipStartingItem(IModuleItem item)
+        {
+            if (!_player.TryGetModule<EquipmentModule>(out var equipment))
+                return;
+
+            foreach (var rule in equipment.Slots)
+            {
+                if (equipment.TryEquip(rule.Slot, item))
+                    return;
+            }
         }
 
         private void InitLeftClickController()

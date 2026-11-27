@@ -16,17 +16,13 @@ MonoBehaviour:
   - m_Key: Default
     _tileBasedGenerationConfig:
       _rooms:
-      - {fileID: 11400000, guid: bb65705c513f95948895823e12923ce5, type: 2}
-      - {fileID: 11400000, guid: efa26c598a67da24da19ddb59282e7bd, type: 2}
-      - {fileID: 11400000, guid: 3e9d0d0f6079c7141a4315dd128f13d4, type: 2}
-      - {fileID: 11400000, guid: d26c7a6975c747d4d90ca518171878f5, type: 2}
-      - {fileID: 11400000, guid: 6e7a82d5867b0e140a10f789c9ae5543, type: 2}
       - {fileID: 11400000, guid: 471d6c15aae8b964789edecbdeaa393b, type: 2}
-      - {fileID: 11400000, guid: a91e119a41adc1e4a8c1d674f5ace8c5, type: 2}
-      - {fileID: 11400000, guid: a93ec9123234b534faf18ac63aa42985, type: 2}
-      - {fileID: 11400000, guid: 6e915515e1060af46866f7bb0f62d99f, type: 2}
-      - {fileID: 11400000, guid: e7ecbd870f6417841b37b3f8c3b57d18, type: 2}
-      - {fileID: 11400000, guid: b04e0d8a217a47e4d9a0f1eb55b99be2, type: 2}
+      - {fileID: 11400000, guid: 513af5121a8eaa74280d7983584b5b54, type: 2}
+      - {fileID: 11400000, guid: 36c8dcef8052a71478fa86d066cb1f61, type: 2}
+      - {fileID: 11400000, guid: 7e2fa61ce3a61b342ae7db570dfc2886, type: 2}
+      - {fileID: 11400000, guid: 5916ca281e933b24596bf01cc02f5deb, type: 2}
+      - {fileID: 11400000, guid: bb65705c513f95948895823e12923ce5, type: 2}
+      - {fileID: 11400000, guid: 89f36fa2d5cb7f243a94dbb9c565ab8b, type: 2}
       _maxDepth: 1
       _maxIterations: 300
       _disableRoomRotation: 1
@@ -44,6 +40,10 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 6e915515e1060af46866f7bb0f62d99f, type: 2}
       - {fileID: 11400000, guid: e7ecbd870f6417841b37b3f8c3b57d18, type: 2}
       - {fileID: 11400000, guid: b04e0d8a217a47e4d9a0f1eb55b99be2, type: 2}
+      - {fileID: 11400000, guid: 513af5121a8eaa74280d7983584b5b54, type: 2}
+      - {fileID: 11400000, guid: 5916ca281e933b24596bf01cc02f5deb, type: 2}
+      - {fileID: 11400000, guid: 89f36fa2d5cb7f243a94dbb9c565ab8b, type: 2}
+      - {fileID: 11400000, guid: 36c8dcef8052a71478fa86d066cb1f61, type: 2}
       _maxDepth: 2
       _maxIterations: 300
       _disableRoomRotation: 1

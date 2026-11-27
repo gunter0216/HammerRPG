@@ -29,8 +29,8 @@ MonoBehaviour:
     - rid: 3362484061470195857
       type: {class: ContainerItemModuleConfig, ns: App.Game.Modules.ContainerItem.Runtime.Config, asm: Autumn.Modules.ContainerItem}
       data:
-        _width: 1
-        _height: 1
+        _width: 2
+        _height: 3
     - rid: 3362484061470195858
       type: {class: NameModuleConfig, ns: App.Game.Modules.Name.Runtime.Config, asm: Autumn.Modules.Name}
       data:

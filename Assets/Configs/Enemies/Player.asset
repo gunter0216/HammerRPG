@@ -105,7 +105,7 @@ MonoBehaviour:
           _allowedEquipmentTypes: 06000000
           _legacyAllowedTypes: []
         - _slot: 6
-          _allowedEquipmentTypes: 0a0000000b000000
+          _allowedEquipmentTypes: 0a0000000b0000000c000000
           _legacyAllowedTypes: []
         - _slot: 7
           _allowedEquipmentTypes: 0a0000000b000000

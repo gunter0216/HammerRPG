@@ -367,6 +367,7 @@ MonoBehaviour:
   m_SlotsContent: {fileID: 3592767291889218091}
   _nameText: {fileID: 8643514673809453305}
   m_CloseButton: {fileID: 8911915484558217716}
+  _itemInfoPrefab: {fileID: 642980124329882684, guid: 5fa946dc33f4f9a4387c2d84c7ab7aca, type: 3}
 --- !u!1 &8217053460941660033
 GameObject:
   m_ObjectHideFlags: 0

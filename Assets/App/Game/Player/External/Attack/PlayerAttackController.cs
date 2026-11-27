@@ -13,6 +13,7 @@ namespace App.Game.Player.External.Attack
         private static readonly int Attack = Animator.StringToHash("Attack");
         private static readonly int AttackSpeed = Animator.StringToHash("AttackSpeed");
         private static readonly int AttackFacingLeft = Animator.StringToHash("AttackFacingLeft");
+        private static readonly int AttackStyle = Animator.StringToHash("AttackStyle");
 
         private readonly PlayerContext _context;
         private readonly PlayerAttackContext _attackContext;
@@ -64,6 +65,7 @@ namespace App.Game.Player.External.Attack
             _repeatAttack = false;
             _animator.SetBool(AttackFacingLeft, _facingLeft);
             _animator.SetFloat(AttackSpeed, weapon.AttackSpeed);
+            _animator.SetFloat(AttackStyle, (float)weapon.AttackStyle);
             _animator.SetTrigger(Attack);
         }
 
@@ -106,6 +108,7 @@ namespace App.Game.Player.External.Attack
 
             _attackContext.IsAttack = false;
             _pendingWeapon = null;
+            _handItems.RefreshHandItems();
             _repeatAttack = true;
         }
     }

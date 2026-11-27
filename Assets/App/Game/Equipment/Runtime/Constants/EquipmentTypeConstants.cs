@@ -14,6 +14,7 @@ namespace App.Game.Equipment.Runtime.Constants
         public const string Boots = "Boots";
         public const string OneHanded = "One-handed";
         public const string TwoHanded = "Two-handed";
+        public const string Shield = "Shield";
 
         public static bool TryGetType(string name, out EquipmentType type)
         {
@@ -31,6 +32,7 @@ namespace App.Game.Equipment.Runtime.Constants
                 Boots => EquipmentType.Boots,
                 OneHanded => EquipmentType.OneHanded,
                 TwoHanded => EquipmentType.TwoHanded,
+                Shield => EquipmentType.Shield,
                 _ => null
             };
             type = match.GetValueOrDefault();

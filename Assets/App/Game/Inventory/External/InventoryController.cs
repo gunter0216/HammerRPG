@@ -41,6 +41,7 @@ namespace App.Game.Inventory.External
         private InventoryAddItemStrategy _addItemStrategy;
 
         internal event Action WindowClosed;
+        internal EquipmentModule Equipment { get; private set; }
 
         public InventoryController(
             IConfigLoader configLoader,
@@ -81,7 +82,11 @@ namespace App.Game.Inventory.External
 
         public bool BindEquipment(EquipmentModule equipment)
         {
-            return equipment != null && _addItemStrategy != null && _inventoryWindowController.BindEquipment(equipment);
+            if (equipment == null || _addItemStrategy == null || !_inventoryWindowController.BindEquipment(equipment))
+                return false;
+
+            Equipment = equipment;
+            return true;
         }
 
         private bool InitWindow()

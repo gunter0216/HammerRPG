@@ -45,29 +45,56 @@ namespace App.Game.Inventory.External.View
             _equippedBadge.SetActive(equipped);
         }
 
-        public bool TryPositionLeftOf(RectTransform footprint)
+        public bool TryPositionLeftOf(RectTransform footprint) => TryPositionNextTo(footprint, false);
+
+        internal bool TryPositionRightOf(RectTransform footprint, InventoryItemInfoView comparison) =>
+            TryPositionNextTo(footprint, true, comparison);
+
+        private bool TryPositionNextTo(RectTransform footprint, bool toRight, InventoryItemInfoView comparison = null)
         {
-            Vector2 itemLeft = _viewport.InverseTransformPoint(
-                footprint.TransformPoint(new Vector3(footprint.rect.xMin, footprint.rect.center.y)));
+            var itemRect = footprint.rect;
+            float itemEdgeX = toRight ? itemRect.xMax : itemRect.xMin;
+            Vector2 itemEdge = _viewport.InverseTransformPoint(
+                footprint.TransformPoint(new Vector3(itemEdgeX, itemRect.center.y)));
             Rect viewport = _viewport.rect;
-            float right = itemLeft.x - Gap;
-            float availableWidth = right - viewport.xMin - Gap;
+            float edge = toRight ? itemEdge.x + Gap : itemEdge.x - Gap;
+            float availableWidth = toRight ? viewport.xMax - edge - Gap : edge - viewport.xMin - Gap;
             float availableHeight = viewport.height - 2f * Gap;
-            if (availableWidth <= 0f || availableHeight <= 0f)
+            float cardGap = comparison != null ? Gap : 0f;
+            if (availableWidth <= cardGap || availableHeight <= 0f)
                 return false;
 
             Vector2 size = _rect.rect.size;
-            float badgeExtension = _equippedBadge.activeSelf
-                ? Mathf.Max(0f, _badge.localPosition.y + _badge.rect.yMax - _rect.rect.yMax)
-                : 0f;
-            float scale = Mathf.Min(1f, Mathf.Min(availableWidth / size.x, availableHeight / (size.y + badgeExtension)));
-            Vector2 halfSize = size * (scale * 0.5f);
-            float y = Mathf.Clamp(itemLeft.y, viewport.yMin + Gap + halfSize.y,
-                viewport.yMax - Gap - halfSize.y - badgeExtension * scale);
-            _rect.localScale = new Vector3(scale, scale, 1f);
-            _rect.localPosition = new Vector3(right - halfSize.x, y, 0f);
-            gameObject.SetActive(true);
+            float width = size.x;
+            float bottom = size.y * 0.5f;
+            float top = bottom + GetBadgeExtension();
+            if (comparison != null)
+            {
+                var comparisonSize = comparison._rect.rect.size;
+                width += comparisonSize.x;
+                bottom = Mathf.Max(bottom, comparisonSize.y * 0.5f);
+                top = Mathf.Max(top, comparisonSize.y * 0.5f + comparison.GetBadgeExtension());
+            }
+
+            float scale = Mathf.Min(1f, Mathf.Min((availableWidth - cardGap) / width, availableHeight / (bottom + top)));
+            float y = Mathf.Clamp(itemEdge.y, viewport.yMin + Gap + bottom * scale, viewport.yMax - Gap - top * scale);
+            float halfWidth = size.x * scale * 0.5f;
+            ShowAt(toRight ? edge + halfWidth : edge - halfWidth, y, scale);
+            if (comparison != null)
+                comparison.ShowAt(edge + size.x * scale + cardGap + comparison._rect.rect.width * scale * 0.5f, y, scale);
+
             return true;
+        }
+
+        private float GetBadgeExtension() => _equippedBadge.activeSelf
+            ? Mathf.Max(0f, _badge.localPosition.y + _badge.rect.yMax - _rect.rect.yMax)
+            : 0f;
+
+        private void ShowAt(float x, float y, float scale)
+        {
+            _rect.localScale = new Vector3(scale, scale, 1f);
+            _rect.localPosition = new Vector3(x, y, 0f);
+            gameObject.SetActive(true);
         }
 
         public void Hide()

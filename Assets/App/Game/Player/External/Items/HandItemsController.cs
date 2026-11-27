@@ -10,6 +10,7 @@ namespace App.Game.Player.External.Items
     public class HandItemsController
     {
         private static readonly int WeaponEquipped = Animator.StringToHash("WeaponEquipped");
+        private static readonly int ShieldEquipped = Animator.StringToHash("ShieldEquipped");
 
         private readonly PlayerContext _context;
         private Animator _animator;
@@ -32,23 +33,29 @@ namespace App.Game.Player.External.Items
             if (_context.ModuleItem.TryGetModule<EquipmentModule>(out _equipment))
                 _equipment.SlotChanged += OnSlotChanged;
 
-            RefreshWeapon();
+            RefreshHandItems();
             return true;
         }
 
         private void OnSlotChanged(EquipmentSlotId slot)
         {
-            if (slot is EquipmentSlotId.RightHand or EquipmentSlotId.LeftHand)
-                RefreshWeapon();
+            if (!_context.AttackContext.IsAttack && (slot is EquipmentSlotId.RightHand or EquipmentSlotId.LeftHand))
+                RefreshHandItems();
         }
 
-        private void RefreshWeapon()
+        internal void RefreshHandItems()
         {
             OneHandedWeapon = GetOneHandedWeapon(EquipmentSlotId.RightHand) ??
                               GetOneHandedWeapon(EquipmentSlotId.LeftHand);
 
             _context.RigProvider.SetWeaponSprites(OneHandedWeapon?.NearSprite, OneHandedWeapon?.FarSprite);
             _animator.SetFloat(WeaponEquipped, OneHandedWeapon != null ? 1f : 0f);
+
+            ShieldModuleConfig shield = null;
+            if (_equipment != null && _equipment.TryGetEquippedItem(EquipmentSlotId.LeftHand, out var leftHand))
+                leftHand.TryGetConfigModule(out shield);
+            _context.RigProvider.SetShieldSprites(shield?.NearSprite, shield?.FarSprite);
+            _animator.SetFloat(ShieldEquipped, shield != null ? 1f : 0f);
         }
 
         private OneHandedWeaponModuleConfig GetOneHandedWeapon(EquipmentSlotId slot)

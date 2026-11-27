@@ -4,9 +4,6 @@ using App.Game.DragItem.Runtime;
 using App.Game.DragItem.Runtime.Model;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace App.Game.Inventory.External.View
@@ -48,7 +45,7 @@ namespace App.Game.Inventory.External.View
             if (_itemInfo == null)
                 return;
 
-            var hit = FindHoveredObject();
+            var hit = _dragItemController.GetHoveredObject();
             var slotView = hit != null ? hit.GetComponentInParent<ItemSlotView>() : null;
             var slot = slotView != null && slotView.transform.parent == _slotsContent
                 ? slotView.Model?.ResolveAnchor()
@@ -78,16 +75,6 @@ namespace App.Game.Inventory.External.View
             var footprint = equipped ? (RectTransform)equippedSlot.transform : slot.Icon.rectTransform;
             if (!_itemInfo.TryPositionLeftOf(footprint))
                 _itemInfo.Hide();
-        }
-
-        private GameObject FindHoveredObject()
-        {
-            var mouse = Mouse.current;
-            if (_dragItemController.IsDragging || mouse == null ||
-                EventSystem.current?.currentInputModule is not InputSystemUIInputModule inputModule)
-                return null;
-
-            return inputModule.GetLastRaycastResult(mouse.deviceId).gameObject;
         }
 
         private void OnDisable()

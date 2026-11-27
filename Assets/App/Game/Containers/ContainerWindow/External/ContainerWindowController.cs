@@ -1,6 +1,8 @@
 using System;
 using App.Common.AssetSystem.Runtime;
 using App.Common.Canvases.External;
+using App.Common.Logger.Runtime;
+using App.Common.ModuleItem.Runtime;
 using App.Common.SpriteLoaders.Runtime;
 using App.Common.Utilities.Utility.Runtime;
 using App.Common.Windows.External;
@@ -8,6 +10,8 @@ using App.Common.Windows.Runtime;
 using App.Game.Containers.ContainerWindow.External.ViewModel.Fabric;
 using App.Game.Containers.ContainerWindow.External.ViewModel.Slots;
 using App.Game.Containers.ContainerWindow.Runtime;
+using App.Game.DragItem.Runtime;
+using App.Game.Inventory.External;
 
 namespace App.Game.Containers.ContainerWindow.External
 {
@@ -16,6 +20,8 @@ namespace App.Game.Containers.ContainerWindow.External
         public const string WindowKey = "ContainerWindow";
         
         private readonly ISpriteLoader _spriteLoader;
+        private readonly DragItemController _drag;
+        private readonly InventoryController _inventory;
         
         private ContainerSlotsModel _slotsModel;
         private Container.Runtime.Container _container;
@@ -47,9 +53,13 @@ namespace App.Game.Containers.ContainerWindow.External
             IAssetManager assetManager,
             ICanvasController canvasController,
             ISpriteLoader spriteLoader,
+            DragItemController drag,
+            InventoryController inventory,
             IWindowManager windowManager) : base(windowManager, assetManager, canvasController)
         {
             _spriteLoader = spriteLoader;
+            _drag = drag;
+            _inventory = inventory;
         }
 
         public void Init()
@@ -64,7 +74,15 @@ namespace App.Game.Containers.ContainerWindow.External
                 new ContainerSlotViewCreator(_window),
                 _spriteLoader);
             _slotsModel.Initialize();
+            if (!_window.InitializeItemHover(_drag, FindEquippedItem))
+                HLogger.LogError("Could not initialize container item info windows.");
             _window.SetCloseButtonClickCallback(OnCloseClick);
+        }
+
+        private IModuleItem FindEquippedItem(IModuleItem item)
+        {
+            var equipment = _inventory.Equipment;
+            return equipment != null && equipment.TryGetEquippedItemForComparison(item, out var equipped) ? equipped : null;
         }
 
         private void OnCloseClick()

@@ -18,6 +18,7 @@ MonoBehaviour:
   - rid: 3362484061470195920
   - rid: 3362484061470195921
   - rid: 7010000000000000000
+  - rid: 3362484196706615392
   m_Tags: 0
   references:
     version: 2
@@ -29,14 +30,19 @@ MonoBehaviour:
     - rid: 3362484061470195920
       type: {class: ContainerItemModuleConfig, ns: App.Game.Modules.ContainerItem.Runtime.Config, asm: Autumn.Modules.ContainerItem}
       data:
-        _width: 1
-        _height: 1
+        _width: 2
+        _height: 3
     - rid: 3362484061470195921
       type: {class: NameModuleConfig, ns: App.Game.Modules.Name.Runtime.Config, asm: Autumn.Modules.Name}
       data:
         _name: "\u0420\u0430\u0441\u043F\u0438\u0441\u043D\u043E\u0439 \u043A\u0430\u043F\u043B\u0435\u0432\u0438\u0434\u043D\u044B\u0439
           \u0449\u0438\u0442"
+    - rid: 3362484196706615392
+      type: {class: ShieldModuleConfig, ns: App.Game.Equipment.Runtime.Config.Model, asm: Autumn.Equipment}
+      data:
+        _nearSprite: {fileID: 1272077151, guid: 78792e87cc6069042bbfe891444294c4, type: 3}
+        _farSprite: {fileID: -566788624, guid: 78792e87cc6069042bbfe891444294c4, type: 3}
     - rid: 7010000000000000000
       type: {class: EquipmentItemModuleConfig, ns: App.Game.Equipment.Runtime.Config.Model, asm: Autumn.Equipment}
       data:
-        m_Type: One-handed
+        m_Type: Shield

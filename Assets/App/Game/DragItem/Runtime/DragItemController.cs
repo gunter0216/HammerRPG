@@ -17,6 +17,7 @@ using App.Game.Modules.Equipment.Runtime.Config;
 using UniRx;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.EventSystems;
 
 namespace App.Game.DragItem.Runtime
@@ -40,6 +41,16 @@ namespace App.Game.DragItem.Runtime
         private IDisposable m_Disposable;
 
         public bool IsDragging => _draggedItem != null;
+
+        internal GameObject GetHoveredObject()
+        {
+            var mouse = Mouse.current;
+            if (IsDragging || mouse == null ||
+                EventSystem.current?.currentInputModule is not InputSystemUIInputModule inputModule)
+                return null;
+
+            return inputModule.GetLastRaycastResult(mouse.deviceId).gameObject;
+        }
 
         internal void CancelDrag()
         {

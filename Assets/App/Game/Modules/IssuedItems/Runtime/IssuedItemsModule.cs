@@ -1,7 +1,7 @@
 using System;
 using App.Common.Logger.Runtime;
 using App.Common.ModuleItem.Runtime;
-using ItemContainerModule = App.Game.Modules.Container.Runtime.ContainerModule;
+using App.Game.Modules.Container.Runtime;
 using App.Game.Modules.IssuedItems.Runtime.Config;
 using App.Game.Modules.IssuedItems.Runtime.Data;
 
@@ -20,7 +20,8 @@ namespace App.Game.Modules.IssuedItems.Runtime
             _data = data;
         }
 
-        public bool TryIssueItems(IModuleItemsManager itemsManager, ItemContainerModule container)
+        public bool TryIssueItems(IModuleItemsManager itemsManager, ContainerModule container,
+            Action<IModuleItem> onItemIssued = null)
         {
             if (itemsManager == null || container == null || _config.Items == null || _data.IssuedCount < 0)
                 return false;
@@ -57,6 +58,7 @@ namespace App.Game.Modules.IssuedItems.Runtime
                     }
 
                     _data.IssuedCount++;
+                    onItemIssued?.Invoke(item.Value);
                 }
             }
 

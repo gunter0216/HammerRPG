@@ -25,6 +25,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17650274905849f47a24b2e0e8c0fe23
+    m_Address: DungeonRooms2D/BastionDressingRoom
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1bf26f63a2cd24a449ed79ecc55c1ccd
     m_Address: EndRoom_9x9
     m_ReadOnly: 0
@@ -37,6 +42,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 23d1fe3dd9df1cd4f94b235eb48c1f6a
     m_Address: TransitRoom_11x11_2TR
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28e4dde2f474a284788f012e1395ff18
+    m_Address: DungeonRooms2D/BastionCistern
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -72,6 +82,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4f7d1e6cf296afa4ab7fd9dee80927bf
     m_Address: TransitRoom_19x19_RD
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5753881bc994bb54fbef78aeb79cebd7
+    m_Address: DungeonRooms2D/BastionCellar_LeftEntrance
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -130,6 +145,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a746c25bff062ca46b9aeb47c1f3b94a
+    m_Address: DungeonRooms2D/BastionDeserterCamp
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b16eadf4d48af594f8d4b4f9198f47df
     m_Address: TransitRoom_19x19_TRD
     m_ReadOnly: 0
@@ -172,6 +192,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f542bf32064df1447893f74b5e375acd
     m_Address: TransitRoom_11x11_1D
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5907c6079550ca449350a47b6a0e9bc
+    m_Address: DungeonRooms2D/BastionStoreroom
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

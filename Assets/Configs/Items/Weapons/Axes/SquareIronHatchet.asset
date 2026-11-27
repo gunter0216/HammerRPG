@@ -18,6 +18,7 @@ MonoBehaviour:
   - rid: 3362484061470195938
   - rid: 3362484061470195939
   - rid: 7010000000000000000
+  - rid: 3362484196706615296
   m_Tags: 0
   references:
     version: 2
@@ -35,6 +36,16 @@ MonoBehaviour:
       type: {class: NameModuleConfig, ns: App.Game.Modules.Name.Runtime.Config, asm: Autumn.Modules.Name}
       data:
         _name: "\u0416\u0435\u043B\u0435\u0437\u043D\u044B\u0439 \u0442\u043E\u043F\u043E\u0440\u0438\u043A"
+    - rid: 3362484196706615296
+      type: {class: OneHandedWeaponModuleConfig, ns: App.Game.Equipment.Runtime.Config.Model, asm: Autumn.Equipment}
+      data:
+        _nearSprite: {fileID: 482845307, guid: 750a0fff3eb7bd740888f53034e83912, type: 3}
+        _farSprite: {fileID: -1586827626, guid: 750a0fff3eb7bd740888f53034e83912, type: 3}
+        _attackStyle: 1
+        _damage: 10
+        _attackSpeed: 1
+        _reach: 1.45
+        _sweepWidth: 1.3
     - rid: 7010000000000000000
       type: {class: EquipmentItemModuleConfig, ns: App.Game.Equipment.Runtime.Config.Model, asm: Autumn.Equipment}
       data:

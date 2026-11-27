@@ -13,6 +13,7 @@ namespace App.Game.Equipment.Runtime.Constants
         Pants = 8,
         Boots = 9,
         OneHanded = 10,
-        TwoHanded = 11
+        TwoHanded = 11,
+        Shield = 12
     }
 }
